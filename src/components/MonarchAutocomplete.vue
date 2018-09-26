@@ -62,6 +62,7 @@
         type="text"
         placeholder="Search for phenotypes, diseases, genes..."
         @input="debounceInput"
+        @keydown="inputChanged"
         @keydown.enter="enter"
         @keydown.down="down"
         @keydown.up="up"
@@ -301,6 +302,9 @@ export default {
       if (this.current > 0) {
         this.current -= 1;
       }
+    },
+    inputChanged() {
+      this.catDropDown = false;
     },
     down() {
       if (this.current < this.suggestions.length - 1) {
