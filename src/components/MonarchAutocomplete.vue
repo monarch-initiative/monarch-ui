@@ -239,7 +239,6 @@ export default {
   },
   watch: {
     value() {
-      this.suggestions = [];
       if (!this.value) {
         this.open = false;
       }
@@ -268,6 +267,7 @@ export default {
       try {
         const selected = this.selected;
         const searchResponse = await BL.getSearchTermSuggestions(this.value, selected);
+        this.suggestions = [];
         searchResponse.docs.forEach((elem) => {
           const resultPacket = {
             match: elem.match,
