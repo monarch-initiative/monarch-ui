@@ -39,7 +39,7 @@
         v-model="value"
         class="form-control xform-control-sm"
         type="text"
-        autofocus=autoFocus
+        autofocus="autoFocus"
         placeholder="Search for phenotypes, diseases, genes..."
         @input="debounceInput"
         @keydown="inputChanged"
@@ -245,7 +245,7 @@ export default {
         const selected = this.selected;
         const searchResponse = await BL.getSearchTermSuggestions(this.value, selected);
         this.suggestions = [];
-        this.current = -1 ;
+        this.current = -1;
         searchResponse.docs.forEach((elem) => {
           const resultPacket = {
             match: elem.match,
