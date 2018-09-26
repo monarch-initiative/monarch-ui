@@ -210,7 +210,7 @@ export default {
       value: '',
       suggestions: [],
       open: false,
-      current: 0,
+      current: -1,
       loading: false
     };
   },
@@ -245,6 +245,7 @@ export default {
         const selected = this.selected;
         const searchResponse = await BL.getSearchTermSuggestions(this.value, selected);
         this.suggestions = [];
+        this.current = -1 ;
         searchResponse.docs.forEach((elem) => {
           const resultPacket = {
             match: elem.match,
