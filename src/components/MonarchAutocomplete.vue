@@ -135,9 +135,6 @@
         role="button"
         @click="useExample(example.searchString, example.category)">
         {{ example.searchString }}
-        <em v-if="example.category">
-          {{ example.category.toLowerCase() }}
-        </em>
       </button>
     </div>
 
