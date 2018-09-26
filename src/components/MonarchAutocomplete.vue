@@ -8,32 +8,11 @@
   >
 
     <div
-      v-if="homeSearch"
-      class="form-group form-group-sm p-0 m-0"
-      label="Button style checkboxes">
-      <label
-        for="categoryChoices">
-        Categories&nbsp;&nbsp;
-      </label>
-
-      <b-form-checkbox-group
-        v-b-tooltip.topright
-        v-model="selected"
-        :options="options"
-        buttons
-        button-variant="dark"
-        name="categoryChoices"
-        size="sm"
-        title="Select a single category or set of categories to search on"
-      />
-    </div>
-
-    <div
       :class="{'input-group-sm': !homeSearch}"
       class="input-group"
     >
       <div
-        v-if="!homeSearch && !singleCategory"
+        v-if="!singleCategory"
         class="input-group-prepend">
         <button
           class="btn btn-secondary dropdown-toggle"
@@ -68,29 +47,6 @@
         @keydown.up="up"
         @keydown.esc="clearSearch"
       >
-
-      <div
-        v-if="homeSearch"
-        class="input-group-append">
-        <button
-          v-b-tooltip.topright
-          class="btn xbtn-sm btn-light py-0"
-          type="button"
-          title="Show all matching results"
-          @click="showMore"
-        >
-          <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid"/>
-        </button>
-        <button
-          v-b-tooltip.topright
-          class="btn xbtn-sm btn-light py-0"
-          type="button"
-          title="Clear search input"
-          @click="clearSearch"
-        >
-          <i class="p-0 m-0 fa xfa-2x fa-ban"/>
-        </button>
-      </div>
 
       <div
         v-if="open"
