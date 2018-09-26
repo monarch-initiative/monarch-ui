@@ -113,10 +113,11 @@
     <div
       v-if="homeSearch"
       class="p-0 m-0">
+      Select Example:
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
-        class="btn btn-outline-light m-1 py-0"
+        class="btn btn-outline-light m-1 py-0 example-button"
         role="button"
         @click="useExample(example.searchString, example.category)">
         {{ example.searchString }}
@@ -381,6 +382,10 @@ export default {
 
   .hilite {
     font-weight: bold;
+  }
+
+  .example-button{
+     background-color:  cadetblue;
   }
 
   .autorootdiv .input-group.input-group-sm {
