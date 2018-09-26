@@ -183,10 +183,6 @@ const exampleSearches = [
     searchString: 'Marfan Syndrome'
   },
   {
-    searchString: 'Marfan Syndrome',
-    category: 'disease'
-  },
-  {
     searchString: 'Spinocerebellar Ataxia 2',
     category: 'disease'
   },
