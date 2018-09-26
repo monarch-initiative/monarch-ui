@@ -266,11 +266,16 @@ export default {
     },
     enter() {
       const currentData = this.suggestions[this.current];
-      if (!this.singleCategory) {
-        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      if (currentData) {
+        if (!this.singleCategory) {
+          this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+        }
+        else {
+          this.$emit('interface', currentData);
+        }
       }
       else {
-        this.$emit('interface', this.suggestions[this.current]);
+        this.showMore();
       }
       this.value = '';
       this.open = false;
