@@ -39,6 +39,7 @@
         v-model="value"
         class="form-control xform-control-sm"
         type="text"
+        autofocus=autoFocus
         placeholder="Search for phenotypes, diseases, genes..."
         @input="debounceInput"
         @keydown="inputChanged"
@@ -174,6 +175,11 @@ export default {
   },
   props: {
     showSearchButton: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    autoFocus: {
       type: Boolean,
       required: false,
       default: false

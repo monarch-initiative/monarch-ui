@@ -28,6 +28,7 @@
                 <monarch-autocomplete
                   :home-search="true"
                   :show-search-button="true"
+                  :auto-focus="true"
                 />
               </div>
             </div>
