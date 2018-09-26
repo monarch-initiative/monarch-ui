@@ -276,9 +276,9 @@ export default {
     },
     toggleFilterBox() {
       this.catDropDown = !this.catDropDown;
-      if (this.catDropDown) {
-        this.suggestions = [];
-      }
+      // if (this.catDropDown) {
+      //   this.suggestions = [];
+      // }
     },
     inputChanged() {
       this.catDropDown = false;
