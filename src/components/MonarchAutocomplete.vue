@@ -135,9 +135,6 @@
         role="button"
         @click="useExample(example.searchString, example.category)">
         {{ example.searchString }}
-        <em v-if="example.category">
-          {{ example.category }}
-        </em>
       </button>
     </div>
 
@@ -159,7 +156,7 @@ const exampleSearches = [
   },
   {
     searchString: 'Multicystic kidney dysplasia',
-    category: 'phenotype'
+    category: 'Phenotype'
   },
   {
     searchString: 'Shh',
@@ -203,7 +200,7 @@ export default {
         { text: 'Gene', value: 'gene' },
         { text: 'Genotype', value: 'genotype' },
         { text: 'Variant', value: 'variant locus' },
-        { text: 'Phenotype', value: 'phenotype' },
+        { text: 'Phenotype', value: 'Phenotype' },
         { text: 'Disease', value: 'disease' }
       ],
       catDropDown: false,
@@ -330,7 +327,7 @@ export default {
       const validCats = {
         'gene': 'gene',
         'variant locus': 'variant',
-        'phenotype': 'phenotype',
+        'Phenotype': 'phenotype',
         'genotype': 'genotype',
         'disease': 'disease'
       };
