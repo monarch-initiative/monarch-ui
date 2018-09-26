@@ -8,39 +8,18 @@
   >
 
     <div
-      v-if="homeSearch"
-      class="form-group form-group-sm p-0 m-0"
-      label="Button style checkboxes">
-      <label
-        for="categoryChoices">
-        Categories&nbsp;&nbsp;
-      </label>
-
-      <b-form-checkbox-group
-        v-b-tooltip.topright
-        v-model="selected"
-        :options="options"
-        buttons
-        button-variant="dark"
-        name="categoryChoices"
-        size="sm"
-        title="Select a single category or set of categories to search on"
-      />
-    </div>
-
-    <div
       :class="{'input-group-sm': !homeSearch}"
       class="input-group"
     >
       <div
-        v-if="!homeSearch && !singleCategory"
+        v-if="!singleCategory"
         class="input-group-prepend">
         <button
           class="btn btn-secondary dropdown-toggle"
           type="button"
-          @click="catDropDown = !catDropDown"
+          @click="toggleFilterBox"
         >
-          Filters
+          All
         </button>
         <div
           v-if="catDropDown"
@@ -60,8 +39,10 @@
         v-model="value"
         class="form-control xform-control-sm"
         type="text"
+        autofocus="autoFocus"
         placeholder="Search for phenotypes, diseases, genes..."
         @input="debounceInput"
+        @keydown="inputChanged"
         @keydown.enter="enter"
         @keydown.down="down"
         @keydown.up="up"
@@ -69,7 +50,7 @@
       >
 
       <div
-        v-if="homeSearch"
+        v-if="showSearchButton"
         class="input-group-append">
         <button
           v-b-tooltip.topright
@@ -80,17 +61,7 @@
         >
           <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid"/>
         </button>
-        <button
-          v-b-tooltip.topright
-          class="btn xbtn-sm btn-light py-0"
-          type="button"
-          title="Clear search input"
-          @click="clearSearch"
-        >
-          <i class="p-0 m-0 fa xfa-2x fa-ban"/>
-        </button>
       </div>
-
       <div
         v-if="open"
         class="dropdown-menu list-group dropList px-4"
@@ -156,10 +127,11 @@
     <div
       v-if="homeSearch"
       class="p-0 m-0">
+      Select Example:
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
-        class="btn btn-outline-light m-1 py-0"
+        class="btn btn-outline-light m-1 py-0 example-button"
         role="button"
         @click="useExample(example.searchString, example.category)">
         {{ example.searchString }}
@@ -182,10 +154,6 @@ const exampleSearches = [
     searchString: 'Marfan Syndrome'
   },
   {
-    searchString: 'Marfan Syndrome',
-    category: 'disease'
-  },
-  {
     searchString: 'Spinocerebellar Ataxia 2',
     category: 'disease'
   },
@@ -206,6 +174,16 @@ export default {
     }
   },
   props: {
+    showSearchButton: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    autoFocus: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     homeSearch: {
       type: Boolean,
       required: false,
@@ -232,13 +210,12 @@ export default {
       value: '',
       suggestions: [],
       open: false,
-      current: 0,
+      current: -1,
       loading: false
     };
   },
   watch: {
     value() {
-      this.suggestions = [];
       if (!this.value) {
         this.open = false;
       }
@@ -267,6 +244,8 @@ export default {
       try {
         const selected = this.selected;
         const searchResponse = await BL.getSearchTermSuggestions(this.value, selected);
+        this.suggestions = [];
+        this.current = -1;
         searchResponse.docs.forEach((elem) => {
           const resultPacket = {
             match: elem.match,
@@ -287,11 +266,16 @@ export default {
     },
     enter() {
       const currentData = this.suggestions[this.current];
-      if (!this.singleCategory) {
-        this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+      if (currentData) {
+        if (!this.singleCategory) {
+          this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
+        }
+        else {
+          this.$emit('interface', currentData);
+        }
       }
       else {
-        this.$emit('interface', this.suggestions[this.current]);
+        this.showMore();
       }
       this.value = '';
       this.open = false;
@@ -301,6 +285,15 @@ export default {
       if (this.current > 0) {
         this.current -= 1;
       }
+    },
+    toggleFilterBox() {
+      this.catDropDown = !this.catDropDown;
+      // if (this.catDropDown) {
+      //   this.suggestions = [];
+      // }
+    },
+    inputChanged() {
+      this.catDropDown = false;
     },
     down() {
       if (this.current < this.suggestions.length - 1) {
@@ -419,6 +412,10 @@ export default {
 
   .hilite {
     font-weight: bold;
+  }
+
+  .example-button{
+     background-color:  cadetblue;
   }
 
   .autorootdiv .input-group.input-group-sm {
