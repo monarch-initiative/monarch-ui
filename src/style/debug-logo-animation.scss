@@ -1,0 +1,81 @@
+.debug-area {
+  width:25px;
+  position:fixed;
+  right: 3px;
+  top:10px;
+  z-index:1900;
+}
+
+
+.debug-area span.debug-spinner {
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;
+  font-weight: bold;
+  color: darkslateblue;
+}
+
+.debug-area span.debug-spinner.active {
+  animation-duration: 2s;
+  animation-name: active-link;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+
+@keyframes rotate-debug-spinner-logo-left {
+  from {
+    transform: rotate(360deg);
+    opacity: 0.2;
+  }
+
+  to {
+    transform: rotate(0deg);
+    opacity: 1.0;
+  }
+}
+@keyframes rotate-debug-spinner-logo-right {
+  from {
+    transform: rotate(0deg);
+    opacity: 1.0;
+  }
+
+  to {
+    transform: rotate(360deg);
+    opacity: 0.2;
+  }
+}
+
+
+.debug-area img.debug-spinner-logo {
+  display: block;
+  margin: auto;
+  height: auto;
+  max-width: 100%;
+  position: absolute;
+  background: transparent;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.debug-area img.debug-spinner-logo.left {
+  display: none;
+}
+
+.debug-area img.debug-spinner-logo.right {
+}
+
+.debug-area img.debug-spinner-logo.left.rotate {
+  display: block;
+  transform: scaleY(-1);
+  animation-name: rotate-debug-spinner-logo-left;
+}
+
+.debug-area img.debug-spinner-logo.right.rotate {
+  animation-name: rotate-debug-spinner-logo-right;
+}

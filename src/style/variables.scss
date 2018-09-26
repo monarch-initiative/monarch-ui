@@ -1,0 +1,24 @@
+$navbar-height: 32px !default;
+
+$font-size-base: 0.875rem;		// 14px !default;
+$font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+
+$grid-float-breakpoint: 700px;
+
+$link-color: #0088ce;
+
+$monarch-bg-color: #15556A;
+
+$navbar-padding-y:          0 !default;
+$nav-link-padding-y:        0 !default;
+$nav-link-padding-x:        0 !default;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  monarch: 860px,
+  lg: 992px,
+  xl: 1200px
+) !default;
+
