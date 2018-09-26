@@ -12,32 +12,32 @@ self.__precacheManifest = [
     "url": "/monarch-ui/img/tax-heat-plotly.6e271a4e.png"
   },
   {
-    "revision": "b2dc9baddf8c717f89db",
-    "url": "/monarch-ui/css/analytics.805ba0cd.css"
+    "revision": "b28615a37f37ff63ab8c",
+    "url": "/monarch-ui/css/analytics.2b2f915d.css"
   },
   {
-    "revision": "7be0c9cd13dc57da7cee",
-    "url": "/monarch-ui/css/analyzephenotypes.b69fb5aa.css"
+    "revision": "ad7661c1e36ef8b55713",
+    "url": "/monarch-ui/css/analyzephenotypes.a89b2cc7.css"
   },
   {
-    "revision": "7be0c9cd13dc57da7cee",
-    "url": "/monarch-ui/js/analyzephenotypes.db86bff7.js"
+    "revision": "ad7661c1e36ef8b55713",
+    "url": "/monarch-ui/js/analyzephenotypes.aee113bc.js"
   },
   {
-    "revision": "6591f9ff3dfa53f6861e",
-    "url": "/monarch-ui/css/app.892baea1.css"
+    "revision": "6f0f5c684bf1f6b29984",
+    "url": "/monarch-ui/css/app.675e39d9.css"
   },
   {
-    "revision": "6591f9ff3dfa53f6861e",
-    "url": "/monarch-ui/js/app.7e2eb1e9.js"
+    "revision": "6f0f5c684bf1f6b29984",
+    "url": "/monarch-ui/js/app.b862915f.js"
   },
   {
-    "revision": "4ddd6ae4572c44b2bec2",
+    "revision": "a155adca6083bef26dbe",
     "url": "/monarch-ui/css/chunk-vendors.5d86c290.css"
   },
   {
-    "revision": "4ddd6ae4572c44b2bec2",
-    "url": "/monarch-ui/js/chunk-vendors.852a6d8e.js"
+    "revision": "a155adca6083bef26dbe",
+    "url": "/monarch-ui/js/chunk-vendors.2b0e87e1.js"
   },
   {
     "revision": "e914b10839c1ccfc991ca85f0bb13048",
@@ -52,12 +52,12 @@ self.__precacheManifest = [
     "url": "/monarch-ui/img/team-jackson.7b1eed8a.png"
   },
   {
-    "revision": "af7ae505a9eed503f8b8e6982036873e",
-    "url": "/monarch-ui/fonts/fontawesome-webfont.af7ae505.woff2"
-  },
-  {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
     "url": "/monarch-ui/fonts/fontawesome-webfont.674f50d2.eot"
+  },
+  {
+    "revision": "af7ae505a9eed503f8b8e6982036873e",
+    "url": "/monarch-ui/fonts/fontawesome-webfont.af7ae505.woff2"
   },
   {
     "revision": "fee66e712a8a08eef5805a46892932ad",
@@ -68,12 +68,12 @@ self.__precacheManifest = [
     "url": "/monarch-ui/fonts/fontawesome-webfont.b06871f2.ttf"
   },
   {
-    "revision": "141ce22ccc780af44bee",
-    "url": "/monarch-ui/js/MonarchLegacy.d415d620.js"
+    "revision": "c9e4e4614d852094b1b7",
+    "url": "/monarch-ui/js/MonarchLegacy.08743f16.js"
   },
   {
-    "revision": "b2dc9baddf8c717f89db",
-    "url": "/monarch-ui/js/analytics.76fa90b1.js"
+    "revision": "b28615a37f37ff63ab8c",
+    "url": "/monarch-ui/js/analytics.1fe3bf1a.js"
   },
   {
     "revision": "9996e65df9805481b17caeccdec8a336",
@@ -132,11 +132,11 @@ self.__precacheManifest = [
     "url": "/monarch-ui/img/icon-phenotypes.74a538c4.png"
   },
   {
-    "revision": "f9b5142e646a70bf3af313d60e3b7962",
+    "revision": "ce384f3354640b95fd8ab85bb00e50d6",
     "url": "/monarch-ui/index.html"
   },
   {
-    "revision": "141ce22ccc780af44bee",
-    "url": "/monarch-ui/css/MonarchLegacy.411d6a0e.css"
+    "revision": "c9e4e4614d852094b1b7",
+    "url": "/monarch-ui/css/MonarchLegacy.cf920121.css"
   }
 ];
