@@ -42,6 +42,14 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/search/:query',
+      name: 'search',
+      // route level code-splitting
+      // this generates a separate chunk (analytics.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import(/* webpackChunkName: "analytics" */ './views/Search.vue'),
+    },
+    {
       path: '/analyze/phenotypes',
       name: 'analyzephenotypes',
       // route level code-splitting

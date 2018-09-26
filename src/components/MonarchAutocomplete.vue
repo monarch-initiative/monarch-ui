@@ -205,7 +205,7 @@ export default {
       ],
       catDropDown: false,
       value: '',
-      suggestions: [],
+      searchResults: [],
       open: false,
       current: -1,
       loading: false
@@ -252,7 +252,7 @@ export default {
             highlight: elem.highlight,
             has_hl: elem.has_highlight
           };
-          this.suggestions.push(resultPacket);
+          this.searchResults.push(resultPacket);
         });
         this.open = true;
         this.loading = false;
@@ -262,7 +262,7 @@ export default {
       }
     },
     enter() {
-      const currentData = this.suggestions[this.current];
+      const currentData = this.searchResults[this.current];
       if (currentData) {
         if (!this.singleCategory) {
           this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
@@ -293,7 +293,7 @@ export default {
       this.catDropDown = false;
     },
     down() {
-      if (this.current < this.suggestions.length - 1) {
+      if (this.current < this.searchResults.length - 1) {
         this.current += 1;
       }
     },
@@ -304,12 +304,12 @@ export default {
       this.current = index;
     },
     suggestionClick(index) {
-      const currentData = this.suggestions[index];
+      const currentData = this.searchResults[index];
       if (!this.singleCategory) {
         this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
       }
       else {
-        this.$emit('interface', this.suggestions[index]);
+        this.$emit('interface', this.searchResults[index]);
       }
       this.value = '';
       this.open = false;

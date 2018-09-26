@@ -324,6 +324,23 @@ export function getNeighborhoodFromResponse(response) {
   };
 }
 
+// also add
+export async function getSearchResults(query, start, rows) {
+  const bioentityUrl = `${biolink}search/entity/${query}`;
+  const bioentityParams = {
+    fetch_objects: false,
+    unselect_evidence: true,
+    exclude_automatic_assertions: false,
+    use_compact_associations: true,
+    rows,
+    start,
+  };
+  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const bioentityResponseData = bioentityResp.data;
+
+  return bioentityResponseData;
+}
+
 export function getSearchTermSuggestions(term, selected) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
