@@ -27,6 +27,12 @@
       </header>
 
       <div class="col-xs-12 col-md-9">
+        <div class="alert alert-dismissible alert-warning">FIXME</div>
+        <b-pagination
+          :total-rows="100"
+          v-model="page"
+          :per-page="25"
+          size="md"/>
         <div class="search-results-rows">
           <table
             :id="'selenium_id_' + selenium_id"
@@ -92,6 +98,7 @@ export default {
       highlight: {},
       searchResults: {},
       page: 0,
+      rows: 25,
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -100,9 +107,9 @@ export default {
   },
   mounted() {
     const query = this.$route.params.query;
-    const start = this.$route.params.start ? this.$route.params.start : 0;
+    // const start = this.$route.params.start ? this.$route.params.start : 0;
     const rows = this.$route.params.rows ? this.$route.params.rows : 25;
-    this.search(query, start, rows);
+    this.search(query, this.page, rows);
   },
   methods: {
     async search(query, start, rows) {
@@ -119,7 +126,7 @@ export default {
             taxon: elem.taxon_label,
             label: elem.label[0],
             curie: elem.id,
-            rows: 100,
+            rows: this.rows,
             highlight: highlight.highlight,
             toLink: '/' + elem.category[0] + '/' + elem.id,
             match: highlight.match,
