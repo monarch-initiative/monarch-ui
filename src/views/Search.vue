@@ -26,9 +26,34 @@
         </div>
       </header>
 
-      <div>
-        <div v-for="(result, index) in searchResults">
-          <strong> {{ result }}</strong>
+      <div class="col-xs-12 col-md-9">
+        <div class="search-results-rows">
+          <table
+            :id="'selenium_id_' + selenium_id"
+            class="search-results-table table table-striped table-sm simpletable">
+            <thead>
+              <tr>
+                <th width="25%">Term</th>
+                <th width="15%">Category</th>
+                <th width="25%">Taxon</th>
+                <th>Matching String</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(result) in searchResults"
+                class="search-result-item">
+                <td>
+                  <router-link :to="result.toLink">
+                    {{ result.label }}
+                  </router-link>
+                </td>
+                <td>{{ result.category }}</td>
+                <td>{{ result.taxon }}</td>
+                <td v-html="result.highlight"/>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -77,7 +102,6 @@ export default {
     const query = this.$route.params.query;
     const start = this.$route.params.start ? this.$route.params.start : 0;
     const rows = this.$route.params.rows ? this.$route.params.rows : 25;
-    console.log('QUERY', query);
     this.search(query, start, rows);
   },
   methods: {
@@ -87,18 +111,17 @@ export default {
         this.searchResults = [];
         this.searchParams = {};
         this.searchFacets = {};
-        console.log('HLS', searchResponse.highlighting);
+        // console.log('HLS', searchResponse.highlighting);
         searchResponse.docs.forEach((elem, index) => {
-          console.log('elem', elem);
-          // console.log('HL',searchResponse.highlighting[index])
           const highlight = searchResponse.highlighting[elem.id];
           const resultPacket = {
-            category: elem.category,
+            category: elem.category[0],
             taxon: elem.taxon_label,
-            label: elem.label,
+            label: elem.label[0],
             curie: elem.id,
             rows: 100,
             highlight: highlight.highlight,
+            toLink: '/' + elem.category[0] + '/' + elem.id,
             match: highlight.match,
             hasHighlight: highlight.has_highlight,
           };
