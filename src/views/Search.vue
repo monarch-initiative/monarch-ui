@@ -38,7 +38,7 @@
 
 <script>
 import HomeFooter from '@/components/HomeFooter.vue';
-import axios from 'axios';
+import * as BL from '@/api/BioLink';
 
 const validCats = {
   'gene': 'gene',
@@ -59,7 +59,7 @@ export default {
       user_facets: {},
       results: [],
       highlight: {},
-      suggestions: {},
+      searchResults: {},
       page: 0,
       numFound: 0,
       numRowsDisplayed: 0,
@@ -68,10 +68,33 @@ export default {
     };
   },
   mounted() {
+    const query = this.$route.params.query;
+    const start = this.$route.params.start ? this.$route.params.start : 0 ;
+    const rows = this.$route.params.rows ? this.$route.params.rows : 25;
+    console.log('QUERY', query);
+    this.search(query,start,rows);
   },
   methods: {
-    getSuggestions() {
-      return 'aasdf';
+    async search(query,start,rows) {
+      try {
+        const searchResponse = await BL.getSearchResults(query,start,rows);
+        this.searchResults = [];
+        searchResponse.docs.forEach((elem) => {
+          const resultPacket = {
+            match: elem.match,
+            // category: this.categoryMap(elem.category),
+            // taxon: this.checkTaxon(elem.taxon_label),
+            curie: elem.id,
+            rows: 100,
+            highlight: elem.highlight,
+            has_hl: elem.has_highlight
+          };
+          this.searchResults.push(resultPacket);
+        });
+      }
+      catch (e) {
+        console.log('Search ERROR', e, this);
+      }
     }
   },
 };
