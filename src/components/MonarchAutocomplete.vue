@@ -38,9 +38,9 @@
         <button
           class="btn btn-secondary dropdown-toggle"
           type="button"
-          @click="catDropDown = !catDropDown"
+          @click="toggleFilterBox"
         >
-          Filters
+          All
         </button>
         <div
           v-if="catDropDown"
@@ -301,6 +301,12 @@ export default {
     up() {
       if (this.current > 0) {
         this.current -= 1;
+      }
+    },
+    toggleFilterBox() {
+      this.catDropDown = !this.catDropDown;
+      if (this.catDropDown) {
+        this.suggestions = [];
       }
     },
     inputChanged() {
