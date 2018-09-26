@@ -26,7 +26,9 @@
 
               <div class="col-12">
                 <monarch-autocomplete
-                  :home-search="true"/>
+                  :home-search="true"
+                  :show-search-button="true"
+                />
               </div>
             </div>
 

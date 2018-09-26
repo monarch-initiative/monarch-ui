@@ -49,6 +49,19 @@
       >
 
       <div
+        v-if="showSearchButton"
+        class="input-group-append">
+        <button
+          v-b-tooltip.topright
+          class="btn xbtn-sm btn-light py-0"
+          type="button"
+          title="Show all matching results"
+          @click="showMore"
+        >
+          <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid"/>
+        </button>
+      </div>
+      <div
         v-if="open"
         class="dropdown-menu list-group dropList px-4"
         style="overflow-y:auto;"
@@ -160,6 +173,11 @@ export default {
     }
   },
   props: {
+    showSearchButton: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     homeSearch: {
       type: Boolean,
       required: false,
