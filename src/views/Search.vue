@@ -26,6 +26,12 @@
         </div>
       </header>
 
+      <div>
+        <div v-for="(result, index) in searchResults">
+          <strong> {{ result }}</strong>
+        </div>
+      </div>
+
 
       <footer class="footer">
         <home-footer/>
@@ -69,25 +75,32 @@ export default {
   },
   mounted() {
     const query = this.$route.params.query;
-    const start = this.$route.params.start ? this.$route.params.start : 0 ;
+    const start = this.$route.params.start ? this.$route.params.start : 0;
     const rows = this.$route.params.rows ? this.$route.params.rows : 25;
     console.log('QUERY', query);
-    this.search(query,start,rows);
+    this.search(query, start, rows);
   },
   methods: {
-    async search(query,start,rows) {
+    async search(query, start, rows) {
       try {
-        const searchResponse = await BL.getSearchResults(query,start,rows);
+        const searchResponse = await BL.getSearchResults(query, start, rows);
         this.searchResults = [];
-        searchResponse.docs.forEach((elem) => {
+        this.searchParams = {};
+        this.searchFacets = {};
+        console.log('HLS', searchResponse.highlighting);
+        searchResponse.docs.forEach((elem, index) => {
+          console.log('elem', elem);
+          // console.log('HL',searchResponse.highlighting[index])
+          const highlight = searchResponse.highlighting[elem.id];
           const resultPacket = {
-            match: elem.match,
-            // category: this.categoryMap(elem.category),
-            // taxon: this.checkTaxon(elem.taxon_label),
+            category: elem.category,
+            taxon: elem.taxon_label,
+            label: elem.label,
             curie: elem.id,
             rows: 100,
-            highlight: elem.highlight,
-            has_hl: elem.has_highlight
+            highlight: highlight.highlight,
+            match: highlight.match,
+            hasHighlight: highlight.has_highlight,
           };
           this.searchResults.push(resultPacket);
         });

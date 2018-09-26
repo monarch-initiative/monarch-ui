@@ -337,8 +337,8 @@ export async function getSearchResults(query, start, rows) {
   };
   const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
   const bioentityResponseData = bioentityResp.data;
-  // console.log(bioentityResp.request.responseURL);
-  // console.log(bioentityResponseData);
+  console.log('A',bioentityResp.request.responseURL);
+  console.log('B',bioentityResponseData);
 
   return bioentityResponseData;
 }
