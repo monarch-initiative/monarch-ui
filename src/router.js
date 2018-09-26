@@ -42,7 +42,7 @@ export default new Router({
       component: Home,
     },
     {
-      path: '/search/*',
+      path: '/search/:query',
       name: 'search',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
