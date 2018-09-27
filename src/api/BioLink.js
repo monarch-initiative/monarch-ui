@@ -341,7 +341,7 @@ export async function getSearchResults(query, start, rows) {
   return bioentityResponseData;
 }
 
-export function getSearchTermSuggestions(term, selected) {
+export async function getSearchTermSuggestions(term, selected) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
