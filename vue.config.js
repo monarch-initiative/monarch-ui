@@ -1,7 +1,7 @@
 module.exports = {
   outputDir: 'docs',
   baseUrl: '/monarch-ui/',
-  lintOnSave: false,
+  // lintOnSave: false,
 
   chainWebpack: (config) => {
     config.module

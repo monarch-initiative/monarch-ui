@@ -47,7 +47,8 @@
             </thead>
             <tbody>
               <tr
-                v-for="(result) in searchResults"
+                v-for="(result, index) in searchResults"
+                :key="index"
                 class="search-result-item">
                 <td>
                   <router-link :to="result.toLink">
