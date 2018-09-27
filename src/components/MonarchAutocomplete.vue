@@ -47,6 +47,7 @@
         @keydown.down="down"
         @keydown.up="up"
         @keydown.esc="clearSearch"
+        @blur="clearSearch"
       >
 
       <div
@@ -321,7 +322,7 @@ export default {
     },
     clearSearch() {
       this.suggestions = [];
-      this.value = '';
+      this.open = false;
     },
     categoryMap(catList) {
       const validCats = {
