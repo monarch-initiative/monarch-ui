@@ -34,33 +34,46 @@
           :per-page="25"
           size="md"/>
         <div class="search-results-rows">
-          <table
-            :id="'selenium_id_' + selenium_id"
-            class="search-results-table table table-striped table-sm simpletable">
-            <thead>
-              <tr>
-                <th width="25%">Term</th>
-                <th width="15%">Category</th>
-                <th width="25%">Taxon</th>
-                <th>Matching String</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(result, index) in searchResults"
-                :key="index"
-                class="search-result-item">
-                <td>
-                  <router-link :to="result.toLink">
-                    {{ result.label }}
-                  </router-link>
-                </td>
-                <td>{{ result.category }}</td>
-                <td>{{ result.taxon }}</td>
-                <td v-html="result.highlight"/>
-              </tr>
-            </tbody>
-          </table>
+
+          <div v-if="searchResults && searchResults.length > 0 ">
+          <h3>Here {{ searchResults.length }}</h3>
+          <b-table
+            :items="searchResults"
+            striped
+            hover/>
+            </div>
+
+
+          <div v-if="true">
+            <h3>There</h3>
+            <table
+              :id="'selenium_id_' + selenium_id"
+              class="search-results-table table table-striped table-sm simpletable">
+              <thead>
+                <tr>
+                  <th width="25%">Term</th>
+                  <th width="15%">Category</th>
+                  <th width="25%">Taxon</th>
+                  <th>Matching String</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="(result, index) in searchResults"
+                  :key="index"
+                  class="search-result-item">
+                  <td>
+                    <router-link :to="result.toLink">
+                      {{ result.label }}
+                    </router-link>
+                  </td>
+                  <td>{{ result.category }}</td>
+                  <td>{{ result.taxon }}</td>
+                  <td v-html="result.highlight"/>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -103,7 +116,7 @@ export default {
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
-      searching: true
+      searching: true,
     };
   },
   mounted() {
