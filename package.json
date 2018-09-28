@@ -5,11 +5,12 @@
   "scripts": {
     "ui": "npx vue ui",
     "serve": "vue-cli-service serve --port 8081",
-    "build": "vue-cli-service build",
-    "build-with-symlink": "vue-cli-service build && (cd docs/ && ln -s . monarch-ui)",
+    "build": "vue-cli-service build && cp docs/index.html docs/404.html",
+    "build-with-symlink": "npm run build && (cd docs/ && ln -s . monarch-ui)",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test:e2e": "vue-cli-service test:e2e",
+    "publish": "npm run build && git add -A docs/"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
