@@ -29,19 +29,26 @@
       <div class="col-xs-12 col-md-9">
         <div class="alert alert-dismissible alert-warning">FIXME</div>
         <b-pagination
-          :total-rows="100"
+          :total-rows="numFound"
+          :per-page="rows"
           v-model="page"
-          :per-page="25"
-          size="md"/>
+          responsive="true"
+          class="table-sm table-border-soft"
+          size="md"
+        />
         <div class="search-results-rows">
 
           <div v-if="searchResults && searchResults.length > 0 ">
-          <h3>Here {{ searchResults.length }}</h3>
-          <b-table
-            :items="searchResults"
-            striped
-            hover/>
-            </div>
+            <h3>Here {{ searchResults.length }}</h3>
+            <b-table
+              :items="searchResults"
+              :current-page="page"
+              :per-page="rows"
+              striped
+              responsive="true"
+              class="table-sm table-border-soft"
+              hover/>
+          </div>
 
 
           <div v-if="true">
