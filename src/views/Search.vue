@@ -41,7 +41,7 @@
             <h3>Here {{ searchResults.length }}</h3>
             <b-table
               :fields="fields"
-              :items="searchResults"
+              :items="rowsProvider"
               :current-page="currentPage"
               :per-page="rowsPerPage"
               striped
@@ -128,7 +128,7 @@ export default {
       results: [],
       highlight: {},
       searchResults: {},
-      currentPage: 0,
+      currentPage: 1,
       rowsPerPage: 25,
       numFound: 0,
       numRowsDisplayed: 0,
@@ -138,17 +138,21 @@ export default {
         { key: 'label', label: 'Term' },
         { key: 'category', label: 'Category' },
         { key: 'taxon', label: 'Taxon' },
-        { key: 'highlight', label: 'Matching String'},
+        { key: 'highlight', label: 'Matching String' },
       ]
     };
   },
   mounted() {
-    const query = this.$route.params.query;
+    this.query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
-    const rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 25;
-    this.search(query, this.currentPage, rowsPerPage);
+    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 25;
+    this.search(this.query, this.currentPage, this.rowsPerPage);
   },
   methods: {
+    rowsProvider() {
+      const start = ((this.currentPage - 1) * this.rowsPerPage);
+      this.search(this.query, start, this.rowsPerPage);
+    },
     async search(query, start, rows) {
       try {
         const searchResponse = await BL.getSearchResults(query, start, rows);
