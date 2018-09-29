@@ -38,7 +38,7 @@
         <div class="search-results-rows">
 
           <div v-if="searchResults && searchResults.length > 0 ">
-            <h3>Here {{ searchResults.length }}</h3>
+            <h3>NEW Table {{ searchResults.length }}</h3>
             <b-table
               :fields="fields"
               :items="rowsProvider"
@@ -62,7 +62,7 @@
 
 
           <div v-if="true">
-            <h3>There</h3>
+            <h3>OLD TABLE</h3>
             <table
               :id="'selenium_id_' + selenium_id"
               class="search-results-table table table-striped table-sm simpletable">
