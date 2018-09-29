@@ -146,16 +146,23 @@ export default {
     this.query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
     this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 25;
-    this.search(this.query, this.currentPage, this.rowsPerPage);
+    this.search();
   },
   methods: {
-    rowsProvider() {
-      const start = ((this.currentPage - 1) * this.rowsPerPage);
-      this.search(this.query, start, this.rowsPerPage);
+    rowsProvider(ctx,callback) {
+      // const start = ((this.currentPage - 1) * this.rowsPerPage);
+      this.search().then((data) => {
+        callback(this.searchResults);
+      }).catch((error) => {
+        callback([]);
+      });
     },
-    async search(query, start, rows) {
+    async search() {
       try {
-        const searchResponse = await BL.getSearchResults(query, start, rows);
+        // let start = page
+        const start = ((this.currentPage - 1) * this.rowsPerPage);
+        // this.query, start, this.rowsPerPage
+        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage);
         this.searchResults = [];
         this.searchParams = {};
         this.searchFacets = {};
