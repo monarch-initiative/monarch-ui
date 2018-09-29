@@ -32,13 +32,13 @@
           :per-page="rowsPerPage"
           v-model="currentPage"
           responsive="true"
-          class="table-sm table-border-soft"
+          class="table-sm table-border-soft topMargin"
           size="md"
         />
         <div class="search-results-rows">
 
           <div v-if="searchResults && searchResults.length > 0 ">
-            <h3>NEW Table {{ searchResults.length }}</h3>
+            <h3><span class="searchTerm">{{ query }}</span>  has <span class="searchTerm">{{ numFound }}</span> matches</h3>
             <b-table
               :fields="fields"
               :items="rowsProvider"
@@ -64,55 +64,23 @@
               </template>
             </b-table>
           </div>
-
-
-          <div v-if="true">
-            <h3>OLD TABLE</h3>
-            <table
-              :id="'selenium_id_' + selenium_id"
-              class="search-results-table table table-striped table-sm simpletable">
-              <thead>
-                <tr>
-                  <th width="25%">Term</th>
-                  <th width="15%">Category</th>
-                  <th width="25%">Taxon</th>
-                  <th>Matching String</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(result, index) in searchResults"
-                  :key="index"
-                  class="search-result-item">
-                  <td>
-                    <router-link :to="result.toLink">
-                      {{ result.label }}
-                    </router-link>
-                  </td>
-                  <td>{{ result.category }}</td>
-                  <td>{{ result.taxon }}</td>
-                  <td v-html="result.highlight"/>
-                </tr>
-              </tbody>
-            </table>
-          </div>
         </div>
+
+
+        <footer class="footer">
+          <home-footer/>
+        </footer>
+
       </div>
-
-
-      <footer class="footer">
-        <home-footer/>
-      </footer>
-
     </div>
-  </div>
-</template>
+</div></template>
 
 
 <script>
 import HomeFooter from '@/components/HomeFooter.vue';
 import * as BL from '@/api/BioLink';
 
+const DEFAULT_ROWS_PER_PAGE = 25;
 const validCats = {
   'gene': 'gene',
   'phenotype': 'phenotype',
@@ -134,7 +102,7 @@ export default {
       highlight: {},
       searchResults: {},
       currentPage: 1,
-      rowsPerPage: 10,
+      rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -150,7 +118,7 @@ export default {
   mounted() {
     this.query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
-    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 10;
+    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : DEFAULT_ROWS_PER_PAGE;
     this.search();
   },
   methods: {
@@ -271,6 +239,10 @@ export default {
         content: '';
         display: block;
         clear: both;
+    }
+
+    .topMargin{
+        margin-top: 20px;
     }
 
     /* search-result-item */
