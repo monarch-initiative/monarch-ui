@@ -27,11 +27,10 @@
       </header>
 
       <div class="col-xs-12 col-md-9">
-        <div class="alert alert-dismissible alert-warning">FIXME</div>
         <b-pagination
           :total-rows="numFound"
-          :per-page="rows"
-          v-model="page"
+          :per-page="rowsPerPage"
+          v-model="currentPage"
           responsive="true"
           class="table-sm table-border-soft"
           size="md"
@@ -42,8 +41,8 @@
             <h3>Here {{ searchResults.length }}</h3>
             <b-table
               :items="searchResults"
-              :current-page="page"
-              :per-page="rows"
+              :current-page="currentPage"
+              :per-page="rowsPerPage"
               striped
               responsive="true"
               class="table-sm table-border-soft"
@@ -118,8 +117,8 @@ export default {
       results: [],
       highlight: {},
       searchResults: {},
-      page: 0,
-      rows: 25,
+      currentPage: 0,
+      rowsPerPage: 25,
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -129,8 +128,8 @@ export default {
   mounted() {
     const query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
-    const rows = this.$route.params.rows ? this.$route.params.rows : 25;
-    this.search(query, this.page, rows);
+    const rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 25;
+    this.search(query, this.currentPage, rowsPerPage);
   },
   methods: {
     async search(query, start, rows) {
@@ -139,6 +138,7 @@ export default {
         this.searchResults = [];
         this.searchParams = {};
         this.searchFacets = {};
+        this.numFound = searchResponse.numFound ;
         // console.log('HLS', searchResponse.highlighting);
         searchResponse.docs.forEach((elem, index) => {
           const highlight = searchResponse.highlighting[elem.id];
