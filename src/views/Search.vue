@@ -21,7 +21,7 @@
                   Search Results
                 </p>
               </div>
-            </div>
+            </div>label:
           </div>
         </div>
       </header>
@@ -40,13 +40,24 @@
           <div v-if="searchResults && searchResults.length > 0 ">
             <h3>Here {{ searchResults.length }}</h3>
             <b-table
+              :fields="fields"
               :items="searchResults"
               :current-page="currentPage"
               :per-page="rowsPerPage"
               striped
               responsive="true"
               class="table-sm table-border-soft"
-              hover/>
+              hover>
+              <!--<template-->
+              <!--<a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">-->
+              <!--{{data.value}}-->
+              <!--</a>-->
+              <!--</template>-->
+              <!--<span-->
+              <!--slot="html"-->
+              <!--slot-scope="data"-->
+              <!--v-html="data.value"/>-->
+            </b-table>
           </div>
 
 
@@ -123,6 +134,12 @@ export default {
       numRowsDisplayed: 0,
       selenium_id: '',
       searching: true,
+      fields: [
+        { key: 'label', label: 'Term' },
+        { key: 'category', label: 'Category' },
+        { key: 'taxon', label: 'Taxon' },
+        { key: 'highlight', label: 'Matching String'},
+      ]
     };
   },
   mounted() {
@@ -138,7 +155,7 @@ export default {
         this.searchResults = [];
         this.searchParams = {};
         this.searchFacets = {};
-        this.numFound = searchResponse.numFound ;
+        this.numFound = searchResponse.numFound;
         // console.log('HLS', searchResponse.highlighting);
         searchResponse.docs.forEach((elem, index) => {
           const highlight = searchResponse.highlighting[elem.id];
