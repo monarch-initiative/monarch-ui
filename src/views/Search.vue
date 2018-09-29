@@ -48,15 +48,20 @@
               responsive="true"
               class="table-sm table-border-soft"
               hover>
-              <!--<template-->
-              <!--<a :href="`#${data.value.replace(/[^a-z]+/i,'-').toLowerCase()}`">-->
-              <!--{{data.value}}-->
-              <!--</a>-->
-              <!--</template>-->
-              <!--<span-->
-              <!--slot="html"-->
-              <!--slot-scope="data"-->
-              <!--v-html="data.value"/>-->
+              <template
+                slot="label"
+                slot-scope="row"
+              >
+                <router-link :to="row.item.toLink">
+                  {{ row.item.label }}
+                </router-link>
+              </template>
+              <template
+                slot="highlight"
+                slot-scope="row"
+              >
+                <span v-html="row.item.highlight"/>
+              </template>
             </b-table>
           </div>
 
@@ -129,7 +134,7 @@ export default {
       highlight: {},
       searchResults: {},
       currentPage: 1,
-      rowsPerPage: 25,
+      rowsPerPage: 10,
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -145,11 +150,11 @@ export default {
   mounted() {
     this.query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
-    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 25;
+    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : 10;
     this.search();
   },
   methods: {
-    rowsProvider(ctx,callback) {
+    rowsProvider(ctx, callback) {
       // const start = ((this.currentPage - 1) * this.rowsPerPage);
       this.search().then((data) => {
         callback(this.searchResults);
@@ -276,6 +281,10 @@ export default {
 
     /* overwrite the default CSS */
     .search-result-item .hilite {
+        font-weight: bold;
+    }
+
+    .hilite {
         font-weight: bold;
     }
 
