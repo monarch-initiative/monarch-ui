@@ -7,14 +7,6 @@
         <div class="intro-body">
           <div class="container">
             <div class="row">
-              <!--<div class="col-md-12">-->
-              <!--<div class="brand-heading m-0 p-0">-->
-              <!--<img-->
-              <!--class="center-block text-center img-fluid"-->
-              <!--style="max-height:80px;"-->
-              <!--src="../assets/img/monarch-logo-white-stacked.png">-->
-              <!--</div>-->
-              <!--</div>-->
               <div
                 class="col-md-12 py-2">
                 <p class="intro-text">
@@ -68,7 +60,7 @@
 
 
         <footer class="footer">
-          <home-footer/>
+          <footer-all/>
         </footer>
 
       </div>
@@ -77,8 +69,8 @@
 
 
 <script>
-import HomeFooter from '@/components/HomeFooter.vue';
 import * as BL from '@/api/BioLink';
+import FooterAll from '@/components/FooterAll.vue';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 const validCats = {
@@ -92,7 +84,7 @@ const validCats = {
 export default {
   name: 'Search',
   components: {
-    'home-footer': HomeFooter
+    'footer-all': FooterAll
   },
   data() {
     return {
