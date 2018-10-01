@@ -7,14 +7,6 @@
         <div class="intro-body">
           <div class="container">
             <div class="row">
-              <!--<div class="col-md-12">-->
-              <!--<div class="brand-heading m-0 p-0">-->
-              <!--<img-->
-              <!--class="center-block text-center img-fluid"-->
-              <!--style="max-height:80px;"-->
-              <!--src="../assets/img/monarch-logo-white-stacked.png">-->
-              <!--</div>-->
-              <!--</div>-->
               <div
                 class="col-md-12 py-2">
                 <p class="intro-text">
@@ -27,57 +19,60 @@
       </header>
 
       <div class="col-xs-12 col-md-9">
-        <div class="alert alert-dismissible alert-warning">FIXME</div>
         <b-pagination
-          :total-rows="100"
-          v-model="page"
-          :per-page="25"
-          size="md"/>
+          :total-rows="numFound"
+          :per-page="rowsPerPage"
+          v-model="currentPage"
+          responsive="true"
+          class="table-sm table-border-soft mt-2"
+          size="md"
+        />
         <div class="search-results-rows">
-          <table
-            :id="'selenium_id_' + selenium_id"
-            class="search-results-table table table-striped table-sm simpletable">
-            <thead>
-              <tr>
-                <th width="25%">Term</th>
-                <th width="15%">Category</th>
-                <th width="25%">Taxon</th>
-                <th>Matching String</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="(result, index) in searchResults"
-                :key="index"
-                class="search-result-item">
-                <td>
-                  <router-link :to="result.toLink">
-                    {{ result.label }}
-                  </router-link>
-                </td>
-                <td>{{ result.category }}</td>
-                <td>{{ result.taxon }}</td>
-                <td v-html="result.highlight"/>
-              </tr>
-            </tbody>
-          </table>
+
+          <div v-if="searchResults && searchResults.length > 0 ">
+            <h3><span class="searchTerm">{{ query }}</span>  has <span class="searchTerm">{{ numFound }}</span> matches</h3>
+            <b-table
+              :fields="fields"
+              :items="rowsProvider"
+              :current-page="currentPage"
+              :per-page="rowsPerPage"
+              striped
+              responsive="true"
+              class="table-sm table-border-soft"
+              hover>
+              <template
+                slot="label"
+                slot-scope="row"
+              >
+                <router-link :to="row.item.toLink">
+                  {{ row.item.label }}
+                </router-link>
+              </template>
+              <template
+                slot="highlight"
+                slot-scope="row"
+              >
+                <span v-html="row.item.highlight"/>
+              </template>
+            </b-table>
+          </div>
         </div>
+
+
+        <footer class="footer">
+          <footer-all/>
+        </footer>
+
       </div>
-
-
-      <footer class="footer">
-        <home-footer/>
-      </footer>
-
     </div>
-  </div>
-</template>
+</div></template>
 
 
 <script>
-import HomeFooter from '@/components/HomeFooter.vue';
 import * as BL from '@/api/BioLink';
+import FooterAll from '@/components/FooterAll.vue';
 
+const DEFAULT_ROWS_PER_PAGE = 25;
 const validCats = {
   'gene': 'gene',
   'phenotype': 'phenotype',
@@ -89,7 +84,7 @@ const validCats = {
 export default {
   name: 'Search',
   components: {
-    'home-footer': HomeFooter
+    'footer-all': FooterAll
   },
   data() {
     return {
@@ -98,27 +93,45 @@ export default {
       results: [],
       highlight: {},
       searchResults: {},
-      page: 0,
-      rows: 25,
+      currentPage: 1,
+      rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
-      searching: true
+      searching: true,
+      fields: [
+        { key: 'label', label: 'Term' },
+        { key: 'category', label: 'Category' },
+        { key: 'taxon', label: 'Taxon' },
+        { key: 'highlight', label: 'Matching String' },
+      ]
     };
   },
   mounted() {
-    const query = this.$route.params.query;
+    this.query = this.$route.params.query;
     // const start = this.$route.params.start ? this.$route.params.start : 0;
-    const rows = this.$route.params.rows ? this.$route.params.rows : 25;
-    this.search(query, this.page, rows);
+    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : DEFAULT_ROWS_PER_PAGE;
+    this.search();
   },
   methods: {
-    async search(query, start, rows) {
+    rowsProvider(ctx, callback) {
+      // const start = ((this.currentPage - 1) * this.rowsPerPage);
+      this.search().then((data) => {
+        callback(this.searchResults);
+      }).catch((error) => {
+        callback([]);
+      });
+    },
+    async search() {
       try {
-        const searchResponse = await BL.getSearchResults(query, start, rows);
+        // let start = page
+        const start = ((this.currentPage - 1) * this.rowsPerPage);
+        // this.query, start, this.rowsPerPage
+        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage);
         this.searchResults = [];
         this.searchParams = {};
         this.searchFacets = {};
+        this.numFound = searchResponse.numFound;
         // console.log('HLS', searchResponse.highlighting);
         searchResponse.docs.forEach((elem, index) => {
           const highlight = searchResponse.highlighting[elem.id];
@@ -221,13 +234,16 @@ export default {
     }
 
     /* search-result-item */
-
     .search-result-item {
         width: 100%;
     }
 
     /* overwrite the default CSS */
     .search-result-item .hilite {
+        font-weight: bold;
+    }
+
+    .hilite {
         font-weight: bold;
     }
 
