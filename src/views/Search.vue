@@ -21,7 +21,7 @@
                   Search Results
                 </p>
               </div>
-            </div>label:
+            </div>
           </div>
         </div>
       </header>
