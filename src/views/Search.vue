@@ -32,7 +32,7 @@
           :per-page="rowsPerPage"
           v-model="currentPage"
           responsive="true"
-          class="table-sm table-border-soft topMargin"
+          class="table-sm table-border-soft mt-2"
           size="md"
         />
         <div class="search-results-rows">
@@ -241,12 +241,7 @@ export default {
         clear: both;
     }
 
-    .topMargin{
-        margin-top: 20px;
-    }
-
     /* search-result-item */
-
     .search-result-item {
         width: 100%;
     }
