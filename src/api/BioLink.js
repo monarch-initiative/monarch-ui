@@ -70,33 +70,6 @@ function getBiolinkAnnotation(cardType) {
 // to be.
 //
 
-//
-// This is the version of getNodeSummary() that talks to webapp.js and
-// the nodeByIdHandler() function there.
-//
-// export async function getNodeSummary(nodeId, nodeType) {
-//   const url = `/node/${nodeType}/${nodeId}.json`;
-
-//   const resp = await axios.get(url);
-//   const responseData = resp.data;
-//   // const { responseURL } = resp.request;
-//   console.log('...getNodeSummary', nodeId, nodeType);
-//   console.log(JSON.stringify(responseData, null, 2));
-//   // if (typeof responseData !== 'object') {
-//   //   reject(responseData);
-//   // }
-//   // else {
-//   //   resolve(responseData);
-//   // }
-//   //     })
-//   //     .catch(err => {
-//   //       reject(err);
-//   //     });
-//   // });
-
-//   return responseData;
-// }
-
 const nodeAssociationTypes = {
   anatomy: [
     'gene'
@@ -324,7 +297,7 @@ export function getNeighborhoodFromResponse(response) {
   };
 }
 
-// also add
+
 export async function getSearchResults(query, start, rows) {
   const bioentityUrl = `${biolink}search/entity/${query}`;
   const bioentityParams = {
@@ -340,6 +313,7 @@ export async function getSearchResults(query, start, rows) {
 
   return bioentityResponseData;
 }
+
 
 export async function getSearchTermSuggestions(term, selected) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
@@ -380,6 +354,7 @@ export async function getSearchTermSuggestions(term, selected) {
 
   return returnedPromise;
 }
+
 
 export function getNodeAssociations(nodeType, identifier, cardType, params) {
   const baseUrl = `${biolink}bioentity/`;

@@ -1,8 +1,9 @@
 # monarch-ui
 
+### Before committing
 
-
-
+- `npm run build` to update `/docs` directory
+- Make sure you commit '/docs'
 
 ## Project setup
 ```

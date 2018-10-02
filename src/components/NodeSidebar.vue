@@ -1,141 +1,164 @@
 <template>
-<!-- eslint-disable vue/html-indent -->
-<div>
 
-  <nav
-    id="sidebar"
-    :class="{ active: isNeighborhood }">
-    <div class="sidebar-content">
-      <div
-        v-for="c in superclasses"
-        :key="c.id"
-        class="row superclass">
-        <div class="col-12">
-          <router-link
-            :to="'/' + nodeType + '/' + c.id">
-            {{ c.label }}
-          </router-link>
-        </div>
-      </div>
+  <div>
+    <node-sidebar-neighborhood
+      :is-visible="isNeighborhoodShowing"
+      :node-type="nodeType"
+      :node-label="nodeLabel"
+      :subclasses="subclasses"
+      :superclasses="superclasses"
+    />
 
-      <div class="row currentclass">
-        <div class="col-12">
-          {{ nodeLabel }}
-        </div>
-      </div>
+    <div class="node-sidebar">
+      <ul
+        v-if="nodeType"
+        class="list-group">
+        <li class="list-group-item list-group-item-node">
+          <a
+            :href="debugServerName + $route.path"
+            target="_blank">
+            <img
+              :src="$parent.icons[nodeType]"
+              class="entity-type-icon">
+            <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
+          </a>
+          <a
+            :href="'http://alpha.monarchinitiative.org' + $route.path"
+            class="debug-link-to-alpha"
+            target="_blank"/>
+        </li>
 
-      <div
-        v-for="c in subclasses"
-        :key="c.id"
-        class="row subclass">
-        <div class="col-12">
-          <router-link
-            :to="'/' + nodeType + '/' + c.id">
-            {{ c.label }}
-          </router-link>
-        </div>
-      </div>
+        <li class="list-group-item list-group-item-squat">
+          <a
+            href="#"
+            @click="toggleNeighborhood()">
+            <i class="fa fa-2x fa-crosshairs"/>
+            <span class="list-group-item-value">Neighbors</span>
+          </a>
+        </li>
+
+
+        <li class="list-group-item list-group-item-squat">
+          <a
+            href="#"
+            @click="toggleFacets()">
+            <i class="fa fa-2x fa-list"/>
+            <span class="list-group-item-value">Facets</span>
+          </a>
+        </li>
+
+        <li
+          :class="{ active: !expandedCard }"
+          class="list-group-item list-group-item-squat">
+          <a
+            href="#"
+            @click="expandCard(null)">
+            <i class="fa fa-2x fa-th-large"/>
+            <span class="list-group-item-value">Overview</span>
+          </a>
+        </li>
+
+        <li
+          v-for="cardType in cardsToDisplay"
+          :class="{ active: expandedCard === cardType }"
+          :key="cardType"
+          class="list-group-item">
+          <a
+            :href="'#' + cardType"
+            @click="expandCard(cardType)">
+            <img
+              :src="$parent.icons[cardType]"
+              class="entity-type-icon">
+            <span
+              class="list-group-item-value">
+              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
+            </span>
+          </a>
+        </li>
+
+      </ul>
     </div>
-  </nav>
 
-  <div class="nav-sidebar-vertical">
-    <ul
-      v-if="nodeType"
-      class="list-group">
-      <li class="list-group-item list-group-item-node">
-        <a
-          :href="debugServerName + $route.path"
-          target="_blank">
-          <img
-            :src="$parent.icons[nodeType]"
-            class="entity-type-icon">
-          <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
-        </a>
-        <a
-          :href="'http://alpha.monarchinitiative.org' + $route.path"
-          class="debug-link-to-alpha"
-          target="_blank"/>
-      </li>
+    <node-sidebar-facets
+      :is-visible="isFacetsShowing"
+      v-model="facetObject.species"
+    />
 
-      <li class="list-group-item list-group-item-squat">
-        <a
-          href="#"
-          @click="toggleNeighborhood()">
-          <i class="fa fa-2x fa-crosshairs"/>
-          <span class="list-group-item-value">Neighbors</span>
-        </a>
-      </li>
+  </div>
 
-      <li
-        :class="{ active: !expandedCard }"
-        class="list-group-item list-group-item-squat">
-        <a
-          href="#"
-          @click="expandCard(null)">
-          <i class="fa fa-2x fa-th-large"/>
-          <span class="list-group-item-value">Overview</span>
-        </a>
-      </li>
-
-      <li
-        v-for="cardType in cardsToDisplay"
-        :class="{ active: expandedCard === cardType }"
-        :key="cardType"
-        class="list-group-item">
-        <a
-          :href="'#' + cardType"
-          @click="expandCard(cardType)">
-          <img
-            :src="$parent.icons[cardType]"
-            class="entity-type-icon">
-          <span
-            class="list-group-item-value">
-            {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
-          </span>
-        </a>
-      </li>
-      <li
-        class="node-filter-section">
-        <h5>Species</h5>
-
-        <assoc-facets
-          v-model="facetObject.species"/>
-
-      </li>
-    </ul>
-</div>
-
-</div>
 </template>
+
 
 <script>
 import * as BL from '@/api/BioLink';
 
-import AssocFacets from '@/components/AssocFacets.vue';
+import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
+import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
 
 export default {
   name: 'NodeSidebar',
 
   components: {
-    'assoc-facets': AssocFacets,
+    'node-sidebar-neighborhood': NodeSidebarNeighborhood,
+    'node-sidebar-facets': NodeSidebarFacets,
   },
 
-  /* eslint vue/require-default-prop: 0 */
   props: {
-    cardsToDisplay: Array,
-    expandedCard: String,
-    cardCounts: Object,
-    nodeType: String,
-    nodeLabel: String,
-    superclasses: Array,
-    subclasses: Array,
-    facetObject: Object,
-    isNeighborhood: Boolean
+    cardsToDisplay: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    expandedCard: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    cardCounts: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+    nodeType: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    nodeLabel: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    superclasses: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    subclasses: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    facetObject: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+    isNeighborhoodShowing: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    isFacetsShowing: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
 
   data() {
     return {
-      debugServerName: BL.debugServerName()
+      debugServerName: BL.debugServerName(),
     };
   },
   created() {
@@ -158,10 +181,13 @@ export default {
       this.$emit('expand-card', cardType);
     },
 
+    toggleFacets() {
+      this.$emit('toggle-facets');
+    },
+
     toggleNeighborhood() {
-      // this.isNeighborhood = !this.isNeighborhood;
       this.$emit('toggle-neighborhood');
-    }
+    },
   }
 };
 
@@ -170,171 +196,33 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 
-$sidebar-content-width: 500px;
+$title-bar-height: 70px;
 $sidebar-width: 200px;
 $collapsed-sidebar-width: 55px;
-$sidebar-button-width: 32px;
-$title-bar-height: 70px;
 
-#sidebar a,
-#sidebar a:hover,
-#sidebar a:focus {
+.node-sidebar {
+  background: $monarch-bg-color;
+  border-right: 1px solid #292e34;
+  bottom: 0;
+  left: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  width: $sidebar-width;
+  top: ($navbar-height);
+  z-index: 1000;
+}
+
+.node-sidebar a,
+.node-sidebar a:hover,
+.node-sidebar a:focus {
   color: inherit;
   text-decoration: none;
   transition: all 0.3s;
 }
 
-#sidebar a img.sidebar-logo {
-  margin: 0 0 0 0;
-  padding: 0;
-  height: 30px !important;
-}
 
-#sidebar {
-  width: $sidebar-content-width;
-  position: fixed;
-  top: ($navbar-height + 80);
-  left: (-$sidebar-content-width);
-  min-height: 40px;
-  z-index: 1050;
-  xcolor: #fff;
-  transition: all 0.3s;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: ghostwhite;
-  xpadding-left: $sidebar-button-width;
-}
-
-#sidebar.active {
-  left: 10px;
-  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
-}
-
-#sidebar .sidebar-content {
-  width: ($sidebar-content-width - $sidebar-button-width);
-  margin: 0;
-}
-
-#sidebar.active .sidebar-content {
-  xdisplay:block;
-}
-
-#sidebar .sidebar-content .superclass {
-  margin-left: 0;
-}
-
-#sidebar .sidebar-content .currentclass {
-  font-weight: 600;
-  margin-left: 15px;
-}
-
-#sidebar .sidebar-content .subclass {
-  margin-left: 30px;
-}
-
-.overlay {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.3);
-    z-index: 50;
-    display: none;
-}
-
-.overlay.active {
-    display: initial;
-}
-
-#sidebar ul li a {
-    text-align: left;
-}
-
-#sidebar.active ul li a {
-    padding: 20px 10px;
-    text-align: center;
-    font-size: 0.85em;
-}
-
-#sidebar.active ul li a i {
-    margin-right:  0;
-    display: block;
-    font-size: 1.8em;
-    margin-bottom: 5px;
-}
-
-#sidebar.active ul ul a {
-    padding: 10px !important;
-}
-
-#sidebar.active a[aria-expanded="false"]::before,
-#sidebar.active a[aria-expanded="true"]::before {
-    top: auto;
-    bottom: 5px;
-    right: 50%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
-
-#sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #47748b;
-}
-
-#sidebar ul li a {
-    padding: 10px;
-    font-size: 1.1em;
-    display: block;
-}
-#sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
-}
-#sidebar ul li a i {
-    margin-right: 10px;
-}
-
-#sidebar ul li.active > a,
-#sidbar a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
-}
-
-#sidebar a[data-toggle="collapse"] {
-    position: relative;
-}
-
-#sidebar a[aria-expanded="false"]::before,
-#sidebar a[aria-expanded="true"]::before {
-    content: '\e259';
-    display: block;
-    position: absolute;
-    right: 20px;
-    font-family: 'Glyphicons Halflings';
-    font-size: 0.6em;
-}
-#sidebar a[aria-expanded="true"]::before {
-    content: '\e260';
-}
-
-#sidebar ul ul a {
-    font-size: 0.9em !important;
-    padding-left: 30px !important;
-    background: #6d7fcc;
-}
-
-#sidebar a.download {
-    background: #fff;
-    color: #7386D5;
-}
-
-#sidebar a.article,
-#sidebar a.article:hover {
-    background: #6d7fcc !important;
-    color: #fff !important;
-}
-
-.nav-sidebar-vertical .node-filter-section {
+.node-sidebar .node-filter-section {
   padding: 0;
   margin-top: 6px;
   height: 250px;
@@ -342,18 +230,18 @@ $title-bar-height: 70px;
   color: white;
 }
 
-.nav-sidebar-vertical .node-filter-section h5 {
+.node-sidebar .node-filter-section h5 {
   margin-left:10px;
 }
 
-.nav-sidebar-vertical li.list-group-item {
+.node-sidebar li.list-group-item {
   margin: 0;
   padding: 0;
   background-color: transparent;
   xborder-color: #030303;
 }
 
-.nav-sidebar-vertical li.list-group-item > a {
+.node-sidebar li.list-group-item > a {
   background-color: transparent;
   color: #d1d1d1;
   cursor: pointer;
@@ -372,18 +260,18 @@ $title-bar-height: 70px;
   height: 35px;
 }
 
-.nav-sidebar-vertical li.list-group-item > a:hover {
+.node-sidebar li.list-group-item > a:hover {
   color: #fff;
   font-weight: 600
 }
 
-.nav-sidebar-vertical li.list-group-item.active > a {
+.node-sidebar li.list-group-item.active > a {
   background-color: #393f44;
   color: #fff;
   font-weight: 600
 }
 
-.nav-sidebar-vertical li.list-group-item.active > a:before {
+.node-sidebar li.list-group-item.active > a:before {
   background: #39a5dc;
   content: " ";
   height: 100%;
@@ -393,16 +281,16 @@ $title-bar-height: 70px;
   width: 3px;
 }
 
-.nav-sidebar-vertical li.list-group-item > a img.entity-type-icon {
-  margin: 0 5px;
-  padding: 0;
-  height: 30px;
+.node-sidebar li.list-group-item > a img.entity-type-icon {
+  margin:0 5px;
+  padding:0;
+  height:30px;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-node {
+.node-sidebar li.list-group-item.list-group-item-node {
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-node .debug-link-to-alpha {
+.node-sidebar li.list-group-item.list-group-item-node .debug-link-to-alpha {
   padding:0;
   height:0;
   width:100%;
@@ -413,56 +301,56 @@ $title-bar-height: 70px;
   }
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-node > a {
+.node-sidebar li.list-group-item.list-group-item-node > a {
   text-transform: uppercase;
   vertical-align: bottom;
   height: 28px;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-node img.entity-type-icon {
+.node-sidebar li.list-group-item.list-group-item-node img.entity-type-icon {
   margin: 0;
   height: 26px;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat {
+.node-sidebar li.list-group-item.list-group-item-squat {
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
+.node-sidebar li.list-group-item.list-group-item-squat > a {
   padding: 0;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a i.fa {
+.node-sidebar li.list-group-item.list-group-item-squat > a i.fa {
   margin: 2px 8px 0 12px;
   padding: 0;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a .list-group-item-value {
+.node-sidebar li.list-group-item.list-group-item-squat > a .list-group-item-value {
   padding: 0;
   vertical-align:text-bottom;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a {
+.node-sidebar li.list-group-item.list-group-item-squat > a {
   height: 35px;
 }
 
-.nav-sidebar-vertical li.list-group-item.list-group-item-squat > a > i {
+.node-sidebar li.list-group-item.list-group-item-squat > a > i {
   margin: 5px 0 0 5px;
 }
 
-.nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
+.node-sidebar li.list-group-item > a .list-group-item-value {
   margin: 2px 0 0 5px;
 }
 
 @media (max-width: $grid-float-breakpoint) {
-  .nav-sidebar-vertical {
+  .node-sidebar {
     width: $collapsed-sidebar-width;
   }
 
-  .nav-sidebar-vertical li.list-group-item > a .list-group-item-value {
+  .node-sidebar li.list-group-item > a .list-group-item-value {
     display: none;
   }
 
-  .nav-sidebar-vertical li.node-filter-section {
+  .node-sidebar li.node-filter-section {
     display: none;
   }
 }
