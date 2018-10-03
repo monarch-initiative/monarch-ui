@@ -68,12 +68,16 @@
         class="dropdown-menu list-group dropList px-4"
         style="overflow-y:auto;"
       >
+        <!--
+          @blur above hides @click. Use @mousedown instead
+          https://stackoverflow.com/a/50313781/5667222
+        -->
         <div
           v-for="(suggestion, index) in suggestions"
           :key="index"
           :class="{'active': isActive(index)}"
           class="border-bottom px-1"
-          @click="suggestionClick(index)"
+          @mousedown="suggestionClick(index)"
           @mouseover="mouseOver(index)"
         >
           <div class="row p-0">
@@ -195,6 +199,7 @@ export default {
   },
   data() {
     return {
+      destroying: false,
       selected: [],
       exampleSearches,
       options: [
@@ -232,10 +237,15 @@ export default {
       this.selected.push(this.singleCategory);
     }
   },
+  beforeDestroy() {
+    this.destroying = true;
+  },
   methods: {
     debounceInput: debounce(
       function debounceInput() {
-        this.fetchData();
+        if (!this.destroying) {
+          this.fetchData();
+        }
       }, 500, { leading: false, trailing: true }
     ),
     async fetchData() {
