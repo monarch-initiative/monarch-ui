@@ -74,59 +74,50 @@
         </div>
       </section>
 
-      <section class="news-section text-center">
+      <section class="news-section">
         <div class="container-fluid">
           <div class="row">
             <div class="col-sm">
-              <h3>Recent Blog Posts</h3>
-              <ul class="list-inline">
-                <li>
-                  <a href="https://medium.com/@MonarchInit/curating-rare-disease-genes-an-interview-with-eleanor-williams-of-genomics-england-ad2a677de8a0">
-                    Feb 28, 2018: <b>Curating Rare Disease Genes...</b>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://medium.com/@MonarchInit/exomiser-10-faster-leaner-better-c988650488be">
-                    March 22, 2018: <b>Exomiser 10: Faster, Leaner, Better</b>
-                  </a>
-                </li>
-                <li>
-                  <a href="https://medium.com/@MonarchInit/tailoring-the-nci-thesaurus-for-semantic-interoperability-21305ccfe3a6">
-                    March 2, 2018: <b>Tailoring the NCI Thesaurus...</b>
-                  </a>
-                </li>
-              </ul>
-              <br>
-              <h3>Upcoming Events</h3>
-              <ul class="list-inline">
-                <li>
-                  <a href="http://icbo2018.cgrb.oregonstate.edu/">
-                    ICBO Conference, Aug 7, 2018
-                  </a>
-                </li>
-              </ul>
-              <div style="padding: 0 0 15px 0;">
-                <a
-                  class="btn btn-dark"
+              <h5 class="text-center">
+                News from <a
                   target="_blank"
-                  href="https://medium.com/@MonarchInit"
-                  role="button">Read More</a>
-              </div>
+                  href="https://medium.com/@MonarchInit">
+                  @MonarchInit
+                </a>
+              </h5>
+              <ul class="list-inline">
+                <li
+                  v-for="(item, index) in newsItems"
+                  :key="index">
+                  <small>{{ item.date }}</small>
+                  <a
+                    :href="item.url"
+                    target="_blank">
+                    {{ item.title }}
+                  </a>
+                </li>
+              </ul>
             </div>
             <div class="col-sm">
-              <div>
-                <h3>Tweets about Monarch</h3>
+              <h5 class="text-center">
+                <i class="fa fa-twitter fa-fw"/>
+                Tweets from
                 <a
-                  class="twitter-timeline"
-                  href="https://twitter.com/search?q=%40MonarchInit"
-                  data-widget-id="527567015918051328"
-                  data-preview=""
-                  data-chrome="noheader"
-                  data-height="250">
-                  Loading Tweets about "@MonarchInit"
+                  href="https://twitter.com/MonarchInit"
+                  target="_blank">
+                  @MonarchInit
                 </a>
-              </div>
+              </h5>
+              <a
+                class="twitter-timeline"
+                href="https://twitter.com/TheDoctorBud/lists/monarchinitiative1?ref_src=twsrc%5Etfw"
+                data-preview=""
+                data-chrome="noheader nofooter"
+                data-height="350">
+                @MonarchInit
+              </a>
             </div>
+
           </div>
         </div>
       </section>
@@ -312,6 +303,7 @@
 // @ is an alias to /src
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import HomeFooter from '@/components/HomeFooter.vue';
+import getNewsItems from '@/api/News';
 
 export default {
   name: 'Home',
@@ -321,50 +313,31 @@ export default {
   },
   data() {
     return {
+      newsItems: [],
     };
   },
-  mounted() {
+  async mounted() {
+    this.newsItems = await getNewsItems();
+
+    /* eslint-disable */
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t.widgets.load();
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function (f) {
+        t._e.push(f);
+      };
+      return t;
+    }(document, "script", "twitter-wjs"));
+    /* eslint-enable */
   }
 };
-
-/*
-
-// From https://dev.twitter.com/web/javascript/loading - 7/26/2015
-!(function(d, s, id) {
-
-  var js,
-      fjs=d.getElementsByTagName(s)[0],
-      p=/^http:/.test(d.location)?'http':'https';
-  if(!d.getElementById(id)){
-    js=d.createElement(s);
-    js.id=id;
-    js.src=p+"://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js,fjs);
-  }
-
-  // https://twittercommunity.com/t/auto-expand-photos-always-on-for-embedded-timeline/62510/48
-
-  var hideRecursive = false;
-  var hideTweetMedia = function() {
-    var container = jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-Tweet-media");
-      container.css("display", "none");
-      jQuery("#twitter").css("height", "100%");
-      container.css("border", "3px solid red");
-      if (!hideRecursive) {
-        jQuery("#twitter").find(".twitter-timeline").contents().find(".timeline-TweetList").bind('DOMSubtreeModified propertychange',
-          function() {
-            hideTweetMedia(this);
-            hideRecursive = true;
-          }
-        );
-      }
-  };
-  hideTweetMedia();
-  jQuery('#twitter').on('DOMSubtreeModified propertychange',"#twitter-widget-0", function() {
-      hideTweetMedia();
-  });
-}(document, "script", "twitter-wjs"));
-*/
 
 </script>
 
@@ -460,9 +433,18 @@ export default {
   }
 
   #monarch-home-container .news-section {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     font-size: 18px;
+  }
+
+  #monarch-home-container ul {
+    max-height: 350px;
+    overflow-y: auto;
+  }
+
+  #monarch-home-container ul li {
+    line-height: 1.5rem;
   }
 
   #monarch-home-container .search-section {

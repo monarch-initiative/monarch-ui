@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import axios from 'axios';
 
 const servers = {
