@@ -56,17 +56,15 @@
         <h4>For the top 15 species in Monarch</h4>
       </div>
     </section>
-    <footer-all/>
+    <monarch-footer/>
   </div>
 </template>
 
 <script>
-import FooterAll from '@/components/FooterAll.vue';
-
 export default {
   name: 'Analytics',
   components: {
-    'footer-all': FooterAll,
+    'monarch-footer': require('@/components/Footer.md').default,
   },
   data() {
     return {

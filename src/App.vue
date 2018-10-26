@@ -21,31 +21,33 @@ export default {
 <style lang="scss">
 @import "~@/style/variables.scss";
 
-#monarch-content-fragment {
-  margin: 0;
-  padding: 0;
-}
-
 $fa-font-path: "~font-awesome/fonts" !default;
 @import '~font-awesome/scss/font-awesome';
 @import "~bootstrap/scss/bootstrap";
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 
-.wrapperforfooter {
-  min-height: 100%;
-  width: 100%;
-  margin: ($navbar-height + 3) 0 2px 0;
-  padding: 0;
-}
-
-.wrapperforfooter .container-fluid.monarch-container {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.container-fluid.monarch-view {
+  xborder:5px solid orange;
 }
 
 [v-cloak] {
   display: none;
+}
+
+div.vue-markdown {
+  margin-top: $navbar-height;
+  xborder: 5px solid cyan;
+}
+
+div.container-fluid.monarch-home-view div.vue-markdown,
+div.container-fluid.monarch-view div.vue-markdown {
+  margin-top: 0;
+  xborder: 5px solid magenta;
+}
+
+div.vue-markdown-plain {
+  margin-top: $navbar-height;
+  padding: 20px;
+  xborder: 5px solid lightgreen;
 }
 </style>

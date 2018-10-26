@@ -42,6 +42,21 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/about/readme',
+      name: 'about-readme',
+      component: require('../README.md').default,
+    },
+    {
+      path: '/about/monarch',
+      name: 'about-monarch',
+      component: require('@/views/AboutMonarch.md').default,
+    },
+    {
+      path: '/about/team',
+      name: 'about-team',
+      component: require('@/views/AboutTeam.md').default,
+    },
+    {
       path: '/search/:query',
       name: 'search',
       // route level code-splitting
