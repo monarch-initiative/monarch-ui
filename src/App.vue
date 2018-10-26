@@ -21,11 +21,6 @@ export default {
 <style lang="scss">
 @import "~@/style/variables.scss";
 
-#monarch-content-fragment {
-  margin: 0;
-  padding: 0;
-}
-
 $fa-font-path: "~font-awesome/fonts" !default;
 @import '~font-awesome/scss/font-awesome';
 @import "~bootstrap/scss/bootstrap";

@@ -1,0 +1,48 @@
+<div
+  class="features-section">
+
+## What We Do
+
+- Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data.
+- Provide a portal for exploration of phenotype-based similarity.
+- Facilitate identification of animal models of human disease through phenotypic similarity.
+- Enable quantitative comparison of cross-species phenotypes.
+- Develop embeddable widgets for data exploration.
+- Influence genotype and phenotype reporting standards.
+- Improve ontologies to better curate genotype-phenotype data.
+
+  <router-link
+    to="/page/about"
+    class="btn btn-dark">
+    <span>Learn More</span>
+  </router-link>
+</div>
+
+
+<style lang="scss">
+@import "~@/style/variables";
+
+.features-section {
+  height: auto;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+  background-color: #E8E8E8;
+  background-size: cover;
+}
+
+.features-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.features-section ul li {
+  line-height: 1.3rem;
+  padding: 10px;
+}
+
+.features-section .btn.btn-dark {
+  color: white;
+  transition: all .3s ease-in-out;
+}
+</style>

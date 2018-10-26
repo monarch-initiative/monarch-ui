@@ -42,9 +42,15 @@
     "eslint-import-resolver-alias": "^1.1.1",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-import": "^2.14.0",
+    "frontmatter-markdown-loader": "^1.4.0",
+    "html-loader": "^0.5.5",
+    "markdown-it": "^8.4.2",
+    "markdown-it-link-attributes": "^2.1.0",
     "node-sass": "^4.9.3",
     "sass-loader": "^7.1.0",
+    "vmark": "^1.0.2",
+    "vmark-loader": "^1.0.0",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "vue-markdown-loader": "^2.4.1"
   }
 }
