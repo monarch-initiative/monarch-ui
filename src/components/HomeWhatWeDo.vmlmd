@@ -12,7 +12,7 @@
 - Improve ontologies to better curate genotype-phenotype data.
 
   <router-link
-    to="/page/about"
+    to="/about/monarch"
     class="btn btn-dark">
     <span>Learn More</span>
   </router-link>

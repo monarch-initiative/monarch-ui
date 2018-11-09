@@ -42,6 +42,11 @@ export default new Router({
       component: Home,
     },
     {
+      path: '/about/monarch',
+      name: 'about-monarch',
+      component: require('@/views/AboutMonarch.vmlmd').default,
+    },
+    {
       path: '/search/:query',
       name: 'search',
       // route level code-splitting

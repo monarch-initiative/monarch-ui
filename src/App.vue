@@ -26,18 +26,12 @@ $fa-font-path: "~font-awesome/fonts" !default;
 @import "~bootstrap/scss/bootstrap";
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 
-.wrapperforfooter {
-  min-height: 100%;
-  width: 100%;
-  margin: ($navbar-height + 3) 0 2px 0;
-  padding: 0;
-}
-
-.wrapperforfooter .container-fluid.monarch-container {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.container-fluid.monarch-view {
+  margin-top: $navbar-height;
+  xheight: 100%;
+  xwidth: 100%;
+  xmargin: 0;
+  xpadding: 0;
 }
 
 [v-cloak] {

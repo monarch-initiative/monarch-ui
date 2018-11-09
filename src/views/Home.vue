@@ -1,7 +1,6 @@
 <template>
   <div
-    id="monarch-home-container"
-    class="container-fluid monarch-container monarch-home-container">
+    class="container-fluid monarch-view monarch-home-view">
 
     <div class="row">
       <vml-home-intro-component/>
@@ -38,26 +37,21 @@ export default {
 <style lang="scss">
   @import "~@/style/variables";
 
-  .monarch-home-container {
-    padding-top: $navbar-height;
+  .container-fluid.monarch-view.monarch-home-view > div:not(.row) {
+    border-top:1px solid orange; // For debugging home page layout
+    border-bottom:1px solid orange; // For debugging home page layout
   }
-
-  #monarch-home-container > div:not(.row) {
-    xborder-top:1px solid orange; // For debugging home page layout
-    xborder-bottom:1px solid orange; // For debugging home page layout
-  }
-  #monarch-home-container > .row > div {
-    xborder-top:1px solid cyan; // For debugging home page layout
-    xborder-bottom:1px solid cyan; // For debugging home page layout
+  .container-fluid.monarch-view.monarch-home-view > .row > div {
+    border-top:1px solid cyan; // For debugging home page layout
+    border-bottom:1px solid cyan; // For debugging home page layout
     width: 100%;
   }
-
 
   //
   // Default classes for subelements of Home
   // Potentially overridden by the various subelements
   //
-  .monarch-home-container p {
+  .monarch-home-view p {
     font-size: 18px;
 
     @media(min-width:$grid-float-breakpoint) {

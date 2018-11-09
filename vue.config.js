@@ -24,6 +24,8 @@ module.exports = {
     markdownIt.preventExtract = true;
     markdownIt.raw = true;
     markdownIt.wrapper = 'div';
+    markdownIt.__vueMarkdownOptions__ = {};
+
     markdownIt.preprocess = function preprocess(md, source) {
       md.use(mila, {
         attrs: {
@@ -63,7 +65,8 @@ module.exports = {
       .loader('vue-loader')
       .end()
       .use('vue-markdown-loader')
-      .loader('vue-markdown-loader/lib/markdown-compiler')
+      // .loader('vue-markdown-loader/lib/markdown-compiler')
+      .loader('vue-markdown-loader-patch.js')
       .options(markdownIt);
     // .options({
     //   raw: true,

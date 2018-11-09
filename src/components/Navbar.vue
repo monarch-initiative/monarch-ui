@@ -64,7 +64,7 @@
           text="About"
         >
           <b-dropdown-item
-            to="/page/about">
+            to="/about/monarch">
             About Monarch
           </b-dropdown-item>
 

@@ -1,6 +1,6 @@
-$navbar-height: 32px !default;
+$navbar-height: 36px !default;
 
-$font-size-base: 0.875rem;		// 14px !default;
+// $font-size-base: 0.875rem;		// 14px !default;
 $font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
 $grid-float-breakpoint: 700px;
@@ -21,6 +21,5 @@ $grid-breakpoints: (
   lg: 992px,
   xl: 1200px
 ) !default;
-
 
 $collapsed-sidebar-width: 55px;
