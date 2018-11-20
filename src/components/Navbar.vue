@@ -50,6 +50,7 @@
             to="/analyze/phenotypes">
             Analyze Phenotypes
           </b-dropdown-item>
+          <!--
           <b-dropdown-item
             to="/annotate/text">
             Annotate Text
@@ -58,6 +59,7 @@
             to="/page/exomes">
             Exomes
           </b-dropdown-item>
+          -->
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown
@@ -125,6 +127,7 @@
 
         </b-nav-item-dropdown>
 
+        <!--
         <b-nav-item-dropdown
           text="Data"
         >
@@ -144,9 +147,9 @@
           </b-dropdown-item>
 
         </b-nav-item-dropdown>
+      -->
       </b-navbar-nav>
 
-      <!-- Right aligned nav items -->
       <b-navbar-nav
         class="ml-auto">
         <div
