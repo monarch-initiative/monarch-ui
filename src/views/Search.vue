@@ -58,11 +58,7 @@
           </div>
         </div>
 
-
-        <footer class="footer">
-          <footer-all/>
-        </footer>
-
+        <monarch-footer/>
       </div>
     </div>
 </div></template>
@@ -70,7 +66,6 @@
 
 <script>
 import * as BL from '@/api/BioLink';
-import FooterAll from '@/components/FooterAll.vue';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 const validCats = {
@@ -84,7 +79,7 @@ const validCats = {
 export default {
   name: 'Search',
   components: {
-    'footer-all': FooterAll
+    'monarch-footer': require('@/components/Footer.md').default,
   },
   data() {
     return {

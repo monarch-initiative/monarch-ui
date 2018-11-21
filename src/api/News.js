@@ -2,7 +2,7 @@ import axios from 'axios';
 import yaml from 'js-yaml';
 
 export default async function getNewsItems() {
-  const newsUrl = `news.yaml`;
+  const newsUrl = `${process.env.BASE_URL}news.yaml`;
   const newsResponse = await axios.get(newsUrl);
 
   let newsItems = [];

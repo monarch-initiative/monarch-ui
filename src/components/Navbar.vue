@@ -21,7 +21,7 @@
       is-nav=""
     >
       <b-navbar-nav>
-
+        <!--
         <b-nav-item-dropdown
           text="Browse"
         >
@@ -42,7 +42,7 @@
             Models
           </b-dropdown-item>
         </b-nav-item-dropdown>
-
+        -->
         <b-nav-item-dropdown
           text="Tools"
         >
@@ -50,6 +50,7 @@
             to="/analyze/phenotypes">
             Analyze Phenotypes
           </b-dropdown-item>
+          <!--
           <b-dropdown-item
             to="/annotate/text">
             Annotate Text
@@ -58,21 +59,23 @@
             to="/page/exomes">
             Exomes
           </b-dropdown-item>
+          -->
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown
           text="About"
         >
           <b-dropdown-item
-            to="/page/about">
+            to="/about/monarch">
             About Monarch
           </b-dropdown-item>
 
           <b-dropdown-item
-            to="/page/team">
-            Team
+            to="/about/team">
+            About Us
           </b-dropdown-item>
 
+          <!--
           <b-dropdown-item
             to="/page/disclaimer">
             Disclaimer
@@ -86,6 +89,12 @@
           <b-dropdown-item
             to="/page/links">
             Link To Us
+          </b-dropdown-item>
+          -->
+
+          <b-dropdown-item
+            to="/about/README">
+            README
           </b-dropdown-item>
 
           <b-dropdown-item
@@ -118,6 +127,7 @@
 
         </b-nav-item-dropdown>
 
+        <!--
         <b-nav-item-dropdown
           text="Data"
         >
@@ -137,9 +147,9 @@
           </b-dropdown-item>
 
         </b-nav-item-dropdown>
+      -->
       </b-navbar-nav>
 
-      <!-- Right aligned nav items -->
       <b-navbar-nav
         class="ml-auto">
         <div

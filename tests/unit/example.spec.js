@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import FooterAll from '@/components/FooterAll.vue';
+import MonarchFooter from '@/components/Footer.md';
 
-describe('FooterAll.vue', () => {
+describe('Footer.md', () => {
   it('renders About Monarch', () => {
-    const wrapper = shallowMount(FooterAll);
+    const wrapper = shallowMount(MonarchFooter);
     console.log('wt', wrapper.text());
     expect(wrapper.text()).to.include('About Monarch');
   });
