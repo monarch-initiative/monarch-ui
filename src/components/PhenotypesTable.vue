@@ -10,26 +10,22 @@
         class="table-border-soft"
       >
         <template
-          slot="hit"
+          slot="hitLabel"
           slot-scope="data"
         >
           <strong>{{ data.item.hitLabel }}</strong>
         </template>
         <template
-          slot="combined_score"
+          slot="hitId"
           slot-scope="data"
         >
-          {{ data.item.combinedScore }}
+          {{ data.item.hitId }}
         </template>
         <template
-          slot="most_informative_shared_phenotype"
+          slot="mostInformativeLabel"
           slot-scope="data"
         >
-          <router-link
-            :to="data.item.mostInformativeLink">
-            {{ data.item.mostInformativeLabel }}
-          </router-link>
-
+          {{ data.item.mostInformativeLabel }}
         </template>
         <template
           slot="misp_ic"
@@ -75,43 +71,62 @@ export default {
       type: Array,
       required: true
     },
-    genes: {
+    targetSpecies: {
+      type: String,
+      required: false,
+      default: '9606'
+    },
+    geneList: {
       type: Array,
-      required: true
+      required: false,
     }
   },
+
+
   data() {
     return {
+      test: {  combinedScore: 65,
+        hitId: "MONDO:0015999",
+        hitLabel: "primary pigmented nodular adrenocortical disease",
+        mostInformativeIc: "10.16",
+        mostInformativeId: "HP:0001065",
+        mostInformativeLabel: "Striae distensae",
+        mostInformativeLink: "/phenotype/HP:0001065",
+        otherMatchIc: "3.67",
+        otherMatchId: "MP:0001533",
+        otherMatchLabel: "abnormal skeleton physiology",
+        otherMatchLink: "/phenotype/MP:0001533"},
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
       fields: [
-        {
-          key: 'hit',
+        { key: 'hitLabel',
+          label: 'Match Label',
+          sortable: true
+        },
+        { key: 'hitId',
+          label: 'Match Identifier',
           sortable: true
         },
         {
-          key: 'combined_score',
+          label: 'Similarity Score',
+          key: 'combinedScore',
+          sortable: true
+        },
+        { key: 'mostInformativeLabel',
+          label: 'Most Informative Phenotype',
           sortable: true
         },
         {
-          key: 'most_informative_shared_phenotype',
-          sortable: true
-        },
-        {
-          key: 'misp_ic',
+          key: 'mostInformativeId',
+          label: 'Most Informative Id',
           sortable: true,
-          label: 'MISP IC'
-        },
-        {
-          key: 'other_matching_phenotypes',
-          sortable: true
-        },
-        {
-          key: 'omp_ic',
+        },{
+          key: 'mostInformativeIc',
+          label: 'Most Informative IC Score',
           sortable: true,
-          label: 'OMP IC'
-        }
+        },
+
       ],
       items: [],
       preItems: []
@@ -133,7 +148,6 @@ export default {
       const that = this;
       try {
         const searchResponse = await BL.comparePhenotypes(this.phenotypes, this.genes);
-
         this.preItems = searchResponse;
         this.dataFetched = true;
       }

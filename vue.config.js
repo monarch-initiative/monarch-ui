@@ -76,7 +76,7 @@ module.exports = {
 
   chainWebpack: (config) => {
     config.resolveLoader.modules.add(
-      '/Users/bud/MI/monarch-ui/src/loaders/'
+      path.resolve('./src/loaders/')
     );
 
     // vue-markdown-loader
