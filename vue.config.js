@@ -1,7 +1,6 @@
 const path = require('path');
 
 const markdownItClass = require('markdown-it');
-const mila = require('markdown-it-link-attributes');
 
 const mdLoader = markdownItClass({
   html: true,
@@ -14,62 +13,16 @@ const mdLoaderPlain = markdownItClass({
   linkify: true
 });
 
-const milaOptions = {
-  attrs: {
-    target: '_blank',
-    rel: 'noopener'
-  }
-};
-
 // mdLoader.preventExtract = true;
 mdLoader.raw = true;
 mdLoader.wrapper = 'div';
-// mdLoader.use = [   // Fails during npm run build
-//   [mila, milaOptions]
-// ];
-
-mdLoader.preprocess = function preprocess(md, source) {
-  md.use(mila, milaOptions);
-
-  return source;
-};
-
-//   // // Remember old renderer, if overriden, or proxy to default renderer
-//   // const defaultRender = md.renderer.rules.link_open || function defaultRender(tokens, idx, options, env, self) {
-//   //   return self.renderToken(tokens, idx, options);
-//   // };
-
-//   // md.renderer.rules.link_open = function link(tokens, idx, options, env, self) {
-//   //   // If you are sure other plugins can't add `target` - drop check below
-//   //   const aIndex = tokens[idx].attrIndex('target');
-
-//   //   if (aIndex < 0) {
-//   //     tokens[idx].attrPush(['target', '_blank']); // add new attribute
-//   //   }
-//   //   else {
-//   //     tokens[idx].attrs[aIndex][1] = '_blank'; // replace value of existing attr
-//   //   }
-
-//   //   // pass token to default renderer.
-//   //   return defaultRender(tokens, idx, options, env, self);
-//   // };
-
-//   // do any thing
-//   return source;
-// };
 
 mdLoaderPlain.raw = true;
 mdLoaderPlain.wrapper = 'div';
 mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
-mdLoaderPlain.preprocess = function preprocess(md, source) {
-  md.use(mila, milaOptions);
-
-  return source;
-};
-
 module.exports = {
-  outputDir: 'docs',
+  // outputDir: 'dist',
   baseUrl: '/monarch-ui/',
 
   // lintOnSave: false,
@@ -78,11 +31,6 @@ module.exports = {
     config.resolveLoader.modules.add(
       path.resolve('./src/loaders/')
     );
-
-    // vue-markdown-loader
-    // - [vue-markdown-loader](https://github.com/QingWei-Li/vue-markdown-loader)
-    // - [markdown-it](https://github.com/markdown-it/markdown-it)
-    // - [markdown-it-link-attributes](https://github.com/crookedneighbor/markdown-it-link-attributes)
 
     config.module
       .rule('README')
@@ -97,12 +45,6 @@ module.exports = {
       // Original: .loader('vue-markdown-loader/lib/markdown-compiler')
       .loader('vue-markdown-loader-improved.js')
       .options(mdLoaderPlain);
-      // .options({
-      //   raw: true,
-      //   wrapper: 'div',
-      //   wrapperClass: 'vue-markdown-plain',
-      //   options: mdLoaderPlain
-      // });
 
     config.module
       .rule('md')

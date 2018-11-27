@@ -2,7 +2,60 @@
 
 This repository contains the Monarch Initiative web application.
 
-## Development Prerequisites (move to CONTRIBUTING.md)
+### Environment setup
+
+There may be some one-time installation of tools, depending upon whether you have the supported version of NodeJS running. NodeJS v8.12.0 is currently supported, although the project will likely build fine with later versions of NodeJS. If the following command fails, then you probably do not have NodeJS installed:
+
+```bash
+node -v
+```
+
+If the above command fails or if it reports a version number significantly different from `v8.12.0`, then you should install `nvm` and then install the correct version of NodeJS. We have provided detailed instructions at the end of this document [Installing NodeJS](#installing-nodejs).
+
+### Project setup
+
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+
+```
+npm run build
+```
+
+### Deploy to gh-pages branch
+
+Use `npm run publish`, which will run `publish.sh`, which will:
+- Build into dist/
+- Push to the gh-pages branch of the current `origin` repository.
+- *Based upon https://blog.bloomca.me/2017/12/15/how-to-push-folder-to-github-pages.html*
+
+### Lints and fixes files
+
+```
+npm run lint
+```
+
+### Run your unit tests
+
+```
+npm run test:unit
+```
+
+### Run your end-to-end tests
+
+```
+npm run test:e2e
+```
+
+## Installing NodeJS
 
 There is some one-time setup that needs to be completed before you can build and develop the application. Most of this is involved with ensuring that you have a compatible version of NodeJS installed.
 
@@ -62,55 +115,3 @@ By default, you will need to type `nvm use v8.12.0` before any development sessi
 ```bash
 nvm alias default 8.12.0
 ```
-
----
-
-## How to Build the App
-
-### Before committing
-
-- `npm run build` to update `/docs` directory
-- Make sure you commit '/docs'
-
-*TODO: Add some more details about the /docs directory and GHPages*
-
-*TODO: Write a 'publish' script which isolates the committing of source changes from the publication to GHPages*.
-
-
-### Project setup
-
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-
-```
-npm run build
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Run your unit tests
-
-```
-npm run test:unit
-```
-
-### Run your end-to-end tests
-
-```
-npm run test:e2e
-```
-
-
