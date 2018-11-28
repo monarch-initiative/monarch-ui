@@ -50,4 +50,10 @@ div.vue-markdown-plain {
   padding: 20px;
   xborder: 5px solid lightgreen;
 }
+
+a.header-anchor {
+  color: lightgray;
+  vertical-align: text-top;
+  font-size: 0.8em;
+}
 </style>

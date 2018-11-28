@@ -20,7 +20,7 @@ module.exports = {
     'airbnb-base',
   ],
   rules: {
-    'no-console': errorInProduction,
+    'no-console': 0, // errorInProduction,
     'no-debugger': errorInProduction,
     'import/dynamic-import-chunkname': 'error',
     'brace-style': [2, 'stroustrup'],

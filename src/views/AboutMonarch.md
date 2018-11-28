@@ -23,7 +23,7 @@ Our philosophy is based on the premise that we want to *make all the data count*
 #### Background
 
 
-It is well-known that mutations in orthologous genes and genes in the same signaling pathway often manifest in similar phenotypes, and therefore study of variant phenotypes in model systems may provide insight into human gene function and understanding of disease. For example, mutations in [PAX6](/gene/NCBIGene:5080), which gives rise to the condition [Aniridia](/disease/OMIM:106210) with striking eye phenotypes, also cause eye phenotypic abnormalities in mouse, zebrafish, and flies, including [abnormal lenses](/phenotype/HP_0000517), [underdeveloped](/phenotype/HP_0000517) or even [absent eyes](/phenotype/MP_0001286).
+It is well-known that mutations in orthologous genes and genes in the same signaling pathway often manifest in similar phenotypes, and therefore study of variant phenotypes in model systems may provide insight into human gene function and understanding of disease. For example, mutations in [PAX6](/gene/NCBIGene:5080), which gives rise to the condition [Aniridia](/disease/OMIM:106210) with striking eye phenotypes, also cause eye phenotypic abnormalities in mouse, zebrafish, and flies, including [abnormal lenses](/phenotype/HP:0000517), [underdeveloped](/phenotype/HP:0000517) or even [absent eyes](/phenotype/MP:0001286).
 
 <figure class="right">
   <img src="http://journals.plos.org/plosbiology/article/figure/image?id=10.1371/journal.pbio.1000247.g001&size=medium" style="max-height:300px;" />

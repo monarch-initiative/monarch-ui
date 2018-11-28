@@ -5,12 +5,13 @@
   "scripts": {
     "ui": "npx vue ui",
     "serve": "npx vue-cli-service serve --port 8081",
-    "build": "npx vue-cli-service build && cp docs/index.html docs/404.html",
-    "build-with-symlink": "npm run build && (cd docs/ && ln -s . monarch-ui)",
+    "build": "npx vue-cli-service build && cp dist/index.html dist/404.html",
+    "build-with-symlink": "npm run build && (cd dist/ && ln -s . monarch-ui)",
     "lint": "npx vue-cli-service lint",
     "test:unit": "npx vue-cli-service test:unit",
     "test:e2e": "npx vue-cli-service test:e2e",
-    "publish": "npm run build && git add -A docs/"
+    "publish": "./publish.sh",
+    "oldpublish": "npm run build && git add -A dist/"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -25,18 +26,18 @@
     "vue": "^2.5.17",
     "vue-form-wizard": "^0.8.4",
     "vue-json-tree": "^0.3.3",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "@vue/cli": "^3.1.3",
-    "@vue/cli-plugin-babel": "^3.1.1",
-    "@vue/cli-plugin-e2e-nightwatch": "^3.1.1",
-    "@vue/cli-plugin-eslint": "^3.1.5",
-    "@vue/cli-plugin-unit-mocha": "^3.1.1",
-    "@vue/cli-service": "^3.1.4",
+    "@vue/cli": "^3.2.1",
+    "@vue/cli-plugin-babel": "^3.2.0",
+    "@vue/cli-plugin-e2e-nightwatch": "^3.2.0",
+    "@vue/cli-plugin-eslint": "^3.2.1",
+    "@vue/cli-plugin-unit-mocha": "^3.2.0",
+    "@vue/cli-service": "^3.2.0",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
-    "@vue/test-utils": "^1.0.0-beta.25",
+    "@vue/test-utils": "^1.0.0-beta.26",
     "chai": "^4.2.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-alias": "^1.1.1",
@@ -44,7 +45,7 @@
     "eslint-plugin-import": "^2.14.0",
     "html-loader": "^0.5.5",
     "markdown-it": "^8.4.2",
-    "markdown-it-link-attributes": "^2.1.0",
+    "markdown-it-anchor": "^5.0.2",
     "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",

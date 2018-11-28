@@ -44,10 +44,15 @@ institutions:
         alumni: false
         bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
       - name: Dan Keith
-        picture: img/team/DanKeith.jpg
-        title: Research Software Engineer
+        picture: img/team/DanielKeith.png
+        title: Bioinformatics Semantic Engineer
         alumni: false
         bio: Dan is a Software Engineer for the Monarch Initiative, within the OHSU Ontology Development Group. He works on the Monarch Initiative Portal and WebPhenote web applications, as well as helping with tooling and infrastructure. Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
+      - name: Tim Putman
+        picture: img/team/TimPutman.jpg
+        title: Bioinformatic Biologist
+        alumni: false
+        bio: Tim needs his bio to be filled out.
       - name: Tom Conlin
         picture: img/team/TomConlin.png
         title: Bioinformaticist
@@ -59,7 +64,7 @@ institutions:
         alumni: false
         bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
       - name: Anne E Thessen
-        picture: img/team/AnneThessen.jpg
+        picture: img/team/AnneThessen.png
         title: Biodiversity Informaticist
         alumni: false
         bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.
