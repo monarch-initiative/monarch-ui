@@ -2,7 +2,6 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import VueD3 from 'vue-d3';
 
 import router from './router';
 // import './registerServiceWorker';
@@ -12,7 +11,6 @@ import '@/style/debug-logo-animation.scss';
 
 
 Vue.config.productionTip = false;
-Vue.use(VueD3);
 Vue.use(BootstrapVue);
 
 
