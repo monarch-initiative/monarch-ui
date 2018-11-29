@@ -132,7 +132,7 @@
     <div
       v-if="homeSearch"
       class="p-0 m-0">
-      Select Example:
+      Examples:
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
@@ -408,10 +408,6 @@ export default {
   .active {
     background-color: cornflowerblue;
     color: white;
-  }
-
-  div.form-group .btn.btn-dark.btn-sm.active {
-    border-color: ghostwhite;
   }
 
   .autorootdiv {

@@ -3,7 +3,7 @@
 
 ![](../assets/img/monarch-logo-white-stacked.png)
 
-#### Advancing *translational science* by **semantically integrating** biological information across species.
+##### Advancing *translational science* by **semantically integrating** biological information across species.
 
   <embedded-autocomplete
     :home-search="true"

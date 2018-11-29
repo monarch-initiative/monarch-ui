@@ -2,7 +2,7 @@
   <div>
     <div v-show="dataFetched">
       <h5>
-        <strong>{{ totalItems }}</strong>
+        <strong>{{ totalItems }}</strong>&nbsp;
         <strong>{{ nodeType }}</strong> to
         <strong>{{ cardType }}</strong> associations
       </h5>

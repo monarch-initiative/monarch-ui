@@ -32,7 +32,7 @@
           <a
             href="#"
             @click="toggleNeighborhood()">
-            <i class="fa fa-2x fa-crosshairs"/>
+            <i class="fa xfa-2x fa-crosshairs"/>
             <span class="list-group-item-value">Neighbors</span>
           </a>
         </li>
@@ -42,7 +42,7 @@
           <a
             href="#"
             @click="toggleFacets()">
-            <i class="fa fa-2x fa-list"/>
+            <i class="fa fa-list"/>
             <span class="list-group-item-value">Facets</span>
           </a>
         </li>
@@ -53,7 +53,7 @@
           <a
             href="#"
             @click="expandCard(null)">
-            <i class="fa fa-2x fa-th-large"/>
+            <i class="fa fa-th-large"/>
             <span class="list-group-item-value">Overview</span>
           </a>
         </li>
@@ -266,7 +266,7 @@ $collapsed-sidebar-width: 55px;
 }
 
 .node-sidebar li.list-group-item.active > a {
-  background-color: #393f44;
+  xbackground-color: #393f44;
   color: #fff;
   font-weight: 600
 }
@@ -308,8 +308,8 @@ $collapsed-sidebar-width: 55px;
 }
 
 .node-sidebar li.list-group-item.list-group-item-node img.entity-type-icon {
-  margin: 0;
-  height: 26px;
+  margin: 1px 7px;
+  height: 27px;
 }
 
 .node-sidebar li.list-group-item.list-group-item-squat {
@@ -320,8 +320,7 @@ $collapsed-sidebar-width: 55px;
 }
 
 .node-sidebar li.list-group-item.list-group-item-squat > a i.fa {
-  margin: 2px 8px 0 12px;
-  padding: 0;
+  padding: 5px 15px;
 }
 
 .node-sidebar li.list-group-item.list-group-item-squat > a .list-group-item-value {

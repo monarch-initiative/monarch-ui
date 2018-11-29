@@ -51,9 +51,28 @@ div.vue-markdown-plain {
   xborder: 5px solid lightgreen;
 }
 
-a.header-anchor {
-  color: lightgray;
-  vertical-align: text-top;
-  font-size: 0.8em;
+:target::before {
+  content: "";
+  display: block;
+  height: $navbar-height; /* fixed header height*/
+  margin: -$navbar-height 0 0; /* negative fixed header height */
 }
+
+a.header-anchor {
+  vertical-align: middle;
+  font-size: 0.6em;
+  opacity: 0;
+  padding-top: 90px;
+}
+
+a.header-anchor, a.header-anchor:hover, .title a {
+  text-decoration: none;
+}
+
+h1:hover a.header-anchor, h2:hover a.header-anchor, h3:hover a.header-anchor,
+h4:hover a.header-anchor, h5:hover a.header-anchor, h6:hover a.header-anchor {
+  opacity: 1;
+}
+
+
 </style>

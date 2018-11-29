@@ -39,6 +39,7 @@
   }
 
   .btn.btn-dark {
+    padding: 2px 10px;
     color: white;
     transition: all .3s ease-in-out;
   }

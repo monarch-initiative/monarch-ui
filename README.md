@@ -100,8 +100,11 @@ export NVM_DIR="$HOME/.nvm"
 We recommend exiting your terminal session and starting a new one, to verify that `nvm` is properly installed with:
 
 ```bash
-nvm run node --version
+nvm
 ```
+
+which should print the Node Version Manager help text to the terminal.
+
 
 ### Update to NodeJS v8.12.0 using `nvm`
 
@@ -115,3 +118,12 @@ By default, you will need to type `nvm use v8.12.0` before any development sessi
 ```bash
 nvm alias default 8.12.0
 ```
+
+### Determining your current version
+
+```bash
+~ $ nvm current
+v8.12.0
+```
+
+
