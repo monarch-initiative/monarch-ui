@@ -404,14 +404,10 @@ export function getNodeLabelByCurie(curie) {
   return returnedPromise;
 }
 
-export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
-  const baseUrl = 'https://beta.monarchinitiative.org/analyze/phenotypes.json?';
+export function comparePhenotypes(phenotypesList, matcher) {
+  const baseUrl = `http://owlsim3-dev.monarchinitiative.org/api/match/${matcher}?`;
   const params = new URLSearchParams();
-  const phenoCuries = phenotypesList.map(elem => elem.curie);
-  params.append('input_items', phenoCuries);
-  params.append('gene_items', geneList);
-  params.append('target_species', species);
-  params.append('mode', mode);
+  phenotypesList.map(elem => params.append('id', elem.curie));
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(baseUrl, { params })
       .then((resp) => {

@@ -6,7 +6,6 @@
     }"
     class="monarch-autocomplete autocomplete autorootdiv"
   >
-
     <div
       :class="{'input-group-sm': !homeSearch}"
       class="input-group"
@@ -40,7 +39,7 @@
         class="form-control xform-control-sm"
         type="text"
         autofocus="autoFocus"
-        placeholder="Search for phenotypes, diseases, genes..."
+        :placeholder="placeholderText"
         @input="debounceInput"
         @keydown="inputChanged"
         @keydown.enter="enter"
@@ -176,6 +175,11 @@ export default {
     }
   },
   props: {
+    placeholderText: {
+      type:String,
+      required:false,
+      default: "Search for phenotypes, diseases, genes...",
+    },
     showSearchButton: {
       type: Boolean,
       required: false,
@@ -222,6 +226,10 @@ export default {
       if (!this.value) {
         this.open = false;
       }
+    },
+    singleCategory() {
+      this.selected = [];
+      this.selected.push(this.singleCategory);
     },
     selected(newValue) {
       if (!this.singleCategory) {
