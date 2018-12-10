@@ -87,7 +87,7 @@ $neighborhood-button-width: 32px;
 #neighborhood {
   width: $neighborhood-width;
   position: fixed;
-  top: ($navbar-height + 40);
+  top: ($navbar-height + 65);
   left: (-$neighborhood-width);
   min-height: 40px;
   z-index: 1050;

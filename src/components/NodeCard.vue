@@ -3,7 +3,7 @@
 
   <div
     :class="{ active: isSelected }"
-    class="node-card card py-0 my-0"
+    class="card node-card"
     @click="toggleSelected()">
     <div class="card-title card-header">
       <img
@@ -80,20 +80,21 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 
-$card-height: 110px;
-$card-width: 300px;
+$card-height: 75px;
+$card-width: 400px;
 
-.node-card {
-  margin: 50px auto;
+.card.node-card {
+  margin: 0 auto;
   padding: 0;
   min-height: $card-height;
   max-height: $card-height;
   min-width: 90%;
   max-width: 90%;
   cursor: pointer;
+  border:none;
 }
 
-.node-card .card-img-top {
+.card.node-card .card-img-top {
   width:40px;
   height:40px;
   margin-right: 10px;
@@ -101,33 +102,25 @@ $card-width: 300px;
 
 .card-title.card-header {
   font-weight: 600;
+  padding-left: 10px;
 }
 
 $sm-width: map-get($grid-breakpoints, "sm");
 @media (min-width: $sm-width) {
-  .node-card {
-    margin: 50px 5%;
+  .card.node-card {
     min-width: 40%;
     max-width: 40%;
+    margin-bottom: 5px;
   }
 }
 
 $md-width: map-get($grid-breakpoints, "md");
 @media (min-width: $md-width) {
-  .node-card {
-    margin: 50px auto;
+  .card.node-card {
     min-width: $card-width;
     max-width: $card-width;
+    xborder:5px solid red;
   }
 }
-
-// $xl-width: map-get($grid-breakpoints, "xl");
-// @media (min-width: $xl-width) {
-//   .node-card {
-//     margin: 5px auto;
-//     min-width: ($card-width);
-//     max-width: ($card-width);
-//   }
-// }
 
 </style>

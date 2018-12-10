@@ -1,6 +1,6 @@
 <div class="home-page-section partners-section">
 
-#### The **Monarch Initiative** is a collaboration between:
+##### The **Monarch Initiative** is a collaboration between:
 
 | | | |
 |:---|:---:|---:|
@@ -18,11 +18,12 @@ Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011
 @import "~@/style/home-page";
 
 div.partners-section {
-  padding: 15px 0;
+  padding: 15px 15px;
   background: $home-section-light-bg;
   text-align: center;
 
   p {
+    text-align: left;
     font-size: 1rem;
     line-height: 1.2rem;
   }

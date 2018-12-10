@@ -39,7 +39,8 @@ var Token = require('markdown-it/lib/token');
 // https://github.com/valeriangalliat/markdown-it-anchor#usage
 const miaOptions = {
   permalink: true,
-  permalinkBefore: false
+  permalinkBefore: false,
+  permalinkSymbol: '&#x1F517;'
 };
 
 

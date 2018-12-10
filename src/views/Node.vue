@@ -57,6 +57,11 @@
                 class="node-label-label">
                 {{ nodeLabel }}
               </span>
+              <span
+                v-if="node.taxon.id"
+                class="node-label-taxon">
+                {{ node.taxon.label }} ({{ node.taxon.id }})
+              </span>
               <a
                 :href="node.iri"
                 target="_blank"
@@ -99,6 +104,7 @@
               </div>
             </div>
 
+            <!--
             <div
               class="col-12 pt-2">
               <b>References:</b>&nbsp;
@@ -129,6 +135,7 @@
                 </span>
               </span>
             </div>
+            -->
 
             <div class="col-12">
               <span
@@ -171,12 +178,19 @@
               @expand-card="expandCard(cardType)"/>
           </div>
           <div
-            v-if="!expandedCard && hasExacGene"
+            v-if="!expandedCard && hasGeneExac"
             class="row">
             <exac-gene
               :node-id="nodeId"/>
-
           </div>
+
+          <div
+            v-if="!expandedCard && hasGeneTrack"
+            class="row">
+            <genome-feature
+              :mygene-data="node.geneInfo"/>
+          </div>
+
           <div
             v-if="expandedCard"
             class="expanded-card-view col-12">
@@ -202,12 +216,14 @@
 
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
+import * as MyGene from '@/api/MyGene';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
 import AssocTable from '@/components/AssocTable.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
+import GenomeFeature from '@/components/GenomeFeature.vue';
 
 const availableCardTypes = [
   'anatomy',
@@ -270,6 +286,7 @@ export default {
     'assoc-table': AssocTable,
     'exac-gene': ExacGeneSummary,
     'exac-variant': ExacVariantTable,
+    'genome-feature': GenomeFeature,
   },
 
   data() {
@@ -350,14 +367,13 @@ export default {
       nodeId: null,
       nodeType: null,
       nodeDebug: null,
-      nodeDefinition: null,
-      nodeLabel: null,
       nodeIcon: null,
       nodeCategory: null,
       availableCards: availableCardTypes,
       nonEmptyCards: [],
       expandedCard: null,
-      hasExacGene: false,
+      hasGeneExac: false,
+      hasGeneTrack: false,
       counts: {
         disease: 0,
         phenotype: 0,
@@ -388,6 +404,15 @@ export default {
         }
       ]
     };
+  },
+
+  computed: {
+    nodeLabel() {
+      return `${this.node.label} ${this.node.geneLabel || ''}`;
+    },
+    nodeDefinition() {
+      return `${this.node.description} ${this.node.geneDescription || ''}`;
+    }
   },
 
   watch: {
@@ -438,16 +463,6 @@ export default {
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
-    generateDefinitionText(nodeType, node) {
-      let result = node.description;
-
-      if (nodeType === 'gene') {
-        result = 'MYGENEFIXME';
-      }
-
-      return result;
-    },
-
     // TIP/QUESTION: This applyResponse is called asynchronously via the function
     // fetchData when it's promise is fulfilled. We (as VueJS newbies) aren't
     // yet certain how this fits into the Vue lifecycle and we may eventually
@@ -485,8 +500,6 @@ export default {
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
       this.inheritance = this.node.inheritance ? this.node.inheritance[0] : null;
-      this.nodeDefinition = this.generateDefinitionText(this.nodeType, this.node);
-      this.nodeLabel = this.node.label;
       this.nodeCategory = this.node.categories
         ? this.node.categories[0].toLowerCase()
         : this.nodeType;
@@ -494,7 +507,8 @@ export default {
       this.phenotypeIcon = this.icons.phenotype;
       this.geneIcon = this.icons.gene;
       this.modelIcon = this.icons.model;
-      this.hasExacGene = (this.nodeType === 'gene' || this.nodeType === 'variant');
+      this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
+      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       const nonEmptyCards = [];
       this.availableCards.forEach((cardType) => {
@@ -555,6 +569,17 @@ export default {
 
       try {
         const nodeResponse = await BL.getNodeSummary(this.nodeId, this.nodeType);
+
+        if (this.nodeType === 'gene') {
+          const geneInfo = await MyGene.getGeneDescription(this.nodeId);
+          const hit = geneInfo.hits[0];
+          // console.log('geneInfo', nodeResponse, hit);
+
+          nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
+          nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
+          nodeResponse.geneDescription = hit.summary;
+          nodeResponse.geneInfo = geneInfo;
+        }
 
         this.applyResponse(nodeResponse);
         this.clearProgress();
@@ -675,11 +700,14 @@ div.container-cards .node-cards-section {
 }
 
 .title-bar .node-label-label {
-  font-size: 1.8em;
+  font-size: 1.4em;
   font-weight: 500;
 }
 
 .title-bar .node-label-id {
+}
+
+.title-bar .node-label-taxon {
 }
 
 @media (max-width: $grid-float-breakpoint) {

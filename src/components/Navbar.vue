@@ -111,13 +111,8 @@
           </b-dropdown-item>
 
           <b-dropdown-item
-            to="/gene/HGNC:17397">
-            BANF1 HGNC:17397
-          </b-dropdown-item>
-
-          <b-dropdown-item
-            to="/gene/MGI:3A98365">
-            Sox3 (Mus musculus) MGI:3A98365
+            to="/gene/HGNC:11773">
+            TGFBR2 HGNC:11773
           </b-dropdown-item>
 
           <b-dropdown-item
