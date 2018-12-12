@@ -21,13 +21,32 @@ mdLoaderPlain.raw = true;
 mdLoaderPlain.wrapper = 'div';
 mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
+// const GenomeFeatureViewer = path.resolve(__dirname, '../GenomeFeatureComponent/dist/index.js');
+// const GenomeFeatureViewerCSS = path.resolve(__dirname, '../GenomeFeatureComponent/dist/GenomeFeatureViewer.css');
+const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/index.js');
+const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
+
 module.exports = {
   // outputDir: 'dist',
   baseUrl: '/monarch-ui/',
 
-  // lintOnSave: false,
+  lintOnSave: false,
+
+  configureWebpack: {
+    resolve: {
+      alias: {
+        'GenomeFeatureViewer': GenomeFeatureViewer,
+        'GenomeFeatureViewerCSS': GenomeFeatureViewerCSS,
+      }
+    }
+  },
 
   chainWebpack: (config) => {
+    // config.resolve.alias.set(
+    //   'GenomeFeatureComponent',
+    //   GenomeFeatureComponent
+    // );
+
     config.resolveLoader.modules.add(
       path.resolve('./src/loaders/')
     );

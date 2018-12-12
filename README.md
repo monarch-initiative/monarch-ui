@@ -30,6 +30,12 @@ npm run serve
 npm run build
 ```
 
+### Compiles and minifies for production, runs http-server
+
+```
+npm run buildandserve
+```
+
 ### Deploy to gh-pages branch
 
 Use `npm run publish`, which will run `publish.sh`, which will:
