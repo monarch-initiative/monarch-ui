@@ -28,7 +28,6 @@
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
 
-
 export default {
   props: {
     mygeneData: {
@@ -108,5 +107,5 @@ export default {
 </script>
 
 <style lang="scss">
-    @import "~GenomeFeatureViewerCSS";
+@import "~GenomeFeatureViewerCSS";
 </style>

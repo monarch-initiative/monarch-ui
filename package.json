@@ -26,7 +26,7 @@
     "lodash": "^4.17.11",
     "register-service-worker": "^1.5.2",
     "underscore": "^1.9.1",
-    "vue": "^2.5.20",
+    "vue": "^2.5.21",
     "vue-form-wizard": "^0.8.4",
     "vue-json-tree": "^0.3.3",
     "vue-router": "^3.0.2"
@@ -54,6 +54,6 @@
     "sass-loader": "^7.1.0",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",
     "vue-markdown-loader": "^2.4.1",
-    "vue-template-compiler": "^2.5.20"
+    "vue-template-compiler": "^2.5.21"
   }
 }
