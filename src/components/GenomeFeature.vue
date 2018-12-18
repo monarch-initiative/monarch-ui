@@ -28,31 +28,6 @@
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
 
-// Global View Example
-
-const configGlobal = {
-  'locale': 'global',
-  'chromosome': 5,
-  'start': 75574916,
-  'end': 75656722,
-  'tracks': [
-    {
-      id: 2,
-      'genome': 'Mus musculus',
-      'type': 'variant-global',
-    },
-    {
-      'id': 1,
-      'genome': 'Mus musculus',
-      'type': 'isoform',
-      'url': [
-        'https://agr-apollo.berkeleybop.io/apollo/track/',
-        '/All%20Genes/',
-        '.json'
-      ]
-    },
-  ]
-};
 
 export default {
   props: {
@@ -64,16 +39,71 @@ export default {
   },
   data() {
     return {
+      geneInfo: this.mygeneData.hits[0]
     };
   },
   mounted() {
-    const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+    if (this.mygeneData.hits.length === 1) {
+      this.generateView(this.mygeneData.hits[0]);
+    }
   },
   methods: {
+    availableGenomes(taxonId) {
+      switch (taxonId) {
+        case 6239:
+          return 'Caenorhabditis elegans';
+        case 7955:
+          return 'Danio rerio';
+        case 7227:
+          return 'Drosophila melanogaster';
+        case 9606:
+          return 'Homo sapiens';
+        case 10090:
+          return 'Mus musculus';
+        case 10116:
+          return 'Rattus norvegicus';
+        case 559292:
+          return 'Saccharomyces cerevisiae';
+        default:
+          console.log('nothing found? ',taxonId)
+          return null;
+      }
+    },
+    generateView(genePosition) {
+      const genomeName = this.availableGenomes(genePosition.taxid);
+      if (!genomeName) {
+        // we can only draw certain taxons
+        return;
+      }
+
+      const position = genePosition.genomic_pos;
+
+
+      const configGlobal = {
+        'locale': 'global',
+        'chromosome': position.chr,
+        'start': position.start,
+        'end': position.end,
+        'tracks': [
+          {
+            'id': 1,
+            'genome': genomeName,
+            'type': 'isoform',
+            'url': [
+              'https://agr-apollo.berkeleybop.io/apollo/track/',
+              '/All%20Genes/',
+              '.json'
+            ]
+          },
+        ]
+      };
+      new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+    }
+
   }
 };
 </script>
 
 <style lang="scss">
-@import "~GenomeFeatureViewerCSS";
+    @import "~GenomeFeatureViewerCSS";
 </style>
