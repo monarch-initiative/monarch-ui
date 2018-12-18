@@ -64,7 +64,6 @@ export default {
         case 559292:
           return 'Saccharomyces cerevisiae';
         default:
-          console.log('nothing found? ', taxonId);
           return null;
       }
     },
