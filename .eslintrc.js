@@ -1,6 +1,11 @@
 const errorInProduction = process.env.NODE_ENV === 'production' ? 'error' : 'off';
 const path = require('path');
 
+// const GenomeFeatureViewer = path.resolve(__dirname, '../GenomeFeatureComponent/dist/index.js');
+// const GenomeFeatureViewerCSS = path.resolve(__dirname, '../GenomeFeatureComponent/dist/GenomeFeatureViewer.css');
+const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/index.js');
+const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
+
 module.exports = {
   root: true,
   env: {
@@ -61,6 +66,7 @@ module.exports = {
         map: [
           ['@', path.resolve(__dirname, 'src')],
           ['vue$', 'vue/dist/vue.runtime.esm.js'],
+          ['GenomeFeatureViewer$', GenomeFeatureViewer],
         ],
       },
       webpack: { // https://www.npmjs.com/package/eslint-import-resolver-webpack
