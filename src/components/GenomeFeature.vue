@@ -28,32 +28,6 @@
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
 
-// Global View Example
-
-const configGlobal = {
-  'locale': 'global',
-  'chromosome': 5,
-  'start': 75574916,
-  'end': 75656722,
-  'tracks': [
-    {
-      id: 2,
-      'genome': 'Mus musculus',
-      'type': 'variant-global',
-    },
-    {
-      'id': 1,
-      'genome': 'Mus musculus',
-      'type': 'isoform',
-      'url': [
-        'https://agr-apollo.berkeleybop.io/apollo/track/',
-        '/All%20Genes/',
-        '.json'
-      ]
-    },
-  ]
-};
-
 export default {
   props: {
     mygeneData: {
@@ -64,30 +38,67 @@ export default {
   },
   data() {
     return {
+      geneInfo: this.mygeneData.hits[0]
     };
   },
   mounted() {
-    //
-    // @nathandunn:
-    // This is currently hardcoded to use the configGlobal example value
-    // provided by the GFV demo.
-    // It needs to use track data from MyGene.info, and that is currently
-    // being fetched before this component is mounted, and is passed
-    // in as a VueJS property.
-    // This needs to be reconciled so that gene-specific data is fetched
-    // from MyGene and then used to populate GFV, but there appears to
-    // be no interface in GFV to do this.
-    //
-    // Uncomment the following to see the difference.
-    // console.log('this.mygeneData.trackResponse');
-    // console.log(JSON.stringify(this.mygeneData.trackResponse, null, 2));
-    // console.log('configGlobal');
-    // console.log(JSON.stringify(configGlobal, null, 2));
-    //
-
-    const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+    if (this.mygeneData.hits.length === 1) {
+      this.generateView(this.mygeneData.hits[0]);
+    }
   },
   methods: {
+    availableGenomes(taxonId) {
+      switch (taxonId) {
+        case 6239:
+          return 'Caenorhabditis elegans';
+        case 7955:
+          return 'Danio rerio';
+        case 7227:
+          return 'Drosophila melanogaster';
+        case 9606:
+          return 'Homo sapiens';
+        case 10090:
+          return 'Mus musculus';
+        case 10116:
+          return 'Rattus norvegicus';
+        case 559292:
+          return 'Saccharomyces cerevisiae';
+        default:
+          return null;
+      }
+    },
+    generateView(genePosition) {
+      // we can only draw certain taxons
+      const genomeName = this.availableGenomes(genePosition.taxid);
+      if (!genomeName) return;
+      const position = genePosition.genomic_pos;
+      if (!position) return;
+
+      let nameSuffixString = `?name=${genePosition.symbol}`;
+      if (position.ensemblgene) {
+        nameSuffixString += `&name=${position.ensemblgene}`;
+      }
+
+      const configGlobal = {
+        'locale': 'global',
+        'chromosome': position.chr,
+        'start': position.start,
+        'end': position.end,
+        'tracks': [
+          {
+            'id': 1,
+            'genome': genomeName,
+            'type': 'isoform',
+            'url': [
+              'https://agr-apollo.berkeleybop.io/apollo/track/',
+              '/All%20Genes/',
+              `.json${nameSuffixString}`
+            ]
+          },
+        ]
+      };
+      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+    }
   }
 };
 </script>
