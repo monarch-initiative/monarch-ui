@@ -65,19 +65,22 @@ export default {
         case 559292:
           return 'Saccharomyces cerevisiae';
         default:
-          console.log('nothing found? ',taxonId)
+          console.log('nothing found? ', taxonId);
           return null;
       }
     },
     generateView(genePosition) {
+      // we can only draw certain taxons
       const genomeName = this.availableGenomes(genePosition.taxid);
       if (!genomeName) {
-        // we can only draw certain taxons
         return;
       }
 
       const position = genePosition.genomic_pos;
-
+      let nameSuffixString = `?name=${genePosition.symbol}`;
+      if (position.ensemblgene) {
+        nameSuffixString += `&name=${position.ensemblgene}`;
+      }
 
       const configGlobal = {
         'locale': 'global',
@@ -92,12 +95,12 @@ export default {
             'url': [
               'https://agr-apollo.berkeleybop.io/apollo/track/',
               '/All%20Genes/',
-              '.json'
+              `.json${nameSuffixString}`
             ]
           },
         ]
       };
-      new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
     }
 
   }
