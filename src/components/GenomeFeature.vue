@@ -1,29 +1,28 @@
 <template>
-  <div
+  <a
     id="genomeFeature"
     class="container-fluid">
 
-    <svg
-      id="genome-feature"
-      width="80%"/>
 
-    <div class="row">
-      <div
-        class="col-11">
-        &nbsp;
-      </div>
-      <div
-        id="jbrowse-link"
-        class="col-1">
-        <a
-          :href="mygeneData.externalURL"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="fa fa-link"/>
-      </div>
+    <div
+      class="row"
+      style="margin-left:20px">
+      <a
+        :href="mygeneData.externalURL"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="fa fa-link">
+        Browse Genome at {{position.chr}}:{{position.start}}..{{position.end}} {{position.strand > 0 ? '+' : '-'}} ( {{position.end-position.start}} kb)
+      </a>
     </div>
+    <div class="row">
+      <svg
+        id="genome-feature"
+        width="80%"/>
+    </div>
+
   </div>
-</template>
+</a></template>
 
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
@@ -38,7 +37,8 @@ export default {
   },
   data() {
     return {
-      geneInfo: this.mygeneData.hits[0]
+      geneInfo: (this.mygeneData.hits && this.mygeneData.hits.length>0) ?  this.mygeneData.hits[0] : null,
+      position: (this.mygeneData.hits && this.mygeneData.hits.length>0) ?  this.mygeneData.hits[0].genomic_pos : null,
     };
   },
   mounted() {
@@ -93,11 +93,28 @@ export default {
               'https://agr-apollo.berkeleybop.io/apollo/track/',
               '/All%20Genes/',
               `.json${nameSuffixString}`
-            ]
+            ],
+            'transcriptTypes': [
+              'mRNA', 'ncRNA', 'piRNA',
+              'lincRNA',
+              'miRNA',
+              'pre_miRNA',
+              'snoRNA',
+              'lnc_RNA',
+              'tRNA',
+              'snRNA',
+              'rRNA',
+              'ARS',
+              'antisense_RNA',
+              'C_gene_segment',
+              'V_gene_segment',
+              'pseudogene_attribute',
+              'snoRNA_gene'
+            ],
           },
         ]
       };
-      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
+      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 500);
     }
   }
 };
