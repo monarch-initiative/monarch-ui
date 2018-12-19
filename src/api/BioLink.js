@@ -332,7 +332,7 @@ export async function getSearchResults(query, start, rows) {
 }
 
 
-export async function getSearchTermSuggestions(term, selected) {
+export async function getSearchTermSuggestions(term, selected, prefixes = []) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
@@ -340,6 +340,11 @@ export async function getSearchTermSuggestions(term, selected) {
   params.append('start', 0);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
+  if (prefixes.length) {
+    prefixes.forEach((elem) => {
+      params.append('prefix', elem);
+    });
+  }
   if (selected.toString() === 'gene') {
     params.append('boost_fx', 'pow(edges,0.334)');
   }
@@ -421,9 +426,8 @@ export function getNodeLabelByCurie(curie) {
   });
   return returnedPromise;
 }
-
 export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
-  const baseUrl = 'https://beta.monarchinitiative.org/analyze/phenotypes.json?';
+  const baseUrl = 'https://monarchinitiative.org/analyze/phenotypes.json?';
   const params = new URLSearchParams();
   const phenoCuries = phenotypesList.map(elem => elem.curie);
   params.append('input_items', phenoCuries);
