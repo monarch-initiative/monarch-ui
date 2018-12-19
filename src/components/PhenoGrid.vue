@@ -1,21 +1,14 @@
 <template>
-  <div
+ <div>
+   <div
     v-if="pgVersion === index"
     ref="phenogridbox"
     :id="'phenogridbox-'+index"
-  />
+  /></div>
 
 </template>
 
 <script>
-const Phenogrid = {
-  name: 'MockPhenogrid',
-  createPhenogridForElement:
-    function createPhenogridForElement(div, options) {
-      console.log('Mock createPhenogridForElement', div, options);
-    },
-};
-
 export default {
   props: {
     xAxis: {
@@ -53,6 +46,10 @@ export default {
     }
   },
   methods: {
+
+
+
+
     launchPhenogrid() {
       const pgData = {
         'title': 'Phenogrid Results',
@@ -60,7 +57,7 @@ export default {
         'yAxis': this.yAxis
       };
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
-        serverURL: 'https://beta.monarchinitiative.org',
+        serverURL: 'https://monarchinitiative.org',
         gridSkeletonData: pgData,
         selectedCalculation: 0,
         selectedSort: 'Frequency',
