@@ -6,13 +6,13 @@
     }"
     class="monarch-autocomplete autocomplete autorootdiv"
   >
-
     <div
-      :class="{'input-group-sm': !homeSearch}"
+      :class="{
+        'input-group-sm': !homeSearch
+      }"
       class="input-group"
     >
       <div
-        v-if="!singleCategory"
         class="input-group-prepend">
         <button
           class="btn btn-secondary dropdown-toggle"
@@ -35,12 +35,14 @@
         </div>
       </div>
       <input
-        :class="{'loading': loading}"
+        :placeholder="dynamicPlaceholder"
+        :class="{
+          'loading': loading
+        }"
         v-model="value"
         class="form-control xform-control-sm"
         type="text"
         autofocus="autoFocus"
-        placeholder="Search for phenotypes, diseases, genes..."
         @input="debounceInput"
         @keydown="inputChanged"
         @keydown.enter="enter"
@@ -52,7 +54,8 @@
 
       <div
         v-if="showSearchButton"
-        class="input-group-append">
+        class="input-group-append"
+      >
         <button
           v-b-tooltip.topright
           class="btn xbtn-sm btn-light py-0"
@@ -93,7 +96,9 @@
             >
               <strong>{{ suggestion.match }}</strong>
             </div>
-            <div class="col-4"><i>{{ suggestion.taxon }}</i></div>
+            <div class="col-4">
+              <i>{{ suggestion.taxon }}</i>
+            </div>
             <div class="col-3 text-align-right">
               <small>{{ suggestion.category }}</small>
             </div>
@@ -123,12 +128,9 @@
             Clear Search
           </div>
  -->
-
         </div>
       </div>
-
     </div>
-
     <div
       v-if="homeSearch"
       class="p-0 m-0">
@@ -138,11 +140,11 @@
         :key="index"
         class="btn btn-outline-light m-1 py-0 example-button"
         role="button"
-        @click="useExample(example.searchString, example.category)">
+        @click="useExample(example.searchString, example.category)"
+      >
         {{ example.searchString }}
       </button>
     </div>
-
   </div>
 </template>
 
@@ -168,6 +170,7 @@ const exampleSearches = [
     category: 'gene'
   }
 ];
+
 export default {
   name: 'AutoComplete',
   filters: {
@@ -191,10 +194,18 @@ export default {
       required: false,
       default: false
     },
-    singleCategory: {
+    definedCategories: {
+      type: Array,
+      required: false,
+    },
+    allowedPrefixes: {
+      type: Array,
+      required: false,
+    },
+    dynamicPlaceholder: {
       type: String,
       required: false,
-      default: ''
+      default: 'search for phenotypes, diseases, genes ...'
     }
   },
   data() {
@@ -203,11 +214,7 @@ export default {
       selected: [],
       exampleSearches,
       options: [
-        { text: 'Gene', value: 'gene' },
-        { text: 'Genotype', value: 'genotype' },
-        { text: 'Variant', value: 'variant locus' },
-        { text: 'Phenotype', value: 'Phenotype' },
-        { text: 'Disease', value: 'disease' }
+
       ],
       catDropDown: false,
       value: '',
@@ -224,7 +231,7 @@ export default {
       }
     },
     selected(newValue) {
-      if (!this.singleCategory) {
+      if (!this.definedCategories) {
         this.suggestions = [];
         if (this.value.length > 0) {
           this.fetchData();
@@ -233,8 +240,38 @@ export default {
     }
   },
   mounted() {
-    if (this.singleCategory) {
-      this.selected.push(this.singleCategory);
+    if (this.definedCategories) {
+      this.definedCategories.forEach((elem) => {
+        this.options.push({
+          text: this.firstCap(elem),
+          value: elem,
+        });
+      });
+      this.definedCategories.forEach(elem => this.selected.push(elem));
+    }
+    else {
+      this.options = [
+        {
+          text: 'Gene',
+          value: 'gene',
+        },
+        {
+          text: 'Genotype',
+          value: 'genotype',
+        },
+        {
+          text: 'Variant',
+          value: 'variant locus',
+        },
+        {
+          text: 'Phenotype',
+          value: 'Phenotype',
+        },
+        {
+          text: 'Disease',
+          value: 'disease',
+        }
+      ];
     }
   },
   beforeDestroy() {
@@ -251,7 +288,7 @@ export default {
     async fetchData() {
       try {
         const selected = this.selected;
-        const searchResponse = await BL.getSearchTermSuggestions(this.value, selected);
+        const searchResponse = await BL.getSearchTermSuggestions(this.value, selected, this.allowedPrefixes);
         this.suggestions = [];
         this.current = -1;
         searchResponse.docs.forEach((elem) => {
@@ -275,7 +312,7 @@ export default {
     enter() {
       const currentData = this.suggestions[this.current];
       if (currentData) {
-        if (!this.singleCategory) {
+        if (!this.definedCategories) {
           this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
         }
         else {
@@ -316,7 +353,7 @@ export default {
     },
     suggestionClick(index) {
       const currentData = this.suggestions[index];
-      if (!this.singleCategory) {
+      if (!this.definedCategories) {
         this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
       }
       else {
@@ -333,6 +370,9 @@ export default {
     clearSearch() {
       this.suggestions = [];
       this.open = false;
+    },
+    firstCap(elem) {
+      return elem.charAt(0).toUpperCase() + elem.substr(1);
     },
     categoryMap(catList) {
       const validCats = {
@@ -364,7 +404,6 @@ export default {
       if (category) {
         this.selected.push(category);
       }
-
       this.value = searchString;
     }
   },
