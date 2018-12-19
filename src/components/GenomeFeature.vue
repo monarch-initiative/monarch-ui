@@ -1,9 +1,5 @@
 <template>
-  <a
-    id="genomeFeature"
-    class="container-fluid">
-
-
+  <div>
     <div
       class="row"
       style="margin-left:20px">
@@ -12,7 +8,8 @@
         target="_blank"
         rel="noopener noreferrer"
         class="fa fa-link">
-        Browse Genome at {{position.chr}}:{{position.start}}..{{position.end}} {{position.strand > 0 ? '+' : '-'}} ( {{position.end-position.start}} kb)
+        Browse Genome at {{ position.chr }}:{{ position.start }}..{{ position.end }} {{ position.strand > 0 ?
+        '+' : '-' }} ( {{ position.end-position.start }} kb)
       </a>
     </div>
     <div class="row">
@@ -20,9 +17,8 @@
         id="genome-feature"
         width="80%"/>
     </div>
-
   </div>
-</a></template>
+</template>
 
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
@@ -37,8 +33,8 @@ export default {
   },
   data() {
     return {
-      geneInfo: (this.mygeneData.hits && this.mygeneData.hits.length>0) ?  this.mygeneData.hits[0] : null,
-      position: (this.mygeneData.hits && this.mygeneData.hits.length>0) ?  this.mygeneData.hits[0].genomic_pos : null,
+      geneInfo: (this.mygeneData.hits && this.mygeneData.hits.length > 0) ? this.mygeneData.hits[0] : null,
+      position: (this.mygeneData.hits && this.mygeneData.hits.length > 0) ? this.mygeneData.hits[0].genomic_pos : null,
     };
   },
   mounted() {
@@ -114,12 +110,12 @@ export default {
           },
         ]
       };
-      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 500);
+      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 900, 500);
     }
   }
 };
 </script>
 
 <style lang="scss">
-@import "~GenomeFeatureViewerCSS";
+    @import "~GenomeFeatureViewerCSS";
 </style>
