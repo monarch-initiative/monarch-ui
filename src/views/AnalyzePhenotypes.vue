@@ -116,7 +116,8 @@
         />
         <div class="p-2">
           <b-form-group>
-            <b-form-radio-group
+
+            <b-form-checkbox-group
               id="btnradios1"
               v-model="selectedGroups"
               :options="groupOptions"
@@ -125,6 +126,17 @@
               size="sm"
               name="radiosBtnDefault"
             />
+<!--
+            <b-form-radio-group
+              id="btnradios1"
+              v-model="selectedGroups"
+              :options="groupOptions"
+              buttons
+              button-variant="outline-info"
+              size="sm"
+              name="radiosBtnDefault"
+            /> -->
+
           </b-form-group>
         </div>
         <b-form-textarea
@@ -156,22 +168,23 @@
     </div>
     <!--results below here-->
     <div
-      v-if="selectedGroups"
+      v-if="selectedGroups.length > 0"
       class="row"
     >
       <div class="col-1"/>
       <div class="col-10 card">
         <div class="p-3">
-          <h4>Taxon Group</h4>
+          <h4>Taxon Groups</h4>
           <div
             class="btn-group"
             role="group"
+            v-for="group in selectedGroups"
           >
             <div
               class="badge badge-info group-badge p-2"
             >
-              {{ selectedGroups.groupName }}
-              (NCBITaxon:{{ selectedGroups.groupId }})
+              {{ group.groupName }}
+              (NCBITaxon:{{ group.groupId }})
             </div>
             <button
               type="button"
@@ -324,7 +337,7 @@ export default {
       messages: [],
       phenotypes: [],
       genes: [],
-      selectedGroups: '',
+      selectedGroups: [],
       yAxis: [],
       xAxis: [],
       geneCurieType: 'NCBIGene',
@@ -344,10 +357,24 @@ export default {
       ],
       groupOptions: [
         {
+          text: 'Homo sapiens',
+          value: {
+            groupId: '9606',
+            groupName: 'Homo sapiens'
+          }
+        },
+        {
           text: 'Mus musculus (genes)',
           value: {
             groupId: '10090',
             groupName: 'Mus musculus'
+          }
+        },
+        {
+          text: 'Danio rerio (genes)',
+          value: {
+            groupId: '7955',
+            groupName: 'Danio rerio'
           }
         },
         {
@@ -364,13 +391,6 @@ export default {
             groupName: 'Caenorhabditis elegans'
           }
         },
-        {
-          text: 'Danio rerio (genes)',
-          value: {
-            groupId: '7955',
-            groupName: 'Danio rerio'
-          }
-        }
       ]
     };
   },
@@ -385,6 +405,204 @@ export default {
       return show;
     }
   },
+  async mounted() {
+    // this.phenoCurieList = 'HP:0000618,HP:0002378,HP:0100742';
+    const phenogridExampleData = [
+      {
+        'id': 'HP:0000006',
+        'term': 'Autosomal dominant inheritance'
+      },
+      {
+        'id': 'HP:0000174',
+        'term': 'Abnormality of the palate'
+      },
+      {
+        'id': 'HP:0000194',
+        'term': 'Open mouth'
+      },
+      {
+        'id': 'HP:0000218',
+        'term': 'High palate'
+      },
+      {
+        'id': 'HP:0000238',
+        'term': 'Hydrocephalus'
+      },
+      {
+        'id': 'HP:0000244',
+        'term': 'Brachyturricephaly'
+      },
+      {
+        'id': 'HP:0000272',
+        'term': 'Malar flattening'
+      },
+      {
+        'id': 'HP:0000303',
+        'term': 'Mandibular prognathia'
+      },
+      {
+        'id': 'HP:0000316',
+        'term': 'Hypertelorism'
+      },
+      {
+        'id': 'HP:0000322',
+        'term': 'Short philtrum'
+      },
+      {
+        'id': 'HP:0000324',
+        'term': 'Facial asymmetry'
+      },
+      {
+        'id': 'HP:0000327',
+        'term': 'Hypoplasia of the maxilla'
+      },
+      {
+        'id': 'HP:0000348',
+        'term': 'High forehead'
+      },
+      {
+        'id': 'HP:0000431',
+        'term': 'Wide nasal bridge'
+      },
+      {
+        'id': 'HP:0000452',
+        'term': 'Choanal stenosis'
+      },
+      {
+        'id': 'HP:0000453',
+        'term': 'Choanal atresia'
+      },
+      {
+        'id': 'HP:0000470',
+        'term': 'Short neck'
+      },
+      {
+        'id': 'HP:0000486',
+        'term': 'Strabismus'
+      },
+      {
+        'id': 'HP:0000494',
+        'term': 'Downslanted palpebral fissures'
+      },
+      {
+        'id': 'HP:0000508',
+        'term': 'Ptosis'
+      },
+      {
+        'id': 'HP:0000586',
+        'term': 'Shallow orbits'
+      },
+      {
+        'id': 'HP:0000678',
+        'term': 'Dental crowding'
+      },
+      {
+        'id': 'HP:0001156',
+        'term': 'Brachydactyly syndrome'
+      },
+      {
+        'id': 'HP:0001249',
+        'term': 'Intellectual disability'
+      },
+      {
+        'id': 'HP:0002308',
+        'term': 'Arnold-Chiari malformation'
+      },
+      {
+        'id': 'HP:0002676',
+        'term': 'Cloverleaf skull'
+      },
+      {
+        'id': 'HP:0002780',
+        'term': 'Bronchomalacia'
+      },
+      {
+        'id': 'HP:0003041',
+        'term': 'Humeroradial synostosis'
+      },
+      {
+        'id': 'HP:0003070',
+        'term': 'Elbow ankylosis'
+      },
+      {
+        'id': 'HP:0003196',
+        'term': 'Short nose'
+      },
+      {
+        'id': 'HP:0003272',
+        'term': 'Abnormality of the hip bone'
+      },
+      {
+        'id': 'HP:0003307',
+        'term': 'Hyperlordosis'
+      },
+      {
+        'id': 'HP:0003795',
+        'term': 'Short middle phalanx of toe'
+      },
+      {
+        'id': 'HP:0004209',
+        'term': 'Clinodactyly of the 5th finger'
+      },
+      {
+        'id': 'HP:0004322',
+        'term': 'Short stature'
+      },
+      {
+        'id': 'HP:0004440',
+        'term': 'Coronal craniosynostosis'
+      },
+      {
+        'id': 'HP:0005048',
+        'term': 'Synostosis of carpal bones'
+      },
+      {
+        'id': 'HP:0005280',
+        'term': 'Depressed nasal bridge'
+      },
+      {
+        'id': 'HP:0005347',
+        'term': 'Cartilaginous trachea'
+      },
+      {
+        'id': 'HP:0006101',
+        'term': 'Finger syndactyly'
+      },
+      {
+        'id': 'HP:0006110',
+        'term': 'Shortening of all middle phalanges of the fingers'
+      },
+      {
+        'id': 'HP:0009602',
+        'term': 'Abnormality of thumb phalanx'
+      },
+      {
+        'id': 'HP:0009773',
+        'term': 'Symphalangism affecting the phalanges of the hand'
+      },
+      {
+        'id': 'HP:0010055',
+        'term': 'Broad hallux'
+      },
+      // {
+      //   'id': 'HP:0010669',
+      //   'term': 'Hypoplasia of the zygomatic bone'
+      // },
+      {
+        'id': 'HP:0011304',
+        'term': 'Broad thumb'
+      }
+    ];
+
+    this.phenoCurieList = phenogridExampleData.map(function (s) {
+      return s.id;
+    }).join(',');
+    console.log(this.phenoCurieList);
+
+    this.selectedGroups = [this.groupOptions[0].value, this.groupOptions[1].value, this.groupOptions[2].value];
+    await this.generatePGDataFromPhenotypeList();
+  },
+
   methods: {
     async fetchLabel(curie, curieType) {
       const that = this;
@@ -466,7 +684,7 @@ export default {
     generatePhenogridData() {
       this.showPhenogrid = true;
       if (this.selectedGroups) {
-        this.xAxis = [this.selectedGroups];
+        this.xAxis = this.selectedGroups;
       }
       else {
         this.xAxis = this.genes.map((elem) => {
@@ -486,10 +704,10 @@ export default {
         this.fetchLabel(`${this.geneCurieType}:${elem.trim()}`, 'gene');
       });
     },
-    generatePGDataFromPhenotypeList() {
+    async generatePGDataFromPhenotypeList() {
       this.rejectedPhenotypeCuries = [];
       this.phenotypes = [];
-      this.phenoCurieList.split(',').forEach((elem) => {
+      this.phenoCurieList.split(',').forEach(async (elem) => {
         const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
@@ -535,7 +753,6 @@ export default {
 </script>
 
 <style>
-
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

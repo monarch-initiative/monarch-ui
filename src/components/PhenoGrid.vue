@@ -46,18 +46,16 @@ export default {
     }
   },
   methods: {
-
-
-
-
     launchPhenogrid() {
       const pgData = {
         'title': 'Phenogrid Results',
         'xAxis': this.xAxis,
         'yAxis': this.yAxis
       };
+
+      console.log('launch', pgData);
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
-        serverURL: 'https://monarchinitiative.org',
+        serverURL: 'https://api.monarchinitiative.org',
         gridSkeletonData: pgData,
         selectedCalculation: 0,
         selectedSort: 'Frequency',
