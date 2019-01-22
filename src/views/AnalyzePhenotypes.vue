@@ -124,18 +124,8 @@
               buttons
               button-variant="outline-info"
               size="sm"
-              name="radiosBtnDefault"
+              name="selectedGroups"
             />
-<!--
-            <b-form-radio-group
-              id="btnradios1"
-              v-model="selectedGroups"
-              :options="groupOptions"
-              buttons
-              button-variant="outline-info"
-              size="sm"
-              name="radiosBtnDefault"
-            /> -->
 
           </b-form-group>
         </div>
@@ -310,6 +300,198 @@ Vue.use(VueFormWizard);
 
 const findIndex = require('lodash/findIndex');
 
+function applyExampleData(vm) {
+  const phenogridExampleData = [
+    {
+      'id': 'HP:0000174',
+      'term': 'Abnormality of the palate'
+    },
+    {
+      'id': 'HP:0000194',
+      'term': 'Open mouth'
+    },
+    {
+      'id': 'HP:0000218',
+      'term': 'High palate'
+    },
+    {
+      'id': 'HP:0000238',
+      'term': 'Hydrocephalus'
+    },
+    {
+      'id': 'HP:0000244',
+      'term': 'Brachyturricephaly'
+    },
+    {
+      'id': 'HP:0000272',
+      'term': 'Malar flattening'
+    },
+    {
+      'id': 'HP:0000303',
+      'term': 'Mandibular prognathia'
+    },
+    {
+      'id': 'HP:0000316',
+      'term': 'Hypertelorism'
+    },
+    {
+      'id': 'HP:0000322',
+      'term': 'Short philtrum'
+    },
+    {
+      'id': 'HP:0000324',
+      'term': 'Facial asymmetry'
+    },
+    {
+      'id': 'HP:0000327',
+      'term': 'Hypoplasia of the maxilla'
+    },
+    {
+      'id': 'HP:0000348',
+      'term': 'High forehead'
+    },
+    {
+      'id': 'HP:0000431',
+      'term': 'Wide nasal bridge'
+    },
+    {
+      'id': 'HP:0000452',
+      'term': 'Choanal stenosis'
+    },
+    {
+      'id': 'HP:0000453',
+      'term': 'Choanal atresia'
+    },
+    {
+      'id': 'HP:0000470',
+      'term': 'Short neck'
+    },
+    {
+      'id': 'HP:0000486',
+      'term': 'Strabismus'
+    },
+    {
+      'id': 'HP:0000494',
+      'term': 'Downslanted palpebral fissures'
+    },
+    {
+      'id': 'HP:0000508',
+      'term': 'Ptosis'
+    },
+    {
+      'id': 'HP:0000586',
+      'term': 'Shallow orbits'
+    },
+    {
+      'id': 'HP:0000678',
+      'term': 'Dental crowding'
+    },
+    {
+      'id': 'HP:0001156',
+      'term': 'Brachydactyly syndrome'
+    },
+    {
+      'id': 'HP:0001249',
+      'term': 'Intellectual disability'
+    },
+    {
+      'id': 'HP:0002308',
+      'term': 'Arnold-Chiari malformation'
+    },
+    {
+      'id': 'HP:0002676',
+      'term': 'Cloverleaf skull'
+    },
+    {
+      'id': 'HP:0002780',
+      'term': 'Bronchomalacia'
+    },
+    {
+      'id': 'HP:0003041',
+      'term': 'Humeroradial synostosis'
+    },
+    {
+      'id': 'HP:0003070',
+      'term': 'Elbow ankylosis'
+    },
+    {
+      'id': 'HP:0003196',
+      'term': 'Short nose'
+    },
+    {
+      'id': 'HP:0003272',
+      'term': 'Abnormality of the hip bone'
+    },
+    {
+      'id': 'HP:0003307',
+      'term': 'Hyperlordosis'
+    },
+    {
+      'id': 'HP:0003795',
+      'term': 'Short middle phalanx of toe'
+    },
+    {
+      'id': 'HP:0004209',
+      'term': 'Clinodactyly of the 5th finger'
+    },
+    {
+      'id': 'HP:0004322',
+      'term': 'Short stature'
+    },
+    {
+      'id': 'HP:0004440',
+      'term': 'Coronal craniosynostosis'
+    },
+    {
+      'id': 'HP:0005048',
+      'term': 'Synostosis of carpal bones'
+    },
+    {
+      'id': 'HP:0005280',
+      'term': 'Depressed nasal bridge'
+    },
+    {
+      'id': 'HP:0005347',
+      'term': 'Cartilaginous trachea'
+    },
+    {
+      'id': 'HP:0006101',
+      'term': 'Finger syndactyly'
+    },
+    {
+      'id': 'HP:0006110',
+      'term': 'Shortening of all middle phalanges of the fingers'
+    },
+    {
+      'id': 'HP:0009602',
+      'term': 'Abnormality of thumb phalanx'
+    },
+    {
+      'id': 'HP:0009773',
+      'term': 'Symphalangism affecting the phalanges of the hand'
+    },
+    {
+      'id': 'HP:0010055',
+      'term': 'Broad hallux'
+    },
+    // {
+    //   'id': 'HP:0010669',
+    //   'term': 'Hypoplasia of the zygomatic bone'
+    // },
+    {
+      'id': 'HP:0011304',
+      'term': 'Broad thumb'
+    }
+  ];
+
+  vm.phenoCurieList = phenogridExampleData.map(function (s) {
+    return s.id;
+  }).join(',');
+  console.log(vm.phenoCurieList);
+
+  vm.selectedGroups = [vm.groupOptions[0].value, vm.groupOptions[1].value, vm.groupOptions[2].value];
+}
+
 export default {
   name: 'AnalyzePhenotypes',
   components: {
@@ -406,201 +588,8 @@ export default {
     }
   },
   async mounted() {
-    // this.phenoCurieList = 'HP:0000618,HP:0002378,HP:0100742';
-    const phenogridExampleData = [
-      {
-        'id': 'HP:0000006',
-        'term': 'Autosomal dominant inheritance'
-      },
-      {
-        'id': 'HP:0000174',
-        'term': 'Abnormality of the palate'
-      },
-      {
-        'id': 'HP:0000194',
-        'term': 'Open mouth'
-      },
-      {
-        'id': 'HP:0000218',
-        'term': 'High palate'
-      },
-      {
-        'id': 'HP:0000238',
-        'term': 'Hydrocephalus'
-      },
-      {
-        'id': 'HP:0000244',
-        'term': 'Brachyturricephaly'
-      },
-      {
-        'id': 'HP:0000272',
-        'term': 'Malar flattening'
-      },
-      {
-        'id': 'HP:0000303',
-        'term': 'Mandibular prognathia'
-      },
-      {
-        'id': 'HP:0000316',
-        'term': 'Hypertelorism'
-      },
-      {
-        'id': 'HP:0000322',
-        'term': 'Short philtrum'
-      },
-      {
-        'id': 'HP:0000324',
-        'term': 'Facial asymmetry'
-      },
-      {
-        'id': 'HP:0000327',
-        'term': 'Hypoplasia of the maxilla'
-      },
-      {
-        'id': 'HP:0000348',
-        'term': 'High forehead'
-      },
-      {
-        'id': 'HP:0000431',
-        'term': 'Wide nasal bridge'
-      },
-      {
-        'id': 'HP:0000452',
-        'term': 'Choanal stenosis'
-      },
-      {
-        'id': 'HP:0000453',
-        'term': 'Choanal atresia'
-      },
-      {
-        'id': 'HP:0000470',
-        'term': 'Short neck'
-      },
-      {
-        'id': 'HP:0000486',
-        'term': 'Strabismus'
-      },
-      {
-        'id': 'HP:0000494',
-        'term': 'Downslanted palpebral fissures'
-      },
-      {
-        'id': 'HP:0000508',
-        'term': 'Ptosis'
-      },
-      {
-        'id': 'HP:0000586',
-        'term': 'Shallow orbits'
-      },
-      {
-        'id': 'HP:0000678',
-        'term': 'Dental crowding'
-      },
-      {
-        'id': 'HP:0001156',
-        'term': 'Brachydactyly syndrome'
-      },
-      {
-        'id': 'HP:0001249',
-        'term': 'Intellectual disability'
-      },
-      {
-        'id': 'HP:0002308',
-        'term': 'Arnold-Chiari malformation'
-      },
-      {
-        'id': 'HP:0002676',
-        'term': 'Cloverleaf skull'
-      },
-      {
-        'id': 'HP:0002780',
-        'term': 'Bronchomalacia'
-      },
-      {
-        'id': 'HP:0003041',
-        'term': 'Humeroradial synostosis'
-      },
-      {
-        'id': 'HP:0003070',
-        'term': 'Elbow ankylosis'
-      },
-      {
-        'id': 'HP:0003196',
-        'term': 'Short nose'
-      },
-      {
-        'id': 'HP:0003272',
-        'term': 'Abnormality of the hip bone'
-      },
-      {
-        'id': 'HP:0003307',
-        'term': 'Hyperlordosis'
-      },
-      {
-        'id': 'HP:0003795',
-        'term': 'Short middle phalanx of toe'
-      },
-      {
-        'id': 'HP:0004209',
-        'term': 'Clinodactyly of the 5th finger'
-      },
-      {
-        'id': 'HP:0004322',
-        'term': 'Short stature'
-      },
-      {
-        'id': 'HP:0004440',
-        'term': 'Coronal craniosynostosis'
-      },
-      {
-        'id': 'HP:0005048',
-        'term': 'Synostosis of carpal bones'
-      },
-      {
-        'id': 'HP:0005280',
-        'term': 'Depressed nasal bridge'
-      },
-      {
-        'id': 'HP:0005347',
-        'term': 'Cartilaginous trachea'
-      },
-      {
-        'id': 'HP:0006101',
-        'term': 'Finger syndactyly'
-      },
-      {
-        'id': 'HP:0006110',
-        'term': 'Shortening of all middle phalanges of the fingers'
-      },
-      {
-        'id': 'HP:0009602',
-        'term': 'Abnormality of thumb phalanx'
-      },
-      {
-        'id': 'HP:0009773',
-        'term': 'Symphalangism affecting the phalanges of the hand'
-      },
-      {
-        'id': 'HP:0010055',
-        'term': 'Broad hallux'
-      },
-      // {
-      //   'id': 'HP:0010669',
-      //   'term': 'Hypoplasia of the zygomatic bone'
-      // },
-      {
-        'id': 'HP:0011304',
-        'term': 'Broad thumb'
-      }
-    ];
-
-    this.phenoCurieList = phenogridExampleData.map(function (s) {
-      return s.id;
-    }).join(',');
-    console.log(this.phenoCurieList);
-
-    this.selectedGroups = [this.groupOptions[0].value, this.groupOptions[1].value, this.groupOptions[2].value];
-    await this.generatePGDataFromPhenotypeList();
+    // applyExampleData(this);
+    // await this.generatePGDataFromPhenotypeList();
   },
 
   methods: {
