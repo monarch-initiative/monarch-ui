@@ -28,7 +28,7 @@ const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeatu
 
 module.exports = {
   // outputDir: 'dist',
-  baseUrl: '/monarch-ui/',
+  publicPath: '/monarch-ui/',
 
   lintOnSave: false,
 

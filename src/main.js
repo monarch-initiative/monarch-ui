@@ -2,8 +2,7 @@ import '@babel/polyfill';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-// // import Phenogrid from 'phenogrid/dist/phenogrid-bundle';
-const Phenogrid = require('phenogrid');
+// import Phenogrid from 'phenogrid/dist/phenogrid-bundle';
 import 'phenogrid/dist/phenogrid-bundle.css';
 
 
@@ -13,6 +12,7 @@ import router from './router';
 import App from './App.vue';
 import '@/style/debug-logo-animation.scss';
 
+const Phenogrid = require('phenogrid');
 
 Vue.config.productionTip = false;
 
