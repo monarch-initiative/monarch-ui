@@ -1,5 +1,8 @@
 const path = require('path');
 
+const nonrootdomain = process.env.BUILD === 'nonrootdomain';
+const publicPath = nonrootdomain ? '/monarch-ui/' : '/';
+
 const markdownItClass = require('markdown-it');
 
 const mdLoader = markdownItClass({
@@ -28,7 +31,7 @@ const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeatu
 
 module.exports = {
   // outputDir: 'dist',
-  publicPath: '/monarch-ui/',
+  publicPath: publicPath,
 
   lintOnSave: false,
 
@@ -100,18 +103,4 @@ module.exports = {
       });
   }
 
-/*
-const path = require('path');
-  // Based on:
-  //  https://github.com/vuejs/vue-cli/issues/1647#issuecomment-399093605
-  //
-  chainWebpack: config => {
-    config.plugin('define').tap(definitions => {
-      definitions[0] = Object.assign(definitions[0], {
-        'monarchNGPrelude': path.join(__dirname, 'src/style/variables.scss')
-      });
-      return definitions;
-    });
-  }
-*/
 };

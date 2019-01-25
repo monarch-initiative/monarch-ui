@@ -38,3 +38,5 @@ debugSpinnerLink.addEventListener('click', () => {
   debugLogos[0].classList.toggle('rotate');
   debugLogos[1].classList.toggle('rotate');
 });
+
+window.MonarchUIVersion = '0.0.1';

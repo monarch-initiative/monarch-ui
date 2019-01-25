@@ -1,9 +1,11 @@
+# publish.sh [remote_name]
+# [remote_name] Optional name of remote. Default is 'origin'
 #
-# Based upon:
-#	https://blog.bloomca.me/2017/12/15/how-to-push-folder-to-github-pages.html
+# Builds the application and pushes to the gh-pages branch of remote_name
 #
 
-REMOTE=`git remote get-url --push origin`
+REMOTENAME=${1:-origin}
+REMOTE=`git remote get-url --push ${REMOTENAME}`
 echo "REMOTE: ${REMOTE}"
 echo "INIT_CWD: ${INIT_CWD}"
 echo "PWD: ${PWD}"
@@ -12,10 +14,10 @@ echo "pwd: `pwd`"
 # exit
 
 rm -rf dist
-npm run build
+BUILD=nonrootdomain npm run build
 cd dist
 git init
 git add .
 git commit -m "Initial commit"
-git remote add origin ${REMOTE}
-git push --force origin master:gh-pages
+git remote add ${REMOTENAME} ${REMOTE}
+git push --force ${REMOTENAME} master:gh-pages
