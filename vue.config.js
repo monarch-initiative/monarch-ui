@@ -1,5 +1,9 @@
 const path = require('path');
 
+const analyze = process.env.BUILD === 'analyze';
+const nonrootdomain = process.env.BUILD === 'nonrootdomain';
+const baseURL = nonrootdomain ? '/monarch-ui/' : '/';
+
 const markdownItClass = require('markdown-it');
 
 const mdLoader = markdownItClass({
@@ -21,22 +25,32 @@ mdLoaderPlain.raw = true;
 mdLoaderPlain.wrapper = 'div';
 mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
-// const GenomeFeatureViewer = path.resolve(__dirname, '../GenomeFeatureComponent/dist/index.js');
-// const GenomeFeatureViewerCSS = path.resolve(__dirname, '../GenomeFeatureComponent/dist/GenomeFeatureViewer.css');
-const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/index.js');
-const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
+// const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/index.js');
+// const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
+const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
+const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/GenomeFeatureViewer.css');
+const esprima = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 
-module.exports = {
+const vueConfig = {
   // outputDir: 'dist',
-  publicPath: '/monarch-ui/',
+  publicPath: baseURL,
 
   lintOnSave: false,
+
+  pluginOptions: {
+    // https://github.com/mrbbot/vue-cli-plugin-webpack-bundle-analyzer
+    // https://github.com/webpack-contrib/webpack-bundle-analyzer#options-for-plugin
+    webpackBundleAnalyzer: {
+      analyzerMode: 'disabled',
+    }
+  },
 
   configureWebpack: {
     resolve: {
       alias: {
         'GenomeFeatureViewer': GenomeFeatureViewer,
         'GenomeFeatureViewerCSS': GenomeFeatureViewerCSS,
+        'esprima$': path.join(__dirname, 'src/NOP.js'),
       }
     }
   },
@@ -100,18 +114,10 @@ module.exports = {
       });
   }
 
-/*
-const path = require('path');
-  // Based on:
-  //  https://github.com/vuejs/vue-cli/issues/1647#issuecomment-399093605
-  //
-  chainWebpack: config => {
-    config.plugin('define').tap(definitions => {
-      definitions[0] = Object.assign(definitions[0], {
-        'monarchNGPrelude': path.join(__dirname, 'src/style/variables.scss')
-      });
-      return definitions;
-    });
-  }
-*/
 };
+
+if (analyze) {
+  vueConfig.pluginOptions.webpackBundleAnalyzer.analyzerMode = 'server';
+}
+
+module.exports = vueConfig;
