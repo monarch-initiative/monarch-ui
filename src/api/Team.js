@@ -3,15 +3,12 @@ import yaml from 'js-yaml';
 
 export default async function getTeam() {
   const teamUrl = `${process.env.BASE_URL}team.yaml`;
-  console.log('getTeam', teamUrl);
   const teamResponse = await axios.get(teamUrl);
-  console.log('teamResponse', teamResponse);
 
   let team = null;
   try {
     const teamParsed = await yaml.safeLoad(teamResponse.data, 'utf8');
     const institutions = teamParsed.institutions;
-    console.log('teamParsed', teamParsed, institutions);
 
     institutions.forEach((i) => {
       i.logo = `${process.env.BASE_URL}${i.logo}`;

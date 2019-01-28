@@ -204,7 +204,6 @@ export default {
   },
   async mounted() {
     this.institutions = (await getTeam()).institutions;
-    console.log('institutions', this.institutions);
   }
 };
 </script>

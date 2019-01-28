@@ -1,6 +1,6 @@
 {
   "name": "monarch-ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist/",
@@ -9,6 +9,7 @@
     "serve": "node_modules/.bin/vue-cli-service serve --port 8081",
     "build": "node_modules/.bin/vue-cli-service build && cp dist/index.html dist/404.html",
     "buildandserve": "npm run build && (cd dist/ && ln -s . monarch-ui) && http-server -c-1 dist/",
+    "analyze": "BUILD=analyze node_modules/.bin/vue-cli-service build",
     "lint": "node_modules/.bin/vue-cli-service lint",
     "test:unit": "node_modules/.bin/vue-cli-service test:unit",
     "test:e2e": "node_modules/.bin/vue-cli-service test:e2e",
@@ -55,6 +56,7 @@
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",
+    "vue-cli-plugin-webpack-bundle-analyzer": "^1.2.0",
     "vue-markdown-loader": "^2.4.1",
     "vue-template-compiler": "^2.5.22"
   }
