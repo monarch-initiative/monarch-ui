@@ -113,9 +113,9 @@ const nodeAssociationTypes = {
     'disease',
     'gene',
     'phenotype',
-    'model',
-    'variant',
-    'literature'
+    // 'model',
+    // BioLink Misssing endpoint... 'variant',
+    // 'literature'
   ],
 
   homolog: [
@@ -161,12 +161,12 @@ const nodeAssociationTypes = {
   ],
 
   variant: [
-    'disease',
+    // 'disease',
     'gene',
     'phenotype',
-    'model',
+    // 'model',
     'genotype',
-    'literature'
+    // 'literature'
   ]
 };
 
@@ -213,8 +213,37 @@ async function getCountsForNode(nodeId, nodeType) {
 
     return associationsResultMap;
   }
-  console.log('getCountsForNode', nodeId, nodeType, 'NO ASSOCIATIONS KNOWN');
+
+  // console.log('getCountsForNode', nodeId, nodeType, 'NO ASSOCIATIONS KNOWN');
   return null;
+}
+
+
+async function getCountsForNodeNew(nodeId, nodeType) {
+  const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
+  console.log('getCountsForNodeNew', nodeId, nodeType);
+  const bioentityParams = {
+    fetch_objects: false,
+    unselect_evidence: true,
+    exclude_automatic_assertions: false,
+    use_compact_associations: true,
+    get_association_counts: true,
+    rows: 1
+  };
+  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const bioentityResponseData = bioentityResp.data;
+  console.log(bioentityResp.request.responseURL);
+  console.log(bioentityResponseData);
+
+  return bioentityResponseData;
+}
+
+async function getURIForId(nodeId) {
+  const blUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
+  const blResp = await axios.get(blUrl);
+  const uri = blResp.data;
+
+  return uri;
 }
 
 export async function getNodeSummary(nodeId, nodeType) {
@@ -226,9 +255,10 @@ export async function getNodeSummary(nodeId, nodeType) {
     use_compact_associations: false,
     rows: 100
   };
-  // console.log('getNodeSummary bioentityUrl', nodeId, nodeType, bioentityUrl);
   const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
   const bioentityResponseData = bioentityResp.data;
+
+  // console.log('getNodeSummary bioentityUrl', nodeId, nodeType);
   // console.log(JSON.stringify(bioentityResponseData, null, 2));
 
   if (!bioentityResponseData.xrefs) {
@@ -260,6 +290,23 @@ export async function getNodeSummary(nodeId, nodeType) {
   const countsMap = await getCountsForNode(nodeId, nodeType);
 
   bioentityResponseData.counts = countsMap;
+  // console.log('countsMap', nodeId, nodeType);
+  // console.log(JSON.stringify(countsMap, null, 2));
+
+  // When BioLink's /bioentity/{nodeId}/{nodeType}?get_association_counts=true
+  // eventually works, we'll use the following.
+  // const countsMapNew = await getCountsForNodeNew(nodeId, nodeType);
+  // console.log('countsMapNew', countsMapNew);
+
+  if (nodeType === 'disease') {
+    bioentityResponseData.inheritance = 'BioLinkFIXME';
+    bioentityResponseData.modifiers = 'BioLinkFIXME';
+  }
+
+  const uri = await getURIForId(nodeId);
+  bioentityResponseData.uri = uri;
+  // console.log('bioentityResponseData', nodeId, nodeType);
+  // console.log(JSON.stringify(bioentityResponseData, null, 2));
 
   return bioentityResponseData;
 }
@@ -302,6 +349,10 @@ export function getNeighborhoodFromResponse(response) {
         else {
           equivalentClasses.push(edge.sub);
         }
+      }
+      else {
+        console.log('getNeighborhoodFromResponse', nodeId, edge.pred);
+        console.log(JSON.stringify(edge, null, 2));
       }
     });
   }
@@ -383,7 +434,6 @@ export function getNodeAssociations(nodeType, identifier, cardType, params) {
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${identifier}/${biolinkAnnotationSuffix}`;
   const url = `${baseUrl}${urlExtension}`;
-  // console.log('getNodeAssociations', nodeType, identifier, cardType, url);
 
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(url, { params })
@@ -393,6 +443,8 @@ export function getNodeAssociations(nodeType, identifier, cardType, params) {
           reject(responseData);
         }
         else {
+          // console.log('getNodeAssociations', nodeType, identifier, cardType, url);
+          // console.log(JSON.stringify(responseData, null, 2));
           resolve(responseData);
         }
       })

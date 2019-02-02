@@ -2,13 +2,13 @@
 // http://nightwatchjs.org/guide#usage
 
 module.exports = {
-  'default e2e tests': (browser) => {
+  'Landing Page Tests': (browser) => {
     browser
       .url(process.env.VUE_DEV_SERVER_URL)
       .waitForElementVisible('#app', 5000)
-      .assert.elementPresent('#monarch-home-container')
-      .assert.containsText('.intro-text', 'translational science')
-      .assert.elementCount('header', 1)
+      .assert.elementPresent('.monarch-home-view')
+      .assert.containsText('.intro', 'translational science')
+      .assert.elementCount('.intro', 1)
       .end();
   }
 };

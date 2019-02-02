@@ -38,11 +38,20 @@
           slot="assocObject"
           slot-scope="data"
         >
-          <strong>
-            <router-link :to="data.item.objectLink">
-              <strong>{{ data.item.assocObject }}</strong>
-            </router-link>
-          </strong>
+          <template
+            v-if="data.item.objectLink">
+            <strong>
+              <router-link :to="data.item.objectLink">
+                {{ data.item.assocObject }}
+              </router-link>
+            </strong>
+          </template>
+          <template
+            v-else>
+            <strong>
+              {{ data.item.assocObject }}
+            </strong>
+          </template>
         </template>
         <template
           v-if="isGene"
@@ -323,6 +332,7 @@ export default {
         'Ornithorhynchus anatinus': 'NCBITaxon:9258',
         'Pan troglodytes': 'NCBITaxon:9598',
         'Rattus norvegicus': 'NCBITaxon:10116',
+        'Saccharomyces cerevisiae': 'NCBITaxon:4932',
         'Saccharomyces cerevisiae S288C': 'NCBITaxon:559292',
         'Sus scrofa': 'NCBITaxon:9823',
         'Xenopus (Silurana) tropicalis': 'NCBITaxon:8364'
@@ -400,6 +410,8 @@ export default {
         const taxon = this.parseTaxon(objectElem);
 
         if (!taxon.id || this.trueFacets.includes(taxon.id)) {
+          const objectLink = objectElem.id.indexOf(':.well-known') === 0
+            ? null : `/${this.cardType}/${objectElem.id}`;
           this.rows.push({
             references: pubs,
             referencesLength: pubsLength,
@@ -410,7 +422,7 @@ export default {
             sources: elem.provided_by,
             sourcesLength: elem.provided_by.length,
             assocObject: objectElem.label,
-            objectLink: `/${this.cardType}/${objectElem.id}`,
+            objectLink,
             taxonLabel: taxon.label,
             taxonId: taxon.id,
             relationId: elem.relation.id,

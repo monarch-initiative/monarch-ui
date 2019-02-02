@@ -1,6 +1,6 @@
 {
   "name": "monarch-ui",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist/",
@@ -11,16 +11,17 @@
     "buildandserve": "npm run build && (cd dist/ && ln -s . monarch-ui) && http-server -c-1 dist/",
     "analyze": "BUILD=analyze node_modules/.bin/vue-cli-service build",
     "lint": "node_modules/.bin/vue-cli-service lint",
-    "test:unit": "node_modules/.bin/vue-cli-service test:unit",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "node_modules/.bin/vue-cli-service test:unit --require tests/unit/pre-setup.js",
     "test:e2e": "node_modules/.bin/vue-cli-service test:e2e",
-    "publish": "./publish.sh"
+    "ghpublish": "./publish.sh"
   },
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "bootstrap-vue": "^2.0.0-rc.11",
-    "d3": "^5.7.0",
+    "d3": "^5.8.0",
     "file-saver": "^2.0.0",
     "font-awesome": "^4.7.0",
     "genomefeaturecomponent": "^0.2.7",
@@ -48,12 +49,13 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-webpack": "^0.11.0",
-    "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-import": "^2.16.0",
     "html-loader": "^0.5.5",
     "http-server": "^0.11.1",
     "markdown-it": "^8.4.2",
     "markdown-it-anchor": "^5.0.2",
     "node-sass": "^4.11.0",
+    "prettier": "^1.16.1",
     "sass-loader": "^7.1.0",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.2.0",

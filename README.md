@@ -38,10 +38,9 @@ npm run buildandserve
 
 ### Deploy to gh-pages branch
 
-Use `npm run publish`, which will run `publish.sh`, which will:
+Use `npm run ghpublish`, which will run `publish.sh`, which will:
 - Build into dist/
 - Push to the gh-pages branch of the current `origin` repository.
-- *Based upon https://blog.bloomca.me/2017/12/15/how-to-push-folder-to-github-pages.html*
 
 ### Lints and fixes files
 
@@ -59,6 +58,13 @@ npm run test:unit
 
 ```
 npm run test:e2e
+```
+
+
+### Run both types of test
+
+```
+npm run test
 ```
 
 ## Installing NodeJS

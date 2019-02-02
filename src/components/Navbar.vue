@@ -107,12 +107,17 @@
 
           <b-dropdown-item
             to="/disease/MONDO:0007947">
-            Marfan syndrome MONDO:0007947
+            Disease: Marfan syndrome MONDO:0007947
           </b-dropdown-item>
 
           <b-dropdown-item
             to="/gene/HGNC:11773">
-            TGFBR2 HGNC:11773
+            Gene: TGFBR2 HGNC:11773
+          </b-dropdown-item>
+
+          <b-dropdown-item
+            to="/disease/MONDO:0010156">
+            Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>
 
           <b-dropdown-item
