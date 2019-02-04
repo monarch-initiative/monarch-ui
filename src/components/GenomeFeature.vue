@@ -32,7 +32,6 @@ export default {
     },
   },
   data() {
-    console.log(this.mygeneData);
     return {
       geneInfo: (this.mygeneData.hits && this.mygeneData.hits.length > 0) ? this.mygeneData.hits[0] : null,
       position: (this.mygeneData.hits && this.mygeneData.hits.length > 0) ? this.mygeneData.hits[0].genomic_pos : null,

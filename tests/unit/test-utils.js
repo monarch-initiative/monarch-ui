@@ -6,9 +6,3 @@ export function shallowMountWithRouting(component, options) {
 
   return shallowMount(component, newOptions);
 }
-
-// const index = {
-//   shallowMount: shallowMountWithRouting,
-// };
-
-// module.exports = index;

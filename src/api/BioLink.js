@@ -232,8 +232,8 @@ async function getCountsForNodeNew(nodeId, nodeType) {
   };
   const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
   const bioentityResponseData = bioentityResp.data;
-  console.log(bioentityResp.request.responseURL);
-  console.log(bioentityResponseData);
+  // console.log(bioentityResp.request.responseURL);
+  // console.log(bioentityResponseData);
 
   return bioentityResponseData;
 }
