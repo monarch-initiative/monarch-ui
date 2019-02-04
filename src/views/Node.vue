@@ -145,6 +145,13 @@
             </div>
 
             <div class="col-12">
+              <span
+                v-if="inheritance">
+                <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
+              </span>
+            </div>
+
+            <div class="col-12">
               <b>Equivalent IDs:</b>&nbsp;
 
               <span
@@ -161,6 +168,16 @@
                   {{ r.label }}
                 </span>
               </span>
+            </div>
+
+            <div class="col-12">
+              <b>URI:</b>&nbsp;
+              <a
+                :href="node.uri"
+                target="_blank"
+                rel="noopener noreferrer">
+                {{ node.uri }}
+              </a>
             </div>
 
           </div>
@@ -185,7 +202,7 @@
           </div>
 
           <div
-            v-if="!expandedCard && hasGeneTrack"
+            v-if="!expandedCard && hasGeneTrack && node.geneInfo"
             class="row">
             <genome-feature
               :mygene-data="node.geneInfo"/>
@@ -196,12 +213,12 @@
             class="expanded-card-view col-12">
             <assoc-table
               :facets="facetObject"
-              :node-type="nodeCategory"
+              :node-type="nodeType"
               :card-type="expandedCard"
               :identifier="nodeId"
             />
           </div>
-          <div v-if="!expandedCard && nodeCategory === 'variant'">
+          <div v-if="!expandedCard && nodeType === 'variant'">
             <exac-variant
               :node-id="nodeId"/>
           </div>
@@ -310,6 +327,7 @@ export default {
           'Ornithorhynchus anatinus': true,
           'Pan troglodytes': true,
           'Rattus norvegicus': true,
+          'Saccharomyces cerevisiae': true,
           'Saccharomyces cerevisiae S288C': true,
           'Sus scrofa': true,
           'Xenopus (Silurana) tropicalis': true
@@ -358,6 +376,7 @@ export default {
       subclasses: null,
       synonyms: null,
       inheritance: null,
+      modifiers: null,
       contentScript: '',
       contentBody: '',
       progressTimer: null,
@@ -499,7 +518,8 @@ export default {
 
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
-      this.inheritance = this.node.inheritance ? this.node.inheritance[0] : null;
+      this.inheritance = this.node.inheritance ? this.node.inheritance : null;
+      this.modifiers = this.node.modifiers ? this.node.modifiers : null;
       this.nodeCategory = this.node.categories
         ? this.node.categories[0].toLowerCase()
         : this.nodeType;
@@ -557,10 +577,10 @@ export default {
       this.path = this.$route.path;
       this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
-
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;
       this.nodeError = null;
+      this.hasGeneTrack = false;
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isFacetsShowing = false;
@@ -570,10 +590,10 @@ export default {
       try {
         const nodeResponse = await BL.getNodeSummary(this.nodeId, this.nodeType);
 
-        if (this.nodeType === 'gene') {
+        if (this.hasGeneTrack) {
           const geneInfo = await MyGene.getGeneDescription(this.nodeId);
           const hit = geneInfo.hits[0];
-          // console.log('geneInfo', nodeResponse, hit);
+          console.log('geneInfo', nodeResponse, hit);
 
           nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
           nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
@@ -622,11 +642,11 @@ $line-height-compact: 1.3em;
 }
 
 .node-container {
-  margin: $title-bar-height 5px 5px 5px;
-  padding: 3px 5px;
+  margin: $title-bar-height 0 5px 0;
+  padding: 0;
   transition: all 0.3s;
   width: 100%;
-  height:100%;
+  height: 100%;
 }
 
 .expanded-card-view {
@@ -638,7 +658,7 @@ $line-height-compact: 1.3em;
 
 .node-container .node-description {
   margin: 0;
-  padding: 0;
+  padding: 5px 5px;
   line-height: $line-height-compact;
 }
 

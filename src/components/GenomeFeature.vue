@@ -38,7 +38,7 @@ export default {
     };
   },
   mounted() {
-    if (this.mygeneData.hits.length === 1) {
+    if (this.mygeneData.hits && this.mygeneData.hits.length === 1) {
       this.generateView(this.mygeneData.hits[0]);
     }
   },
