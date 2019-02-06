@@ -1,8 +1,8 @@
 <template>
   <div
     :class="{
-      'home-search':homeSearch,
-      'open':open
+      'home-search': homeSearch,
+      'open': open
     }"
     class="monarch-autocomplete autocomplete autorootdiv"
   >
@@ -68,8 +68,10 @@
       </div>
       <div
         v-if="open"
-        class="dropdown-menu list-group dropList px-4"
-        style="overflow-y:auto;"
+        :class="{
+          'full-width-search': fullWidthSearch
+        }"
+        class="dropdown-menu list-group dropList mx-2"
       >
         <!--
           @blur above hides @click. Use @mousedown instead
@@ -79,11 +81,11 @@
           v-for="(suggestion, index) in suggestions"
           :key="index"
           :class="{'active': isActive(index)}"
-          class="border-bottom px-1"
+          class="border-bottom m-0 px-1"
           @mousedown="suggestionClick(index)"
           @mouseover="mouseOver(index)"
         >
-          <div class="row p-0">
+          <div class="row m-0 p-0">
             <div
               v-if="suggestion.has_hl"
               class="col-5"
@@ -190,6 +192,11 @@ export default {
       default: false
     },
     homeSearch: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    fullWidthSearch: {
       type: Boolean,
       required: false,
       default: false
@@ -429,10 +436,18 @@ export default {
     background-repeat: no-repeat;
   }
   .dropList {
-    width:100%;
+    width: 100%;
     border-radius: 2px;
     border: solid black 1px;
+    overflow-y: auto;
+
+    &.full-width-search {
+      position: fixed !important;
+      top: $navbar-height;
+      left: 0;
+    }
   }
+
   .dropCatList {
     position: absolute;
     z-index: 1001;

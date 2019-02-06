@@ -200,7 +200,7 @@ export default {
     }
   },
   props: {
-    identifier: {
+    nodeId: {
       type: String,
       required: true
     },
@@ -229,6 +229,8 @@ export default {
       dataPacket: '',
       dataFetched: false,
       dataError: false,
+      dataFetchedPage: 0,
+      dataFetchedRowsPerPage: 0,
       fields: [],
       rows: [],
       taxonFields: [
@@ -259,30 +261,20 @@ export default {
       this.generateFields();
 
       this.$refs.tableRef.refresh();
-      // this.fetchData();
     },
-    // dataPacket() {
-    //   if (this.dataPacket) {
-    //     this.populateRows();
-    //   }
-    // },
     facets: {
       handler() {
         this.currentPage = 1;
         this.$refs.tableRef.refresh();
-        // this.fetchData();
       },
       deep: true
     }
   },
   mounted() {
     this.generateFields();
-    // this.fetchData();
   },
   methods: {
-    rowsProvider(ctx, callback) {
-      // console.log('rowsProvider', ctx);
-      // debugger;
+    async rowsProvider(ctx, callback) {
       this.fetchData().then((data) => {
         callback(this.rows);
       }).catch((error) => {
@@ -327,6 +319,7 @@ export default {
         'Gallus gallus': 'NCBITaxon:9031',
         'Homo sapiens': 'NCBITaxon:9606',
         'Macaca mulatta': 'NCBITaxon:9544',
+        'Mammalia': 'NCBITaxon:40674',
         'Monodelphis domestica': 'NCBITaxon:13616',
         'Mus musculus': 'NCBITaxon:10090',
         'Ornithorhynchus anatinus': 'NCBITaxon:9258',
@@ -346,36 +339,47 @@ export default {
 
     async fetchData() {
       const that = this;
-      // console.log('####fetchData');
-      try {
-        const params = {
-          fetch_objects: true,
-          start: ((this.currentPage - 1) * this.rowsPerPage),
-          rows: this.rowsPerPage
-        };
-        const searchResponse = await BL.getNodeAssociations(
-          this.nodeType,
-          this.identifier,
-          this.cardType,
-          params
-        );
-        if (!searchResponse.data
-            || !searchResponse.data.associations) {
-          that.dataPacket = null;
-          throw new Error('BL.getNodeAssociations() returned no data');
-        }
-        that.dataPacket = searchResponse;
-        that.dataFetched = true;
-        that.totalItems = searchResponse.data.numFound;
-        // searchResponse.data.associations.forEach(a => {
-        //   console.log(a.subject.label, a.subject.taxon.label);
-        // });
-        // that.currentPage = 1;
-        that.populateRows();
+      if (that.dataFetchedPage === that.currentPage
+           && that.dataFetchedRowsPerPage === that.rowsPerPage) {
+        // console.log('####fetchData inhibited due to cached values.');
       }
-      catch (e) {
-        that.dataError = e;
-        console.log('BioLink Error', e);
+      else {
+        try {
+          const params = {
+            fetch_objects: true,
+            start: ((this.currentPage - 1) * this.rowsPerPage),
+            rows: this.rowsPerPage
+          };
+          const searchResponse = await BL.getNodeAssociations(
+            this.nodeType,
+            this.nodeId,
+            this.cardType,
+            params
+          );
+          // console.log('searchResponse');
+          // console.log(JSON.stringify(searchResponse, null, 2));
+
+          if (!searchResponse.data
+              || !searchResponse.data.associations) {
+            that.dataPacket = null;
+            throw new Error('BL.getNodeAssociations() returned no data');
+          }
+          that.dataPacket = searchResponse;
+          that.dataFetched = true;
+          that.dataFetchedPage = this.currentPage;
+          that.dataFetchedRowsPerPage = this.currentPage;
+
+          that.totalItems = searchResponse.data.numFound;
+          // searchResponse.data.associations.forEach(a => {
+          //   console.log(a.subject.label, a.subject.taxon.label);
+          // });
+          // that.currentPage = 1;
+          that.populateRows();
+        }
+        catch (e) {
+          that.dataError = e;
+          console.log('BioLink Error', e);
+        }
       }
     },
     populateRows() {
@@ -410,8 +414,11 @@ export default {
         const taxon = this.parseTaxon(objectElem);
 
         if (!taxon.id || this.trueFacets.includes(taxon.id)) {
-          const objectLink = objectElem.id.indexOf(':.well-known') === 0
-            ? null : `/${this.cardType}/${objectElem.id}`;
+          let objectLink = `/${this.cardType}/${objectElem.id}`;
+          if (objectElem.id.indexOf(':.well-known') === 0) {
+            objectLink = null;
+          }
+
           this.rows.push({
             references: pubs,
             referencesLength: pubsLength,
@@ -466,19 +473,6 @@ export default {
         });
       }
       this.fields = fields;
-    },
-    getBiolinkAnnotation(val) {
-      let result = `${val}s/`;
-      if (val === 'anatomy') {
-        result = 'expression/anatomy';
-      }
-      else if (val === 'literature') {
-        result = val;
-      }
-      else if (val === 'function') {
-        result = val;
-      }
-      return result;
     },
     parseEvidence(evidenceList) {
       let result = [];
