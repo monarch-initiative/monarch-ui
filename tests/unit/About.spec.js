@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import { shallowMountWithRouting } from './test-utils';
 import AboutMonarch from '@/views/AboutMonarch.md';
 import AboutTeam from '@/views/AboutTeam.md';
+import axios from 'axios';
 
 const teamResponse = {
   data:
@@ -48,19 +49,21 @@ describe('AboutMonarch.md', () => {
 });
 
 
-const mockAxios = {
-  get: sinon.stub()
-    .withArgs(`${process.env.BASE_URL}team.yaml`)
-    .returns(Promise.resolve(teamResponse))
-};
-
 describe('AboutTeam.md', () => {
+  // let sandbox;
+  // beforeEach(() => {
+  //   sandbox = sinon.createSandbox();
+  // });
+  // afterEach(() => {
+  //   sandbox.restore();
+  // });
+
   it('renders "Participating Institutions"', () => {
-    const wrapper = shallowMountWithRouting(AboutTeam, {
-      mocks: {
-        $http: mockAxios
-      }
-    });
+    sinon.stub(axios, 'get')
+      .withArgs(`${process.env.BASE_URL}team.yaml`)
+      .returns(Promise.resolve(teamResponse));
+
+    const wrapper = shallowMountWithRouting(AboutTeam);
     expect(wrapper.text()).to.include('Participating Institutions');
   });
 });

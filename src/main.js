@@ -14,11 +14,6 @@ import '@/style/debug-logo-animation.scss';
 
 const Phenogrid = require('phenogrid');
 
-
-// https://vuejs.org/v2/cookbook/adding-instance-properties.html
-Vue.prototype.$http = axios;
-Vue.prototype.axios = axios;
-
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);

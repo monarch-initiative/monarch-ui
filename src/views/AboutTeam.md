@@ -203,7 +203,7 @@ export default {
     };
   },
   async mounted() {
-    this.institutions = (await getTeam(this.$http)).institutions;
+    this.institutions = (await getTeam()).institutions;
   }
 };
 </script>

@@ -1,8 +1,9 @@
+import axios from 'axios';
 import yaml from 'js-yaml';
 
-export default async function getTeam($http) {
+export default async function getTeam() {
   const teamUrl = `${process.env.BASE_URL}team.yaml`;
-  const teamResponse = await $http.get(teamUrl);
+  const teamResponse = await axios.get(teamUrl);
 
   let team = null;
   try {
