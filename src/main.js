@@ -1,10 +1,10 @@
 import '@babel/polyfill';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
+import axios from 'axios';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 // import Phenogrid from 'phenogrid/dist/phenogrid-bundle';
 import 'phenogrid/dist/phenogrid-bundle.css';
-
 
 import router from './router';
 // import './registerServiceWorker';
@@ -13,6 +13,11 @@ import App from './App.vue';
 import '@/style/debug-logo-animation.scss';
 
 const Phenogrid = require('phenogrid');
+
+
+// https://vuejs.org/v2/cookbook/adding-instance-properties.html
+Vue.prototype.$http = axios;
+Vue.prototype.axios = axios;
 
 Vue.config.productionTip = false;
 
@@ -39,4 +44,4 @@ debugSpinnerLink.addEventListener('click', () => {
   debugLogos[1].classList.toggle('rotate');
 });
 
-window.MonarchUIVersion = '0.0.3';
+window.MonarchUIVersion = '0.0.4';

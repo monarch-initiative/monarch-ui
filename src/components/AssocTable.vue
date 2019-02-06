@@ -200,7 +200,7 @@ export default {
     }
   },
   props: {
-    identifier: {
+    nodeId: {
       type: String,
       required: true
     },
@@ -355,7 +355,7 @@ export default {
         };
         const searchResponse = await BL.getNodeAssociations(
           this.nodeType,
-          this.identifier,
+          this.nodeId,
           this.cardType,
           params
         );
@@ -410,8 +410,14 @@ export default {
         const taxon = this.parseTaxon(objectElem);
 
         if (!taxon.id || this.trueFacets.includes(taxon.id)) {
-          const objectLink = objectElem.id.indexOf(':.well-known') === 0
-            ? null : `/${this.cardType}/${objectElem.id}`;
+          let objectLink = `/${this.cardType}/${objectElem.id}`;
+          if (objectElem.id.indexOf(':.well-known') === 0) {
+            objectLink = null;
+          }
+          else if (this.cardType === 'literature') {
+            objectLink = `/${this.cardType}/${objectElem.id}/${this.nodeType}/${this.nodeId}`;
+          }
+
           this.rows.push({
             references: pubs,
             referencesLength: pubsLength,
@@ -466,19 +472,6 @@ export default {
         });
       }
       this.fields = fields;
-    },
-    getBiolinkAnnotation(val) {
-      let result = `${val}s/`;
-      if (val === 'anatomy') {
-        result = 'expression/anatomy';
-      }
-      else if (val === 'literature') {
-        result = val;
-      }
-      else if (val === 'function') {
-        result = val;
-      }
-      return result;
     },
     parseEvidence(evidenceList) {
       let result = [];

@@ -248,6 +248,8 @@ async function getURIForId(nodeId) {
 
 export async function getNodeSummary(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
+  // console.log('bioentityUrl', nodeId, nodeType, bioentityUrl);
+
   const bioentityParams = {
     fetch_objects: true,
     unselect_evidence: false,

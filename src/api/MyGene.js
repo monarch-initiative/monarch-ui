@@ -114,9 +114,6 @@ export async function getGeneDescription(geneId) {
       }
     }
   }
-  else {
-    console.log('getGeneDescription() no genomic_pos found.');
-  }
 
   return result;
 }

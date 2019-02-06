@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 // import Analytics from './views/Analytics.vue';
 import Node from './views/Node.vue';
+import Publication from './views/Publication.vue';
 
 Vue.use(Router);
 
@@ -15,7 +16,7 @@ const availableCardTypes = [
   'genotype',
   'homolog',
   'interaction',
-  'literature',
+  // 'literature',
   'model',
   'ortholog-phenotype',
   'ortholog-disease',
@@ -57,7 +58,7 @@ export default new Router({
       component: require('@/views/AboutTeam.md').default,
     },
     {
-      path: '/search/:query',
+      path: '/search/:query?',
       name: 'search',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
@@ -79,6 +80,11 @@ export default new Router({
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "analytics" */ './views/Analytics.vue'),
+    },
+    {
+      path: '/literature/:id/:fromType?/:fromId?',
+      name: 'literature',
+      component: Publication,
     },
     {
       path: '/*',

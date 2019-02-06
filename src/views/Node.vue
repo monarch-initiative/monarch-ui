@@ -215,7 +215,7 @@
               :facets="facetObject"
               :node-type="nodeType"
               :card-type="expandedCard"
-              :identifier="nodeId"
+              :node-id="nodeId"
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
@@ -528,7 +528,6 @@ export default {
       this.geneIcon = this.icons.gene;
       this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
-      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       const nonEmptyCards = [];
       this.availableCards.forEach((cardType) => {
@@ -580,7 +579,7 @@ export default {
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;
       this.nodeError = null;
-      this.hasGeneTrack = false;
+      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isFacetsShowing = false;
@@ -593,12 +592,12 @@ export default {
         if (this.hasGeneTrack) {
           const geneInfo = await MyGene.getGeneDescription(this.nodeId);
           const hit = geneInfo.hits[0];
-          console.log('geneInfo', nodeResponse, hit);
-
-          nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
-          nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
-          nodeResponse.geneDescription = hit.summary;
-          nodeResponse.geneInfo = geneInfo;
+          if (hit) {
+            nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
+            nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
+            nodeResponse.geneDescription = hit.summary;
+            nodeResponse.geneInfo = geneInfo;
+          }
         }
 
         this.applyResponse(nodeResponse);
