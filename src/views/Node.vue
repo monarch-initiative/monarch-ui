@@ -322,6 +322,7 @@ export default {
           'Gallus gallus': true,
           'Homo sapiens': true,
           'Macaca mulatta': true,
+          'Mammalia': true,
           'Monodelphis domestica': true,
           'Mus musculus': true,
           'Ornithorhynchus anatinus': true,
@@ -531,6 +532,7 @@ export default {
 
       const nonEmptyCards = [];
       this.availableCards.forEach((cardType) => {
+        // console.log('cardType', cardType, that.node, that.node.counts);
         const count = that.node.counts[cardType];
         that.counts[cardType] = count ? count.totalCount : 0;
         if (that.counts[cardType] > 0) {

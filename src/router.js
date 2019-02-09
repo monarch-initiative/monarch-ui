@@ -16,7 +16,7 @@ const availableCardTypes = [
   'genotype',
   'homolog',
   'interaction',
-  // 'literature',
+  'literature',
   'model',
   'ortholog-phenotype',
   'ortholog-disease',

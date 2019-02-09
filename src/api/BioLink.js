@@ -191,10 +191,92 @@ async function getCounts(nodeId, nodeType, countType) {
   return bioentityResponseData;
 }
 
+//
+// This special-case for literature is a short-term (we hope) kludge that uses
+// the BioLink endpoint /bioentity/:id/associations`, rather than the
+// soon-to-be-written /literature/:id endpoint.
+//
+
+function idToType(nodeId) {
+  let result = 'gene';
+
+  if (nodeId.indexOf('MONDO:') === 0) {
+    result = 'disease';
+  }
+  else if (nodeId.indexOf('HP:') === 0) {
+    result = 'phenotype';
+  }
+
+  return result;
+}
+
+async function getLiteratureAssociationCounts(nodeId) {
+  const associationsResultMap = {};
+
+  const bioentityUrl = `${biolink}association/from/${nodeId}`;
+
+  // https://api.monarchinitiative.org/api/association/from/PMID%3A11820800?graphize=false&unselect_evidence=true&start=0&rows=100&use_compact_associations=false
+
+  // const bioentityUrl = `${biolink}bioentity/${nodeId}/associations`;
+  console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
+  const bioentityParams = {
+    fetch_objects: true,
+    unselect_evidence: true,
+    exclude_automatic_assertions: false,
+    use_compact_associations: false,
+    rows: 100,
+    graphize: false
+  };
+  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const associations = bioentityResp.data.associations;
+  // https://api.monarchinitiative.org/api/bioentity/PMID%3A11751940/associations?rows=100&unselect_evidence=true&exclude_automatic_assertions=false&fetch_objects=true&use_compact_associations=false
+
+  console.log('associations', associations);
+
+  let geneCount = 0;
+  let diseaseCount = 0;
+  let phenotypeCount = 0;
+
+  associations.forEach((a) => {
+    const id = a.object.id;
+    const type = idToType(id);
+    console.log(id, type, a.object.label);
+    if (type === 'disease') {
+      diseaseCount += 1;
+    }
+    else if (type === 'phenotype') {
+      phenotypeCount += 1;
+    }
+    else {
+      geneCount += 1;
+    }
+  });
+
+  associationsResultMap.gene = {
+    facetCount: geneCount,
+    totalCount: geneCount
+  };
+  associationsResultMap.disease = {
+    facetCount: diseaseCount,
+    totalCount: diseaseCount
+  };
+  associationsResultMap.phenotype = {
+    facetCount: phenotypeCount,
+    totalCount: phenotypeCount
+  };
+
+  return associationsResultMap;
+}
+
+
 async function getCountsForNode(nodeId, nodeType) {
+  let result = null;
   const associationTypes = nodeAssociationTypes[nodeType];
 
-  if (associationTypes) {
+  if (nodeType === 'literature') {
+    result = await getLiteratureAssociationCounts(nodeId);
+  }
+  else if (associationTypes) {
     const promisesArray = associationTypes.map((a) => {
       const countPromise = getCounts(nodeId, nodeType, a);
       return countPromise;
@@ -202,20 +284,18 @@ async function getCountsForNode(nodeId, nodeType) {
 
     const associationsResult = await Promise.all(promisesArray);
 
-    const associationsResultMap = {};
+    result = {};
     associationTypes.forEach((a, index) => {
       const aResult = associationsResult[index].numFound;
-      associationsResultMap[a] = {
+      result[a] = {
         facetCount: aResult,
         totalCount: aResult
       };
     });
-
-    return associationsResultMap;
   }
 
-  // console.log('getCountsForNode', nodeId, nodeType, 'NO ASSOCIATIONS KNOWN');
-  return null;
+  console.log('getCountsForNode', nodeId, nodeType, result);
+  return result;
 }
 
 
@@ -248,7 +328,7 @@ async function getURIForId(nodeId) {
 
 export async function getNodeSummary(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
-  // console.log('bioentityUrl', nodeId, nodeType, bioentityUrl);
+  console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
 
   const bioentityParams = {
     fetch_objects: true,
@@ -431,13 +511,58 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
 }
 
 
-export function getNodeAssociations(nodeType, identifier, cardType, params) {
+//
+// This special-case for literature is a short-term (we hope) kludge that uses
+// the BioLink endpoint /bioentity/:id/associations`, rather than the
+// soon-to-be-written /literature/:id endpoint.
+//
+//
+async function getLiteratureAssociations(nodeId, cardType) {
+  const bioentityUrl = `${biolink}association/from/${nodeId}`;
+
+  // https://api.monarchinitiative.org/api/association/from/PMID%3A11820800?graphize=false&unselect_evidence=true&start=0&rows=100&use_compact_associations=false
+
+  // const bioentityUrl = `${biolink}bioentity/${nodeId}/associations`;
+  console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
+  const bioentityParams = {
+    fetch_objects: true,
+    unselect_evidence: true,
+    exclude_automatic_assertions: false,
+    use_compact_associations: false,
+    rows: 100,
+    graphize: false
+  };
+  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const associations = bioentityResp.data.associations;
+  // https://api.monarchinitiative.org/api/bioentity/PMID%3A11751940/associations?rows=100&unselect_evidence=true&exclude_automatic_assertions=false&fetch_objects=true&use_compact_associations=false
+
+  console.log('getLiteratureAssociations', associations);
+
+  const filtered = associations.filter(a => idToType(a.object.id) === cardType);
+
+  return {
+    data: {
+      numFound: filtered.length,
+      associations: filtered
+    }
+  };
+}
+
+export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
+  if (nodeType === 'literature') {
+    const litAssociations = await getLiteratureAssociations(nodeId, cardType);
+    console.log('getNodeAssociations lit', nodeType, nodeId, cardType, litAssociations);
+    return litAssociations;
+  }
+
   const baseUrl = `${biolink}bioentity/`;
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
-  const urlExtension = `${nodeType}/${identifier}/${biolinkAnnotationSuffix}`;
+  const urlExtension = `${nodeType}/${nodeId}/${biolinkAnnotationSuffix}`;
   const url = `${baseUrl}${urlExtension}`;
 
-  const returnedPromise = new Promise((resolve, reject) => {
+  console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
+
+  return new Promise((resolve, reject) => {
     axios.get(url, { params })
       .then((resp) => {
         const responseData = resp;
@@ -445,7 +570,7 @@ export function getNodeAssociations(nodeType, identifier, cardType, params) {
           reject(responseData);
         }
         else {
-          // console.log('getNodeAssociations', nodeType, identifier, cardType, url);
+          // console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
           // console.log(JSON.stringify(responseData, null, 2));
           resolve(responseData);
         }
@@ -454,7 +579,6 @@ export function getNodeAssociations(nodeType, identifier, cardType, params) {
         reject(err);
       });
   });
-  return returnedPromise;
 }
 
 export function getNodeLabelByCurie(curie) {
@@ -463,6 +587,7 @@ export function getNodeLabelByCurie(curie) {
     fetch_objects: true,
     rows: 100
   };
+  console.log('getNodeLabelByCurie', curie);
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(baseUrl, { params })
       .then((resp) => {
