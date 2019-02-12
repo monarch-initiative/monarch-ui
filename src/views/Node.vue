@@ -642,7 +642,7 @@ export default {
           const entrezResult = await Entrez.getPublication(this.nodeId);
           this.entrezResult = entrezResult;
           this.node.label = entrezResult.title;
-          this.node.iri = entrezResult.pmLink;
+          this.node.iri = entrezResult.pubmedURL;
 
           let abstractEnhanced = this.entrezResult.abstract;
           abstractEnhanced = abstractEnhanced.replace(

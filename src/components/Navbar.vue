@@ -155,7 +155,8 @@
         <div
           v-if="this.$route.path !== '/'"
           class="nav-ac">
-          <monarch-autocomplete/>
+          <monarch-autocomplete
+            :full-width-search="true"/>
         </div>
       </b-navbar-nav>
     </b-collapse>

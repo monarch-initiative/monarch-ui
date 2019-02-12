@@ -339,9 +339,9 @@ export default {
 
     async fetchData() {
       const that = this;
-      if (that.dataFetchedPage === that.currentPage &&
-          that.dataFetchedRowsPerPage === that.rowsPerPage) {
-        console.log('####fetchData inhibited due to cached values.');
+      if (that.dataFetchedPage === that.currentPage
+           && that.dataFetchedRowsPerPage === that.rowsPerPage) {
+        // console.log('####fetchData inhibited due to cached values.');
       }
       else {
         try {
@@ -418,9 +418,6 @@ export default {
           if (objectElem.id.indexOf(':.well-known') === 0) {
             objectLink = null;
           }
-          // else if (this.cardType === 'literature') {
-          //   objectLink = `/${this.cardType}/${objectElem.id}/${this.nodeType}/${this.nodeId}`;
-          // }
 
           this.rows.push({
             references: pubs,

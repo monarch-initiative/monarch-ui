@@ -69,7 +69,7 @@
       <div
         v-if="open"
         :class="{
-          'navbar-search': !homeSearch
+          'full-width-search': fullWidthSearch
         }"
         class="dropdown-menu list-group dropList mx-2"
       >
@@ -192,6 +192,11 @@ export default {
       default: false
     },
     homeSearch: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    fullWidthSearch: {
       type: Boolean,
       required: false,
       default: false
@@ -436,10 +441,10 @@ export default {
     border: solid black 1px;
     overflow-y: auto;
 
-    &.navbar-search {
+    &.full-width-search {
       position: fixed !important;
       top: $navbar-height;
-      border:1px solid green;
+      left: 0;
     }
   }
 

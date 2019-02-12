@@ -569,7 +569,7 @@ export function getNodeLabelByCurie(curie) {
     fetch_objects: true,
     rows: 100
   };
-  console.log('getNodeLabelByCurie', curie);
+
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(baseUrl, { params })
       .then((resp) => {
