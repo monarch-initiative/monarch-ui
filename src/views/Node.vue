@@ -65,8 +65,17 @@
               <a
                 :href="node.iri"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="node-label-id">
                 {{ node.id }}
+              </a>
+              <a
+                v-if="entrezResult && entrezResult.abstractURL"
+                :href="entrezResult.abstractURL"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="node-label-id">
+                Entrez: {{ node.id }}
               </a>
             </div>
 
@@ -103,6 +112,26 @@
                 {{ nodeDefinition }}
               </div>
             </div>
+
+            <template
+              v-if="entrezResult">
+              <h6>Date: {{ entrezResult.pubdate }}</h6>
+              <h6>Authors:
+                {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
+              </h6>
+
+              <div
+                v-if="entrezResult"
+                class="publication-abstract"
+                v-html="entrezResult.abstractMarkdown"/>
+
+              <!--
+              <pre
+                v-if="entrezResult">
+        {{ entrezResult }}
+              </pre>
+               -->
+            </template>
 
             <!--
             <div
@@ -215,7 +244,7 @@
               :facets="facetObject"
               :node-type="nodeType"
               :card-type="expandedCard"
-              :identifier="nodeId"
+              :node-id="nodeId"
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
@@ -234,6 +263,7 @@
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
+import * as Entrez from '@/api/Entrez';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -241,6 +271,8 @@ import AssocTable from '@/components/AssocTable.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
+
+import MarkdownIt from 'markdown-it';
 
 const availableCardTypes = [
   'anatomy',
@@ -322,6 +354,7 @@ export default {
           'Gallus gallus': true,
           'Homo sapiens': true,
           'Macaca mulatta': true,
+          'Mammalia': true,
           'Monodelphis domestica': true,
           'Mus musculus': true,
           'Ornithorhynchus anatinus': true,
@@ -393,6 +426,7 @@ export default {
       expandedCard: null,
       hasGeneExac: false,
       hasGeneTrack: false,
+      entrezResult: null,
       counts: {
         disease: 0,
         phenotype: 0,
@@ -528,10 +562,10 @@ export default {
       this.geneIcon = this.icons.gene;
       this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
-      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       const nonEmptyCards = [];
       this.availableCards.forEach((cardType) => {
+        // console.log('cardType', cardType, that.node, that.node.counts);
         const count = that.node.counts[cardType];
         that.counts[cardType] = count ? count.totalCount : 0;
         if (that.counts[cardType] > 0) {
@@ -580,7 +614,8 @@ export default {
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;
       this.nodeError = null;
-      this.hasGeneTrack = false;
+      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
+      this.entrezResult = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isFacetsShowing = false;
@@ -593,15 +628,34 @@ export default {
         if (this.hasGeneTrack) {
           const geneInfo = await MyGene.getGeneDescription(this.nodeId);
           const hit = geneInfo.hits[0];
-          console.log('geneInfo', nodeResponse, hit);
-
-          nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
-          nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
-          nodeResponse.geneDescription = hit.summary;
-          nodeResponse.geneInfo = geneInfo;
+          if (hit) {
+            nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
+            nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
+            nodeResponse.geneDescription = hit.summary;
+            nodeResponse.geneInfo = geneInfo;
+          }
         }
 
         this.applyResponse(nodeResponse);
+
+        if (this.nodeType === 'literature') {
+          const entrezResult = await Entrez.getPublication(this.nodeId);
+          this.entrezResult = entrezResult;
+          this.node.label = entrezResult.title;
+          this.node.iri = entrezResult.pubmedURL;
+
+          let abstractEnhanced = this.entrezResult.abstract;
+          abstractEnhanced = abstractEnhanced.replace(
+            // /^([A-Z]+): /g,
+            /\n([A-Z]+): /g,
+            `\n\n##### $1\n\n`
+          );
+          // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
+          const md = new MarkdownIt();
+          const mdRendered = md.render(abstractEnhanced);
+          this.entrezResult.abstractMarkdown = mdRendered;
+          // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
+        }
         this.clearProgress();
       }
       catch (e) {
@@ -730,6 +784,10 @@ div.container-cards .node-cards-section {
 .title-bar .node-label-taxon {
 }
 
+div.publication-abstract {
+  margin: 0;
+  padding: 10px;
+}
 @media (max-width: $grid-float-breakpoint) {
   div.container-cards {
     margin-left: $collapsed-sidebar-width;

@@ -57,7 +57,7 @@ export default new Router({
       component: require('@/views/AboutTeam.md').default,
     },
     {
-      path: '/search/:query',
+      path: '/search/:query?',
       name: 'search',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route

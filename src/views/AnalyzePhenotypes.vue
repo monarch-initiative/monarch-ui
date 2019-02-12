@@ -82,6 +82,7 @@
               </div>
               <b-modal
                 :id="phenotype.curie"
+                v-model="modalShow"
                 size="lg"
                 title="phenotype.label"
               >
@@ -91,7 +92,8 @@
                 >
                   <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
                 </div>
-                <div>
+                <div
+                  v-if="modalShow">
                   <local-nav
                     :anchor-id="phenotype.curie"
                     @interface="handleReplacePhenotype"
@@ -502,6 +504,7 @@ export default {
   },
   data() {
     return {
+      modalShow: false,
       acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
       phenoSearchPH: 'search for phenotypes or disease',
       geneSearchPH: 'search for genes',

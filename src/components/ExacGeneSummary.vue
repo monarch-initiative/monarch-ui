@@ -115,7 +115,7 @@ export default {
       })
         .then((resp) => {
           const hits = resp.data.hits[0];
-          if (hits.exac) {
+          if (hits && hits.exac) {
             this.showGeneExac = true;
             this.exacGene = {
               exp_syn: this.round(hits.exac.all.exp_syn, 1),
