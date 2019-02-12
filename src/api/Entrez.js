@@ -42,8 +42,8 @@ export async function getPublication(nodeId) {
           if (entrezSummary && entrezSummary.data && entrezSummary.data.result) {
             result = entrezSummary.data.result[pubId];
             result.pmLink = `https://www.ncbi.nlm.nih.gov/pubmed/${pubId}`;
+            result.abstractURL = entrezAbstract.request.responseURL;
             result.abstract = entrezAbstract.data;
-            // console.log('result.abstract', result.abstract);
           }
         }
       ));

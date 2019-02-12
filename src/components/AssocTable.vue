@@ -275,7 +275,6 @@ export default {
   },
   methods: {
     async rowsProvider(ctx, callback) {
-      console.log('rowsProvider', ctx);
       this.fetchData().then((data) => {
         callback(this.rows);
       }).catch((error) => {
@@ -414,7 +413,6 @@ export default {
         }
         const taxon = this.parseTaxon(objectElem);
 
-        console.log('taxon', taxon);
         if (!taxon.id || this.trueFacets.includes(taxon.id)) {
           let objectLink = `/${this.cardType}/${objectElem.id}`;
           if (objectElem.id.indexOf(':.well-known') === 0) {

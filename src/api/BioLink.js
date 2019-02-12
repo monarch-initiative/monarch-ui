@@ -215,10 +215,6 @@ async function getLiteratureAssociationCounts(nodeId) {
 
   const bioentityUrl = `${biolink}association/from/${nodeId}`;
 
-  // https://api.monarchinitiative.org/api/association/from/PMID%3A11820800?graphize=false&unselect_evidence=true&start=0&rows=100&use_compact_associations=false
-
-  // const bioentityUrl = `${biolink}bioentity/${nodeId}/associations`;
-  console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
   const bioentityParams = {
     fetch_objects: true,
     unselect_evidence: true,
@@ -229,9 +225,6 @@ async function getLiteratureAssociationCounts(nodeId) {
   };
   const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
   const associations = bioentityResp.data.associations;
-  // https://api.monarchinitiative.org/api/bioentity/PMID%3A11751940/associations?rows=100&unselect_evidence=true&exclude_automatic_assertions=false&fetch_objects=true&use_compact_associations=false
-
-  console.log('associations', associations);
 
   let geneCount = 0;
   let diseaseCount = 0;
@@ -240,7 +233,6 @@ async function getLiteratureAssociationCounts(nodeId) {
   associations.forEach((a) => {
     const id = a.object.id;
     const type = idToType(id);
-    console.log(id, type, a.object.label);
     if (type === 'disease') {
       diseaseCount += 1;
     }
@@ -294,7 +286,6 @@ async function getCountsForNode(nodeId, nodeType) {
     });
   }
 
-  console.log('getCountsForNode', nodeId, nodeType, result);
   return result;
 }
 
@@ -328,7 +319,7 @@ async function getURIForId(nodeId) {
 
 export async function getNodeSummary(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
-  console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
+  // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
 
   const bioentityParams = {
     fetch_objects: true,
@@ -519,11 +510,8 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
 //
 async function getLiteratureAssociations(nodeId, cardType) {
   const bioentityUrl = `${biolink}association/from/${nodeId}`;
+  // console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
 
-  // https://api.monarchinitiative.org/api/association/from/PMID%3A11820800?graphize=false&unselect_evidence=true&start=0&rows=100&use_compact_associations=false
-
-  // const bioentityUrl = `${biolink}bioentity/${nodeId}/associations`;
-  console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
   const bioentityParams = {
     fetch_objects: true,
     unselect_evidence: true,
@@ -534,9 +522,6 @@ async function getLiteratureAssociations(nodeId, cardType) {
   };
   const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
   const associations = bioentityResp.data.associations;
-  // https://api.monarchinitiative.org/api/bioentity/PMID%3A11751940/associations?rows=100&unselect_evidence=true&exclude_automatic_assertions=false&fetch_objects=true&use_compact_associations=false
-
-  console.log('getLiteratureAssociations', associations);
 
   const filtered = associations.filter(a => idToType(a.object.id) === cardType);
 
@@ -551,7 +536,6 @@ async function getLiteratureAssociations(nodeId, cardType) {
 export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   if (nodeType === 'literature') {
     const litAssociations = await getLiteratureAssociations(nodeId, cardType);
-    console.log('getNodeAssociations lit', nodeType, nodeId, cardType, litAssociations);
     return litAssociations;
   }
 
@@ -559,8 +543,6 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkAnnotationSuffix}`;
   const url = `${baseUrl}${urlExtension}`;
-
-  console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
 
   return new Promise((resolve, reject) => {
     axios.get(url, { params })

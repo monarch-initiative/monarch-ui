@@ -1,14 +1,15 @@
 <template>
- <div>
-   <div
+  <div
     v-if="pgVersion === index"
     ref="phenogridbox"
     :id="'phenogridbox-'+index"
-  /></div>
-
+  />
 </template>
 
 <script>
+
+/* global Phenogrid */
+
 export default {
   props: {
     xAxis: {
@@ -53,7 +54,6 @@ export default {
         'yAxis': this.yAxis
       };
 
-      console.log('launch', pgData);
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
         serverURL: 'https://api.monarchinitiative.org',
         gridSkeletonData: pgData,
