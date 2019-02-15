@@ -170,7 +170,9 @@
       </div>
     </div>
     <div v-show="!dataFetched && !dataError">
-      <h1>Loading ...</h1>
+      <br>
+      <br>
+      <h5>Loading…</h5>
     </div>
   </div>
 </template>
@@ -312,6 +314,7 @@ export default {
         'Anolis carolinensis': 'NCBITaxon:28377',
         'Arabidopsis thaliana': 'NCBITaxon:3702',
         'Bos taurus': 'NCBITaxon:9913',
+        'Caenorhabditis': 'NCBITaxon:6237',
         'Caenorhabditis elegans': 'NCBITaxon:6239',
         'Danio rerio': 'NCBITaxon:7955',
         'Drosophila melanogaster': 'NCBITaxon:7227',
