@@ -79,32 +79,37 @@ export default {
     geneList: {
       type: Array,
       required: false,
+      default: null,
     }
   },
 
 
   data() {
     return {
-      test: {  combinedScore: 65,
-        hitId: "MONDO:0015999",
-        hitLabel: "primary pigmented nodular adrenocortical disease",
-        mostInformativeIc: "10.16",
-        mostInformativeId: "HP:0001065",
-        mostInformativeLabel: "Striae distensae",
-        mostInformativeLink: "/phenotype/HP:0001065",
-        otherMatchIc: "3.67",
-        otherMatchId: "MP:0001533",
-        otherMatchLabel: "abnormal skeleton physiology",
-        otherMatchLink: "/phenotype/MP:0001533"},
+      test: {
+        combinedScore: 65,
+        hitId: 'MONDO:0015999',
+        hitLabel: 'primary pigmented nodular adrenocortical disease',
+        mostInformativeIc: '10.16',
+        mostInformativeId: 'HP:0001065',
+        mostInformativeLabel: 'Striae distensae',
+        mostInformativeLink: '/phenotype/HP:0001065',
+        otherMatchIc: '3.67',
+        otherMatchId: 'MP:0001533',
+        otherMatchLabel: 'abnormal skeleton physiology',
+        otherMatchLink: '/phenotype/MP:0001533'
+      },
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
       fields: [
-        { key: 'hitLabel',
+        {
+          key: 'hitLabel',
           label: 'Match Label',
           sortable: true
         },
-        { key: 'hitId',
+        {
+          key: 'hitId',
           label: 'Match Identifier',
           sortable: true
         },
@@ -113,7 +118,8 @@ export default {
           key: 'combinedScore',
           sortable: true
         },
-        { key: 'mostInformativeLabel',
+        {
+          key: 'mostInformativeLabel',
           label: 'Most Informative Phenotype',
           sortable: true
         },
@@ -121,7 +127,7 @@ export default {
           key: 'mostInformativeId',
           label: 'Most Informative Id',
           sortable: true,
-        },{
+        }, {
           key: 'mostInformativeIc',
           label: 'Most Informative IC Score',
           sortable: true,

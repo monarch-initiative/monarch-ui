@@ -126,7 +126,7 @@
                 class="publication-abstract"
                 v-html="entrezResult.abstractMarkdown"/>
 
-              <!--
+                <!--
               <pre
                 v-if="entrezResult">
         {{ entrezResult }}
@@ -232,7 +232,7 @@
           </div>
 
           <div
-            v-if="!expandedCard && hasGeneTrack && node.geneInfo"
+            v-if="!expandedCard && node.geneInfo"
             class="row">
             <genome-feature
               :mygene-data="node.geneInfo"/>
@@ -414,7 +414,6 @@ export default {
       modifiers: null,
       contentScript: '',
       contentBody: '',
-      progressTimer: null,
       path: null,
       icons,
       labels,
@@ -427,7 +426,6 @@ export default {
       nonEmptyCards: [],
       expandedCard: null,
       hasGeneExac: false,
-      hasGeneTrack: false,
       entrezResult: null,
       counts: {
         disease: 0,
@@ -473,8 +471,6 @@ export default {
   watch: {
     $route(to, _from) {
       // Only fetchData if the path is different.
-      // hash changes are currently handled by monarch-tabs.js
-      // within the loaded MonarchLegacy component.
 
       if (to.path !== this.path) {
         this.fetchData();
@@ -518,12 +514,6 @@ export default {
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
-    // TIP/QUESTION: This applyResponse is called asynchronously via the function
-    // fetchData when it's promise is fulfilled. We (as VueJS newbies) aren't
-    // yet certain how this fits into the Vue lifecycle and we may eventually
-    // need to apply $nextTick() to deal with this. Keep an eye out for UI fields
-    // not updating or having undefined values.
-    //
     async applyResponse(response, neighborhood) {
       // console.log('applyResponse', response);
       const that = this;
@@ -587,28 +577,6 @@ export default {
       }
     },
 
-    startProgress() {
-      const that = this;
-      if (that.progressTimer) {
-        console.log('startProgress.... leftover progressTimer');
-      }
-      else {
-        that.progressTimer = setTimeout(function timeout() {
-          that.progressTimer = null;
-        }, 500);
-      }
-    },
-
-    clearProgress() {
-      const that = this;
-      that.$nextTick(function clearProgress() {
-        if (that.progressTimer) {
-          clearTimeout(that.progressTimer);
-          that.progressTimer = null;
-        }
-      });
-    },
-
     async fetchData() {
       const path = this.$route.fullPath;
 
@@ -618,61 +586,53 @@ export default {
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;
       this.nodeError = null;
-      this.hasGeneTrack = (this.nodeType === 'gene' || this.nodeType === 'variant');
       this.entrezResult = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
       this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
-      this.startProgress();
 
-      try {
-        const nodeSummary = await BL.getNode(this.nodeId, this.nodeType);
+      const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
+      const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
 
-        if (this.hasGeneTrack) {
-          const geneInfo = await MyGene.getGeneDescription(this.nodeId);
-          const hit = geneInfo && geneInfo.hits[0];
-          if (hit) {
-            nodeSummary.geneLabel = `${hit.name}/${hit.symbol}`;
-            nodeSummary.geneSymbol = `${hit.name}/${hit.symbol}`;
-            nodeSummary.geneDescription = hit.summary;
-            nodeSummary.geneInfo = geneInfo;
-          }
-        }
+      const [nodeSummary, neighborhood] = await Promise.all(
+        [
+          nodeSummaryPromise,
+          neighborhoodPromise
+        ]
+      );
 
-        const neighborhood = await BL.getNeighborhood(this.nodeId, this.nodeType);
+      this.applyResponse(nodeSummary, neighborhood);
 
-        this.applyResponse(nodeSummary, neighborhood);
+      if (this.nodeType === 'publication') {
+        const entrezResult = await Entrez.getPublication(this.nodeId);
+        this.entrezResult = entrezResult;
+        this.node.label = entrezResult.title;
+        this.node.iri = entrezResult.pubmedURL;
 
-        if (this.nodeType === 'publication') {
-          const entrezResult = await Entrez.getPublication(this.nodeId);
-          this.entrezResult = entrezResult;
-          this.node.label = entrezResult.title;
-          this.node.iri = entrezResult.pubmedURL;
-
-          let abstractEnhanced = this.entrezResult.abstract;
-          abstractEnhanced = abstractEnhanced.replace(
-            // /^([A-Z]+): /g,
-            /\n([A-Z]+): /g,
-            `\n\n##### $1\n\n`
-          );
-          // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
-          const md = new MarkdownIt();
-          const mdRendered = md.render(abstractEnhanced);
-          this.entrezResult.abstractMarkdown = mdRendered;
-          // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
-        }
-        this.clearProgress();
-      }
-      catch (e) {
-        console.log('nodeSummary ERROR', e, this);
-        this.nodeError = e;
-        this.clearProgress();
+        let abstractEnhanced = this.entrezResult.abstract;
+        abstractEnhanced = abstractEnhanced.replace(
+          // /^([A-Z]+): /g,
+          /\n([A-Z]+): /g,
+          `\n\n##### $1\n\n`
+        );
+        // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
+        const md = new MarkdownIt();
+        const mdRendered = md.render(abstractEnhanced);
+        this.entrezResult.abstractMarkdown = mdRendered;
+        // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
       }
 
-      // TIP: Don't put anything useful here, because this will execute BEFORE
-      // the async operation has even been queued and before it has returned
-      // a useful result or error.
+      if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
+        const geneInfo = await MyGene.getGeneDescription(this.nodeId);
+        const hit = geneInfo && geneInfo.hits[0];
+        if (hit) {
+          nodeSummary.geneLabel = `${hit.name}/${hit.symbol}`;
+          nodeSummary.geneSymbol = `${hit.name}/${hit.symbol}`;
+          nodeSummary.geneDescription = hit.summary;
+          nodeSummary.geneInfo = geneInfo;
+        }
+      }
     }
   }
 };
