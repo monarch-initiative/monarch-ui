@@ -11,14 +11,6 @@
         class="card-img-top">
       {{ pluralize(cardLabel, cardCount) }}
     </div>
-
-<!--
-    <div class="card-body">
-      <div class="card-text text-center">
-        {{ cardCount }}
-      </div>
-    </div>
- -->
   </div>
 
 </template>
@@ -69,7 +61,8 @@ export default {
 
     pluralize(label, count) {
       const s = count === 1 ? '' : 's';
-      return `${count} ${label}${s}`;
+      // return `${count.facetCount}/${count.totalCount}/${count.correctCount} ${label}${s}`;
+      return `${count.totalCount} ${label}${s}`;
     }
   }
 

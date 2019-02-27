@@ -55,8 +55,6 @@
 import _ from 'underscore';
 import * as BL from '@/api/BioLink';
 
-const uniqBy = require('lodash/uniqBy');
-
 export default {
   props: {
     anchorId: {
@@ -83,7 +81,7 @@ export default {
       try {
         const searchResponse = await BL.getNodeSummary(this.anchorId, 'phenotype');
         this.familyData = searchResponse;
-        this.sortRelationships();
+        await this.sortRelationships();
         this.dataFetched = true;
       }
       catch (e) {
@@ -99,14 +97,13 @@ export default {
           root: this.rootTerm.id
         });
     },
-    sortRelationships() {
+    async sortRelationships() {
       this.rootTerm = {
         id: this.familyData.id,
         label: this.familyData.label,
-        synonyms: this.familyData.synonyms
       };
 
-      const neighborhood = BL.getNeighborhoodFromResponse(this.familyData);
+      const neighborhood = await BL.getNeighborhood(this.familyData.id);
       const nodeLabelMap = neighborhood.nodeLabelMap;
       const equivalentClasses = neighborhood.equivalentClasses;
       const superclasses = neighborhood.superclasses;
@@ -124,27 +121,6 @@ export default {
         id: c,
         label: nodeLabelMap[c]
       }));
-
-      /*
-      // This code no longer works, as MonarchAccess returns super/sub/equiv in a different form.
-
-      this.equivalentTerms = uniqBy(this.familyData.equivalentNodes, 'id');
-      const preChildren = [];
-      const preParents = [];
-      this.familyData.relationships.forEach((elem) => {
-        if (elem.property.id === 'subClassOf') {
-          if (elem.object.id === this.anchorId) {
-            preChildren.push(elem);
-          }
-          if (elem.subject.id === this.anchorId) {
-            preParents.push(elem);
-          }
-        }
-
-      });
-      this.children = uniqBy(preChildren, 'id');
-      this.parents = uniqBy(preParents, 'id');
-*/
     }
   }
 };

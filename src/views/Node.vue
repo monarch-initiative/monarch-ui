@@ -45,6 +45,7 @@
             </div>
             <div
               v-else>
+              <br>
               <h5 class="text-center">Loading Data for {{ labels[nodeType] }}: {{ nodeId }}</h5>
             </div>
           </div>
@@ -283,7 +284,7 @@ const availableCardTypes = [
   'genotype',
   'homolog',
   'interaction',
-  'literature',
+  'publication',
   'model',
   'ortholog-phenotype',
   'ortholog-disease',
@@ -301,7 +302,7 @@ const icons = {
   genotype: require('../assets/img/icon-anatomy.png'),
   homolog: require('../assets/img/icon-anatomy.png'),
   interaction: require('../assets/img/icon-anatomy.png'),
-  literature: require('../assets/img/icon-anatomy.png'),
+  publication: require('../assets/img/icon-anatomy.png'),
   model: require('../assets/img/icon-models.png'),
   'ortholog-disease': require('../assets/img/icon-anatomy.png'),
   'ortholog-phenotype': require('../assets/img/icon-anatomy.png'),
@@ -319,7 +320,7 @@ const labels = {
   genotype: 'Genotype',
   homolog: 'Homolog',
   interaction: 'Interaction',
-  literature: 'Literature',
+  publication: 'Publication',
   model: 'Model',
   'ortholog-phenotype': 'Ortholog Phenotype',
   'ortholog-disease': 'Ortholog Disease',
@@ -347,6 +348,7 @@ export default {
           'Anolis carolinensis': true,
           'Arabidopsis thaliana': true,
           'Bos taurus': true,
+          'Caenorhabditis': true,
           'Caenorhabditis elegans': true,
           'Danio rerio': true,
           'Drosophila melanogaster': true,
@@ -434,7 +436,7 @@ export default {
         variant: 0,
         model: 0,
         pathway: 0,
-        literature: 0,
+        publication: 0,
         cellline: 0,
         genotype: 0
       },
@@ -522,13 +524,14 @@ export default {
     // need to apply $nextTick() to deal with this. Keep an eye out for UI fields
     // not updating or having undefined values.
     //
-    applyResponse(response) {
+    async applyResponse(response, neighborhood) {
       // console.log('applyResponse', response);
       const that = this;
       this.node = response;
       // this.nodeDebug = JSON.stringify(response, null, 2);
 
-      const neighborhood = BL.getNeighborhoodFromResponse(response);
+      // const neighborhood = await BL.getNeighborhood(this.nodeId, this.nodeType);
+      // console.log('neighborhood', neighborhood);
       const nodeLabelMap = neighborhood.nodeLabelMap;
       const equivalentClasses = neighborhood.equivalentClasses;
       const superclasses = neighborhood.superclasses;
@@ -565,11 +568,12 @@ export default {
 
       const nonEmptyCards = [];
       this.availableCards.forEach((cardType) => {
-        // console.log('cardType', cardType, that.node, that.node.counts);
         const count = that.node.counts[cardType];
-        that.counts[cardType] = count ? count.totalCount : 0;
-        if (that.counts[cardType] > 0) {
-          nonEmptyCards.push(cardType);
+        if (count) {
+          that.counts[cardType] = count;
+          if (count.totalCount > 0) {
+            nonEmptyCards.push(cardType);
+          }
         }
       });
       this.nonEmptyCards = nonEmptyCards;
@@ -623,22 +627,24 @@ export default {
       this.startProgress();
 
       try {
-        const nodeResponse = await BL.getNodeSummary(this.nodeId, this.nodeType);
+        const nodeSummary = await BL.getNode(this.nodeId, this.nodeType);
 
         if (this.hasGeneTrack) {
           const geneInfo = await MyGene.getGeneDescription(this.nodeId);
-          const hit = geneInfo.hits[0];
+          const hit = geneInfo && geneInfo.hits[0];
           if (hit) {
-            nodeResponse.geneLabel = `${hit.name}/${hit.symbol}`;
-            nodeResponse.geneSymbol = `${hit.name}/${hit.symbol}`;
-            nodeResponse.geneDescription = hit.summary;
-            nodeResponse.geneInfo = geneInfo;
+            nodeSummary.geneLabel = `${hit.name}/${hit.symbol}`;
+            nodeSummary.geneSymbol = `${hit.name}/${hit.symbol}`;
+            nodeSummary.geneDescription = hit.summary;
+            nodeSummary.geneInfo = geneInfo;
           }
         }
 
-        this.applyResponse(nodeResponse);
+        const neighborhood = await BL.getNeighborhood(this.nodeId, this.nodeType);
 
-        if (this.nodeType === 'literature') {
+        this.applyResponse(nodeSummary, neighborhood);
+
+        if (this.nodeType === 'publication') {
           const entrezResult = await Entrez.getPublication(this.nodeId);
           this.entrezResult = entrezResult;
           this.node.label = entrezResult.title;
@@ -659,7 +665,7 @@ export default {
         this.clearProgress();
       }
       catch (e) {
-        console.log('nodeResponse ERROR', e, this);
+        console.log('nodeSummary ERROR', e, this);
         this.nodeError = e;
         this.clearProgress();
       }

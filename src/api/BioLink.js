@@ -39,17 +39,6 @@ const servers = {
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
   },
 
-  cgrb: {
-    'type': 'beta',
-    'app_base': 'https://monarch-app-beta.cgrb.oregonstate.edu',
-    'scigraph_url': 'https://monarch-scigraph-ontology-dev.cgrb.oregonstate.edu/scigraph/',
-    'scigraph_data_url': 'https://monarch-scigraph-data-dev.cgrb.oregonstate.edu/scigraph/',
-    'golr_url': 'https://monarch-solr6-dev.cgrb.oregonstate.edu/solr/golr/',
-    'search_url': 'https://monarch-solr6-dev.cgrb.oregonstate.edu/solr/search/',
-    'owlsim_services_url': 'https://monarch-app-beta.cgrb.oregonstate.edu/owlsim',
-    'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
-  }
 };
 
 
@@ -60,9 +49,6 @@ function getBiolinkAnnotation(cardType) {
   let result = `${cardType}s`;
   if (cardType === 'anatomy') {
     result = 'expression/anatomy';
-  }
-  else if (cardType === 'literature') {
-    result = cardType;
   }
   else if (cardType === 'function') {
     result = cardType;
@@ -82,242 +68,44 @@ function getBiolinkAnnotation(cardType) {
 // to be.
 //
 
-const nodeAssociationTypes = {
-  anatomy: [
-    'gene'
-  ],
-
-  disease: [
-    'gene',
-    'phenotype',
-    'model',
-    'variant',
-    'genotype',
-    'literature'
-  ],
-
-  function: [
-    'gene'
-  ],
-
-  gene: [
-    'disease',
-    'phenotype',
-    'model',
-    'variant',
-    'genotype',
-    'literature'
-  ],
-
-  genotype: [
-    'disease',
-    'gene',
-    'phenotype',
-    // 'model',
-    // BioLink Misssing endpoint... 'variant',
-    // 'literature'
-  ],
-
-  homolog: [
-    'gene'
-  ],
-
-  interaction: [
-    'gene'
-  ],
-
-  literature: [
-    'disease'
-  ],
-
-  model: [
-    'disease',
-    'gene',
-    'genotype',
-    'phenotype',
-    'variant',
-    'literature'
-  ],
-
-  orthoPhenotype: [
-    'gene'
-  ],
-
-  orthoDisease: [
-    'gene'
-  ],
-
-  pathway: [
-    'disease',
-    'gene'
-  ],
-
-  phenotype: [
-    'disease',
-    'gene',
-    'genotype',
-    'variant',
-    'literature'
-  ],
-
-  variant: [
-    // 'disease',
-    'gene',
-    'phenotype',
-    // 'model',
-    'genotype',
-    // 'literature'
-  ]
-};
-
-async function getCounts(nodeId, nodeType, countType) {
-  if (countType !== 'literature') {
-    countType += 's';
-  }
-  const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}/${countType}`;
-  // console.log('getCounts', nodeId, nodeType, countType);
-  const bioentityParams = {
-    fetch_objects: false,
-    unselect_evidence: true,
-    exclude_automatic_assertions: false,
-    use_compact_associations: true,
-    rows: 1
-  };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const bioentityResponseData = bioentityResp.data;
-  // console.log(bioentityResp.request.responseURL);
-  // console.log(bioentityResponseData);
-
-  return bioentityResponseData;
-}
-
-//
-// This special-case for literature is a short-term (we hope) kludge that uses
-// the BioLink endpoint /bioentity/:id/associations`, rather than the
-// soon-to-be-written /literature/:id endpoint.
-//
-
-function idToType(nodeId) {
-  let result = 'gene';
-
-  if (nodeId.indexOf('MONDO:') === 0) {
-    result = 'disease';
-  }
-  else if (nodeId.indexOf('HP:') === 0) {
-    result = 'phenotype';
-  }
-
-  return result;
-}
-
-async function getLiteratureAssociationCounts(nodeId) {
-  const associationsResultMap = {};
-
-  const bioentityUrl = `${biolink}association/from/${nodeId}`;
-
-  const bioentityParams = {
-    fetch_objects: true,
-    unselect_evidence: true,
-    exclude_automatic_assertions: false,
-    use_compact_associations: false,
-    rows: 100,
-    graphize: false
-  };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const associations = bioentityResp.data.associations;
-
-  let geneCount = 0;
-  let diseaseCount = 0;
-  let phenotypeCount = 0;
-
-  associations.forEach((a) => {
-    const id = a.object.id;
-    const type = idToType(id);
-    if (type === 'disease') {
-      diseaseCount += 1;
-    }
-    else if (type === 'phenotype') {
-      phenotypeCount += 1;
-    }
-    else {
-      geneCount += 1;
-    }
-  });
-
-  associationsResultMap.gene = {
-    facetCount: geneCount,
-    totalCount: geneCount
-  };
-  associationsResultMap.disease = {
-    facetCount: diseaseCount,
-    totalCount: diseaseCount
-  };
-  associationsResultMap.phenotype = {
-    facetCount: phenotypeCount,
-    totalCount: phenotypeCount
-  };
-
-  return associationsResultMap;
-}
-
-
-async function getCountsForNode(nodeId, nodeType) {
-  let result = null;
-  const associationTypes = nodeAssociationTypes[nodeType];
-
-  if (nodeType === 'literature') {
-    result = await getLiteratureAssociationCounts(nodeId);
-  }
-  else if (associationTypes) {
-    const promisesArray = associationTypes.map((a) => {
-      const countPromise = getCounts(nodeId, nodeType, a);
-      return countPromise;
-    });
-
-    const associationsResult = await Promise.all(promisesArray);
-
-    result = {};
-    associationTypes.forEach((a, index) => {
-      const aResult = associationsResult[index].numFound;
-      result[a] = {
-        facetCount: aResult,
-        totalCount: aResult
-      };
-    });
-  }
-
-  return result;
-}
-
-
-async function getCountsForNodeNew(nodeId, nodeType) {
-  const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
-  console.log('getCountsForNodeNew', nodeId, nodeType);
-  const bioentityParams = {
-    fetch_objects: false,
-    unselect_evidence: true,
-    exclude_automatic_assertions: false,
-    use_compact_associations: true,
-    get_association_counts: true,
-    rows: 1
-  };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const bioentityResponseData = bioentityResp.data;
-  // console.log(bioentityResp.request.responseURL);
-  // console.log(bioentityResponseData);
-
-  return bioentityResponseData;
-}
-
-async function getURIForId(nodeId) {
-  const blUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
-  const blResp = await axios.get(blUrl);
-  const uri = blResp.data;
-
-  return uri;
-}
-
 export async function getNodeSummary(nodeId, nodeType) {
+  const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
+  // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
+
+  const bioentityParams = {
+    fetch_objects: false,
+    unselect_evidence: true,
+    exclude_automatic_assertions: true,
+    use_compact_associations: false,
+    get_association_counts: false,
+    rows: 0
+  };
+
+  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
+
+  const nodeSummary = axios.all(
+    [
+      axios.get(bioentityUrl, { params: bioentityParams }),
+      axios.get(getIdentifierUrl),
+    ]
+  ).then(
+    axios.spread(
+      function response(bioentityResp, getIdentifierResp) {
+        const bioentityResponseData = bioentityResp.data;
+
+
+        bioentityResponseData.type = nodeType;
+        bioentityResponseData.uri = getIdentifierResp.data;
+        return bioentityResponseData;
+      }
+    )
+  );
+
+  return nodeSummary;
+}
+
+
+export async function getNode(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
   // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
 
@@ -326,66 +114,80 @@ export async function getNodeSummary(nodeId, nodeType) {
     unselect_evidence: false,
     exclude_automatic_assertions: false,
     use_compact_associations: false,
+    get_association_counts: true,
     rows: 100
   };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const bioentityResponseData = bioentityResp.data;
 
-  // console.log('getNodeSummary bioentityUrl', nodeId, nodeType);
-  // console.log(JSON.stringify(bioentityResponseData, null, 2));
+  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
 
-  if (!bioentityResponseData.xrefs) {
-    bioentityResponseData.xrefs = [
-      {
-        'url': '',
-        'label': 'BioLink:FIXME/xrefs',
-        'blank': false
+  const nodeSummary = axios.all(
+    [
+      axios.get(bioentityUrl, { params: bioentityParams }),
+      axios.get(getIdentifierUrl),
+    ]
+  ).then(
+    axios.spread(
+      function response(bioentityResp, getIdentifierResp) {
+        const bioentityResponseData = bioentityResp.data;
+
+        if (!bioentityResponseData.xrefs) {
+          bioentityResponseData.xrefs = [
+            {
+              'url': '',
+              'label': 'BioLink:FIXME/xrefs',
+              'blank': false
+            }
+          ];
+        }
+
+        if (!bioentityResponseData.description) {
+          bioentityResponseData.description = '';
+        }
+
+        const counts = bioentityResponseData.association_counts;
+        const countsMap = {};
+        Object.keys(counts).forEach((c) => {
+          let count = counts[c];
+          const singularKey = c.slice(0, -1);
+          if (singularKey === nodeType && count > 0) {
+            console.log('bad?', nodeType, nodeId, count);
+            count = 0;
+          }
+          countsMap[singularKey] = {
+            facetCount: count,
+            totalCount: count
+          };
+        });
+
+        bioentityResponseData.counts = countsMap;
+        // console.log('countsMap', nodeId, nodeType);
+        // console.log(JSON.stringify(countsMap, null, 2));
+
+        if (nodeType === 'disease') {
+          bioentityResponseData.inheritance = 'BioLinkFIXME';
+          bioentityResponseData.modifiers = 'BioLinkFIXME';
+        }
+
+        bioentityResponseData.type = nodeType;
+        bioentityResponseData.uri = getIdentifierResp.data;
+        return bioentityResponseData;
       }
-    ];
-  }
+    )
+  );
 
-  if (!bioentityResponseData.description) {
-    bioentityResponseData.description = '';
-  }
-
-  const graphUrl = `${biolink}graph/node/${nodeId}`;
-  const graphResponse = await axios.get(graphUrl);
-  // console.log('getNodeSummary graphUrl', nodeId, nodeType, graphUrl);
-  const graphResponseData = graphResponse.data;
-  // console.log(JSON.stringify(graphResponseData, null, 2));
-  bioentityResponseData.edges = graphResponseData.edges;
-  bioentityResponseData.nodes = graphResponseData.nodes;
-  // console.log(bioentityResponseData.edges);
-  // console.log(bioentityResponseData.nodes);
-
-  // const assUrl = `${biolink}bioentity/${nodeId}/associations`;
-
-  const countsMap = await getCountsForNode(nodeId, nodeType);
-
-  bioentityResponseData.counts = countsMap;
-  // console.log('countsMap', nodeId, nodeType);
-  // console.log(JSON.stringify(countsMap, null, 2));
-
-  // When BioLink's /bioentity/{nodeId}/{nodeType}?get_association_counts=true
-  // eventually works, we'll use the following.
-  // const countsMapNew = await getCountsForNodeNew(nodeId, nodeType);
-  // console.log('countsMapNew', countsMapNew);
-
-  if (nodeType === 'disease') {
-    bioentityResponseData.inheritance = 'BioLinkFIXME';
-    bioentityResponseData.modifiers = 'BioLinkFIXME';
-  }
-
-  const uri = await getURIForId(nodeId);
-  bioentityResponseData.uri = uri;
-  // console.log('bioentityResponseData', nodeId, nodeType);
-  // console.log(JSON.stringify(bioentityResponseData, null, 2));
-
-  return bioentityResponseData;
+  return nodeSummary;
 }
 
-export function getNeighborhoodFromResponse(response) {
-  const nodeId = response.id;
+
+export async function getNeighborhood(nodeId) {
+  // const graphUrl = `${biolink}graph/node/${nodeId}`;
+  const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
+
+  const graphResponse = await axios.get(graphUrl);
+  const graphResponseData = graphResponse.data;
+
+  // console.log('getNeighborhood', nodeId, graphUrl);
+  // console.log(JSON.stringify(graphResponseData, null, 2));
 
   const nodeLabelMap = {};
 
@@ -393,13 +195,13 @@ export function getNeighborhoodFromResponse(response) {
   const superclasses = [];
   const subclasses = [];
 
-  if (response.nodes) {
-    response.nodes.forEach((node) => {
+  if (graphResponseData.nodes) {
+    graphResponseData.nodes.forEach((node) => {
       nodeLabelMap[node.id] = node.lbl;
     });
   }
-  if (response.edges) {
-    response.edges.forEach((edge) => {
+  if (graphResponseData.edges) {
+    graphResponseData.edges.forEach((edge) => {
       if (edge.pred === 'subClassOf') {
         if (edge.sub === nodeId) {
           // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
@@ -410,7 +212,7 @@ export function getNeighborhoodFromResponse(response) {
           subclasses.push(edge.sub);
         }
         else {
-          // console.log('BAD', edge.sub, edge.pred, edge.obj);
+          // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
         }
       }
       else if (edge.pred === 'equivalentClass') {
@@ -424,7 +226,7 @@ export function getNeighborhoodFromResponse(response) {
         }
       }
       else {
-        console.log('getNeighborhoodFromResponse', nodeId, edge.pred);
+        console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
         console.log(JSON.stringify(edge, null, 2));
       }
     });
@@ -456,6 +258,11 @@ export async function getSearchResults(query, start, rows) {
 }
 
 
+function categoryKludge(category) {
+  return category === 'phenotype' ? 'Phenotype' : category;
+}
+
+
 export async function getSearchTermSuggestions(term, selected, prefixes = []) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
@@ -474,14 +281,18 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
   }
   if (selected.length > 0) {
     selected.forEach((elem) => {
-      params.append('category', elem);
+      params.append(
+        'category',
+        categoryKludge(elem)
+      );
     });
   }
   else {
     ['gene', 'variant locus', 'phenotype', 'genotype', 'disease']
-      .forEach(elem => (params.append('category', elem)));
+      .forEach(elem => (params.append('category', categoryKludge(elem))));
   }
   params.append('prefix', '-OMIA');
+
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(urlExtension, { params })
       .then((resp) => {
@@ -502,43 +313,7 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
 }
 
 
-//
-// This special-case for literature is a short-term (we hope) kludge that uses
-// the BioLink endpoint /bioentity/:id/associations`, rather than the
-// soon-to-be-written /literature/:id endpoint.
-//
-//
-async function getLiteratureAssociations(nodeId, cardType) {
-  const bioentityUrl = `${biolink}association/from/${nodeId}`;
-  // console.log('getLiteratureAssociationCounts', nodeId, bioentityUrl);
-
-  const bioentityParams = {
-    fetch_objects: true,
-    unselect_evidence: true,
-    exclude_automatic_assertions: false,
-    use_compact_associations: false,
-    rows: 100,
-    graphize: false
-  };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const associations = bioentityResp.data.associations;
-
-  const filtered = associations.filter(a => idToType(a.object.id) === cardType);
-
-  return {
-    data: {
-      numFound: filtered.length,
-      associations: filtered
-    }
-  };
-}
-
 export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
-  if (nodeType === 'literature') {
-    const litAssociations = await getLiteratureAssociations(nodeId, cardType);
-    return litAssociations;
-  }
-
   const baseUrl = `${biolink}bioentity/`;
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkAnnotationSuffix}`;
@@ -553,7 +328,16 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
         }
         else {
           // console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
-          // console.log(JSON.stringify(responseData, null, 2));
+          // // console.log(JSON.stringify(responseData, null, 2));
+          // responseData.data.associations.forEach((a) => {
+          //   console.log('');
+          //   console.log(a.subject.id + '/' + a.subject.label);
+          //   console.log(a.relation.id + '/' + a.relation.label + '/' + a.relation.inverse);
+          //   console.log(a.object.id + '/' + a.subject.object);
+          //   // console.log(JSON.stringify(a.relation, null, 2));
+          //   // console.log(JSON.stringify(a.object, null, 2));
+          //   console.log('');
+          // });
           resolve(responseData);
         }
       })
@@ -562,6 +346,7 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
       });
   });
 }
+
 
 export function getNodeLabelByCurie(curie) {
   const baseUrl = `${biolink}bioentity/${curie}`;
@@ -587,6 +372,8 @@ export function getNodeLabelByCurie(curie) {
   });
   return returnedPromise;
 }
+
+
 export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
   const baseUrl = 'https://monarchinitiative.org/analyze/phenotypes.json?';
   const params = new URLSearchParams();
@@ -612,6 +399,7 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
   });
   return returnedPromise;
 }
+
 
 export function debugServerName() {
   return (serverConfiguration.app_base.length > 0)

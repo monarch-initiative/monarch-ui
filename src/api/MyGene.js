@@ -74,45 +74,52 @@ export async function getGeneDescription(geneId) {
     species: speciesParam,
   };
 
-  const mygeneResponse = await axios.get(mygeneURL, { params: mygeneParams });
+  let result;
 
-  // console.log('mygeneResponse', mygeneResponse);
+  try {
+    const mygeneResponse = await axios.get(mygeneURL, { params: mygeneParams });
 
-  const result = mygeneResponse.data;
+    // console.log('mygeneResponse', mygeneResponse);
 
-  if (result.hits.length > 0 && result.hits[0].genomic_pos) {
-    const hit = result.hits[0];
-    // console.log('hit', hit);
+    result = mygeneResponse.data;
 
-    const symbol = hit.symbol;
-    const locationObj = hit.genomic_pos;
-    let taxid = hit.taxid;
-    if (locationObj) {
-      // sometimes data is not on the genomic position
-      if (!taxid) {
-        taxid = locationObj.taxid;
-      }
-      // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
-      const thisSpecies = getSpeciesFromTaxId(taxid);
-      if (!thisSpecies) {
-        console.log('Species not found from mygene.info.  Not showing genome features.');
-      }
-      else {
-        const defaultTrackName = 'All Genes'; // this is the generic track name
-        const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
-        const apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
-        const externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data/' + encodeURI(thisSpecies) + '&loc=' + encodeURI(locationString);
-        const trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
-        const trackDataWithHighlightURL = trackDataPrefix + '?name=' + symbol;
+    if (result.hits.length > 0 && result.hits[0].genomic_pos) {
+      const hit = result.hits[0];
+      // console.log('hit', hit);
 
-        // console.log('trackDataWithHighlight', trackDataWithHighlightURL);
-        const trackResponse = await axios.get(trackDataWithHighlightURL);
-        // console.log('trackResponse', trackResponse.data);
+      const symbol = hit.symbol;
+      const locationObj = hit.genomic_pos;
+      let taxid = hit.taxid;
+      if (locationObj) {
+        // sometimes data is not on the genomic position
+        if (!taxid) {
+          taxid = locationObj.taxid;
+        }
+        // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
+        const thisSpecies = getSpeciesFromTaxId(taxid);
+        if (!thisSpecies) {
+          console.log('Species not found from mygene.info.  Not showing genome features.');
+        }
+        else {
+          const defaultTrackName = 'All Genes'; // this is the generic track name
+          const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
+          const apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
+          const externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data/' + encodeURI(thisSpecies) + '&loc=' + encodeURI(locationString);
+          const trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
+          const trackDataWithHighlightURL = trackDataPrefix + '?name=' + symbol;
 
-        result.trackResponse = trackResponse.data;
-        result.externalURL = externalUrl;
+          // console.log('trackDataWithHighlight', trackDataWithHighlightURL);
+          const trackResponse = await axios.get(trackDataWithHighlightURL);
+          // console.log('trackResponse', trackResponse.data);
+
+          result.trackResponse = trackResponse.data;
+          result.externalURL = externalUrl;
+        }
       }
     }
+  }
+  catch (e) {
+    console.log('mygene.info error', e.message);
   }
 
   return result;

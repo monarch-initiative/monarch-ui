@@ -71,7 +71,11 @@
               class="entity-type-icon">
             <span
               class="list-group-item-value">
-              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
+              <!--
+              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType].facetCount }}/{{ cardCounts[cardType].totalCount }}/{{ cardCounts[cardType].correctCount }})
+               -->
+              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType].totalCount }})
+
             </span>
           </a>
         </li>
