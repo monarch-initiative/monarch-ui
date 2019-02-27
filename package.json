@@ -1,6 +1,6 @@
 {
   "name": "monarch-ui",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist/",
@@ -10,7 +10,8 @@
     "build": "node_modules/.bin/vue-cli-service build && cp dist/index.html dist/404.html",
     "buildandserve": "npm run build && (cd dist/ && ln -s . monarch-ui) && http-server -c-1 dist/",
     "analyze": "BUILD=analyze node_modules/.bin/vue-cli-service build",
-    "lint": "node_modules/.bin/vue-cli-service lint",
+    "lint": "node_modules/.bin/vue-cli-service lint --no-fix",
+    "lintfix": "node_modules/.bin/vue-cli-service lint --fix",
     "test": "npm run test:unit && npm run test:e2e",
     "test:unit": "node_modules/.bin/vue-cli-service test:unit --require tests/unit/pre-setup.js",
     "test:e2e": "node_modules/.bin/vue-cli-service test:e2e",
@@ -23,15 +24,21 @@
     "bootstrap": "4.3.1",
     "bootstrap-vue": "^2.0.0-rc.13",
     "d3": "^5.9.1",
+    "d3-axis": "^1.0.12",
+    "d3-scale": "^2.2.2",
+    "d3-selection": "^1.4.0",
     "file-saver": "^2.0.1",
     "font-awesome": "^4.7.0",
     "genomefeaturecomponent": "^0.2.7",
-    "js-yaml": "^3.12.1",
+    "js-yaml": "^3.12.2",
+    "jsdom-global": "^3.0.2",
     "lodash": "^4.17.11",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2",
     "phenogrid": "^1.4.0",
     "register-service-worker": "^1.6.2",
     "underscore": "^1.9.1",
-    "vue": "^2.6.6",
+    "vue": "^2.6.7",
     "vue-form-wizard": "^0.8.4",
     "vue-json-tree": "^0.3.3",
     "vue-router": "^3.0.2"
@@ -53,14 +60,12 @@
     "eslint-plugin-import": "^2.16.0",
     "html-loader": "^0.5.5",
     "http-server": "^0.11.1",
-    "markdown-it": "^8.4.2",
-    "markdown-it-anchor": "^5.0.2",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "sinon": "^7.2.4",
+    "sinon": "^7.2.5",
     "vue-cli-plugin-bootstrap-vue": "^0.1.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.2.0",
     "vue-markdown-loader": "^2.4.1",
-    "vue-template-compiler": "^2.6.6"
+    "vue-template-compiler": "^2.6.7"
   }
 }

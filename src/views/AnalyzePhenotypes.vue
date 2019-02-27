@@ -57,9 +57,10 @@
         <div class="p-3">
           <h4>Phenotype Profile</h4>
           <div class="flex-container">
+
             <div
               v-for="(phenotype, index) in phenotypes"
-              :key="phenotype.curie"
+              :key="index"
               class="m-1"
             >
               <div
@@ -67,8 +68,9 @@
                 role="group"
               >
                 <button
-                  v-b-modal="phenotype.curie"
+                  v-b-modal.phenotypeModal
                   class="btn btn-sm btn-info"
+                  @click="displayPhenotypeModal(phenotype)"
                 >
                   <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
                 </button>
@@ -80,26 +82,6 @@
                   <strong>x</strong>
                 </button>
               </div>
-              <b-modal
-                :id="phenotype.curie"
-                v-model="modalShow"
-                size="lg"
-                title="phenotype.label"
-              >
-                <div
-                  slot="modal-title"
-                  class="w-100"
-                >
-                  <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
-                </div>
-                <div
-                  v-if="modalShow">
-                  <local-nav
-                    :anchor-id="phenotype.curie"
-                    @interface="handleReplacePhenotype"
-                  />
-                </div>
-              </b-modal>
             </div>
           </div>
         </div>
@@ -168,9 +150,10 @@
         <div class="p-3">
           <h4>Taxon Groups</h4>
           <div
+            v-for="group in selectedGroups"
+            :key="group.groupId"
             class="btn-group"
             role="group"
-            v-for="group in selectedGroups"
           >
             <div
               class="badge badge-info group-badge p-2"
@@ -209,8 +192,9 @@
                 role="group"
               >
                 <button
-                  v-b-modal="gene.curie"
+                  v-b-modal.geneModal
                   class="btn btn-sm btn-info"
+                  @click="displayGeneModal(gene)"
                 >
                   <strong>{{ gene.match }} </strong>({{ gene.curie }})
                 </button>
@@ -222,24 +206,7 @@
                   <strong>x</strong>
                 </button>
               </div>
-              <b-modal
-                :id="gene.curie"
-                size="lg"
-                title="gene.label"
-              >
-                <div
-                  slot="modal-title"
-                  class="w-100"
-                >
-                  {{ gene.match }} | {{ gene.curie }}
-                </div>
-                <div>
-                  <local-nav
-                    :anchor-id="gene.curie"
-                    @interface="handleReplaceGene"
-                  />
-                </div>
-              </b-modal>
+
             </div>
           </div>
         </div>
@@ -285,6 +252,52 @@
       </div>
       <div class="col-1"/>
     </div>
+
+
+    <b-modal
+      id="phenotypeModal"
+      v-model="phenotypeModal"
+      lazy
+      size="xl"
+      title="selectedPhenotype.label"
+    >
+      <div
+        slot="modal-title"
+        class="w-100"
+      >
+        <strong>{{ selectedPhenotype.match }}</strong> | {{ selectedPhenotype.curie }}
+      </div>
+      <div
+        v-if="phenotypeModal">
+        <local-nav
+          :anchor-id="selectedPhenotype.curie"
+          @interface="handleReplacePhenotype"
+        />
+      </div>
+    </b-modal>
+
+    <b-modal
+      id="geneModal"
+      v-model="geneModal"
+      lazy
+      size="xl"
+      title="selectedGene.label"
+    >
+      <div
+        slot="modal-title"
+        class="w-100"
+      >
+        {{ selectedGene.match }} | {{ selectedGene.curie }}
+      </div>
+      <div
+        v-if="geneModal">
+        <local-nav
+          :anchor-id="selectedGene.curie"
+          :anchor-type="'gene'"
+          @interface="handleReplaceGene"
+        />
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -302,198 +315,6 @@ Vue.use(VueFormWizard);
 
 const findIndex = require('lodash/findIndex');
 
-function applyExampleData(vm) {
-  const phenogridExampleData = [
-    {
-      'id': 'HP:0000174',
-      'term': 'Abnormality of the palate'
-    },
-    {
-      'id': 'HP:0000194',
-      'term': 'Open mouth'
-    },
-    {
-      'id': 'HP:0000218',
-      'term': 'High palate'
-    },
-    {
-      'id': 'HP:0000238',
-      'term': 'Hydrocephalus'
-    },
-    {
-      'id': 'HP:0000244',
-      'term': 'Brachyturricephaly'
-    },
-    {
-      'id': 'HP:0000272',
-      'term': 'Malar flattening'
-    },
-    {
-      'id': 'HP:0000303',
-      'term': 'Mandibular prognathia'
-    },
-    {
-      'id': 'HP:0000316',
-      'term': 'Hypertelorism'
-    },
-    {
-      'id': 'HP:0000322',
-      'term': 'Short philtrum'
-    },
-    {
-      'id': 'HP:0000324',
-      'term': 'Facial asymmetry'
-    },
-    {
-      'id': 'HP:0000327',
-      'term': 'Hypoplasia of the maxilla'
-    },
-    {
-      'id': 'HP:0000348',
-      'term': 'High forehead'
-    },
-    {
-      'id': 'HP:0000431',
-      'term': 'Wide nasal bridge'
-    },
-    {
-      'id': 'HP:0000452',
-      'term': 'Choanal stenosis'
-    },
-    {
-      'id': 'HP:0000453',
-      'term': 'Choanal atresia'
-    },
-    {
-      'id': 'HP:0000470',
-      'term': 'Short neck'
-    },
-    {
-      'id': 'HP:0000486',
-      'term': 'Strabismus'
-    },
-    {
-      'id': 'HP:0000494',
-      'term': 'Downslanted palpebral fissures'
-    },
-    {
-      'id': 'HP:0000508',
-      'term': 'Ptosis'
-    },
-    {
-      'id': 'HP:0000586',
-      'term': 'Shallow orbits'
-    },
-    {
-      'id': 'HP:0000678',
-      'term': 'Dental crowding'
-    },
-    {
-      'id': 'HP:0001156',
-      'term': 'Brachydactyly syndrome'
-    },
-    {
-      'id': 'HP:0001249',
-      'term': 'Intellectual disability'
-    },
-    {
-      'id': 'HP:0002308',
-      'term': 'Arnold-Chiari malformation'
-    },
-    {
-      'id': 'HP:0002676',
-      'term': 'Cloverleaf skull'
-    },
-    {
-      'id': 'HP:0002780',
-      'term': 'Bronchomalacia'
-    },
-    {
-      'id': 'HP:0003041',
-      'term': 'Humeroradial synostosis'
-    },
-    {
-      'id': 'HP:0003070',
-      'term': 'Elbow ankylosis'
-    },
-    {
-      'id': 'HP:0003196',
-      'term': 'Short nose'
-    },
-    {
-      'id': 'HP:0003272',
-      'term': 'Abnormality of the hip bone'
-    },
-    {
-      'id': 'HP:0003307',
-      'term': 'Hyperlordosis'
-    },
-    {
-      'id': 'HP:0003795',
-      'term': 'Short middle phalanx of toe'
-    },
-    {
-      'id': 'HP:0004209',
-      'term': 'Clinodactyly of the 5th finger'
-    },
-    {
-      'id': 'HP:0004322',
-      'term': 'Short stature'
-    },
-    {
-      'id': 'HP:0004440',
-      'term': 'Coronal craniosynostosis'
-    },
-    {
-      'id': 'HP:0005048',
-      'term': 'Synostosis of carpal bones'
-    },
-    {
-      'id': 'HP:0005280',
-      'term': 'Depressed nasal bridge'
-    },
-    {
-      'id': 'HP:0005347',
-      'term': 'Cartilaginous trachea'
-    },
-    {
-      'id': 'HP:0006101',
-      'term': 'Finger syndactyly'
-    },
-    {
-      'id': 'HP:0006110',
-      'term': 'Shortening of all middle phalanges of the fingers'
-    },
-    {
-      'id': 'HP:0009602',
-      'term': 'Abnormality of thumb phalanx'
-    },
-    {
-      'id': 'HP:0009773',
-      'term': 'Symphalangism affecting the phalanges of the hand'
-    },
-    {
-      'id': 'HP:0010055',
-      'term': 'Broad hallux'
-    },
-    // {
-    //   'id': 'HP:0010669',
-    //   'term': 'Hypoplasia of the zygomatic bone'
-    // },
-    {
-      'id': 'HP:0011304',
-      'term': 'Broad thumb'
-    }
-  ];
-
-  vm.phenoCurieList = phenogridExampleData.map(function (s) {
-    return s.id;
-  }).join(',');
-  console.log(vm.phenoCurieList);
-
-  vm.selectedGroups = [vm.groupOptions[0].value, vm.groupOptions[1].value, vm.groupOptions[2].value];
-}
-
 export default {
   name: 'AnalyzePhenotypes',
   components: {
@@ -504,7 +325,10 @@ export default {
   },
   data() {
     return {
-      modalShow: false,
+      phenotypeModal: false,
+      selectedPhenotype: {},
+      geneModal: false,
+      selectedGene: {},
       acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
       phenoSearchPH: 'search for phenotypes or disease',
       geneSearchPH: 'search for genes',
@@ -591,11 +415,18 @@ export default {
     }
   },
   async mounted() {
-    // applyExampleData(this);
-    // await this.generatePGDataFromPhenotypeList();
+    await this.applyExampleData();
   },
 
   methods: {
+    displayPhenotypeModal(item) {
+      this.selectedPhenotype = item;
+    },
+
+    displayGeneModal(item) {
+      this.selectedGene = item;
+    },
+
     async fetchLabel(curie, curieType) {
       const that = this;
       try {
@@ -606,7 +437,7 @@ export default {
             this.showGeneAlert = false;
           }
         }
-        if (curieType === 'gene') {
+        else if (curieType === 'gene') {
           this.convertGenes(searchResponse);
           if (searchResponse.status === 500) {
             this.showGeneAlert = true;
@@ -662,6 +493,7 @@ export default {
       });
       this.phenotypes.splice(replaceIndex, 1);
       this.phenotypes.push(payload);
+      this.selectedPhenotype = payload;
     },
     handleGenes(payload) {
       this.genes.push(payload);
@@ -672,6 +504,7 @@ export default {
       });
       this.genes.splice(replaceIndex, 1);
       this.genes.push(payload);
+      this.selectedGene = payload;
     },
     generatePhenogridData() {
       this.showPhenogrid = true;
@@ -690,10 +523,10 @@ export default {
       }));
       this.pgIndex += 1;
     },
-    geneListLookup() {
+    async geneListLookup() {
       this.genes = [];
-      this.geneCurieList.split(',').forEach((elem) => {
-        this.fetchLabel(`${this.geneCurieType}:${elem.trim()}`, 'gene');
+      this.geneCurieList.split(',').forEach(async (elem) => {
+        await this.fetchLabel(`${this.geneCurieType}:${elem.trim()}`, 'gene');
       });
     },
     async generatePGDataFromPhenotypeList() {
@@ -703,7 +536,7 @@ export default {
         const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
-          this.fetchLabel(elemTrimmed, 'phenotype');
+          await this.fetchLabel(elemTrimmed, 'phenotype');
         }
         else {
           this.rejectedPhenotypeCuries.push(elemTrimmed);
@@ -739,7 +572,204 @@ export default {
         curie: phenoData.id,
         match: phenoData.label
       });
-    }
+    },
+
+    async applyExampleData() {
+      const phenogridExampleData = [
+        {
+          'id': 'HP:0000174',
+          'term': 'Abnormality of the palate'
+        },
+        {
+          'id': 'HP:0000194',
+          'term': 'Open mouth'
+        },
+        {
+          'id': 'HP:0000218',
+          'term': 'High palate'
+        },
+        {
+          'id': 'HP:0000238',
+          'term': 'Hydrocephalus'
+        },
+        {
+          'id': 'HP:0000244',
+          'term': 'Brachyturricephaly'
+        },
+        {
+          'id': 'HP:0000272',
+          'term': 'Malar flattening'
+        },
+        {
+          'id': 'HP:0000303',
+          'term': 'Mandibular prognathia'
+        },
+        {
+          'id': 'HP:0000316',
+          'term': 'Hypertelorism'
+        },
+        {
+          'id': 'HP:0000322',
+          'term': 'Short philtrum'
+        },
+        {
+          'id': 'HP:0000324',
+          'term': 'Facial asymmetry'
+        },
+        {
+          'id': 'HP:0000327',
+          'term': 'Hypoplasia of the maxilla'
+        },
+        {
+          'id': 'HP:0000348',
+          'term': 'High forehead'
+        },
+        {
+          'id': 'HP:0000431',
+          'term': 'Wide nasal bridge'
+        },
+        {
+          'id': 'HP:0000452',
+          'term': 'Choanal stenosis'
+        },
+        {
+          'id': 'HP:0000453',
+          'term': 'Choanal atresia'
+        },
+        {
+          'id': 'HP:0000470',
+          'term': 'Short neck'
+        },
+        {
+          'id': 'HP:0000486',
+          'term': 'Strabismus'
+        },
+        {
+          'id': 'HP:0000494',
+          'term': 'Downslanted palpebral fissures'
+        },
+        {
+          'id': 'HP:0000508',
+          'term': 'Ptosis'
+        },
+        {
+          'id': 'HP:0000586',
+          'term': 'Shallow orbits'
+        },
+        {
+          'id': 'HP:0000678',
+          'term': 'Dental crowding'
+        },
+        {
+          'id': 'HP:0001156',
+          'term': 'Brachydactyly syndrome'
+        },
+        {
+          'id': 'HP:0001249',
+          'term': 'Intellectual disability'
+        },
+        {
+          'id': 'HP:0002308',
+          'term': 'Arnold-Chiari malformation'
+        },
+        {
+          'id': 'HP:0002676',
+          'term': 'Cloverleaf skull'
+        },
+        {
+          'id': 'HP:0002780',
+          'term': 'Bronchomalacia'
+        },
+        {
+          'id': 'HP:0003041',
+          'term': 'Humeroradial synostosis'
+        },
+        {
+          'id': 'HP:0003070',
+          'term': 'Elbow ankylosis'
+        },
+        {
+          'id': 'HP:0003196',
+          'term': 'Short nose'
+        },
+        {
+          'id': 'HP:0003272',
+          'term': 'Abnormality of the hip bone'
+        },
+        {
+          'id': 'HP:0003307',
+          'term': 'Hyperlordosis'
+        },
+        {
+          'id': 'HP:0003795',
+          'term': 'Short middle phalanx of toe'
+        },
+        {
+          'id': 'HP:0004209',
+          'term': 'Clinodactyly of the 5th finger'
+        },
+        {
+          'id': 'HP:0004322',
+          'term': 'Short stature'
+        },
+        {
+          'id': 'HP:0004440',
+          'term': 'Coronal craniosynostosis'
+        },
+        {
+          'id': 'HP:0005048',
+          'term': 'Synostosis of carpal bones'
+        },
+        {
+          'id': 'HP:0005280',
+          'term': 'Depressed nasal bridge'
+        },
+        {
+          'id': 'HP:0005347',
+          'term': 'Cartilaginous trachea'
+        },
+        {
+          'id': 'HP:0006101',
+          'term': 'Finger syndactyly'
+        },
+        {
+          'id': 'HP:0006110',
+          'term': 'Shortening of all middle phalanges of the fingers'
+        },
+        {
+          'id': 'HP:0009602',
+          'term': 'Abnormality of thumb phalanx'
+        },
+        {
+          'id': 'HP:0009773',
+          'term': 'Symphalangism affecting the phalanges of the hand'
+        },
+        {
+          'id': 'HP:0010055',
+          'term': 'Broad hallux'
+        },
+        {
+          'id': 'HP:0010669',
+          'term': 'Hypoplasia of the zygomatic bone'
+          // Monarch says this EquivalentTo HP:0000272: 'Malar flattening'
+        },
+        {
+          'id': 'HP:0011304',
+          'term': 'Broad thumb'
+        }
+      ];
+
+      this.phenoCurieList = phenogridExampleData.map(function getId(s) {
+        return s.id;
+      }).join(',');
+
+      this.geneCurieList = 'NCBIGene:3845,HGNC:2176';
+
+      this.selectedGroups = [this.groupOptions[0].value, this.groupOptions[1].value, this.groupOptions[2].value];
+
+      await this.generatePGDataFromPhenotypeList();
+      await this.generatePGDataFromGeneList();
+    },
   }
 };
 </script>

@@ -204,10 +204,12 @@ export default {
     definedCategories: {
       type: Array,
       required: false,
+      default: null,
     },
     allowedPrefixes: {
       type: Array,
       required: false,
+      default: null,
     },
     dynamicPlaceholder: {
       type: String,

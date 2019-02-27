@@ -1,5 +1,16 @@
 import axios from 'axios';
 
+// TIP: Example of a domain-specific (as opposed to a generic loadJSON)
+// service function. This set of domain-specific services will pretty much
+// correspond to the set of needed services for the Monarch UI application, and may
+// not necessarily be the same set of functions needed by a generic client
+// of Monarch's services/data. In other words, we can add convenience/aggregation
+// services here that may not make sense for general-purpose use. Our goal
+// with this BioLink API module is to isolate the UI from the service layer, and only secondarily,
+// to create a general-purpose service layer, which is more what BioLink promises
+// to be.
+//
+
 const servers = {
   development: {
     'type': 'development',
@@ -42,7 +53,7 @@ const servers = {
 };
 
 
-const serverConfiguration = servers.production;
+const serverConfiguration = servers.development;
 const biolink = serverConfiguration.biolink_url;
 
 function getBiolinkAnnotation(cardType) {
@@ -57,16 +68,9 @@ function getBiolinkAnnotation(cardType) {
   return result;
 }
 
-// TIP: Example of a domain-specific (as opposed to a generic loadJSON)
-// service function. This set of domain-specific services will pretty much
-// correspond to the set of needed services for the Monarch UI application, and may
-// not necessarily be the same set of functions needed by a generic client
-// of Monarch's services/data. In other words, we can add convenience/aggregation
-// services here that may not make sense for general-purpose use. Our goal
-// with this BioLink API module is to isolate the UI from the service layer, and only secondarily,
-// to create a general-purpose service layer, which is more what BioLink promises
-// to be.
-//
+/**
+  Lighter-weight BL node info. Used by LocalNav.vue
+ */
 
 export async function getNodeSummary(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
@@ -81,29 +85,17 @@ export async function getNodeSummary(nodeId, nodeType) {
     rows: 0
   };
 
-  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
-
-  const nodeSummary = axios.all(
-    [
-      axios.get(bioentityUrl, { params: bioentityParams }),
-      axios.get(getIdentifierUrl),
-    ]
-  ).then(
-    axios.spread(
-      function response(bioentityResp, getIdentifierResp) {
-        const bioentityResponseData = bioentityResp.data;
-
-
-        bioentityResponseData.type = nodeType;
-        bioentityResponseData.uri = getIdentifierResp.data;
-        return bioentityResponseData;
-      }
-    )
-  );
+  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const nodeSummary = bioentityResp.data;
+  nodeSummary.type = nodeType;
 
   return nodeSummary;
 }
 
+
+/**
+  Get node info to support Node.vue
+ */
 
 export async function getNode(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
@@ -117,6 +109,13 @@ export async function getNode(nodeId, nodeType) {
     get_association_counts: true,
     rows: 100
   };
+
+  // There should be no need for a separate API call to get the uri field.
+  // the /bioentity/ endpoints should return uri when appropriate.
+  // Until then, we parallelize a call to identifier/prefixes/expand to get a uri,
+  // which is really stupid.
+  // Once BL's bioentity/ endpoint returns uri, we can delete this hack.
+  //
 
   const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
 
@@ -146,14 +145,13 @@ export async function getNode(nodeId, nodeType) {
 
         const counts = bioentityResponseData.association_counts;
         const countsMap = {};
-        Object.keys(counts).forEach((c) => {
-          let count = counts[c];
-          const singularKey = c.slice(0, -1);
-          if (singularKey === nodeType && count > 0) {
+        Object.keys(counts).forEach((key) => {
+          let count = counts[key];
+          if (key === nodeType && count > 0) {
             console.log('bad?', nodeType, nodeId, count);
             count = 0;
           }
-          countsMap[singularKey] = {
+          countsMap[key] = {
             facetCount: count,
             totalCount: count
           };
@@ -348,7 +346,7 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
 }
 
 
-export function getNodeLabelByCurie(curie) {
+export async function getNodeLabelByCurie(curie) {
   const baseUrl = `${biolink}bioentity/${curie}`;
   const params = {
     fetch_objects: true,
