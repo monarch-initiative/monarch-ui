@@ -27,7 +27,7 @@
         >
           <div class="form-group">
             <b-form-checkbox-group
-              v-model="selected"
+              v-model="categories"
               :options="options"
               plain
               stacked/>
@@ -220,7 +220,7 @@ export default {
   data() {
     return {
       destroying: false,
-      selected: [],
+      categories: [],
       exampleSearches,
       options: [
 
@@ -239,7 +239,7 @@ export default {
         this.open = false;
       }
     },
-    selected(newValue) {
+    categories(newValue) {
       if (!this.definedCategories) {
         this.suggestions = [];
         if (this.value.length > 0) {
@@ -256,7 +256,7 @@ export default {
           value: elem,
         });
       });
-      this.definedCategories.forEach(elem => this.selected.push(elem));
+      this.definedCategories.forEach(elem => this.categories.push(elem));
     }
     else {
       this.options = [
@@ -296,8 +296,7 @@ export default {
     ),
     async fetchData() {
       try {
-        const selected = this.selected;
-        const searchResponse = await BL.getSearchTermSuggestions(this.value, selected, this.allowedPrefixes);
+        const searchResponse = await BL.getSearchTermSuggestions(this.value, this.categories, this.allowedPrefixes);
         this.suggestions = [];
         this.current = -1;
         searchResponse.docs.forEach((elem) => {
@@ -409,9 +408,9 @@ export default {
       return null;
     },
     useExample(searchString, category) {
-      this.selected = [];
+      this.categories = [];
       if (category) {
-        this.selected.push(category);
+        this.categories.push(category);
       }
       this.value = searchString;
     }

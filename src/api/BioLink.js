@@ -56,18 +56,6 @@ const servers = {
 const serverConfiguration = servers.development;
 const biolink = serverConfiguration.biolink_url;
 
-function getBiolinkAnnotation(cardType) {
-  let result = `${cardType}s`;
-  if (cardType === 'anatomy') {
-    result = 'expression/anatomy';
-  }
-  else if (cardType === 'function') {
-    result = cardType;
-  }
-
-  return result;
-}
-
 /**
   Lighter-weight BL node info. Used by LocalNav.vue
  */
@@ -76,7 +64,7 @@ export async function getNodeSummary(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
   // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
 
-  const bioentityParams = {
+  const params = {
     fetch_objects: false,
     unselect_evidence: true,
     exclude_automatic_assertions: true,
@@ -85,7 +73,7 @@ export async function getNodeSummary(nodeId, nodeType) {
     rows: 0
   };
 
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
+  const bioentityResp = await axios.get(bioentityUrl, { params });
   const nodeSummary = bioentityResp.data;
   nodeSummary.type = nodeType;
 
@@ -101,7 +89,7 @@ export async function getNode(nodeId, nodeType) {
   const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
   // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
 
-  const bioentityParams = {
+  const params = {
     fetch_objects: true,
     unselect_evidence: false,
     exclude_automatic_assertions: false,
@@ -121,7 +109,7 @@ export async function getNode(nodeId, nodeType) {
 
   const nodeSummary = axios.all(
     [
-      axios.get(bioentityUrl, { params: bioentityParams }),
+      axios.get(bioentityUrl, { params }),
       axios.get(getIdentifierUrl),
     ]
   ).then(
@@ -239,29 +227,62 @@ export async function getNeighborhood(nodeId) {
 }
 
 
-export async function getSearchResults(query, start, rows) {
-  const bioentityUrl = `${biolink}search/entity/${query}`;
-  const bioentityParams = {
-    fetch_objects: false,
-    unselect_evidence: true,
-    exclude_automatic_assertions: false,
-    use_compact_associations: true,
-    rows,
-    start,
-  };
-  const bioentityResp = await axios.get(bioentityUrl, { params: bioentityParams });
-  const bioentityResponseData = bioentityResp.data;
-
-  return bioentityResponseData;
-}
-
-
 function categoryKludge(category) {
   return category === 'phenotype' ? 'Phenotype' : category;
 }
 
+const categoriesAll = [
+  'gene',
+  'variant locus',
+  'genotype',
+  'phenotype',
+  'disease',
+  'goterm',
+  'pathway',
+  'anatomy',
+  'substance',
+  'individual',
+  'publication',
+  'model',
+];
 
-export async function getSearchTermSuggestions(term, selected, prefixes = []) {
+const categoriesSome = categoriesAll.slice(0, 5);
+
+
+export async function getSearchResults(query, start, rows, categories, prefixes) {
+  const bioentityUrl = `${biolink}search/entity/${query}`;
+  const params = new URLSearchParams();
+  params.append('start', start);
+  params.append('rows', rows);
+  params.append('fetch_objects', false);
+  params.append('exclude_automatic_assertions', false);
+  params.append('exclude_automatic_assertions', false);
+  params.append('use_compact_associations', true);
+
+  let categoriesLocal = categories;
+  if (!categoriesLocal || categoriesLocal.length === 0) {
+    categoriesLocal = categoriesAll;
+  }
+
+  categoriesLocal.forEach((elem) => {
+    params.append('category', categoryKludge(elem));
+  });
+
+  const bioentityResp = await axios.get(bioentityUrl, { params });
+  const data = bioentityResp.data;
+
+  // Debug code to detect entries without categories.
+  // data.docs.forEach((d) => {
+  //   if (!d.category) {
+  //     console.log('getSearchResults NO CATEGORY', d.id);
+  //   }
+  // });
+
+  return data;
+}
+
+
+export async function getSearchTermSuggestions(term, categories, prefixes) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
@@ -269,27 +290,26 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
   params.append('start', 0);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
-  if (prefixes.length) {
+
+  if (prefixes && prefixes.length) {
     prefixes.forEach((elem) => {
       params.append('prefix', elem);
     });
   }
-  if (selected.toString() === 'gene') {
+  params.append('prefix', '-OMIA');
+
+  let categoriesLocal = categories;
+  if (!categoriesLocal || categoriesLocal.length === 0) {
+    categoriesLocal = categoriesAll;
+  }
+
+  categoriesLocal.forEach((elem) => {
+    params.append('category', categoryKludge(elem));
+  });
+
+  if (categoriesLocal.indexOf('gene') >= 0) {
     params.append('boost_fx', 'pow(edges,0.334)');
   }
-  if (selected.length > 0) {
-    selected.forEach((elem) => {
-      params.append(
-        'category',
-        categoryKludge(elem)
-      );
-    });
-  }
-  else {
-    ['gene', 'variant locus', 'phenotype', 'genotype', 'disease']
-      .forEach(elem => (params.append('category', categoryKludge(elem))));
-  }
-  params.append('prefix', '-OMIA');
 
   const returnedPromise = new Promise((resolve, reject) => {
     axios.get(urlExtension, { params })
@@ -308,6 +328,19 @@ export async function getSearchTermSuggestions(term, selected, prefixes = []) {
   });
 
   return returnedPromise;
+}
+
+
+function getBiolinkAnnotation(cardType) {
+  let result = `${cardType}s`;
+  if (cardType === 'anatomy') {
+    result = 'expression/anatomy';
+  }
+  else if (cardType === 'function') {
+    result = cardType;
+  }
+
+  return result;
 }
 
 
