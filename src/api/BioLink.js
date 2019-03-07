@@ -14,7 +14,7 @@ import axios from 'axios';
 const servers = {
   development: {
     'type': 'development',
-    'app_base': 'https://beta.monarchinitiative.org',
+    'app_base': 'https://monarchinitiative.org',
     'scigraph_url': 'https://scigraph-ontology-dev.monarchinitiative.org/scigraph/',
     'scigraph_data_url': 'https://scigraph-data-dev.monarchinitiative.org/scigraph/',
     'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
@@ -146,13 +146,8 @@ export async function getNode(nodeId, nodeType) {
         });
 
         bioentityResponseData.counts = countsMap;
-        // console.log('countsMap', nodeId, nodeType);
-        // console.log(JSON.stringify(countsMap, null, 2));
-
-        if (nodeType === 'disease') {
-          bioentityResponseData.inheritance = 'BioLinkFIXME';
-          bioentityResponseData.modifiers = 'BioLinkFIXME';
-        }
+        // console.log('bioentityResponseData', nodeId, nodeType);
+        // console.log(JSON.stringify(bioentityResponseData, null, 2));
 
         bioentityResponseData.type = nodeType;
         bioentityResponseData.uri = getIdentifierResp.data;

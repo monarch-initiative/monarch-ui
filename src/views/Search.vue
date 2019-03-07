@@ -1,7 +1,7 @@
 <template>
   <div id="selenium_id_content">
     <div
-      id="monarch-home-container"
+      id="monarch-search-container"
       class="container-fluid monarch-container">
       <header class="intro">
         <div class="intro-body">
@@ -38,7 +38,7 @@
               :per-page="rowsPerPage"
               striped
               responsive="true"
-              class="table-sm table-border-soft"
+              class="table-sm table-border-soft test-search-results-table"
               hover>
               <template
                 slot="label"

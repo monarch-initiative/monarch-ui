@@ -111,6 +111,12 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/disease/MONDO:0010935">
+            Disease: neuronopathy, distal hereditary motor, type 5A MONDO:0010935
+          </b-dropdown-item>
+
+
+          <b-dropdown-item
             to="/gene/HGNC:11773">
             Gene: TGFBR2 HGNC:11773
           </b-dropdown-item>
