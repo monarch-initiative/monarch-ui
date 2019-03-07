@@ -40,7 +40,7 @@
           'loading': loading
         }"
         v-model="value"
-        class="form-control xform-control-sm"
+        class="form-control xform-control-sm test-input-search-text"
         type="text"
         autofocus="autoFocus"
         @input="debounceInput"
@@ -58,7 +58,7 @@
       >
         <button
           v-b-tooltip.topright
-          class="btn xbtn-sm btn-light py-0"
+          class="btn xbtn-sm btn-light py-0 test-button-show-all"
           type="button"
           title="Show all matching results"
           @click="showMore"
@@ -71,7 +71,7 @@
         :class="{
           'full-width-search': fullWidthSearch
         }"
-        class="dropdown-menu list-group dropList mx-2"
+        class="dropdown-menu list-group dropList mx-2 test-input-dropdown"
       >
         <!--
           @blur above hides @click. Use @mousedown instead
@@ -81,11 +81,12 @@
           v-for="(suggestion, index) in suggestions"
           :key="index"
           :class="{'active': isActive(index)}"
-          class="border-bottom m-0 px-1"
+          class="border-bottom m-0 px-1 test-input-dropdown-option"
           @mousedown="suggestionClick(index)"
           @mouseover="mouseOver(index)"
         >
-          <div class="row m-0 p-0">
+          <div
+            class="row m-0 p-0">
             <div
               v-if="suggestion.has_hl"
               class="col-5"

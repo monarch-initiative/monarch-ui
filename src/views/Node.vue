@@ -176,7 +176,7 @@
 
             <div class="col-12">
               <span
-                v-if="inheritance">
+                v-if="modifiers">
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
@@ -545,8 +545,14 @@ export default {
 
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
-      this.inheritance = this.node.inheritance ? this.node.inheritance : null;
-      this.modifiers = this.node.modifiers ? this.node.modifiers : null;
+
+      if (this.node.inheritance) {
+        this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
+      }
+      if (this.node.clinical_modifiers) {
+        this.modifiers = this.node.clinical_modifiers.map(m => m.label).join(', ');
+      }
+
       this.nodeCategory = this.node.categories
         ? this.node.categories[0].toLowerCase()
         : this.nodeType;
