@@ -415,7 +415,7 @@ export default {
     }
   },
   async mounted() {
-    // await this.applyExampleData();
+    await this.applyExampleData();
   },
 
   methods: {

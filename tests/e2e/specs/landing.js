@@ -38,7 +38,7 @@ module.exports = {
       .click('.monarch-home-view .monarch-autocomplete .test-input-dropdown .test-input-dropdown-option')
       .waitForElementVisible('.node-content-section', 5000)
       .assert.containsText('.node-description', 'Loss of or impaired ability to smell')
-      .assert.containsText('.node-synonyms', 'ANOSMIA')
+      .assert.containsText('.node-synonyms', 'anosmia')
       .end();
   },
 };

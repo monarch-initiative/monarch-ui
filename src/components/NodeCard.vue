@@ -61,8 +61,7 @@ export default {
 
     pluralize(label, count) {
       const s = count === 1 ? '' : 's';
-      // return `${count.facetCount}/${count.totalCount}/${count.correctCount} ${label}${s}`;
-      return `${count.totalCount} ${label}${s}`;
+      return `${count} ${label}${s}`;
     }
   }
 

@@ -111,6 +111,17 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/disease/OMIM:105830">
+            Disease: Angelman syndrome OMIM:105830
+          </b-dropdown-item>
+
+
+          <b-dropdown-item
+            to="/disease/MONDO:0016621#gene">
+            Disease: juvenile Huntington disease MONDO:0016621
+          </b-dropdown-item>
+
+          <b-dropdown-item
             to="/disease/MONDO:0010935">
             Disease: neuronopathy, distal hereditary motor, type 5A MONDO:0010935
           </b-dropdown-item>
