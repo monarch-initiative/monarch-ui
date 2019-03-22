@@ -31,7 +31,7 @@ const nodeRoutes = availableCardTypes.map(nodeType => (
     component: Node,
   }));
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -90,3 +90,24 @@ export default new Router({
     },
   ],
 });
+
+// https://stackoverflow.com/a/47195471/5667222
+function hasQueryParams(route) {
+  return Object.keys(route.query).length > 0;
+}
+
+
+router.beforeEach((to, from, next) => {
+  if (!hasQueryParams(to) && hasQueryParams(from)) {
+    const toWithQuery = Object.assign({}, to,
+      {
+        query: from.query
+      });
+    next(toWithQuery);
+  }
+  else {
+    next();
+  }
+});
+
+export default router;

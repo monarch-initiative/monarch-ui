@@ -563,14 +563,34 @@ export default {
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       const nonEmptyCards = [];
+      // console.log('that.node.association_counts', that.node);
       this.availableCards.forEach((cardType) => {
-        const count = that.node.counts[cardType];
-        if (count) {
-          that.counts[cardType] = count;
-          if (count.totalCount > 0) {
+        const acount = that.node.association_counts[cardType] || 0;
+        if (acount) {
+          that.counts[cardType] = acount;
+          if (acount > 0) {
             nonEmptyCards.push(cardType);
           }
         }
+
+        // const count = that.node.counts[cardType];
+        // let ccount = 0;
+        // if (!count) {
+        //   console.log('missing', cardType);
+        // }
+        // else {
+        //   ccount = count.totalCount;
+        // }
+        // const acount = that.node.association_counts[cardType] || 0;
+        // if (ccount !== acount) {
+        //   console.log('mismatch', cardType, ccount, acount);
+        // }
+        // if (ccount) {
+        //   that.counts[cardType] = ccount;
+        //   if (ccount > 0) {
+        //     nonEmptyCards.push(cardType);
+        //   }
+        // }
       });
       this.nonEmptyCards = nonEmptyCards;
 
@@ -608,7 +628,6 @@ export default {
         ]
       );
 
-      this.applyResponse(nodeSummary, neighborhood);
 
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
@@ -639,6 +658,8 @@ export default {
           nodeSummary.geneInfo = geneInfo;
         }
       }
+
+      this.applyResponse(nodeSummary, neighborhood);
     }
   }
 };

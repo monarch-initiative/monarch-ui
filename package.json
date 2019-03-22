@@ -1,6 +1,6 @@
 {
   "name": "monarch-ui",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist/",
@@ -18,19 +18,19 @@
     "ghpublish": "./publish.sh"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
+    "@babel/polyfill": "^7.4.0",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.13",
-    "d3": "^5.9.1",
+    "bootstrap-vue": "^2.0.0-rc.15",
+    "d3": "^5.9.2",
     "d3-axis": "^1.0.12",
-    "d3-scale": "^2.2.2",
+    "d3-scale": "^3.0.0",
     "d3-selection": "^1.4.0",
     "file-saver": "^2.0.1",
     "font-awesome": "^4.7.0",
     "genomefeaturecomponent": "^0.2.7",
-    "js-yaml": "^3.12.2",
+    "js-yaml": "^3.13.0",
     "jsdom-global": "^3.0.2",
     "lodash": "^4.17.11",
     "markdown-it": "^8.4.2",
@@ -38,18 +38,18 @@
     "phenogrid": "^1.4.0",
     "register-service-worker": "^1.6.2",
     "underscore": "^1.9.1",
-    "vue": "^2.6.8",
+    "vue": "^2.6.10",
     "vue-form-wizard": "^0.8.4",
     "vue-json-tree": "^0.3.3",
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "@vue/cli": "^3.4.1",
-    "@vue/cli-plugin-babel": "^3.4.1",
-    "@vue/cli-plugin-e2e-nightwatch": "^3.4.1",
-    "@vue/cli-plugin-eslint": "^3.4.1",
-    "@vue/cli-plugin-unit-mocha": "^3.4.1",
-    "@vue/cli-service": "^3.4.1",
+    "@vue/cli": "^3.5.1",
+    "@vue/cli-plugin-babel": "^3.5.1",
+    "@vue/cli-plugin-e2e-nightwatch": "^3.5.1",
+    "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-plugin-unit-mocha": "^3.5.1",
+    "@vue/cli-service": "^3.5.1",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.29",
@@ -62,10 +62,10 @@
     "http-server": "^0.11.1",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "sinon": "^7.2.7",
-    "vue-cli-plugin-bootstrap-vue": "^0.1.0",
+    "sinon": "^7.3.0",
+    "vue-cli-plugin-bootstrap-vue": "^0.2.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.2.0",
     "vue-markdown-loader": "^2.4.1",
-    "vue-template-compiler": "^2.6.8"
+    "vue-template-compiler": "^2.6.10"
   }
 }

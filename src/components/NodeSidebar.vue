@@ -15,7 +15,7 @@
         class="list-group">
         <li class="list-group-item list-group-item-node">
           <a
-            :href="debugServerName + $route.path"
+            :href="debugServerURL"
             target="_blank">
             <img
               :src="$parent.icons[nodeType]"
@@ -36,7 +36,6 @@
             <span class="list-group-item-value">Neighbors</span>
           </a>
         </li>
-
 
         <li class="list-group-item list-group-item-squat">
           <a
@@ -71,10 +70,7 @@
               class="entity-type-icon">
             <span
               class="list-group-item-value">
-              <!--
-              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType].facetCount }}/{{ cardCounts[cardType].totalCount }}/{{ cardCounts[cardType].correctCount }})
-               -->
-              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType].totalCount }})
+              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
 
             </span>
           </a>
@@ -162,8 +158,16 @@ export default {
 
   data() {
     return {
-      debugServerName: BL.debugServerName(),
     };
+  },
+  computed: {
+    debugServerURL() {
+      const debugHash = (this.$route.hash.length > 1)
+        ? (this.$route.hash + 's')
+        : '';
+      const result = BL.debugServerName() + this.$route.path + debugHash;
+      return result;
+    },
   },
   created() {
     // console.log('created', this.nodeId);
