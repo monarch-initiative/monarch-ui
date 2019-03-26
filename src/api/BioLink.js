@@ -151,24 +151,6 @@ export async function getNode(nodeId, nodeType) {
         //   variant: 1,
         // };
 
-        // const counts = bioentityResponseData.association_counts;
-        // const countsMap = {};
-        // Object.keys(counts).forEach((key) => {
-        //   let count = counts[key];
-        //   if (key === nodeType && count > 0) {
-        //     console.log('bad?', nodeType, nodeId, count);
-        //     count = 0;
-        //   }
-        //   countsMap[key] = {
-        //     facetCount: count,
-        //     totalCount: count
-        //   };
-        // });
-
-        // bioentityResponseData.counts = countsMap;
-        // console.log('bioentityResponseData', nodeId, nodeType);
-        // console.log(JSON.stringify(bioentityResponseData, null, 2));
-
         bioentityResponseData.type = nodeType;
         bioentityResponseData.uri = getIdentifierResp.data;
         return bioentityResponseData;
@@ -372,43 +354,8 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const url = `${baseUrl}${urlExtension}`;
 
   const response = await axios.get(url, { params });
-  // console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
-  // console.log(response.request.responseURL);
-  response.data.associations.forEach((a) => {
-    // const relation = a.relation.inverse
-    //   ? `<- ${a.relation.label} <-`
-    //   : `-> ${a.relation.label} ->`;
-    // const line = `${a.subject.label}(${a.subject.id}) ${relation} ${a.object.label}(${a.object.id}) `;
-    // console.log(line);
-  });
-  return response;
 
-/*
-      .then((resp) => {
-        const responseData = resp;
-        if (typeof responseData !== 'object') {
-          reject(responseData);
-        }
-        else {
-          // console.log('getNodeAssociations', nodeType, nodeId, cardType, url);
-          // // console.log(JSON.stringify(responseData, null, 2));
-          // responseData.data.associations.forEach((a) => {
-          //   console.log('');
-          //   console.log(a.subject.id + '/' + a.subject.label);
-          //   console.log(a.relation.id + '/' + a.relation.label + '/' + a.relation.inverse);
-          //   console.log(a.object.id + '/' + a.subject.object);
-          //   // console.log(JSON.stringify(a.relation, null, 2));
-          //   // console.log(JSON.stringify(a.object, null, 2));
-          //   console.log('');
-          // });
-          resolve(responseData);
-        }
-      })
-      .catch((err) => {
-        reject(err);
-      });
-  });
-*/
+  return response;
 }
 
 
