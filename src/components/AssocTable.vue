@@ -507,39 +507,8 @@ export default {
     },
     generateFields() {
       this.isGene = false;
+
       const fields = [
-        // {
-        //   key: 'show_details',
-        //   label: ''
-        // },
-        {
-          key: 'assocObject',
-          label: this.firstCap(this.cardType),
-          'class': 'assoc-column-width '
-          // sortable: true,
-        },
-        {
-          key: 'relation',
-          label: 'Relation'
-        },
-        {
-          key: 'evidence',
-          label: 'Evidence'
-        },
-        {
-          key: 'publications',
-          label: 'Publications'
-        },
-        {
-          key: 'sources',
-          label: 'Sources'
-        },
-        {
-          key: 'support',
-          label: 'Support'
-        }
-      ];
-      const fieldsWithSupport = [
         {
           key: 'assocObject',
           label: this.firstCap(this.cardType),
@@ -563,13 +532,8 @@ export default {
           label: 'Taxon'
           // sortable: true,
         });
-        fieldsWithSupport.splice(2, 0, {
-          key: 'taxon',
-          label: 'Taxon'
-          // sortable: true,
-        });
       }
-      this.fields = fieldsWithSupport;
+      this.fields = fields;
     },
     parseEvidence(evidenceGraph) {
       let result = [];
