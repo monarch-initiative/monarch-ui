@@ -2,12 +2,12 @@
   <div
     class="assoc-table">
     <div v-show="dataFetched">
+      <!--
       <h5>
         <strong>{{ totalItems }}</strong>&nbsp;
-        <strong>{{ nodeType }}</strong> to
         <strong>{{ cardType }}</strong> associations
       </h5>
-
+      -->
 
       <b-table
         ref="tableRef"
@@ -16,13 +16,16 @@
         :current-page="currentPage"
         :per-page="rowsPerPage"
         responsive="true"
-        hover
-        selectable
-        select-mode="range"
-        selected-variant="info"
         class="table-sm"
-        @row-selected="rowSelected"
       >
+
+        <template
+          v-if="isGene"
+          slot="taxon"
+          slot-scope="data"
+        >
+          <i>{{ data.item.taxonLabel }}</i>
+        </template>
 
         <template
           slot="assocObject"
@@ -31,7 +34,8 @@
           <template
             v-if="data.item.objectLink">
             <strong>
-              <router-link :to="data.item.objectLink">
+              <router-link
+                :to="data.item.objectLink">
                 {{ data.item.assocObject }}
               </router-link>
             </strong>
@@ -48,95 +52,95 @@
           slot="relation"
           slot-scope="data"
         >
-          <a
-            :href="data.item.relation.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ data.item.relation.label }}
-          </a>
+          <small>
+            <a
+              :href="data.item.relation.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ data.item.relation.label }}
+            </a>
+          </small>
         </template>
 
         <template
-          v-if="isGene"
-          slot="taxon"
+          slot="assocSubject"
           slot-scope="data"
         >
-          {{ data.item.taxonLabel }}
-        </template>
-
-        <template
-          slot="evidence"
-          slot-scope="data"
-        >
-          ({{ data.item.evidenceLength }})
-        </template>
-
-        <template
-          slot="publications"
-          slot-scope="data"
-        >
-          ({{ data.item.publicationsLength }})
-        </template>
-
-        <template
-          slot="sources"
-          slot-scope="data"
-        >
-          ({{ data.item.sourcesLength }})
+          <template
+            v-if="data.item.subjectLink">
+            <strong>
+              <router-link :to="data.item.subjectLink">
+                {{ data.item.assocSubject }}
+              </router-link>
+            </strong>
+          </template>
+          <template
+            v-else>
+            <strong>
+              {{ data.item.assocSubject }}
+            </strong>
+          </template>
         </template>
 
         <template
           slot="support"
           slot-scope="data"
         >
-          <span
-            v-for="(icon, index) in data.item.supportIcons"
-            :key="index"
-          >
-            <i
-              :class="icon"
-              class="fa fa-fw"
-            />
-          </span>
-          ({{ data.item.supportLength }})
+          <b-button
+            :pressed.sync="data.item._showDetails"
+            size="small"
+            class="btn btn-xs px-1 py-0 m-0"
+            variant="outline-info">
+            <span
+              v-for="(icon, index) in data.item.supportIcons"
+              :key="index"
+            >
+              <i
+                :class="icon"
+                class="fa fa-fw"
+              />
+            </span>
+            <small>{{ data.item.supportLength }}</small>
+          </b-button>
         </template>
 
         <template
           slot="row-details"
           slot-scope="row"
         >
-          <div class="xcard ml-1 xborder xborder-secondary">
+          <div class="container-fluid support-section py-0">
             <div
               v-for="(support, index) in row.item.support"
               :key="index"
               class="row"
             >
               <div
-                class="col-2">
-                <i
-                  :class="support.typeIcon"
-                  class="fa fa-fw"
-                />
-                <small>&nbsp;{{ support.type }}</small>
-              </div>
-              <div
-                v-if="support.label"
-                class="col-10">
+                class="col-9 px-1">
                 <a
+                  v-if="support.label"
                   :href="support.url"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {{ support.label }}
+                  {{ support.label }}&nbsp;
+                  <img
+                    v-if="support.icon"
+                    :src="support.icon"
+                    class="source-icon">
                 </a>
               </div>
               <div
-                v-if="support.icon"
-                class="col-9">
-                <img
-                  :src="support.icon"
-                  class="source-icon">
+                class="col-2 px-1">
+                <small>{{ support.type }}</small>
+              </div>
+              <div
+                class="col-1 px-1"
+                style="text-align: center;">
+                <i
+                  :class="support.typeIcon"
+                  class="fa fa-fw text-info"
+                />
               </div>
             </div>
           </div>
@@ -181,29 +185,6 @@ export default {
   components: {
     'json-tree': JsonTree
   },
-  filters: {
-    pubHref(curie) {
-      const identifier = curie.split(/[:]+/).pop();
-      return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
-    },
-    eviHref(evi) {
-      const curie = evi.id || '';
-      const identifier = curie.split(/[:]+/).pop();
-      return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
-    },
-    relationHref(relation) {
-      const curie = relation.id || '';
-      const identifier = curie.split(/[:]+/).pop();
-      return `http://purl.obolibrary.org/obo/RO_${identifier}`;
-    },
-    sourceLabel(url) {
-      const result = url.split(/[/]+/)
-        .pop()
-        .split(/[.]+/)[0]
-        .toUpperCase();
-      return result;
-    }
-  },
   props: {
     nodeId: {
       type: String,
@@ -228,7 +209,6 @@ export default {
       currentPage: 1,
       rowsPerPage: 25,
       totalItems: 0,
-      inverted: false,
       isGene: false,
       associationData: '',
       dataFetched: false,
@@ -244,7 +224,7 @@ export default {
         'variant',
         'homolog'
       ],
-      lastSelection: null,
+      lastSelection: [],
     };
   },
   computed: {
@@ -263,6 +243,8 @@ export default {
     cardType() {
       this.dataFetched = false;
       this.dataError = false;
+      window.scroll(0, 0);
+      this.currentPage = 1;
       this.generateFields();
 
       this.$refs.tableRef.refresh();
@@ -339,18 +321,6 @@ export default {
       return keyMappings[key];
     },
 
-    rowSelected(rows, index, event) {
-      if (this.lastSelection) {
-        this.lastSelection.forEach((r) => {
-          this.$set(r, '_showDetails', false);
-        });
-      }
-      rows.forEach((r) => {
-        this.$set(r, '_showDetails', true);
-      });
-      this.lastSelection = rows.slice(0);
-    },
-
     async fetchData() {
       const that = this;
       if (that.dataFetchedPage === that.currentPage
@@ -396,6 +366,47 @@ export default {
         }
       }
     },
+
+    fixupRelation(elem, nodeType, cardType) {
+      const relation = elem.relation;
+      if (!relation) {
+        console.log('fixupRelation NO RELATION');
+        console.log(JSON.stringify(elem, null, 2));
+        elem.relation = {
+          label: 'Unknown',
+          id: 'RO:Unknown',
+        };
+      }
+      else {
+        if (!relation.label && relation.id) {
+          relation.label = relation.id;
+        }
+        else if (!relation.label) {
+          relation.label = 'Unknown';
+          relation.id = 'RO:Unknown';
+        }
+        relation.label = relation.label.replace(/_/g, ' ');
+        if (relation.id === 'RO:0002200') {
+          if (nodeType !== 'phenotype' && cardType !== 'genotype') {
+            relation.id = 'RO:0002201';
+            relation.label = 'phenotype of';
+          }
+        }
+        else if (relation.id === 'RO:0003301') {
+          if (nodeType !== 'model') {
+            relation.id = 'RO:0002615';
+            relation.label = 'model of';
+          }
+        }
+        else if (relation.id === 'RO:0002206') {
+          if (nodeType === 'gene' && cardType === 'anatomy') {
+            relation.id = 'RO:0002292';
+            relation.label = 'expresses';
+          }
+        }
+      }
+    },
+
     populateRows() {
       this.rows = [];
       let count = 0;
@@ -416,10 +427,8 @@ export default {
           evidence = eviResults;
           evidenceLength = eviResults.length;
         }
-        let objectElem = elem.object;
-        if (this.inverted) {
-          objectElem = elem.subject;
-        }
+        const objectElem = elem.object;
+        const subjectElem = elem.subject;
         const taxon = this.parseTaxon(objectElem);
 
         const support = [];
@@ -433,7 +442,7 @@ export default {
               type: 'evidence',
               typeIcon: eviIcon,
               label: `${evi.lbl} (${evi.id})`,
-              url: this.$options.filters.eviHref(evi),
+              url: this.eviHref(evi),
             });
           });
         }
@@ -446,7 +455,7 @@ export default {
               type: 'publication',
               typeIcon: pubIcon,
               label: pub,
-              url: this.$options.filters.pubHref(pub),
+              url: this.pubHref(pub),
             });
           });
         }
@@ -458,7 +467,7 @@ export default {
           elem.provided_by.forEach((source) => {
             support.push({
               type: 'source',
-              // label: this.$options.filters.sourceLabel(source),
+              label: this.sourceLabel(source),
               typeIcon: sourceIcon,
               icon: '../img/sources/' + sourceToImage(source),
             });
@@ -469,17 +478,15 @@ export default {
         // console.log('support');
         // console.log(JSON.stringify(support, null, 2));
         if (!taxon.id || this.trueFacets.includes(taxon.id)) {
-          let objectLink = `/${this.cardType}/${objectElem.id}`;
+          const simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
+          let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
           if (objectElem.id.indexOf(':.well-known') === 0) {
             objectLink = null;
           }
+          const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
 
-          // if (this.rows.length === 0) {
-          //   console.log('firstrow');
-          //   console.log(JSON.stringify(elem, null, 2));
-          //   console.log('firstrow evidence', evidenceLength);
-          //   console.log(JSON.stringify(evidence, null, 2));
-          // }
+          this.fixupRelation(elem, this.nodeType, this.cardType);
+
           this.rows.push({
             publications: pubs,
             publicationsLength: pubsLength,
@@ -494,14 +501,15 @@ export default {
             sourcesLength: elem.provided_by.length,
             assocObject: objectElem.label,
             objectLink,
+            assocSubject: subjectElem.label,
+            subjectLink,
             taxonLabel: taxon.label,
             taxonId: taxon.id,
             relation: elem.relation,
             _showDetails: false,
-            isActive: false,
           });
 
-          elem.relation.url = this.$options.filters.relationHref(elem.relation);
+          elem.relation.url = this.relationHref(elem.relation);
         }
       });
     },
@@ -512,24 +520,33 @@ export default {
         {
           key: 'assocObject',
           label: this.firstCap(this.cardType),
-          'class': 'assoc-column-width '
+          class: 'assoc-object',
           // sortable: true,
         },
         {
           key: 'relation',
-          label: 'Relation'
+          label: 'Relation',
+          class: 'relation-column-width',
+          // sortable: true,
+        },
+        {
+          key: 'assocSubject',
+          label: this.firstCap(this.nodeType),
+          class: 'assoc-subject',
+          // sortable: true,
         },
         {
           key: 'support',
-          label: 'Support'
-        }
+          class: 'support-column-width',
+          label: 'Support',
+        },
       ];
 
       if (this.taxonFields.includes(this.cardType)) {
         this.isGene = true;
-        fields.splice(2, 0, {
+        fields.splice(0, 0, {
           key: 'taxon',
-          label: 'Taxon'
+          label: 'Species'
           // sortable: true,
         });
       }
@@ -565,6 +582,28 @@ export default {
     firstCap(val) {
       return val.charAt(0)
         .toUpperCase() + val.slice(1);
+    },
+
+    pubHref(curie) {
+      const identifier = curie.split(/[:]+/).pop();
+      return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
+    },
+    eviHref(evi) {
+      const curie = evi.id || '';
+      const identifier = curie.split(/[:]+/).pop();
+      return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
+    },
+    relationHref(relation) {
+      const curie = relation.id || '';
+      const identifier = curie.split(/[:]+/).pop();
+      return `http://purl.obolibrary.org/obo/RO_${identifier}`;
+    },
+    sourceLabel(url) {
+      const result = url.split(/[/]+/)
+        .pop()
+        .split(/[.]+/)[0]
+        .toUpperCase();
+      return result;
     }
   }
 };
@@ -589,6 +628,16 @@ export default {
     user-select: unset;
     cursor: unset;
   }
+
+  .assoc-object,
+  .assoc-subject {
+    min-width: 200px;
+    word-break: break-all;
+  }
+
+  table.b-table row.b-table-details
+  {
+  }
   a {
     color: #404040;
   }
@@ -610,8 +659,22 @@ export default {
     border-radius: 10px;
 
   }
-  .assoc-column-width {
-    width: 400px;
+
+  .relation-column-width {
+    min-width: 100px !important;
+  }
+
+  .support-column-width {
+    min-width: 100px !important;
+  }
+
+  .support-is-active {
+    background: lightblue;
+  }
+
+  .support-section {
+    max-height: 200px;
+    overflow-y: auto;
   }
 
   .list-bullets {
@@ -641,9 +704,16 @@ export default {
   }
 
   img.source-icon {
+    margin: 0;
+    padding: 0;
+    vertical-align: top;
     max-height: 22px;
     height: 22px;
     width: auto;
+  }
+
+  .object-label {
+    word-break: break-all;
   }
 }
 </style>
