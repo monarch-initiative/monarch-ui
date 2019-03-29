@@ -347,6 +347,29 @@ function getBiolinkAnnotation(cardType) {
 }
 
 
+function invertAssociationsIfNecessary(nodeType, cardType, response) {
+  let invert = false;
+
+  // Remove the apiServer restriction clause when
+  // https://github.com/biolink/biolink-api/pull/261
+  // is on production. 3/29/2019 DBK
+  if (nodeType === 'anatomy'
+     && apiServer === 'production') {
+    invert = true;
+  }
+
+  if (invert) {
+    console.log('invertAssociationsIfNecessary', nodeType, cardType);
+    response.associations.forEach((a) => {
+      // console.log(JSON.stringify(a, null, 2));
+      const tmp = a.subject;
+      a.subject = a.object;
+      a.object = tmp;
+    });
+  }
+}
+
+
 export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const baseUrl = `${biolink}bioentity/`;
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
@@ -354,6 +377,8 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const url = `${baseUrl}${urlExtension}`;
 
   const response = await axios.get(url, { params });
+
+  invertAssociationsIfNecessary(nodeType, cardType, response.data);
 
   return response;
 }

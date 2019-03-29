@@ -59,7 +59,7 @@
                 {{ nodeLabel }}
               </span>
               <span
-                v-if="node.taxon.id"
+                v-if="node.taxon && node.taxon.id"
                 class="node-label-taxon">
                 {{ node.taxon.label }} ({{ node.taxon.id }})
               </span>
@@ -596,7 +596,7 @@ export default {
 
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
-        const cardType = hash.slice(1);
+        const cardType = hash.split('?')[0].slice(1);
         this.$nextTick((_) => {
           this.expandCard(cardType);
         });
@@ -628,12 +628,12 @@ export default {
         ]
       );
 
-
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
+
         this.entrezResult = entrezResult;
-        this.node.label = entrezResult.title;
-        this.node.iri = entrezResult.pubmedURL;
+        nodeSummary.label = entrezResult.title;
+        nodeSummary.iri = entrezResult.pubmedURL;
 
         let abstractEnhanced = this.entrezResult.abstract;
         abstractEnhanced = abstractEnhanced.replace(
@@ -753,17 +753,19 @@ div.container-cards .node-cards-section {
 }
 
 .title-bar .node-synonyms {
-  line-height: $line-height-compact;
+  line-height: 1.0em;
+  margin: 0;
 }
 
 .title-bar .synonym {
-  padding: 2px 10px 1px 2px;
+  padding: 0 2px;
+  margin: 0 15px 0 0;
   font-size: 0.9em;
-  background: white;
+  font-weight: 500;
 }
 
 .title-bar .node-label {
-  margin: 2px 5px 5px 2px;
+  margin: 2px;
 }
 
 .title-bar .node-label-label {
