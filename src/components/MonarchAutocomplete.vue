@@ -19,7 +19,7 @@
           type="button"
           @click="toggleFilterBox"
         >
-          All
+          {{ categories.map((c) => { return firstCap(c); }).join(', ') }}
         </button>
         <div
           v-if="catDropDown"
@@ -99,10 +99,12 @@
             >
               <strong>{{ suggestion.match }}</strong>
             </div>
-            <div class="col-4">
+            <div
+              class="col-4">
               <i>{{ suggestion.taxon }}</i>
             </div>
-            <div class="col-3 text-align-right">
+            <div
+              class="col-3 text-align-right">
               <small>{{ suggestion.category }}</small>
             </div>
           </div>
@@ -271,7 +273,7 @@ export default {
         },
         {
           text: 'Variant',
-          value: 'variant locus',
+          value: 'variant',
         },
         {
           text: 'Phenotype',
@@ -386,7 +388,7 @@ export default {
     categoryMap(catList) {
       const validCats = {
         'gene': 'gene',
-        'variant locus': 'variant',
+        'variant': 'variant',
         'Phenotype': 'phenotype',
         'genotype': 'genotype',
         'disease': 'disease'

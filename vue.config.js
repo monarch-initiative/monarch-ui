@@ -29,7 +29,6 @@ mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 // const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
 const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/GenomeFeatureViewer.css');
-const esprima = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 
 const vueConfig = {
   // outputDir: 'dist',

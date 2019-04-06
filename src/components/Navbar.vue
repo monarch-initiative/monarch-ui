@@ -133,6 +133,11 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/gene/HGNC:11180">
+            Gene: SOD2 HGNC:11180
+          </b-dropdown-item>
+
+          <b-dropdown-item
             to="/disease/MONDO:0010156">
             Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>

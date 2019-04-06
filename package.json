@@ -1,6 +1,6 @@
 {
   "name": "monarch-ui",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "private": true,
   "scripts": {
     "clean": "rm -rf dist/",
@@ -18,7 +18,7 @@
     "ghpublish": "./publish.sh"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.4.0",
+    "@babel/polyfill": "^7.4.3",
     "axios": "^0.18.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "4.3.1",
@@ -44,12 +44,12 @@
     "vue-router": "^3.0.2"
   },
   "devDependencies": {
-    "@vue/cli": "^3.5.1",
-    "@vue/cli-plugin-babel": "^3.5.1",
+    "@vue/cli": "^3.5.5",
+    "@vue/cli-plugin-babel": "^3.5.5",
     "@vue/cli-plugin-e2e-nightwatch": "^3.5.1",
     "@vue/cli-plugin-eslint": "^3.5.1",
     "@vue/cli-plugin-unit-mocha": "^3.5.1",
-    "@vue/cli-service": "^3.5.1",
+    "@vue/cli-service": "^3.5.3",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/test-utils": "^1.0.0-beta.29",
@@ -62,7 +62,7 @@
     "http-server": "^0.11.1",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
-    "sinon": "^7.3.0",
+    "sinon": "^7.3.1",
     "vue-cli-plugin-bootstrap-vue": "^0.2.0",
     "vue-cli-plugin-webpack-bundle-analyzer": "^1.2.0",
     "vue-markdown-loader": "^2.4.1",

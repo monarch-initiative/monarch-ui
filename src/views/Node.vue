@@ -187,15 +187,8 @@
               <span
                 v-for="r in equivalentClasses"
                 :key="r.id">
-                <router-link
-                  v-if="r.id"
-                  :to="'/resolve/' + r.id">
-                  {{ r.label || r.id }}
-                </router-link>
-
-                <span
-                  v-else>
-                  {{ r.label }}
+                <span>
+                  {{ r.id }}&nbsp;
                 </span>
               </span>
             </div>
@@ -232,7 +225,7 @@
           </div>
 
           <div
-            v-if="!expandedCard && node.geneInfo"
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.hits[0]"
             class="row">
             <genome-feature
               :mygene-data="node.geneInfo"/>
@@ -526,7 +519,6 @@ export default {
       const equivalentClasses = neighborhood.equivalentClasses;
       const superclasses = neighborhood.superclasses;
       const subclasses = neighborhood.subclasses;
-
       this.superclasses = us.map(us.uniq(superclasses), c => ({
         id: c,
         label: nodeLabelMap[c]
@@ -542,6 +534,7 @@ export default {
       // console.log('superclasses', this.superclasses);
       // console.log('subclasses', this.subclasses);
       // console.log('equivalentClasses', this.equivalentClasses);
+      // console.log('equivalentClasses', equivalentClasses);
 
       this.synonyms = this.node.synonyms;
       this.xrefs = this.node.xrefs;
@@ -563,35 +556,20 @@ export default {
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       const nonEmptyCards = [];
-      // console.log('that.node.association_counts', that.node);
-      this.availableCards.forEach((cardType) => {
-        const acount = that.node.association_counts[cardType] || 0;
-        if (acount) {
-          that.counts[cardType] = acount;
-          if (acount > 0) {
-            nonEmptyCards.push(cardType);
+      if (!that.node.association_counts) {
+        console.log('Missing association_counts', that.node);
+      }
+      else {
+        this.availableCards.forEach((cardType) => {
+          const acount = that.node.association_counts[cardType] || 0;
+          if (acount) {
+            that.counts[cardType] = acount;
+            if (acount > 0) {
+              nonEmptyCards.push(cardType);
+            }
           }
-        }
-
-        // const count = that.node.counts[cardType];
-        // let ccount = 0;
-        // if (!count) {
-        //   console.log('missing', cardType);
-        // }
-        // else {
-        //   ccount = count.totalCount;
-        // }
-        // const acount = that.node.association_counts[cardType] || 0;
-        // if (ccount !== acount) {
-        //   console.log('mismatch', cardType, ccount, acount);
-        // }
-        // if (ccount) {
-        //   that.counts[cardType] = ccount;
-        //   if (ccount > 0) {
-        //     nonEmptyCards.push(cardType);
-        //   }
-        // }
-      });
+        });
+      }
       this.nonEmptyCards = nonEmptyCards;
 
       const hash = this.$router.currentRoute.hash;

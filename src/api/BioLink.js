@@ -52,7 +52,7 @@ const servers = {
 
 };
 
-const defaultApiServer = 'development';
+const defaultApiServer = 'production';
 const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
 console.log('apiServer', apiServer);
 
@@ -89,8 +89,12 @@ export async function getNodeSummary(nodeId, nodeType) {
  */
 
 export async function getNode(nodeId, nodeType) {
-  const bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
+  let bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
   // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
+
+  if (nodeType === 'function') {
+    bioentityUrl = `${biolink}bioentity/${nodeId}`;
+  }
 
   const params = {
     fetch_objects: true,
@@ -134,22 +138,6 @@ export async function getNode(nodeId, nodeType) {
         if (!bioentityResponseData.description) {
           bioentityResponseData.description = '';
         }
-
-        // TEMPORARY WORKAROUND when api-dev.m.org is broken and
-        // when production does not yet support get_association_counts.
-        // So the hack is to synthesize non-zero counts, and rely upon
-        // /bioentity/disease/:id/genes (e.g.) to work properly when
-        // the user asks for a paricular type of association (i.e., clicks
-        // on a card in Node.vue)
-        //
-        //
-        // bioentityResponseData.association_counts = {
-        //   gene: 1,
-        //   phenotype: 1,
-        //   disease: 1,
-        //   genotype: 1,
-        //   variant: 1,
-        // };
 
         bioentityResponseData.type = nodeType;
         bioentityResponseData.uri = getIdentifierResp.data;
@@ -230,7 +218,7 @@ function categoryKludge(category) {
 
 const categoriesAll = [
   'gene',
-  'variant locus',
+  'variant',
   'genotype',
   'phenotype',
   'disease',
@@ -347,29 +335,6 @@ function getBiolinkAnnotation(cardType) {
 }
 
 
-function invertAssociationsIfNecessary(nodeType, cardType, response) {
-  let invert = false;
-
-  // Remove the apiServer restriction clause when
-  // https://github.com/biolink/biolink-api/pull/261
-  // is on production. 3/29/2019 DBK
-  if (nodeType === 'anatomy'
-     && apiServer === 'production') {
-    invert = true;
-  }
-
-  if (invert) {
-    console.log('invertAssociationsIfNecessary', nodeType, cardType);
-    response.associations.forEach((a) => {
-      // console.log(JSON.stringify(a, null, 2));
-      const tmp = a.subject;
-      a.subject = a.object;
-      a.object = tmp;
-    });
-  }
-}
-
-
 export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const baseUrl = `${biolink}bioentity/`;
   const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
@@ -377,8 +342,6 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
   const url = `${baseUrl}${urlExtension}`;
 
   const response = await axios.get(url, { params });
-
-  invertAssociationsIfNecessary(nodeType, cardType, response.data);
 
   return response;
 }
