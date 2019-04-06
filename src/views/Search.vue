@@ -73,7 +73,7 @@ const validCats = {
   'phenotype': 'phenotype',
   'genotype': 'genotype',
   'disease': 'disease',
-  'variant locus': 'variant',
+  'variant': 'variant',
 };
 
 export default {

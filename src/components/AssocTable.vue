@@ -237,6 +237,9 @@ export default {
           }
         });
       return truth;
+    },
+    allFacets() {
+      return Object.entries(this.facets.species).map(elem => this.keyMap(elem[0]));
     }
   },
   watch: {
@@ -416,7 +419,7 @@ export default {
         ];
         let pubsLength = 0;
         if (elem.publications) {
-          pubs = this.parsePublications(elem.publications);
+          pubs = this.parsePublications(elem.publications, elem.object.id);
           pubsLength += pubs.length;
         }
         let evidence = [
@@ -477,8 +480,15 @@ export default {
         const supportLength = support.length;
         // console.log('support');
         // console.log(JSON.stringify(support, null, 2));
-        if (!taxon.id || this.trueFacets.includes(taxon.id)) {
-          const simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
+        if (taxon.id && this.allFacets.includes(taxon.id) && !this.trueFacets.includes(taxon.id)) {
+          console.log('skipping', taxon.id, elem);
+        }
+        else {
+          let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
+          if (simplifiedCardType === 'interaction') {
+            simplifiedCardType = 'gene';
+          }
+
           let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
           if (objectElem.id.indexOf(':.well-known') === 0) {
             objectLink = null;
@@ -559,10 +569,10 @@ export default {
       }
       return result;
     },
-    parsePublications(pubsList) {
+    parsePublications(pubsList, selfId) {
       const pubs = [];
       pubsList.forEach((elem) => {
-        if (elem.id !== this.nodeId) {
+        if (elem.id !== this.nodeId && elem.id !== selfId) {
           pubs.push(elem.id);
         }
       });
