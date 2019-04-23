@@ -1,18 +1,27 @@
 <template>
   <div
     id="facets"
-    :class="{ active: isVisible }">
+    :class="{ active: isVisible }"
+    class="container-fluid">
 
     <div
-      v-for="(value, key) in model"
+      v-for="(value, key) in model.selectedTaxons"
       :key="key"
-      class="facet-item">
+      class="facet-item row">
 
-      <b-form-checkbox
-        v-model="model[key]"
-      >
-        <i>{{ key }}</i>
-      </b-form-checkbox>
+      <div
+        class="col-10">
+        <b-form-checkbox
+          v-model="model.selectedTaxons[key]"
+        >
+          <i>{{ idToLabel(key) }}</i>&nbsp;({{ key }})
+        </b-form-checkbox>
+      </div>
+
+      <div
+        class="col-2">
+        {{ idToCount(key) }}
+      </div>
 
     </div>
   </div>
@@ -20,6 +29,7 @@
 
 
 <script>
+import { idToLabel } from '../lib/TaxonMap';
 
 export default {
   name: 'NodeSidebarFacets',
@@ -40,6 +50,16 @@ export default {
       default: false,
     },
   },
+
+  methods: {
+    idToLabel(id) {
+      return idToLabel(id);
+    },
+
+    idToCount(id) {
+      return this.model.taxons[id];
+    },
+  },
 };
 
 </script>
@@ -47,7 +67,7 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 
-$facets-width: 300px;
+$facets-width: 500px;
 
 #facets {
   width: $facets-width;
@@ -66,14 +86,13 @@ $facets-width: 300px;
 }
 
 #facets.active {
-  left: $collapsed-sidebar-width;
+  left: 0;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 
 #facets .facet-item {
   background: white;
-  padding: 0;
 }
 
 </style>

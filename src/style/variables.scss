@@ -1,10 +1,11 @@
 $navbar-height: 36px !default;
 
 // $body-color:                $gray-900 !default;
-// $font-size-base: 0.875rem;		// 14px !default;
+// $font-size-base: 0.875rem;   // 14px !default;
 $font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 
-$grid-float-breakpoint: 700px;
+$sidebar-collapse-width: 800px;
+$grid-float-breakpoint: 600px;
 
 $link-color: #0088ce;
 
@@ -16,14 +17,24 @@ $navbar-padding-y:          0 !default;
 $nav-link-padding-y:        0 !default;
 $nav-link-padding-x:        0 !default;
 
+
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
-  monarch: 860px,
+/*
+  monarch: $grid-float-breakpoint,
+
+  The attempt to create a custom breakpoint name doesn't work and
+  produces a build warning from Bootstrap. This will probably be fixed
+  in a future version of Bootstrap, but for now, we'll adopt 'sm' as our
+  navbar breakpoint.
+*/
   lg: 992px,
   xl: 1200px
 ) !default;
+
 
 $collapsed-sidebar-width: 55px;
 

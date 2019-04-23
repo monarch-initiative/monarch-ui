@@ -50,6 +50,7 @@
         @keydown.up="up"
         @keydown.esc="clearSearch"
         @blur="clearSearch"
+        @focus="closeFilterBox"
       >
 
       <div
@@ -324,6 +325,11 @@ export default {
       const currentData = this.suggestions[this.current];
       if (currentData) {
         if (!this.definedCategories) {
+          //
+          // Need to add Taxon Filter information here so that it can be picked up
+          // by Search.vue
+          // @nathandunn this might feed into the Search.vue and taxon faceting there.
+          //
           this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
         }
         else {
@@ -336,11 +342,15 @@ export default {
       this.value = '';
       this.open = false;
       this.suggestions = [];
+      this.categories = [];
     },
     up() {
       if (this.current > 0) {
         this.current -= 1;
       }
+    },
+    closeFilterBox() {
+      this.catDropDown = false;
     },
     toggleFilterBox() {
       this.catDropDown = !this.catDropDown;
@@ -372,6 +382,7 @@ export default {
       }
       this.value = '';
       this.open = false;
+      this.categories = [];
       this.suggestions = [];
     },
     showMore() {

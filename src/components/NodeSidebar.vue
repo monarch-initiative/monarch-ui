@@ -23,23 +23,22 @@
             <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
           </a>
           <a
-            :href="'http://alpha.monarchinitiative.org' + $route.path"
+            :href="'http://beta.monarchinitiative.org' + $route.path"
             class="debug-link-to-alpha"
             target="_blank"/>
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <a
-            href="#"
+          <b-link
+            :disabled="neighborhoodDisabled"
             @click="toggleNeighborhood()">
             <i class="fa xfa-2x fa-crosshairs"/>
             <span class="list-group-item-value">Neighbors</span>
-          </a>
+          </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <a
-            href="#"
             @click="toggleFacets()">
             <i class="fa fa-list"/>
             <span class="list-group-item-value">Facets</span>
@@ -81,7 +80,7 @@
 
     <node-sidebar-facets
       :is-visible="isFacetsShowing"
-      v-model="facetObject.species"
+      v-model="facetObject"
     />
 
   </div>
@@ -161,6 +160,9 @@ export default {
     };
   },
   computed: {
+    neighborhoodDisabled() {
+      return this.superclasses.length === 0 && this.subclasses.length === 0;
+    },
     debugServerURL() {
       const debugHash = (this.$route.hash.length > 1)
         ? (this.$route.hash + 's')
@@ -273,6 +275,11 @@ $collapsed-sidebar-width: 55px;
   font-weight: 600
 }
 
+.node-sidebar li.list-group-item > a.disabled:hover {
+  color: #ccc;
+  font-weight: unset
+}
+
 .node-sidebar li.list-group-item.active > a {
   xbackground-color: #393f44;
   color: #fff;
@@ -348,7 +355,7 @@ $collapsed-sidebar-width: 55px;
   margin: 2px 0 0 5px;
 }
 
-@media (max-width: $grid-float-breakpoint) {
+@media (max-width: $sidebar-collapse-width) {
   .node-sidebar {
     width: $collapsed-sidebar-width;
   }
