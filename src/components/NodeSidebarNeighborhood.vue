@@ -87,7 +87,7 @@ $neighborhood-button-width: 32px;
 #neighborhood {
   width: $neighborhood-width;
   position: fixed;
-  top: ($navbar-height + 65);
+  top: ($navbar-height + 70);
   left: (-$neighborhood-width);
   min-height: 40px;
   z-index: 1050;
@@ -97,17 +97,20 @@ $neighborhood-button-width: 32px;
   background: ghostwhite;
   border:2px solid lightgray;
   border-radius: 5px;
+  max-height: 80%;
+  font-size: 0.95rem;
+  padding: 5px;
 }
 
 #neighborhood.active {
-  left: $collapsed-sidebar-width;
+  left: 0;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
 #neighborhood a,
 #neighborhood a:hover,
 #neighborhood a:focus {
-  padding: 2px 10px;
+  padding: 2px 0;
   color: inherit;
   text-decoration: none;
   transition: all 0.3s;

@@ -212,7 +212,7 @@
               v-for="cardType in nonEmptyCards"
               :key="cardType"
               :card-type="cardType"
-              :card-count="counts[cardType]"
+              :card-count="counts"
               :parent-node="node"
               :parent-node-id="nodeId"
               @expand-card="expandCard(cardType)"/>
@@ -233,9 +233,10 @@
 
           <div
             v-if="expandedCard"
-            class="expanded-card-view col-12">
+            class="expanded-card-view row">
             <assoc-table
               :facets="facetObject"
+              :card-counts="counts"
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
@@ -337,28 +338,7 @@ export default {
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
-        species: {
-          'Anolis carolinensis': true,
-          'Arabidopsis thaliana': true,
-          'Bos taurus': true,
-          'Caenorhabditis': true,
-          'Caenorhabditis elegans': true,
-          'Danio rerio': true,
-          'Drosophila melanogaster': true,
-          'Equus caballus': true,
-          'Gallus gallus': true,
-          'Homo sapiens': true,
-          'Macaca mulatta': true,
-          'Mammalia': true,
-          'Monodelphis domestica': true,
-          'Mus musculus': true,
-          'Ornithorhynchus anatinus': true,
-          'Pan troglodytes': true,
-          'Rattus norvegicus': true,
-          'Saccharomyces cerevisiae': true,
-          'Saccharomyces cerevisiae S288C': true,
-          'Sus scrofa': true,
-          'Xenopus (Silurana) tropicalis': true
+        selectedTaxons: {
         },
         evidence: {
           IEA: true
@@ -420,6 +400,7 @@ export default {
       expandedCard: null,
       hasGeneExac: false,
       entrezResult: null,
+
       counts: {
         disease: 0,
         phenotype: 0,
@@ -431,6 +412,7 @@ export default {
         cellline: 0,
         genotype: 0
       },
+
       relationshipsColumns: [
         {
           label: 'Subject',
@@ -462,13 +444,28 @@ export default {
   },
 
   watch: {
+    facetObject: {
+      handler(val, oldVal) {
+        // console.log('facetObject');
+        // console.log(JSON.stringify(val.selectedTaxons, null, 2));
+        this.updateCounts();
+      },
+      deep: true
+    },
+
     $route(to, _from) {
       // Only fetchData if the path is different.
 
       if (to.path !== this.path) {
         this.fetchData();
       }
-    }
+      else {
+        const strippedHash = to.hash.slice(1);
+        if (strippedHash !== this.cardType) {
+          this.expandCard(strippedHash);
+        }
+      }
+    },
   },
   created() {
     // console.log('created', this.nodeId);
@@ -488,7 +485,7 @@ export default {
 
   methods: {
     expandCard(cardType) {
-      this.$router.replace({ hash: cardType });
+      this.$router.push({ hash: cardType });
       this.expandedCard = cardType;
     },
 
@@ -513,8 +510,26 @@ export default {
       this.node = response;
       // this.nodeDebug = JSON.stringify(response, null, 2);
 
-      // const neighborhood = await BL.getNeighborhood(this.nodeId, this.nodeType);
-      // console.log('neighborhood', neighborhood);
+      const taxons = {};
+      const selectedTaxons = {};
+      Object.keys(response.taxonCounts).forEach((key) => {
+        const entry = response.taxonCounts[key];
+        Object.keys(entry.taxons).forEach((taxon) => {
+          // console.log(key, taxon, entry.taxons[taxon]);
+          selectedTaxons[taxon] = true;
+          let taxonCount = taxons[taxon];
+          if (!taxonCount) {
+            taxonCount = 0;
+          }
+          else {
+            // console.log('prexisting taxons[taxon]', key, taxon, taxonCount);
+          }
+          taxons[taxon] = taxonCount + entry.taxons[taxon];
+        });
+      });
+      this.facetObject.taxons = taxons;
+      this.facetObject.selectedTaxons = selectedTaxons;
+
       const nodeLabelMap = neighborhood.nodeLabelMap;
       const equivalentClasses = neighborhood.equivalentClasses;
       const superclasses = neighborhood.superclasses;
@@ -555,22 +570,7 @@ export default {
       this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
-      const nonEmptyCards = [];
-      if (!that.node.association_counts) {
-        console.log('Missing association_counts', that.node);
-      }
-      else {
-        this.availableCards.forEach((cardType) => {
-          const acount = that.node.association_counts[cardType] || 0;
-          if (acount) {
-            that.counts[cardType] = acount;
-            if (acount > 0) {
-              nonEmptyCards.push(cardType);
-            }
-          }
-        });
-      }
-      this.nonEmptyCards = nonEmptyCards;
+      this.updateCounts();
 
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
@@ -579,6 +579,53 @@ export default {
           this.expandCard(cardType);
         });
       }
+    },
+
+    updateCounts() {
+      // console.log(JSON.stringify(Object.keys(this.node.association_counts), null, 2));
+      // console.log(JSON.stringify(Object.keys(this.node.taxonCounts), null, 2));
+      const nonEmptyCards = [];
+      if (!this.node.association_counts) {
+        console.log('Missing association_counts', this.node);
+      }
+      else {
+        // console.log('association_counts', Object.keys(this.node.association_counts).join(','));
+        // console.log(JSON.stringify(this.node.association_counts, null, 2));
+        // console.log('taxonCounts', Object.keys(this.node.taxonCounts).join(','));
+        // console.log(JSON.stringify(this.node.taxonCounts, null, 2));
+        this.availableCards.forEach((cardType) => {
+          const taxonCount = this.node.taxonCounts[cardType];
+          const taxonTotal = taxonCount ? taxonCount.total : 0;
+          let taxonFiltered = taxonTotal;
+          if (taxonCount) {
+            // console.log('taxonCount', taxonCount);
+            Object.keys(taxonCount.taxons).forEach((t) => {
+              // console.log('this.facetObject.selectedTaxons', this.facetObject.selectedTaxons, this.facetObject.selectedTaxons[t], t);
+              if (!this.facetObject.selectedTaxons[t]) {
+                taxonFiltered -= taxonCount.taxons[t];
+              }
+            });
+          }
+
+          const acount = this.node.association_counts[cardType] || 0;
+          // console.log('xx', cardType, acount, taxonTotal, taxonFiltered);
+          // console.log('updateCounts', cardType, acount);
+
+          if (acount > 0 && taxonTotal === 0) {
+            console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
+            taxonFiltered = acount;
+          }
+          if (acount > 0 && taxonFiltered !== acount) {
+            console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
+            // taxonFiltered = acount;
+          }
+          this.counts[cardType] = taxonFiltered;
+          if (acount > 0) {
+            nonEmptyCards.push(cardType);
+          }
+        });
+      }
+      this.nonEmptyCards = nonEmptyCards;
     },
 
     async fetchData() {
@@ -666,20 +713,18 @@ $line-height-compact: 1.3em;
     display: initial;
 }
 
-.node-container {
-  margin: $title-bar-height 0 5px 0;
-  padding: 0;
+.container-fluid.node-container {
+  margin-top: $title-bar-height;
+  xpadding: 0;
   transition: all 0.3s;
   width: 100%;
   height: 100%;
+
+  .expanded-card-view {
+    padding:0;
+  }
 }
 
-.expanded-card-view {
-  margin:0;
-  padding:0;
-  width:100%;
-  height:100%;
-}
 
 .node-container .node-description {
   margin: 0;
@@ -761,7 +806,7 @@ div.publication-abstract {
   margin: 0;
   padding: 10px;
 }
-@media (max-width: $grid-float-breakpoint) {
+@media (max-width: $sidebar-collapse-width) {
   div.container-cards {
     margin-left: $collapsed-sidebar-width;
   }

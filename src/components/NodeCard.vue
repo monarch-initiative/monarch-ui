@@ -9,7 +9,7 @@
       <img
         :src="cardIcon"
         class="card-img-top">
-      {{ pluralize(cardLabel, cardCount) }}
+      {{ pluralize(cardLabel, cardCount[cardType]) }}
     </div>
   </div>
 

@@ -49,6 +49,7 @@ module.exports = {
     'standard/no-callback-literal': 0,
     'no-param-reassign': 0,
     'no-underscore-dangle': 0,
+    'operator-linebreak': 0,
   },
   parserOptions: {
     parser: 'babel-eslint'

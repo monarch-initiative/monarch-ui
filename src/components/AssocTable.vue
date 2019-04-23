@@ -1,13 +1,43 @@
 <template>
   <div
     class="assoc-table">
-    <div v-show="dataFetched">
-      <!--
+    <div
+      v-if="dataError">
+      <h3>BioLink Error</h3>
+      <div class="row">
+        <div class="col-xs-12 pre-scrollable">
+          <b><i>{{ dataError }}</i></b>
+        </div>
+      </div>
+    </div>
+
+    <div
+      v-show="!dataFetched && !dataError"
+      class="loading-div">
+
+      <b-progress
+        :value="100"
+        height="4rem"
+        variant="info"
+        striped
+        animated
+        class="m-1">
+        <b-progress-bar
+          :value="100"
+          class="p-4">
+          <h3>&nbsp;Loading Associations …&nbsp;</h3>
+        </b-progress-bar>
+      </b-progress>
+
+    </div>
+
+    <div
+      v-show="dataFetched && !dataError">
+
       <h5>
-        <strong>{{ totalItems }}</strong>&nbsp;
-        <strong>{{ cardType }}</strong> associations
+        &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
+        <strong>{{ cardType }}</strong> associations.
       </h5>
-      -->
 
       <b-table
         ref="tableRef"
@@ -18,9 +48,8 @@
         responsive="true"
         class="table-sm"
       >
-
         <template
-          v-if="isGene"
+          v-if="hasTaxon"
           slot="taxon"
           slot-scope="data"
         >
@@ -58,7 +87,15 @@
               target="_blank"
               rel="noopener noreferrer"
             >
+              <span
+                v-if="data.item.relation.inverse">
+                <b>&Larr;</b>
+              </span>
               {{ data.item.relation.label }}
+              <span
+                v-if="data.item.relation.inverse">
+                <b>&Larr;</b>
+              </span>
             </a>
           </small>
         </template>
@@ -117,18 +154,27 @@
             >
               <div
                 class="col-9 px-1">
-                <a
-                  v-if="support.label"
-                  :href="support.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {{ support.label }}&nbsp;
-                  <img
-                    v-if="support.icon"
-                    :src="support.icon"
-                    class="source-icon">
-                </a>
+                <template
+                  v-if="support.useRouter">
+                  <router-link
+                    :to="support.url">
+                    {{ support.label }}
+                  </router-link>
+                </template>
+                <template
+                  v-else>
+                  <a
+                    :href="support.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ support.label }}&nbsp;
+                    <img
+                      v-if="support.icon"
+                      :src="support.icon"
+                      class="source-icon">
+                  </a>
+                </template>
               </div>
               <div
                 class="col-2 px-1">
@@ -146,44 +192,27 @@
           </div>
         </template>
       </b-table>
-      <div v-if="totalItems > rowsPerPage">
+      <div v-if="totalAssociations > rowsPerPage">
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="totalItems"
+          :total-rows="totalAssociations"
           class="pag-width my-1"
           align="center"
           size="md"
         />
       </div>
     </div>
-    <div v-if="dataError">
-      <h3>BioLink Error</h3>
-      <div class="row">
-        <div class="col-xs-12 pre-scrollable">
-          <json-tree
-            :data="dataError.response"
-            :level="1"
-          />
-        </div>
-      </div>
-    </div>
-    <div v-show="!dataFetched && !dataError">
-      <br>
-      <br>
-      <h5>Loading…</h5>
-    </div>
   </div>
 </template>
 
 <script>
 import * as BL from '@/api/BioLink';
-import JsonTree from 'vue-json-tree';
 import sourceToImage from '../lib/sources';
+import { isTaxonCardType } from '../lib/TaxonMap';
 
 export default {
   components: {
-    'json-tree': JsonTree
   },
   props: {
     nodeId: {
@@ -198,6 +227,11 @@ export default {
       type: String,
       required: true
     },
+    cardCounts: {
+      type: Object,
+      required: false,
+      default: null,
+    },
     facets: {
       type: Object,
       default: null,
@@ -208,8 +242,8 @@ export default {
     return {
       currentPage: 1,
       rowsPerPage: 25,
-      totalItems: 0,
-      isGene: false,
+      totalAssociations: 0,
+      hasTaxon: false,
       associationData: '',
       dataFetched: false,
       dataError: false,
@@ -217,30 +251,8 @@ export default {
       dataFetchedRowsPerPage: 0,
       fields: [],
       rows: [],
-      taxonFields: [
-        'gene',
-        'genotype',
-        'model',
-        'variant',
-        'homolog'
-      ],
       lastSelection: [],
     };
-  },
-  computed: {
-    trueFacets() {
-      const truth = [];
-      Object.entries(this.facets.species)
-        .forEach((elem) => {
-          if (elem[1]) {
-            truth.push(this.keyMap(elem[0]));
-          }
-        });
-      return truth;
-    },
-    allFacets() {
-      return Object.entries(this.facets.species).map(elem => this.keyMap(elem[0]));
-    }
   },
   watch: {
     cardType() {
@@ -264,6 +276,30 @@ export default {
     this.generateFields();
   },
   methods: {
+    hasFalseFacets() {
+      let foundFalseFacets = false;
+      Object.entries(this.facets.selectedTaxons)
+        .forEach((elem) => {
+          if (!elem[1]) {
+            foundFalseFacets = true;
+          }
+        });
+      return foundFalseFacets;
+    },
+    trueFacets() {
+      const truth = [];
+      Object.entries(this.facets.selectedTaxons)
+        .forEach((elem) => {
+          if (elem[1]) {
+            truth.push(elem[0]);
+          }
+        });
+      return truth;
+    },
+    allFacets() {
+      return Object.entries(this.facets.selectedTaxons).map(elem => elem[0]);
+    },
+
     async rowsProvider(ctx, callback) {
       this.fetchData().then(() => {
         callback(this.rows);
@@ -299,27 +335,6 @@ export default {
         'Breast': 'HP:0000769',
         'Voice': 'HP:0001608',
         'Cellular': 'HP:0025354',
-        'Anolis carolinensis': 'NCBITaxon:28377',
-        'Arabidopsis thaliana': 'NCBITaxon:3702',
-        'Bos taurus': 'NCBITaxon:9913',
-        'Caenorhabditis': 'NCBITaxon:6237',
-        'Caenorhabditis elegans': 'NCBITaxon:6239',
-        'Danio rerio': 'NCBITaxon:7955',
-        'Drosophila melanogaster': 'NCBITaxon:7227',
-        'Equus caballus': 'NCBITaxon:9796',
-        'Gallus gallus': 'NCBITaxon:9031',
-        'Homo sapiens': 'NCBITaxon:9606',
-        'Macaca mulatta': 'NCBITaxon:9544',
-        'Mammalia': 'NCBITaxon:40674',
-        'Monodelphis domestica': 'NCBITaxon:13616',
-        'Mus musculus': 'NCBITaxon:10090',
-        'Ornithorhynchus anatinus': 'NCBITaxon:9258',
-        'Pan troglodytes': 'NCBITaxon:9598',
-        'Rattus norvegicus': 'NCBITaxon:10116',
-        'Saccharomyces cerevisiae': 'NCBITaxon:4932',
-        'Saccharomyces cerevisiae S288C': 'NCBITaxon:559292',
-        'Sus scrofa': 'NCBITaxon:9823',
-        'Xenopus (Silurana) tropicalis': 'NCBITaxon:8364'
       };
       return keyMappings[key];
     },
@@ -328,19 +343,24 @@ export default {
       const that = this;
       if (that.dataFetchedPage === that.currentPage
            && that.dataFetchedRowsPerPage === that.rowsPerPage) {
-        // console.log('####fetchData inhibited due to cached values.');
+        console.log('####fetchData inhibited due to cached values.');
       }
       else {
+        this.dataFetched = false;
+        this.dataError = false;
         try {
           const params = {
             fetch_objects: true,
             start: ((this.currentPage - 1) * this.rowsPerPage),
             rows: this.rowsPerPage
           };
+
+          const taxons = this.hasFalseFacets() ? this.trueFacets() : null;
           const associationsResponse = await BL.getNodeAssociations(
             this.nodeType,
             this.nodeId,
             this.cardType,
+            taxons,
             params
           );
           // console.log('associationsResponse');
@@ -356,8 +376,7 @@ export default {
           that.dataFetchedPage = this.currentPage;
           that.dataFetchedRowsPerPage = this.currentPage;
 
-          that.totalItems = associationsResponse.data.numFound;
-          // associationsResponse.data.associations.forEach(a => {
+          // associationData.associations.forEach(a => {
           //   console.log(a.subject.label, a.subject.taxon.label);
           // });
           // that.currentPage = 1;
@@ -372,6 +391,7 @@ export default {
 
     fixupRelation(elem, nodeType, cardType) {
       const relation = elem.relation;
+
       if (!relation) {
         console.log('fixupRelation NO RELATION');
         console.log(JSON.stringify(elem, null, 2));
@@ -381,6 +401,7 @@ export default {
         };
       }
       else {
+        let inverse = false;
         if (!relation.label && relation.id) {
           relation.label = relation.id;
         }
@@ -396,9 +417,15 @@ export default {
           }
         }
         else if (relation.id === 'RO:0003301') {
-          if (nodeType !== 'model') {
+          if (nodeType === 'model') {
             relation.id = 'RO:0002615';
-            relation.label = 'model of';
+            relation.label = 'has model';
+          }
+        }
+        else if (relation.id === 'RO:0002615') {
+          if (nodeType !== 'model') {
+            relation.id = 'RO:0003301';
+            relation.label = 'is model of';
           }
         }
         else if (relation.id === 'RO:0002206') {
@@ -407,7 +434,53 @@ export default {
             relation.label = 'expresses';
           }
         }
+        else if (relation.id === 'RO:0002607') {
+          if (nodeType === 'gene' && cardType === 'disease') {
+            inverse = true;
+          }
+        }
+        else if (relation.id === 'RO:0003303') {
+          if (cardType === 'disease' || cardType === 'phenotype') {
+            inverse = true;
+          }
+        }
+        else if (relation.id === 'RO:0003304') {
+          if (cardType === 'disease' || cardType === 'phenotype') {
+            inverse = true;
+          }
+        }
+        else if (relation.id === 'GENO:0000841') {
+          if (nodeType === 'gene' && cardType === 'disease') {
+            inverse = true;
+          }
+        }
+        else if (relation.id === 'GENO:0000408') {
+          if (nodeType === 'variant' && cardType === 'gene') {
+            relation.id = 'GENO:0000413';
+            relation.label = 'has allele';
+          }
+        }
+        else if (relation.id === 'RO:0002331') {
+          if (nodeType === 'gene' && cardType === 'pathway') {
+            inverse = true;
+          }
+        }
+        else if (relation.id === 'GENO:0000639') {
+          if (nodeType === 'variant' && cardType === 'gene') {
+            inverse = true;
+          }
+        }
+        relation.inverse = inverse;
+        // if (inverse) {
+        //   relation.label = `&Larr;&nbsp;${relation.label}&nbsp;&Larr;`;
+        // }
+        // else {
+        //   relation.label = `&Rarr;&nbsp;${relation.label}&nbsp;&Rarr;`;
+        // }
       }
+
+
+      // console.log('fixupRelation2', relation.id, relation.label);
     },
 
     populateRows() {
@@ -454,11 +527,13 @@ export default {
           const pubIcon = 'fa-book';
           supportIcons.push(pubIcon);
           pubs.forEach((pub) => {
+            const href = this.pubHref(pub);
             support.push({
               type: 'publication',
               typeIcon: pubIcon,
               label: pub,
-              url: this.pubHref(pub),
+              url: href,
+              useRouter: href.indexOf('/publication/') === 0,
             });
           });
         }
@@ -480,12 +555,16 @@ export default {
         const supportLength = support.length;
         // console.log('support');
         // console.log(JSON.stringify(support, null, 2));
-        if (taxon.id && this.allFacets.includes(taxon.id) && !this.trueFacets.includes(taxon.id)) {
-          console.log('skipping', taxon.id, elem);
+        // console.log('taxon.id', taxon.id, this.allFacets.includes(taxon.id), this.trueFacets.includes(taxon.id));
+        if (taxon.id && this.allFacets().includes(taxon.id) && !this.trueFacets().includes(taxon.id)) {
+          // console.log('skipping', taxon.id, elem);
         }
         else {
           let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
           if (simplifiedCardType === 'interaction') {
+            simplifiedCardType = 'gene';
+          }
+          else if (simplifiedCardType === 'homolog') {
             simplifiedCardType = 'gene';
           }
 
@@ -522,9 +601,13 @@ export default {
           elem.relation.url = this.relationHref(elem.relation);
         }
       });
+
+      // console.log('this.associationData', this.associationData.numFound, this.rows.length);
+      // console.log(JSON.stringify(this.associationData.associations, null, 2));
+      this.totalAssociations = this.associationData.numFound;
     },
     generateFields() {
-      this.isGene = false;
+      this.hasTaxon = false;
 
       const fields = [
         {
@@ -552,8 +635,8 @@ export default {
         },
       ];
 
-      if (this.taxonFields.includes(this.cardType)) {
-        this.isGene = true;
+      if (isTaxonCardType(this.cardType)) {
+        this.hasTaxon = true;
         fields.splice(0, 0, {
           key: 'taxon',
           label: 'Species'
@@ -595,8 +678,9 @@ export default {
     },
 
     pubHref(curie) {
-      const identifier = curie.split(/[:]+/).pop();
-      return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
+      return `/publication/${curie}`;
+      // const identifier = curie.split(/[:]+/).pop();
+      // return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
     },
     eviHref(evi) {
       const curie = evi.id || '';
@@ -605,8 +689,8 @@ export default {
     },
     relationHref(relation) {
       const curie = relation.id || '';
-      const identifier = curie.split(/[:]+/).pop();
-      return `http://purl.obolibrary.org/obo/RO_${identifier}`;
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
+      return `http://purl.obolibrary.org/obo/${identifier}`;
     },
     sourceLabel(url) {
       const result = url.split(/[/]+/)
@@ -622,6 +706,11 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 .assoc-table {
+
+  .loading-div {
+    margin: 0;
+    padding: 50px;
+  }
   .table.b-table tr {
     outline: 1px solid lightgray;
   }

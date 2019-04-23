@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isTaxonCardType } from '../lib/TaxonMap';
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -14,11 +15,11 @@ import axios from 'axios';
 const servers = {
   development: {
     'type': 'development',
-    'app_base': 'https://beta.monarchinitiative.org',
+    'app_base': 'https://monarchinitiative.org',
     'scigraph_url': 'https://scigraph-ontology-dev.monarchinitiative.org/scigraph/',
     'scigraph_data_url': 'https://scigraph-data-dev.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
+    'golr_url': 'https://solr-dev.monarchinitiative.org/solr/golr/',
+    'search_url': 'https://solr-dev.monarchinitiative.org/solr/search/',
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
@@ -95,6 +96,9 @@ export async function getNode(nodeId, nodeType) {
   if (nodeType === 'function') {
     bioentityUrl = `${biolink}bioentity/${nodeId}`;
   }
+  // else if (nodeType === 'variant') {
+  //   bioentityUrl = `${biolink}bioentity/gene/${nodeId}`;
+  // }
 
   const params = {
     fetch_objects: true,
@@ -115,14 +119,77 @@ export async function getNode(nodeId, nodeType) {
 
   const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
 
+  //
+  // Temporary hack until BL gets taxon-faceted association counts built in.
+  //
+  const useAssociationTypeKey = false;
+  const subjectKey = useAssociationTypeKey ? 'association_type' : 'subject_category';
+  const objectKey = useAssociationTypeKey ? 'association_type' : 'object_category';
+  const golrUrl1 =
+`${serverConfiguration.golr_url}select/?q=*%3A*&facet=true&fq=subject_closure:%22${nodeId}%22&rows=0&wt=json&facet.mincount=1&indent=on&facet.sort=count&facet.pivot=${objectKey},object_taxon`;
+  const golrUrl2 =
+`${serverConfiguration.golr_url}select/?q=*%3A*&facet=true&fq=object_closure:%22${nodeId}%22&rows=0&wt=json&facet.mincount=1&indent=on&facet.sort=count&facet.pivot=${subjectKey},subject_taxon`;
+
   const nodeSummary = axios.all(
     [
       axios.get(bioentityUrl, { params }),
       axios.get(getIdentifierUrl),
+      axios.get(golrUrl1, {}),
+      axios.get(golrUrl2, {}),
     ]
   ).then(
     axios.spread(
-      function response(bioentityResp, getIdentifierResp) {
+      function response(bioentityResp, getIdentifierResp, golrResponse1, golrResponse2) {
+        // console.log('golrResponse1');
+        // console.log(JSON.stringify(golrResponse1.data, null, 2));
+        // console.log('golrResponse2');
+        // console.log(JSON.stringify(golrResponse2.data, null, 2));
+        const taxonCounts = {};
+
+        const objectTaxonCounts = golrResponse1.data.facet_counts.facet_pivot[`${objectKey},object_taxon`];
+        objectTaxonCounts.forEach((facet) => {
+          let facetName = facet.value.replace(`${nodeType}_`, '');
+          //
+          // Temporary hack until BL gets taxon-faceted association counts built in.
+          // Presumably, BL will return facet names like 'anatomy', so that the following
+          // mappings are not necessary.
+          //
+          if (facetName === 'anatomical entity') {
+            facetName = 'anatomy';
+          }
+          else if (facetName === 'biological process') {
+            facetName = 'function';
+          }
+          else if (facetName === 'homology') {
+            facetName = 'homolog';
+          }
+
+          taxonCounts[facetName] = {
+            total: facet.count,
+            taxons: {},
+          };
+          if (facet.pivot) {
+            facet.pivot.forEach((taxonInfo) => {
+              taxonCounts[facetName].taxons[taxonInfo.value] = taxonInfo.count;
+            });
+          }
+        });
+
+        const subjectTaxonCounts = golrResponse2.data.facet_counts.facet_pivot[`${subjectKey},subject_taxon`];
+        subjectTaxonCounts.forEach((facet) => {
+          const facetName = facet.value.replace(`_${nodeType}`, '');
+          taxonCounts[facetName] = {
+            total: facet.count,
+            taxons: {},
+          };
+          if (facet.pivot) {
+            facet.pivot.forEach((taxonInfo) => {
+              taxonCounts[facetName].taxons[taxonInfo.value] = taxonInfo.count;
+            });
+          }
+        });
+        // console.log(JSON.stringify(taxonCounts, null, 2));
+
         const bioentityResponseData = bioentityResp.data;
 
         if (!bioentityResponseData.xrefs) {
@@ -140,6 +207,7 @@ export async function getNode(nodeId, nodeType) {
         }
 
         bioentityResponseData.type = nodeType;
+        bioentityResponseData.taxonCounts = taxonCounts;
         bioentityResponseData.uri = getIdentifierResp.data;
         return bioentityResponseData;
       }
@@ -150,57 +218,87 @@ export async function getNode(nodeId, nodeType) {
 }
 
 
-export async function getNeighborhood(nodeId) {
+function canUseSuperclassNode(nodeId, nodeType, superId) {
+  let result = true;
+
+  if (nodeType === 'disease') {
+    result = nodeId !== 'MONDO:0000001'; // superId !== 'OBI:1110055' && superId !== 'BFO:0000016';
+  }
+  else if (nodeType === 'anatomy') {
+    result = nodeId !== 'OBO:CARO_0000000';
+  }
+  else if (nodeType === 'phenotype') {
+    result = nodeId !== 'UPHENO:0001001';
+  }
+  else if (nodeType === 'function') {
+    result = nodeId !== 'GO:0003674';
+  }
+  else if (nodeType === 'pathway') {
+    result = nodeId !== 'GO:0008150';
+  }
+  return result;
+}
+
+export async function getNeighborhood(nodeId, nodeType) {
   // const graphUrl = `${biolink}graph/node/${nodeId}`;
   const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
-
-  const graphResponse = await axios.get(graphUrl);
-  const graphResponseData = graphResponse.data;
-
-  // console.log('getNeighborhood', nodeId, graphUrl);
-  // console.log(JSON.stringify(graphResponseData, null, 2));
-
   const nodeLabelMap = {};
-
   const equivalentClasses = [];
   const superclasses = [];
   const subclasses = [];
 
-  if (graphResponseData.nodes) {
-    graphResponseData.nodes.forEach((node) => {
-      nodeLabelMap[node.id] = node.lbl;
-    });
-  }
-  if (graphResponseData.edges) {
-    graphResponseData.edges.forEach((edge) => {
-      if (edge.pred === 'subClassOf') {
-        if (edge.sub === nodeId) {
-          // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
-          superclasses.push(edge.obj);
-        }
-        else if (edge.obj === nodeId) {
-          // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
-          subclasses.push(edge.sub);
-        }
-        else {
-          // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
-        }
-      }
-      else if (edge.pred === 'equivalentClass') {
-        // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
+  const params = {
+    fetch_objects: false,
+    get_association_counts: false,
+    exclude_automatic_assertions: true,
+    rows: 100
+  };
 
-        if (edge.sub === nodeId) {
-          // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
+  if (nodeType !== 'gene' && nodeType !== 'variant') {
+    const graphResponse = await axios.get(graphUrl, { params });
+    const graphResponseData = graphResponse.data;
+
+    // console.log('getNeighborhood', nodeId, graphUrl);
+    // console.log(JSON.stringify(graphResponseData, null, 2));
+
+    if (graphResponseData.nodes) {
+      graphResponseData.nodes.forEach((node) => {
+        nodeLabelMap[node.id] = node.lbl;
+      });
+    }
+    if (graphResponseData.edges) {
+      graphResponseData.edges.forEach((edge) => {
+        if (edge.pred === 'subClassOf') {
+          if (edge.sub === nodeId) {
+            // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
+            if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
+              superclasses.push(edge.obj);
+            }
+          }
+          else if (edge.obj === nodeId) {
+            // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
+            subclasses.push(edge.sub);
+          }
+          else {
+            // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
+          }
+        }
+        else if (edge.pred === 'equivalentClass') {
+          // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
+
+          if (edge.sub === nodeId) {
+            // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
+          }
+          else {
+            equivalentClasses.push(edge.sub);
+          }
         }
         else {
-          equivalentClasses.push(edge.sub);
+          console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
+          console.log(JSON.stringify(edge, null, 2));
         }
-      }
-      else {
-        console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
-        console.log(JSON.stringify(edge, null, 2));
-      }
-    });
+      });
+    }
   }
 
   return {
@@ -335,13 +433,37 @@ function getBiolinkAnnotation(cardType) {
 }
 
 
-export async function getNodeAssociations(nodeType, nodeId, cardType, params) {
+export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, params) {
   const baseUrl = `${biolink}bioentity/`;
-  const biolinkAnnotationSuffix = getBiolinkAnnotation(cardType);
-  const urlExtension = `${nodeType}/${nodeId}/${biolinkAnnotationSuffix}`;
+  const biolinkMappedCardType = getBiolinkAnnotation(cardType);
+  const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
   const url = `${baseUrl}${urlExtension}`;
+  const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
 
+  if (useTaxonRestriction) {
+    // console.log('getNodeAssociations', nodeType, nodeId, cardType);
+    // console.log(JSON.stringify(params, null, 2));
+    // console.log(JSON.stringify(taxons, null, 2));
+    params.start = 0;
+    params.rows = 10000;
+  }
   const response = await axios.get(url, { params });
+
+  if (useTaxonRestriction) {
+    response.data.associations = response.data.associations.filter((d) => {
+      const subjTaxon = d.subject.taxon;
+      const objTaxon = d.object.taxon;
+      let result = false;
+      if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
+        result = true;
+      }
+      if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
+        result = true;
+      }
+      return result;
+    });
+    response.data.numFound = response.data.associations.length;
+  }
 
   return response;
 }
