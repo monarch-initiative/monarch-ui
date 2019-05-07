@@ -82,6 +82,7 @@ $facets-width: 500px;
   background: ghostwhite;
   border:2px solid gray;
   border-radius: 5px;
+  font-size: 0.95rem;
   padding: 5px;
 }
 
@@ -90,9 +91,12 @@ $facets-width: 500px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
 }
 
-
 #facets .facet-item {
   background: white;
+
+  .custom-control.custom-checkbox label {
+    padding-top: 2px;
+  }
 }
 
 </style>
