@@ -130,6 +130,15 @@
             class="btn btn-xs px-1 py-0 m-0"
             variant="outline-info">
             <span
+              v-if="data.item._showDetails">
+              &blacktriangledown;&nbsp;
+            </span>
+            <span
+              v-else>
+              &blacktriangleright;&nbsp;
+            </span>
+
+            <span
               v-for="(icon, index) in data.item.supportIcons"
               :key="index"
             >
@@ -505,7 +514,8 @@ export default {
         }
         const objectElem = elem.object;
         const subjectElem = elem.subject;
-        const taxon = this.parseTaxon(objectElem);
+        const objectTaxon = this.parseTaxon(objectElem);
+        // const subjectTaxon = this.parseTaxon(subjectElem);
 
         const support = [];
         const supportIcons = [];
@@ -556,8 +566,8 @@ export default {
         // console.log('support');
         // console.log(JSON.stringify(support, null, 2));
         // console.log('taxon.id', taxon.id, this.allFacets.includes(taxon.id), this.trueFacets.includes(taxon.id));
-        if (taxon.id && this.allFacets().includes(taxon.id) && !this.trueFacets().includes(taxon.id)) {
-          // console.log('skipping', taxon.id, elem);
+        if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
+          // console.log('skipping', objectTaxon.id, elem);
         }
         else {
           let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
@@ -592,8 +602,8 @@ export default {
             objectLink,
             assocSubject: subjectElem.label,
             subjectLink,
-            taxonLabel: taxon.label,
-            taxonId: taxon.id,
+            taxonLabel: objectTaxon.label,
+            taxonId: objectTaxon.id,
             relation: elem.relation,
             _showDetails: false,
           });
@@ -734,12 +744,6 @@ export default {
     word-break: break-all;
   }
 
-  table.b-table row.b-table-details
-  {
-  }
-  a {
-    color: #404040;
-  }
 
   .main-font {
     color: #404040;
@@ -756,7 +760,6 @@ export default {
   .table-border-soft {
     border: solid lightgrey 1px;
     border-radius: 10px;
-
   }
 
   .relation-column-width {
