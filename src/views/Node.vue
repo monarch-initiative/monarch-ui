@@ -4,7 +4,7 @@
       v-if="node"
       ref="sidebar"
       :node-type="nodeType"
-      :node-label="nodeLabel"
+      :node-label="node.label"
       :expanded-card="expandedCard"
       :available-cards="availableCards"
       :cards-to-display="nonEmptyCards"
@@ -56,20 +56,22 @@
               class="node-label">
               <span
                 class="node-label-label">
-                {{ nodeLabel }}
+                {{ node.label }}
               </span>
               <span
                 v-if="node.taxon && node.taxon.id"
                 class="node-label-taxon">
-                {{ node.taxon.label }} ({{ node.taxon.id }})
+                <em>{{ node.taxon.label }} ({{ node.taxon.id }})</em>
               </span>
               <a
-                :href="node.iri"
+                :href="node.uri"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="node-label-id">
                 {{ node.id }}
               </a>
+
+<!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
                 :href="entrezResult.abstractURL"
@@ -78,6 +80,7 @@
                 class="node-label-id">
                 Entrez: {{ node.id }}
               </a>
+ -->
             </div>
 
             <div
@@ -106,11 +109,11 @@
           </div>
 
           <div
-            v-if="!expandedCard && nodeDefinition"
+            v-if="!expandedCard"
             class="row node-content-section">
             <div class="col-12">
               <div class="node-description">
-                {{ nodeDefinition }}
+                {{ node.description }}
               </div>
             </div>
 
@@ -125,47 +128,7 @@
                 v-if="entrezResult"
                 class="publication-abstract"
                 v-html="entrezResult.abstractMarkdown"/>
-
-                <!--
-              <pre
-                v-if="entrezResult">
-        {{ entrezResult }}
-              </pre>
-               -->
             </template>
-
-            <!--
-            <div
-              class="col-12 pt-2">
-              <b>References:</b>&nbsp;
-              <span
-                v-for="r in xrefs"
-                :key="r.url">
-                <router-link
-                  v-if="r.url.indexOf('/') === 0"
-                  :to="r.url">
-                  {{ r.label }}
-                </router-link>
-
-                <a
-                  v-else-if="r.url && r.blank"
-                  :href="r.url"
-                  target="_blank">
-                  {{ r.label }}
-                </a>
-                <a
-                  v-else-if="r.url"
-                  :href="r.url">
-                  {{ r.label }}
-                </a>
-
-                <span
-                  v-else>
-                  {{ r.label }}
-                </span>
-              </span>
-            </div>
-            -->
 
             <div class="col-12">
               <span
@@ -180,8 +143,9 @@
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
-
-            <div class="col-12">
+            <div
+              class="col-12"
+              v-if="equivalentClasses && equivalentClasses.length > 0">
               <b>Equivalent IDs:</b>&nbsp;
 
               <span
@@ -192,7 +156,7 @@
                 </span>
               </span>
             </div>
-
+<!--
             <div class="col-12">
               <b>URI:</b>&nbsp;
               <a
@@ -202,7 +166,7 @@
                 {{ node.uri }}
               </a>
             </div>
-
+ -->
           </div>
 
           <div
@@ -435,12 +399,6 @@ export default {
   },
 
   computed: {
-    nodeLabel() {
-      return `${this.node.label} ${this.node.geneLabel || ''}`;
-    },
-    nodeDefinition() {
-      return `${this.node.description} ${this.node.geneDescription || ''}`;
-    }
   },
 
   watch: {
@@ -656,31 +614,49 @@ export default {
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
 
-        this.entrezResult = entrezResult;
-        nodeSummary.label = entrezResult.title;
-        nodeSummary.iri = entrezResult.pubmedURL;
+        if (!entrezResult) {
+          console.log('Entrez.getPublication null for ', this.nodeId);
+        }
+        else {
+          this.entrezResult = entrezResult;
+          nodeSummary.label = entrezResult.title;
+          nodeSummary.uri = entrezResult.pubmedURL;
 
-        let abstractEnhanced = this.entrezResult.abstract;
-        abstractEnhanced = abstractEnhanced.replace(
-          // /^([A-Z]+): /g,
-          /\n([A-Z]+): /g,
-          `\n\n##### $1\n\n`
-        );
-        // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
-        const md = new MarkdownIt();
-        const mdRendered = md.render(abstractEnhanced);
-        this.entrezResult.abstractMarkdown = mdRendered;
-        // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
+          let abstractEnhanced = this.entrezResult.abstract;
+          abstractEnhanced = abstractEnhanced.replace(
+            // /^([A-Z]+): /g,
+            /\n([A-Z]+): /g,
+            `\n\n##### $1\n\n`
+          );
+          // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
+          const md = new MarkdownIt();
+          const mdRendered = md.render(abstractEnhanced);
+          this.entrezResult.abstractMarkdown = mdRendered;
+          // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
+        }
       }
 
       if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
         const geneInfo = await MyGene.getGeneDescription(this.nodeId);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
-          nodeSummary.geneLabel = `${hit.name}/${hit.symbol}`;
-          nodeSummary.geneSymbol = `${hit.name}/${hit.symbol}`;
-          nodeSummary.geneDescription = hit.summary;
+          if (nodeSummary.description) {
+            console.log('Overriding nodeSummary.description with hit.summary', nodeSummary.description, hit.summary);
+          }
+
+          nodeSummary.description = hit.summary;
+
           nodeSummary.geneInfo = geneInfo;
+          if (!nodeSummary.synonyms) {
+            nodeSummary.synonyms = [];
+          }
+          nodeSummary.synonyms.unshift({
+            val: hit.name,
+            pred: 'synonym',
+            xrefs: null,
+          });
+          // console.log('nodeSummary.synonyms');
+          // console.log(JSON.stringify(nodeSummary.synonyms, null, 2));
         }
       }
 

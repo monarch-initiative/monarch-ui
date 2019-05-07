@@ -130,6 +130,15 @@
             class="btn btn-xs px-1 py-0 m-0"
             variant="outline-info">
             <span
+              v-if="data.item._showDetails">
+              &blacktriangledown;&nbsp;
+            </span>
+            <span
+              v-else>
+              &blacktriangleright;&nbsp;
+            </span>
+
+            <span
               v-for="(icon, index) in data.item.supportIcons"
               :key="index"
             >
@@ -737,8 +746,9 @@ export default {
   table.b-table row.b-table-details
   {
   }
+
   a {
-    color: #404040;
+    color: darken($link_color, 20%);
   }
 
   .main-font {
