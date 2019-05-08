@@ -161,7 +161,7 @@ export default {
   },
   computed: {
     neighborhoodDisabled() {
-      return this.superclasses.length === 0 && this.subclasses.length === 0;
+      return (!this.superclasses || this.superclasses.length === 0) && (!this.subclasses || this.subclasses.length === 0);
     },
     debugServerURL() {
       const debugHash = (this.$route.hash.length > 1)

@@ -126,6 +126,10 @@
             Disease: neuronopathy, distal hereditary motor, type 5A MONDO:0010935
           </b-dropdown-item>
 
+          <b-dropdown-item
+            to="/disease/OMIMPS:PS120435">
+            Disease: Colorectal cancer, hereditary nonpolyposis OMIMPS:PS120435 (no superclass)
+          </b-dropdown-item>
 
           <b-dropdown-item
             to="/gene/HGNC:11773">

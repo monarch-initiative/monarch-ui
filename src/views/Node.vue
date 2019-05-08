@@ -61,15 +61,16 @@
               <span
                 v-if="node.taxon && node.taxon.id"
                 class="node-label-taxon">
-                <em>{{ node.taxon.label }} ({{ node.taxon.id }})</em>
+                &nbsp;
+                <a
+                  :href="node.taxon.uri"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="node-label-id">
+                  <em>{{ node.taxon.label }}</em>
+                </a>
               </span>
-              <a
-                :href="node.uri"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="node-label-id">
-                {{ node.id }}
-              </a>
+              &nbsp;
 
 <!--
               <a
@@ -86,13 +87,14 @@
             <div
               class="node-synonyms">
               <span
-                v-for="s in synonyms"
-                :key="s.val"
+                v-for="(s, index) in synonyms"
+                :key="index"
                 class="synonym"
               >
-                {{ s.val }}
+                {{ s }}
               </span>
             </div>
+
           </div>
         </div>
 
@@ -111,7 +113,9 @@
           <div
             v-if="!expandedCard"
             class="row node-content-section">
-            <div class="col-12">
+            <div
+              v-if="node.description"
+              class="col-12">
               <div class="node-description">
                 {{ node.description }}
               </div>
@@ -143,30 +147,38 @@
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
+
             <div
-              class="col-12"
-              v-if="equivalentClasses && equivalentClasses.length > 0">
+              class="col-12">
+              <b>References:</b>&nbsp;
+              <span
+                v-for="(r, index) in references"
+                :key="index"
+                class="synonym"
+              >
+                <a
+                  :href="r.uri"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="node-label-id">
+                  {{ r.label }}
+                </a>
+              </span>
+            </div>
+
+            <div
+              v-if="equivalentClasses && equivalentClasses.length > 0"
+              class="col-12">
               <b>Equivalent IDs:</b>&nbsp;
 
               <span
-                v-for="r in equivalentClasses"
-                :key="r.id">
+                v-for="(r, index) in equivalentClasses"
+                :key="index">
                 <span>
                   {{ r.id }}&nbsp;
                 </span>
               </span>
             </div>
-<!--
-            <div class="col-12">
-              <b>URI:</b>&nbsp;
-              <a
-                :href="node.uri"
-                target="_blank"
-                rel="noopener noreferrer">
-                {{ node.uri }}
-              </a>
-            </div>
- -->
           </div>
 
           <div
@@ -347,6 +359,7 @@ export default {
       superclasses: null,
       subclasses: null,
       synonyms: null,
+      references: null,
       inheritance: null,
       modifiers: null,
       contentScript: '',
@@ -462,83 +475,6 @@ export default {
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
-    async applyResponse(response, neighborhood) {
-      // console.log('applyResponse', response);
-      const that = this;
-      this.node = response;
-      // this.nodeDebug = JSON.stringify(response, null, 2);
-
-      const taxons = {};
-      const selectedTaxons = {};
-      Object.keys(response.taxonCounts).forEach((key) => {
-        const entry = response.taxonCounts[key];
-        Object.keys(entry.taxons).forEach((taxon) => {
-          // console.log(key, taxon, entry.taxons[taxon]);
-          selectedTaxons[taxon] = true;
-          let taxonCount = taxons[taxon];
-          if (!taxonCount) {
-            taxonCount = 0;
-          }
-          else {
-            // console.log('prexisting taxons[taxon]', key, taxon, taxonCount);
-          }
-          taxons[taxon] = taxonCount + entry.taxons[taxon];
-        });
-      });
-      this.facetObject.taxons = taxons;
-      this.facetObject.selectedTaxons = selectedTaxons;
-
-      const nodeLabelMap = neighborhood.nodeLabelMap;
-      const equivalentClasses = neighborhood.equivalentClasses;
-      const superclasses = neighborhood.superclasses;
-      const subclasses = neighborhood.subclasses;
-      this.superclasses = us.map(us.uniq(superclasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));
-      this.subclasses = us.map(us.uniq(subclasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));
-      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));
-      // console.log('superclasses', this.superclasses);
-      // console.log('subclasses', this.subclasses);
-      // console.log('equivalentClasses', this.equivalentClasses);
-      // console.log('equivalentClasses', equivalentClasses);
-
-      this.synonyms = this.node.synonyms;
-      this.xrefs = this.node.xrefs;
-
-      if (this.node.inheritance) {
-        this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
-      }
-      if (this.node.clinical_modifiers) {
-        this.modifiers = this.node.clinical_modifiers.map(m => m.label).join(', ');
-      }
-
-      this.nodeCategory = this.node.categories
-        ? this.node.categories[0].toLowerCase()
-        : this.nodeType;
-      this.nodeIcon = this.icons[this.nodeCategory];
-      this.phenotypeIcon = this.icons.phenotype;
-      this.geneIcon = this.icons.gene;
-      this.modelIcon = this.icons.model;
-      this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
-
-      this.updateCounts();
-
-      const hash = this.$router.currentRoute.hash;
-      if (hash.length > 1) {
-        const cardType = hash.split('?')[0].slice(1);
-        this.$nextTick((_) => {
-          this.expandCard(cardType);
-        });
-      }
-    },
-
     updateCounts() {
       // console.log(JSON.stringify(Object.keys(this.node.association_counts), null, 2));
       // console.log(JSON.stringify(Object.keys(this.node.taxonCounts), null, 2));
@@ -592,6 +528,7 @@ export default {
       this.path = this.$route.path;
       this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
+
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;
       this.nodeError = null;
@@ -600,6 +537,8 @@ export default {
       this.nonEmptyCards = [];
       this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
+      this.inheritance = null;
+      this.modifiers = null;
 
       const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
       const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
@@ -610,6 +549,29 @@ export default {
           neighborhoodPromise
         ]
       );
+      this.node = nodeSummary;
+
+      if (this.node.synonyms) {
+        this.synonyms = this.node.synonyms.map(s => s.val);
+      }
+      else {
+        this.synonyms = [];
+      }
+
+      if (this.node.xrefs) {
+        this.references = this.node.xrefs.map(s => ({
+          label: s,
+          uri: s
+        }));
+      }
+      else {
+        this.references = [];
+      }
+      // We'll insert our node's id/uri as the first reference.
+      this.references.unshift({
+        label: this.node.id,
+        uri: this.node.uri
+      });
 
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
@@ -636,6 +598,13 @@ export default {
         }
       }
 
+      //
+      // Because Monarch doesn't ingest gene descriptions, we must
+      // asynchronously pull these from MyGene. In the future, BioLink
+      // may provide this data, either by ingest or by making the MyGene
+      // call from the BioLink server.
+      //
+
       if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
         const geneInfo = await MyGene.getGeneDescription(this.nodeId);
         const hit = geneInfo && geneInfo.hits[0];
@@ -647,20 +616,104 @@ export default {
           nodeSummary.description = hit.summary;
 
           nodeSummary.geneInfo = geneInfo;
-          if (!nodeSummary.synonyms) {
-            nodeSummary.synonyms = [];
+          if (this.synonyms.indexOf(hit.name) !== -1) {
+            this.synonyms.unshift(hit.name);
           }
-          nodeSummary.synonyms.unshift({
-            val: hit.name,
-            pred: 'synonym',
-            xrefs: null,
-          });
-          // console.log('nodeSummary.synonyms');
-          // console.log(JSON.stringify(nodeSummary.synonyms, null, 2));
         }
       }
 
-      this.applyResponse(nodeSummary, neighborhood);
+      //
+      // If there a taxon for the current node, then build
+      // a nice URL
+      //
+      const ncbiTaxonPrefix = 'NCBITaxon:';
+      if (this.node.taxon &&
+          this.node.taxon.id &&
+          this.node.taxon.id.indexOf(ncbiTaxonPrefix) === 0) {
+        const taxonNumber = this.node.taxon.id.slice(ncbiTaxonPrefix.length);
+        this.node.taxon.uri = `https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=info&id=${taxonNumber}`;
+      }
+
+      //
+      // Build the information needed to populate the taxon facet
+      // component.
+      //
+
+      const taxons = {};
+      const selectedTaxons = {};
+      Object.keys(nodeSummary.taxonCounts).forEach((key) => {
+        const entry = nodeSummary.taxonCounts[key];
+        Object.keys(entry.taxons).forEach((taxon) => {
+          // console.log(key, taxon, entry.taxons[taxon]);
+          selectedTaxons[taxon] = true;
+          let taxonCount = taxons[taxon];
+          if (!taxonCount) {
+            taxonCount = 0;
+          }
+          else {
+            // console.log('prexisting taxons[taxon]', key, taxon, taxonCount);
+          }
+          taxons[taxon] = taxonCount + entry.taxons[taxon];
+        });
+      });
+      this.facetObject.taxons = taxons;
+      this.facetObject.selectedTaxons = selectedTaxons;
+
+
+      //
+      // Build out the superclass/subclass/equivclass lists from
+      // the info provided by getNeighborhood()
+      //
+      const nodeLabelMap = neighborhood.nodeLabelMap;
+      const equivalentClasses = neighborhood.equivalentClasses;
+      const superclasses = neighborhood.superclasses;
+      const subclasses = neighborhood.subclasses;
+      this.superclasses = us.map(us.uniq(superclasses), c => ({
+        id: c,
+        label: nodeLabelMap[c]
+      }));
+      this.subclasses = us.map(us.uniq(subclasses), c => ({
+        id: c,
+        label: nodeLabelMap[c]
+      }));
+      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
+        id: c,
+        label: nodeLabelMap[c]
+      }));
+
+      if (this.node.inheritance) {
+        this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
+      }
+      if (this.node.clinical_modifiers) {
+        this.modifiers = this.node.clinical_modifiers.map(m => m.label).join(', ');
+      }
+
+      this.nodeCategory = this.node.categories
+        ? this.node.categories[0].toLowerCase()
+        : this.nodeType;
+      this.nodeIcon = this.icons[this.nodeCategory];
+      this.phenotypeIcon = this.icons.phenotype;
+      this.geneIcon = this.icons.gene;
+      this.modelIcon = this.icons.model;
+      this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
+
+      //
+      // Update all the node counts based upon the taxon facets,
+      // although initially this will be all taxons.
+      //
+      this.updateCounts();
+
+      //
+      // If we got here via someone specifying a cardType in the
+      // URL hash, then expand that cardType.
+      //
+      const hash = this.$router.currentRoute.hash;
+      if (hash.length > 1) {
+        const cardType = hash.split('?')[0].slice(1);
+        this.$nextTick((_) => {
+          this.expandCard(cardType);
+        });
+      }
     }
   }
 };
@@ -673,7 +726,7 @@ export default {
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;
 $sidebar-button-width: 32px;
-$title-bar-height: 80px;
+$title-bar-max-height: 100px;
 $line-height-compact: 1.3em;
 
 .overlay {
@@ -690,7 +743,7 @@ $line-height-compact: 1.3em;
 }
 
 .container-fluid.node-container {
-  margin-top: $title-bar-height;
+  margin-top: $title-bar-max-height;
   xpadding: 0;
   transition: all 0.3s;
   width: 100%;
@@ -701,11 +754,12 @@ $line-height-compact: 1.3em;
   }
 }
 
-
 .node-container .node-description {
-  margin: 0;
-  padding: 5px 5px;
+  margin: 0 -5px;
+  padding: 10px 5px;
   line-height: $line-height-compact;
+  border-radius: 5px;
+  background: mintcream;
 }
 
 .wrapper {
@@ -733,11 +787,11 @@ div.container-cards .node-cards-section {
 }
 
 .title-bar {
-  border-bottom:1px solid lightgray;
+  border-bottom: 1px solid lightgray;
   background: aliceblue;
   position: fixed;
-  height: $title-bar-height;
-  max-height: $title-bar-height;
+  min-height: ($title-bar-max-height * 3/4);
+  max-height: $title-bar-max-height;
   overflow-y: auto;
   xfont-size: 1.0em;
   line-height: $line-height-compact;
@@ -753,7 +807,8 @@ div.container-cards .node-cards-section {
 
 .title-bar .node-synonyms {
   line-height: 1.0em;
-  margin: 0;
+  margin: 5px;
+  padding: 0 5px;
 }
 
 .title-bar .synonym {
@@ -782,6 +837,7 @@ div.publication-abstract {
   margin: 0;
   padding: 10px;
 }
+
 @media (max-width: $sidebar-collapse-width) {
   div.container-cards {
     margin-left: $collapsed-sidebar-width;

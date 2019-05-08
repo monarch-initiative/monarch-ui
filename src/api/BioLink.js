@@ -101,12 +101,12 @@ export async function getNode(nodeId, nodeType) {
   // }
 
   const params = {
-    fetch_objects: true,
-    unselect_evidence: false,
-    exclude_automatic_assertions: false,
+    fetch_objects: false,
+    unselect_evidence: true,
+    exclude_automatic_assertions: true,
     use_compact_associations: false,
     get_association_counts: true,
-    rows: 100
+    rows: 1
   };
 
   //
@@ -140,6 +140,8 @@ export async function getNode(nodeId, nodeType) {
   ).then(
     axios.spread(
       function response(bioentityResp, getIdentifierResp, golrResponse1, golrResponse2) {
+        // console.log('bioentityResp');
+        // console.log(JSON.stringify(bioentityResp.data, null, 2));
         // console.log('golrResponse1');
         // console.log(JSON.stringify(golrResponse1.data, null, 2));
         // console.log('golrResponse2');
@@ -188,17 +190,11 @@ export async function getNode(nodeId, nodeType) {
             });
           }
         });
-        // console.log(JSON.stringify(taxonCounts, null, 2));
 
         const bioentityResponseData = bioentityResp.data;
 
         if (!bioentityResponseData.xrefs) {
           bioentityResponseData.xrefs = [
-            {
-              'url': '',
-              'label': 'BioLink:FIXME/xrefs',
-              'blank': false
-            }
           ];
         }
 
@@ -254,51 +250,53 @@ export async function getNeighborhood(nodeId, nodeType) {
     rows: 100
   };
 
-  if (nodeType !== 'gene' && nodeType !== 'variant') {
-    const graphResponse = await axios.get(graphUrl, { params });
-    const graphResponseData = graphResponse.data;
+  const graphResponse = await axios.get(graphUrl, { params });
+  const graphResponseData = graphResponse.data;
 
-    // console.log('getNeighborhood', nodeId, graphUrl);
-    // console.log(JSON.stringify(graphResponseData, null, 2));
+  // console.log('getNeighborhood', nodeId, graphUrl);
+  // console.log(JSON.stringify(graphResponseData, null, 2));
 
-    if (graphResponseData.nodes) {
-      graphResponseData.nodes.forEach((node) => {
-        nodeLabelMap[node.id] = node.lbl;
-      });
-    }
-    if (graphResponseData.edges) {
-      graphResponseData.edges.forEach((edge) => {
-        if (edge.pred === 'subClassOf') {
-          if (edge.sub === nodeId) {
-            // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
-            if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
-              superclasses.push(edge.obj);
-            }
-          }
-          else if (edge.obj === nodeId) {
-            // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
-            subclasses.push(edge.sub);
-          }
-          else {
-            // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
+  if (graphResponseData.nodes) {
+    graphResponseData.nodes.forEach((node) => {
+      nodeLabelMap[node.id] = node.lbl;
+    });
+  }
+  if (graphResponseData.edges) {
+    graphResponseData.edges.forEach((edge) => {
+      if (edge.pred === 'subClassOf') {
+        if (edge.sub === nodeId) {
+          // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
+          if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
+            superclasses.push(edge.obj);
           }
         }
-        else if (edge.pred === 'equivalentClass') {
-          // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
-
-          if (edge.sub === nodeId) {
-            // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
-          }
-          else {
-            equivalentClasses.push(edge.sub);
-          }
+        else if (edge.obj === nodeId) {
+          // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
+          subclasses.push(edge.sub);
         }
         else {
-          console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
-          console.log(JSON.stringify(edge, null, 2));
+          // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
         }
-      });
-    }
+      }
+      else if (edge.pred === 'equivalentClass') {
+        // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
+
+        if (edge.sub === nodeId) {
+          // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
+        }
+        else {
+          equivalentClasses.push(edge.sub);
+        }
+      }
+      else {
+        console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
+        console.log(JSON.stringify(edge, null, 2));
+      }
+    });
+  }
+  if (nodeType === 'gene' || nodeType === 'variant') {
+    superclasses.length = 0;
+    subclasses.length = 0;
   }
 
   return {
