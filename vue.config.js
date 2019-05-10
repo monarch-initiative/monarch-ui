@@ -25,12 +25,11 @@ mdLoaderPlain.raw = true;
 mdLoaderPlain.wrapper = 'div';
 mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
-// const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/index.js');
-// const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css');
 const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/GenomeFeatureViewer.css');
 
 const vueConfig = {
+  runtimeCompiler: true,
   // outputDir: 'dist',
   publicPath: baseURL,
 
@@ -47,6 +46,8 @@ const vueConfig = {
   configureWebpack: {
     resolve: {
       alias: {
+        // https://vuejs.org/v2/guide/installation.html#Runtime-Compiler-vs-Runtime-only
+        'vue$': 'vue/dist/vue.common.js',
         'GenomeFeatureViewer': GenomeFeatureViewer,
         'GenomeFeatureViewerCSS': GenomeFeatureViewerCSS,
         'esprima$': path.join(__dirname, 'src/NOP.js'),

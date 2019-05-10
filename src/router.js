@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
-// import Analytics from './views/Analytics.vue';
 import Node from './views/Node.vue';
 
 Vue.use(Router);
@@ -62,7 +61,7 @@ const router = new Router({
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "analytics" */ './views/Search.vue'),
+      component: () => import(/* webpackChunkName: "search" */ './views/Search.vue'),
     },
     {
       path: '/analyze/phenotypes',
@@ -89,6 +88,23 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "MonarchLegacy" */ './views/MonarchLegacy.vue'),
     },
   ],
+
+  // https://router.vuejs.org/guide/advanced/scroll-behavior.html
+  scrollBehavior(to, from, savedPosition) {
+    let result = { x: 0, y: 0 };
+
+    if (savedPosition) {
+      result = savedPosition;
+    }
+    else if (to.hash) {
+      result = {
+        selector: to.hash
+        // , offset: { x: 0, y: 10 }
+      };
+    }
+
+    return result;
+  }
 });
 
 // https://stackoverflow.com/a/47195471/5667222

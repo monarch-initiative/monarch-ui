@@ -110,7 +110,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row mx-3">
           <!--
           <div
             v-if="suggestions.length && !singleCategory"
@@ -122,9 +122,9 @@
  -->
           <div
             v-if="suggestions.length === 0"
-            class="btn col m-2"
+            class="col border"
           >
-            No results for '{{ value }}'
+            <b>No results for '{{ value }}'</b>
           </div>
           <!--
           <div
@@ -169,7 +169,7 @@ const exampleSearches = [
   },
   {
     searchString: 'Multicystic kidney dysplasia',
-    category: 'Phenotype'
+    category: 'phenotype'
   },
   {
     searchString: 'Shh',
@@ -278,7 +278,7 @@ export default {
         },
         {
           text: 'Phenotype',
-          value: 'Phenotype',
+          value: 'phenotype',
         },
         {
           text: 'Disease',
@@ -294,7 +294,9 @@ export default {
     debounceInput: debounce(
       function debounceInput() {
         if (!this.destroying) {
-          this.fetchData();
+          if (this.value && this.value.length > 0) {
+            this.fetchData();
+          }
         }
       }, 500, { leading: false, trailing: true }
     ),
@@ -400,7 +402,7 @@ export default {
       const validCats = {
         'gene': 'gene',
         'variant': 'variant',
-        'Phenotype': 'phenotype',
+        'phenotype': 'phenotype',
         'genotype': 'genotype',
         'disease': 'disease'
       };

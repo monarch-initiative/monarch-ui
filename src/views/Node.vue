@@ -72,7 +72,7 @@
               </span>
               &nbsp;
 
-<!--
+              <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
                 :href="entrezResult.abstractURL"
@@ -81,7 +81,7 @@
                 class="node-label-id">
                 Entrez: {{ node.id }}
               </a>
- -->
+             -->
             </div>
 
             <div

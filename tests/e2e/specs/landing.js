@@ -37,8 +37,8 @@ module.exports = {
       .assert.containsText('.monarch-home-view .monarch-autocomplete .test-input-dropdown', 'anosmia for butyl mercaptan')
       .click('.monarch-home-view .monarch-autocomplete .test-input-dropdown .test-input-dropdown-option')
       .waitForElementVisible('.node-content-section', 5000)
-      .assert.containsText('.node-description', 'Loss of or impaired ability to smell')
-      .assert.containsText('.node-synonyms', 'anosmia')
+      .assert.containsText('.node-description', 'An inability to perceive odors. This is a general term describing inability to smell arising in any part of the process of smelling from absorption of odorants into the nasal mucous overlying the olfactory epithelium, diffusion to the cilia, binding to olfactory receptor sites, generation of action potentials in olfactory neurons, and perception of a smell.')
+      .assert.containsText('.node-synonyms', 'Lost smell')
       .end();
   },
 };

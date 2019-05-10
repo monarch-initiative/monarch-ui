@@ -56,8 +56,10 @@
             class="memberpicture"
             v-bind:src="member.picture"/>
           <div class="clear"></div>
-          <div class="memberbio">
-            {{ member.bio }}
+          <div
+            v-if="member.bio"
+            v-bind:is="markdownToComponent(member.bio)"
+            class="memberbio">
           </div>
           <!--
           <div class="membercontact">
@@ -73,6 +75,43 @@
   </div>
   <team-footer></team-footer>
 </div>
+
+
+<script>
+import getTeam from '@/api/Team';
+import MarkdownIt from 'markdown-it';
+import { applyLinkHandlers } from '../lib/markdown';
+
+export default {
+  components: {
+    'team-footer': require('@/components/Footer.md').default,
+  },
+  data() {
+    return {
+      institutions: [],
+      markdown: null,
+      inRouterLink: false,
+    };
+  },
+  created() {
+    const parser = new MarkdownIt();
+    this.markdown = parser;
+
+    applyLinkHandlers(parser);
+  },
+  async mounted() {
+    this.institutions = (await getTeam()).institutions;
+  },
+  methods: {
+    markdownToComponent(source) {
+      const rendered = this.markdown.render(source || '');
+      return {
+        template: `<div>${rendered}</div>`,
+      };
+    },
+  }
+};
+</script>
 
 
 <style lang="scss">
@@ -188,22 +227,3 @@
 }
 
 </style>
-
-
-<script>
-import getTeam from '@/api/Team';
-
-export default {
-  components: {
-    'team-footer': require('@/components/Footer.md').default,
-  },
-  data() {
-    return {
-      institutions: [],
-    };
-  },
-  async mounted() {
-    this.institutions = (await getTeam()).institutions;
-  }
-};
-</script>
