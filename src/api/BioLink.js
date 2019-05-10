@@ -307,11 +307,6 @@ export async function getNeighborhood(nodeId, nodeType) {
   };
 }
 
-
-function categoryKludge(category) {
-  return category === 'phenotype' ? 'Phenotype' : category;
-}
-
 const categoriesAll = [
   'gene',
   'variant',
@@ -346,7 +341,7 @@ export async function getSearchResults(query, start, rows, categories, prefixes)
   }
 
   categoriesLocal.forEach((elem) => {
-    params.append('category', categoryKludge(elem));
+    params.append('category', elem);
   });
 
   const bioentityResp = await axios.get(bioentityUrl, { params });
@@ -385,7 +380,7 @@ export async function getSearchTermSuggestions(term, categories, prefixes) {
   }
 
   categoriesLocal.forEach((elem) => {
-    params.append('category', categoryKludge(elem));
+    params.append('category', elem);
   });
 
   if (categoriesLocal.indexOf('gene') >= 0) {

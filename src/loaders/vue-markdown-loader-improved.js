@@ -34,6 +34,9 @@ var cheerio = require('cheerio');
 var markdown = require('markdown-it');
 const mia = require('markdown-it-anchor');
 
+const monarchMarkdown = require('../lib/markdown');
+const applyLinkHandlers = monarchMarkdown.applyLinkHandlers;
+
 var Token = require('markdown-it/lib/token');
 
 // https://github.com/valeriangalliat/markdown-it-anchor#usage
@@ -120,7 +123,8 @@ module.exports = function(source) {
 
   if (typeof opts.render === 'function') {
     parser = opts;
-  } else {
+  }
+  else {
     opts = Object.assign(
       {
         preset: 'default',
@@ -141,24 +145,18 @@ module.exports = function(source) {
     parser = markdown(opts.preset, opts);
     parser.use(mia, miaOptions);
 
+    applyLinkHandlers(parser);
+    /*
     // https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
     // Remember old renderer, if overriden, or proxy to default renderer
-    const defaultRender = parser.renderer.rules.link_open || function defaultRender(tokens, idx, options, env, self) {
+    const defaultRenderLinkOpen = parser.renderer.rules.link_open || function defaultRenderLinkOpen(tokens, idx, options, env, self) {
+      return self.renderToken(tokens, idx, options);
+    };
+    const defaultRenderLinkClose = parser.renderer.rules.link_close || function defaultRenderLinkClose(tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options);
     };
 
     let inRouterLink = false;
-
-    parser.renderer.rules.link_close = function link(tokens, idx, options, env, self) {
-      let result = defaultRender(tokens, idx, options, env, self);
-      if (inRouterLink) {
-        inRouterLink = false;
-        result = '</router-link>';
-      }
-
-      return result;
-    };
-
 
     parser.renderer.rules.link_open = function link(tokens, idx, options, env, self) {
       // pass token to default renderer.
@@ -209,11 +207,22 @@ module.exports = function(source) {
       }
 
       if (!result) {
-        result = defaultRender(tokens, idx, options, env, self);
+        result = defaultRenderLinkOpen(tokens, idx, options, env, self);
       }
 
       return result;
     };
+
+    parser.renderer.rules.link_close = function link(tokens, idx, options, env, self) {
+      let result = defaultRenderLinkClose(tokens, idx, options, env, self);
+      if (inRouterLink) {
+        inRouterLink = false;
+        result = '</router-link>';
+      }
+
+      return result;
+    };
+    */
 
     //add ruler:extract script and style tags from html token content
     !preventExtract &&

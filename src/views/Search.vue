@@ -32,6 +32,7 @@
           <div v-if="searchResults && searchResults.length > 0 ">
             <h3><span class="searchTerm">{{ query }}</span>  has <span class="searchTerm">{{ numFound }}</span> matches</h3>
             <b-table
+              ref="results-table"
               :fields="fields"
               :items="rowsProvider"
               :current-page="currentPage"
@@ -87,7 +88,7 @@ export default {
       user_facets: {},
       results: [],
       highlight: {},
-      searchResults: {},
+      searchResults: [],
       currentPage: 1,
       rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       numFound: 0,
@@ -102,13 +103,23 @@ export default {
       ]
     };
   },
-  mounted() {
-    this.query = this.$route.params.query;
-    // const start = this.$route.params.start ? this.$route.params.start : 0;
-    this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : DEFAULT_ROWS_PER_PAGE;
-    this.search();
+  watch: {
+    '$route': function $route(to, from) {
+      this.searchViaRouteParams();
+      this.$refs['results-table'].refresh();
+    }
   },
+  mounted() {
+    this.searchViaRouteParams();
+  },
+
   methods: {
+    searchViaRouteParams() {
+      this.query = this.$route.params.query;
+      // const start = this.$route.params.start ? this.$route.params.start : 0;
+      this.rowsPerPage = this.$route.params.rows ? this.$route.params.rows : DEFAULT_ROWS_PER_PAGE;
+      this.search();
+    },
     rowsProvider(ctx, callback) {
       // const start = ((this.currentPage - 1) * this.rowsPerPage);
       this.search().then((data) => {
@@ -123,11 +134,11 @@ export default {
         const start = ((this.currentPage - 1) * this.rowsPerPage);
         // this.query, start, this.rowsPerPage
         const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage);
-        this.searchResults = [];
+        this.searchResults.length = 0;
         this.searchParams = {};
         this.searchFacets = {};
         this.numFound = searchResponse.numFound;
-        // console.log('HLS', searchResponse.highlighting);
+        // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
         searchResponse.docs.forEach((elem, index) => {
           const highlight = searchResponse.highlighting[elem.id];
           const resultPacket = {

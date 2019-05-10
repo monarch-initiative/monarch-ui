@@ -133,26 +133,6 @@ We are proud to work with several organizations to develop ontologies, drive com
 | [![](../assets/img/partner-phenomecentral.png)](http://phenomecentral.org) | [![](../assets/img/partner-biolark.png)](http://bio-lark.org) | [![](../assets/img/partner-go.png)](www.geneontology.org) |
 | [![PhenoTips](../assets/img/partner-phenotips.jpg)](https://phenotips.org) | [![Disease Ontology](../assets/img/partner-do.png)](https:www.disease-ontology.org) | [![Force11](../assets/img/partner-force11.png)](https://www.force11.org)
 
-<!--
-<table class="collab-table">
-  <tr>
-    <td><a href="http://www.rarediseases.info.nih.gov/research/pages/27/undiagnosed-diseases-program"><img src="../assets/img/partner-udp.png" alt="NIH Undiagnosed Disease Program"></a></td>
-    <td><a href="http://genomicsandhealth.org/"><img src="../assets/img/partner-globalalliance.jpg" alt="Global Alliance"></a></td>
-    <td><a href="http://www.irdirc.org/"><img src="../assets/img/partner-irdirc.png" alt="International Rare Diseases Research Consoritum"></a></td>
-  </tr>
-  <tr>
-    <td><a href="http://phenomecentral.org"><img src="../assets/img/partner-phenomecentral.png" alt="Phenome Central"></a></td>
-    <td><a href="http://bio-lark.org/"><img src="../assets/img/partner-biolark.png" alt="BioLARK"></a></td>
-    <td><a href="http://www.geneontology.org"><img src="../assets/img/partner-go.png" alt="Gene Ontology"></a></td>
-  </tr>
-  <tr>
-    <td><a href="https://phenotips.org/"><img src="../assets/img/partner-phenotips.jpg" alt="PhenoTips"></a></td>
-    <td><a href="http://www.disease-ontology.org"><img src="../assets/img/partner-do.png" alt="Disease Ontology"></a></td>
-    <td><a href="https://www.force11.org"><img src="../assets/img/partner-force11.png" alt="Force11"></a></td>
-  </tr>
-</table> -->
-
-
 <about-footer></about-footer>
 </div>
 
@@ -221,25 +201,6 @@ We are proud to work with several organizations to develop ontologies, drive com
     }
   }
 
-/*
-  .collab-table {
-    table-layout: fixed;
-    width: 100%;
-  }
-
-  .collab-table td {
-    width: 125px;
-    vertical-align: middle;
-    text-align: center;
-  }
-
-  .collab-table img {
-    margin-left: auto;
-    margin-right: auto;
-    max-height: 125px;
-    max-width: 125px;
-  }
-*/
 }
 
 </style>

@@ -2,12 +2,11 @@
   <div
     class="assoc-table">
     <div
-      v-if="dataError">
+      v-if="dataError"
+      class="border p-2 m-2">
       <h3>BioLink Error</h3>
-      <div class="row">
-        <div class="col-xs-12 pre-scrollable">
-          <b><i>{{ dataError }}</i></b>
-        </div>
+      <div class="col-xs-12">
+        {{ dataError }}
       </div>
     </div>
 
