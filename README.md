@@ -14,6 +14,15 @@ If the above command fails or if it reports a version number significantly diffe
 
 ### Project setup
 
+Clone this repo:
+```
+git clone https://github.com/monarch-initiative/monarch-ui
+```
+Go into the directory that has your newly cloned copy of this repo:
+```
+cd monarch-ui
+```
+Then you can run the installation setup:
 ```
 npm install
 ```
