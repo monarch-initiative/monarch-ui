@@ -18,51 +18,88 @@
         </div>
       </header>
 
-      <div class="col-xs-12 col-md-9">
-        <b-pagination
-          :total-rows="numFound"
-          :per-page="rowsPerPage"
-          v-model="currentPage"
-          responsive="true"
-          class="table-sm table-border-soft mt-2"
-          size="md"
-        />
-        <div class="search-results-rows">
+      <div class="row">
+        <div
+          class="container col-md-3"
+          style="margin-top: 60px;"
+        >
+          <div class="b-row">
+            <ul class="showFacetLinks  col-md-12">
+              <li v-for="(value,propertyName) of facetCategories">
+                <a
+                  href="javascript:"
+                  @click="selectCategory(propertyName)">
+                  {{ propertyName }}
+                  <div class="pull-right">
+                    {{ value }}
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div class="b-row">
+            <ul class="showFacetLinks  col-md-12">
+              <li v-for="(value,propertyName) of facetTaxons ">
+                <a
+                        href="javascript:"
+                  @click="selectTaxon(propertyName)">
+                  {{ propertyName }}
+                  <div class="pull-right">
+                    {{ value }}
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <b-pagination
+            :total-rows="numFound"
+            :per-page="rowsPerPage"
+            v-model="currentPage"
+            responsive="true"
+            class="table-sm table-border-soft mt-2"
+            size="md"
+          />
+          <div class="search-results-rows">
 
-          <div v-if="searchResults && searchResults.length > 0 ">
-            <h3><span class="searchTerm">{{ query }}</span>  has <span class="searchTerm">{{ numFound }}</span> matches</h3>
-            <b-table
-              ref="results-table"
-              :fields="fields"
-              :items="rowsProvider"
-              :current-page="currentPage"
-              :per-page="rowsPerPage"
-              striped
-              responsive="true"
-              class="table-sm table-border-soft test-search-results-table"
-              hover>
-              <template
-                slot="label"
-                slot-scope="row"
-              >
-                <router-link :to="row.item.toLink">
-                  {{ row.item.label }}
-                </router-link>
-              </template>
-              <template
-                slot="highlight"
-                slot-scope="row"
-              >
-                <span v-html="row.item.highlight"/>
-              </template>
-            </b-table>
+            <div v-if="searchResults && searchResults.length > 0 ">
+              <h3><span class="searchTerm">{{ query }}</span> has <span
+                class="searchTerm">{{ numFound }}</span> matches</h3>
+              <b-table
+                ref="results-table"
+                :fields="fields"
+                :items="rowsProvider"
+                :current-page="currentPage"
+                :per-page="rowsPerPage"
+                striped
+                responsive="true"
+                class="table-sm table-border-soft test-search-results-table"
+                hover>
+                <template
+                  slot="label"
+                  slot-scope="row"
+                >
+                  <router-link :to="row.item.toLink">
+                    {{ row.item.label }}
+                  </router-link>
+                </template>
+                <template
+                  slot="highlight"
+                  slot-scope="row"
+                >
+                  <span v-html="row.item.highlight"/>
+                </template>
+              </b-table>
+            </div>
           </div>
         </div>
 
         <monarch-footer/>
       </div>
     </div>
-</div></template>
+  </div>
+</template>
 
 
 <script>
@@ -96,10 +133,22 @@ export default {
       selenium_id: '',
       searching: true,
       fields: [
-        { key: 'label', label: 'Term' },
-        { key: 'category', label: 'Category' },
-        { key: 'taxon', label: 'Taxon' },
-        { key: 'highlight', label: 'Matching String' },
+        {
+          key: 'label',
+          label: 'Term'
+        },
+        {
+          key: 'category',
+          label: 'Category'
+        },
+        {
+          key: 'taxon',
+          label: 'Taxon'
+        },
+        {
+          key: 'highlight',
+          label: 'Matching String'
+        },
       ]
     };
   },
@@ -114,6 +163,12 @@ export default {
   },
 
   methods: {
+    selectTaxon(taxon) {
+      alert('taxon' + taxon);
+    },
+    selectCategory(category) {
+      console.log(category,this.query)
+    },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
       // const start = this.$route.params.start ? this.$route.params.start : 0;
@@ -122,11 +177,13 @@ export default {
     },
     rowsProvider(ctx, callback) {
       // const start = ((this.currentPage - 1) * this.rowsPerPage);
-      this.search().then((data) => {
-        callback(this.searchResults);
-      }).catch((error) => {
-        callback([]);
-      });
+      this.search()
+        .then((data) => {
+          callback(this.searchResults);
+        })
+        .catch((error) => {
+          callback([]);
+        });
     },
     async search() {
       try {
@@ -135,8 +192,11 @@ export default {
         // this.query, start, this.rowsPerPage
         const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage);
         this.searchResults.length = 0;
-        this.searchParams = {};
-        this.searchFacets = {};
+        // this.searchParams = {};
+        this.facetCategories = searchResponse.facet_counts.category;
+        this.facetTaxons = searchResponse.facet_counts.taxon_label;
+        console.log('search categoreies ', this.facetCategories);
+        console.log('search taxons ', this.facetTaxons);
         this.numFound = searchResponse.numFound;
         // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
         searchResponse.docs.forEach((elem, index) => {
@@ -270,5 +330,9 @@ export default {
 
     .searchTerm {
         color: #d9534f;
+    }
+
+    .showFacetLinks {
+        list-style: none;
     }
 </style>
