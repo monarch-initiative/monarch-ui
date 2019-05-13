@@ -21,8 +21,22 @@
       <div class="row">
         <div
           class="container col-md-3"
-          style="margin-top: 60px;"
         >
+          <div
+            v-if="categoryFilters.length>0 || taxonFilters.length>0"
+            class="b-row card" >
+            <div class="card-header">
+              Filters
+            </div>
+            <div
+              v-for="category in categoryFilters"
+              href="javascript:;"
+              class="b-row">
+              {{ category }}
+              <button @click="removeCategoryFilter(category)">X</button>
+            </div>
+
+          </div>
           <div class="b-row">
             <ul class="showFacetLinks  col-md-12">
               <li v-for="(value,propertyName) of facetCategories">
@@ -129,6 +143,7 @@ export default {
       currentPage: 1,
       rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       categoryFilters: [],
+      taxonFilters: [],
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -168,13 +183,12 @@ export default {
       alert('taxon' + taxon);
     },
     addCategoryFilter(category) {
-      // alert('category' + category);
       this.categoryFilters.push(category);
       this.search();
     },
     removeCategoryFilter(category) {
-      // alert('category' + category);
-      this.categoryFilters.remove(category);
+      this.categoryFilters = this.categoryFilters.filter(c => c !== category);
+      this.search();
     },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
