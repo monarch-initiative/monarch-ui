@@ -185,10 +185,12 @@ export default {
     addCategoryFilter(category) {
       this.categoryFilters.push(category);
       this.search();
+      this.$refs['results-table'].refresh();
     },
     removeCategoryFilter(category) {
       this.categoryFilters = this.categoryFilters.filter(c => c !== category);
       this.search();
+      this.$refs['results-table'].refresh();
     },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
