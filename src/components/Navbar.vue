@@ -91,6 +91,12 @@
             Link To Us
           </b-dropdown-item>
           -->
+          <b-dropdown-item
+            href="https://medium.com/@MonarchInit"
+            target="_blank"
+          >
+            Blog
+          </b-dropdown-item>
 
           <b-dropdown-item
             to="/about/README">
@@ -99,7 +105,8 @@
 
           <b-dropdown-item
             href="https://github.com/monarch-initiative"
-            target="_blank">
+            target="_blank"
+          >
             GitHub Organization
           </b-dropdown-item>
 
