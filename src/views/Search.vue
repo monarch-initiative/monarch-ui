@@ -227,7 +227,7 @@ export default {
         // let start = page
         const start = ((this.currentPage - 1) * this.rowsPerPage);
         // this.query, start, this.rowsPerPage
-        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters);
+        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters,this.taxonFilters);
         this.searchResults.length = 0;
         // this.searchParams = {};
         this.facetCategories = searchResponse.facet_counts.category;
