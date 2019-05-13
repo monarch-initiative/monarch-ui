@@ -63,21 +63,11 @@ institutions:
           - [external link](https://en.wikipedia.org/wiki/Monarch_butterfly)
           - [internal link with a hash](/about/monarch/#collaborations-and-partners)
           - [intrapage link with just a hash](#monarch-people-and-their-institutions)
-      - name: Tim Putman
-        picture: img/team/TimPutman.jpg
-        title: Bioinformatic Biologist
-        alumni: false
-        bio: Tim needs his bio to be filled out.
       - name: Tom Conlin
         picture: img/team/TomConlin.png
         title: Bioinformaticist
         alumni: false
         bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
-      - name: Lilly Winfree
-        picture: img/team/LillyWinfree.jpg
-        title: Science and Data Analyst
-        alumni: false
-        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
       - name: Anne E Thessen
         picture: img/team/AnneThessen.png
         title: Biodiversity Informaticist
@@ -86,12 +76,17 @@ institutions:
       - name: Shahim Essaid
         picture: img/team/ShahimEssaid.jpg
         title: Ontologist
-        alumni: true
+        alumni: false
         bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: true
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
+      - name: Lilly Winfree
+        picture: img/team/LillyWinfree.jpg
+        title: Science and Data Analyst
+        alumni: true
+        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.  
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
     logo: img/team/lbnl.jpeg
