@@ -70,7 +70,7 @@ institutions:
       bio: Tim needs his bio to be filled out.  
   - id: ohsu
     name: Oregon Health & Science University
-    logo: img/team/ohsu.gif
+    logo: img/team/ohsu.jpg
     website: http://ohsu.edu
     people:
       - name: Matthew Brush
