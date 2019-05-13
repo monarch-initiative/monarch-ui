@@ -167,7 +167,7 @@ export default {
       alert('taxon' + taxon);
     },
     selectCategory(category) {
-      console.log(category,this.query)
+      alert('category' + category);
     },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
