@@ -28,23 +28,40 @@
             <div class="card-header">
               Filters
             </div>
-            <div
-              v-for="category in categoryFilters"
-              href="javascript:;"
-              class="b-row">
-              {{ category }}
-              <button @click="removeCategoryFilter(category)">X</button>
+
+            <div v-if="categoryFilters.length>0">
+              <div class="offset-1 font-weight-bold">Categories</div>
+              <ul>
+                <li
+                  v-for="category in categoryFilters"
+                  href="javascript:;"
+                  class="b-row">
+                  {{ category }}
+                  <button
+                    class="fa fa-remove"
+                    @click="removeCategoryFilter(category)"/>
+                </li>
+              </ul>
             </div>
-            <div
-              v-for="taxon in taxonFilters"
-              href="javascript:;"
-              class="b-row">
-              {{ taxon }}
-              <button @click="removeTaxonFilter(taxon)">X</button>
+            <div v-if="taxonFilters.length>0">
+              <div class="offset-1 font-weight-bold">Taxa</div>
+              <ul>
+                <li
+                  v-for="taxon in taxonFilters"
+                  href="javascript:;"
+                  class="b-row">
+                  {{ taxon }}
+                  <button
+                    class="fa fa-remove"
+                    @click="removeTaxonFilter(taxon)"/>
+                </li>
+              </ul>
             </div>
 
           </div>
-          <div class="b-row card" style="margin-top: 20px">
+          <div
+            class="b-row card"
+            style="margin-top: 20px">
             <div class="card-header">
               Categories
             </div>
@@ -63,7 +80,9 @@
               </ul>
             </div>
           </div>
-          <div class="b-row card" style="margin-top: 20px">
+          <div
+            class="b-row card"
+            style="margin-top: 20px">
             <div class="card-header">
               Taxa
             </div>
