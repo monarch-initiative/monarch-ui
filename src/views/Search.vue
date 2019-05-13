@@ -161,6 +161,8 @@ export default {
       rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       categoryFilters: [],
       taxonFilters: [],
+      facetCategories: [],
+      facetTaxons: [],
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -242,8 +244,6 @@ export default {
         // this.searchParams = {};
         this.facetCategories = searchResponse.facet_counts.category;
         this.facetTaxons = searchResponse.facet_counts.taxon_label;
-        console.log('search categoreies ', this.facetCategories);
-        console.log('search taxons ', this.facetTaxons);
         this.numFound = searchResponse.numFound;
         // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
         searchResponse.docs.forEach((elem, index) => {
