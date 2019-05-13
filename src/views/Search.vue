@@ -28,7 +28,7 @@
               <li v-for="(value,propertyName) of facetCategories">
                 <a
                   href="javascript:"
-                  @click="selectCategory(propertyName)">
+                  @click="addCategoryFilter(propertyName)">
                   {{ propertyName }}
                   <div class="pull-right">
                     {{ value }}
@@ -41,8 +41,8 @@
             <ul class="showFacetLinks  col-md-12">
               <li v-for="(value,propertyName) of facetTaxons ">
                 <a
-                        href="javascript:"
-                  @click="selectTaxon(propertyName)">
+                  href="javascript:"
+                  @click="addTaxonFilter(propertyName)">
                   {{ propertyName }}
                   <div class="pull-right">
                     {{ value }}
@@ -128,6 +128,7 @@ export default {
       searchResults: [],
       currentPage: 1,
       rowsPerPage: DEFAULT_ROWS_PER_PAGE,
+      categoryFilters: [],
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -163,11 +164,17 @@ export default {
   },
 
   methods: {
-    selectTaxon(taxon) {
+    addTaxonFilter(taxon) {
       alert('taxon' + taxon);
     },
-    selectCategory(category) {
-      alert('category' + category);
+    addCategoryFilter(category) {
+      // alert('category' + category);
+      this.categoryFilters.push(category);
+      this.search();
+    },
+    removeCategoryFilter(category) {
+      // alert('category' + category);
+      this.categoryFilters.remove(category);
     },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
@@ -190,7 +197,7 @@ export default {
         // let start = page
         const start = ((this.currentPage - 1) * this.rowsPerPage);
         // this.query, start, this.rowsPerPage
-        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage);
+        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters);
         this.searchResults.length = 0;
         // this.searchParams = {};
         this.facetCategories = searchResponse.facet_counts.category;
