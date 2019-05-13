@@ -26,6 +26,17 @@ Then you can run the installation setup:
 ```
 npm install
 ```
+If you want to try changing things on the website and previewing your changes, you can run
+```
+npm run dev
+```
+That will print something like:
+```
+App running at:
+  - Local:   http://localhost:8081/ 
+  - Network: http://10.16.13.249:8081/
+```
+You can then open one of those URLs in your browser and it will show you what the website looks like (including any changes you made to your local version).
 
 ### Compiles and hot-reloads for development
 
