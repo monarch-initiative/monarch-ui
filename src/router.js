@@ -80,6 +80,12 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "analytics" */ './views/Analytics.vue'),
     },
     {
+      path: '/sources',
+      name: 'sources',
+      // Work done at Hackathon Seth Dan Nathan Chris
+      component: () => import(/* webpackChunkName: "analytics" */ './views/Sources.vue'),
+    },
+    {
       path: '/*',
       name: 'MonarchLegacy',
       // route level code-splitting
