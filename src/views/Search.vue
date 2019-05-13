@@ -35,6 +35,13 @@
               {{ category }}
               <button @click="removeCategoryFilter(category)">X</button>
             </div>
+            <div
+              v-for="taxon in taxonFilters"
+              href="javascript:;"
+              class="b-row">
+              {{ taxon }}
+              <button @click="removeTaxonFilter(taxon)">X</button>
+            </div>
 
           </div>
           <div class="b-row">
@@ -180,7 +187,14 @@ export default {
 
   methods: {
     addTaxonFilter(taxon) {
-      alert('taxon' + taxon);
+      this.taxonFilters.push(taxon);
+      this.search();
+      this.$refs['results-table'].refresh();
+    },
+    removeTaxonFilter(taxon) {
+      this.taxonFilters = this.taxonFilters.filter(c => c !== taxon);
+      this.search();
+      this.$refs['results-table'].refresh();
     },
     addCategoryFilter(category) {
       this.categoryFilters.push(category);
