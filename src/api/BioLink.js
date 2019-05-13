@@ -353,16 +353,7 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   }
 
   const bioentityResp = await axios.get(bioentityUrl, { params });
-  const data = bioentityResp.data;
-
-  // Debug code to detect entries without categories.
-  // data.docs.forEach((d) => {
-  //   if (!d.category) {
-  //     console.log('getSearchResults NO CATEGORY', d.id);
-  //   }
-  // });
-
-  return data;
+  return bioentityResp.data;
 }
 
 

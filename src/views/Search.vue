@@ -44,33 +44,43 @@
             </div>
 
           </div>
-          <div class="b-row">
-            <ul class="showFacetLinks  col-md-12">
-              <li v-for="(value,propertyName) of facetCategories">
-                <a
-                  href="javascript:"
-                  @click="addCategoryFilter(propertyName)">
-                  {{ propertyName }}
-                  <div class="pull-right">
-                    {{ value }}
-                  </div>
-                </a>
-              </li>
-            </ul>
+          <div class="b-row card" style="margin-top: 20px">
+            <div class="card-header">
+              Categories
+            </div>
+            <div class="card-body">
+              <ul class="showFacetLinks col-md-12">
+                <li v-for="(value,propertyName) of facetCategories">
+                  <a
+                    href="javascript:"
+                    @click="addCategoryFilter(propertyName)">
+                    {{ propertyName }}
+                    <div class="pull-right">
+                      {{ value }}
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="b-row">
-            <ul class="showFacetLinks  col-md-12">
-              <li v-for="(value,propertyName) of facetTaxons ">
-                <a
-                  href="javascript:"
-                  @click="addTaxonFilter(propertyName)">
-                  {{ propertyName }}
-                  <div class="pull-right">
-                    {{ value }}
-                  </div>
-                </a>
-              </li>
-            </ul>
+          <div class="b-row card" style="margin-top: 20px">
+            <div class="card-header">
+              Taxa
+            </div>
+            <div class="card-body">
+              <ul class="showFacetLinks  col-md-12">
+                <li v-for="(value,propertyName) of facetTaxons ">
+                  <a
+                    href="javascript:"
+                    @click="addTaxonFilter(propertyName)">
+                    {{ propertyName }}
+                    <div class="pull-right">
+                      {{ value }}
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="col-md-8">
@@ -227,7 +237,7 @@ export default {
         // let start = page
         const start = ((this.currentPage - 1) * this.rowsPerPage);
         // this.query, start, this.rowsPerPage
-        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters,this.taxonFilters);
+        const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters, this.taxonFilters);
         this.searchResults.length = 0;
         // this.searchParams = {};
         this.facetCategories = searchResponse.facet_counts.category;
