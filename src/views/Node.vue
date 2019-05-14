@@ -225,6 +225,9 @@
         </div>
       </div>
     </div>
+    <script
+      type="application/ld+json"
+      v-html="jsonld"/>
   </div>
 </template>
 
@@ -311,6 +314,10 @@ export default {
 
   data() {
     return {
+      jsonld: {
+        '@context': 'https://schema.org',
+        '@type': 'DataSet',
+      },
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
