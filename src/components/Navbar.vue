@@ -76,7 +76,7 @@
           </b-dropdown-item>
 
           <b-dropdown-item
-                  to="/about/citing">
+            to="/about/citing">
             Citing Monarch
           </b-dropdown-item>
           <!--
@@ -98,6 +98,7 @@
           <b-dropdown-item
             href="https://medium.com/@MonarchInit"
             target="_blank"
+            rel="noopener noreferrer"
           >
             Blog
           </b-dropdown-item>
@@ -110,6 +111,7 @@
           <b-dropdown-item
             href="https://github.com/monarch-initiative"
             target="_blank"
+            rel="noopener noreferrer"
           >
             GitHub Organization
           </b-dropdown-item>
