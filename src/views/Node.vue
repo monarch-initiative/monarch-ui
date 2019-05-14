@@ -222,6 +222,9 @@
             <exac-variant
               :node-id="nodeId"/>
           </div>
+          <div>
+            <common-footer/>
+          </div>
         </div>
       </div>
     </div>
@@ -307,6 +310,7 @@ export default {
     'exac-gene': ExacGeneSummary,
     'exac-variant': ExacVariantTable,
     'genome-feature': GenomeFeature,
+    'common-footer': require('@/components/Footer.md').default,
   },
 
   data() {
