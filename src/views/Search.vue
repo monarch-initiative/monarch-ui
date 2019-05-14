@@ -34,6 +34,7 @@
               <ul>
                 <li
                   v-for="category in categoryFilters"
+                  :key="category"
                   href="javascript:;"
                   class="b-row">
                   {{ category }}
@@ -48,6 +49,7 @@
               <ul>
                 <li
                   v-for="taxon in taxonFilters"
+                  :key="taxon"
                   href="javascript:;"
                   class="b-row">
                   {{ taxon }}
@@ -67,7 +69,10 @@
             </div>
             <div class="card-body">
               <ul class="showFacetLinks col-md-12">
-                <li v-for="(value,propertyName) of facetCategories">
+                <li
+                  v-for="(value,propertyName) of facetCategories"
+                  :key="propertyName"
+                >
                   <a
                     href="javascript:"
                     @click="addCategoryFilter(propertyName)">
@@ -88,7 +93,10 @@
             </div>
             <div class="card-body">
               <ul class="showFacetLinks  col-md-12">
-                <li v-for="(value,propertyName) of facetTaxons ">
+                <li
+                  v-for="(value,propertyName) of facetTaxons"
+                  :key="propertyName"
+                >
                   <a
                     href="javascript:"
                     @click="addTaxonFilter(propertyName)">
