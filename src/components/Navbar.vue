@@ -98,6 +98,11 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/sources">
+            Sources
+          </b-dropdown-item>
+
+          <b-dropdown-item
             href="https://github.com/monarch-initiative"
             target="_blank">
             GitHub Organization
