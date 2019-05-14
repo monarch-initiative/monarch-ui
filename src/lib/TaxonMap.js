@@ -73,10 +73,11 @@ export function idToLabel(id) {
 }
 
 export function labelToId(label) {
-  for (const taxon in taxonIdToLabelMap) {
-    if (taxonIdToLabelMap[taxon] === label) {
-      return taxon;
-    }
+  const entry = Object.entries(taxonIdToLabelMap).find((e) => {
+    return e[1] === label;
+  });
+  if (entry) {
+    return entry[0];
   }
   return null;
 }
