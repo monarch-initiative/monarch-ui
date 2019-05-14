@@ -10,7 +10,7 @@
     <span class="network-name">Contact Us</span></a>
   </div>
   <div class="col-3">
-    <router-link to="/page/about">
+    <router-link to="/about/monarch">
       <i class="fa fa-info fa-fw"></i>
       <span class="network-name">
         About Monarch
