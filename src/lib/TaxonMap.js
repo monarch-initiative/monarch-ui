@@ -73,13 +73,8 @@ export function idToLabel(id) {
 }
 
 export function labelToId(label) {
-  const entry = Object.entries(taxonIdToLabelMap).find((e) => {
-    return e[1] === label;
-  });
-  if (entry) {
-    return entry[0];
-  }
-  return null;
+  const entry = Object.entries(taxonIdToLabelMap).find(e => e[1] === label);
+  return entry ? entry[0] : null;
 }
 
 const cardTypesSupportingTaxon = [
