@@ -314,10 +314,25 @@ export default {
 
   data() {
     return {
-      jsonld: {
-        '@context': 'https://schema.org',
-        '@type': 'DataSet',
-      },
+      jsonld: [
+        {
+          '@context': 'http://schema.org',
+          '@type': 'Organization',
+          'url': 'https://monarchinitiative.org',
+          'email': 'info@monarchinitiative.org'
+        },
+        // specify actions
+        {
+          '@context': 'http://schema.org',
+          '@type': 'WebSite',
+          'url': 'https://monarchinitiative.org',
+          'potentialAction': {
+            '@type': 'SearchAction',
+            'target': 'https://monarchiniative.org/search/{term}',
+            'query-input': 'required name=term'
+          }
+        },
+      ],
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
