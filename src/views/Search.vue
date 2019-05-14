@@ -74,8 +74,8 @@
                   :key="propertyName"
                 >
                   <a
-                    href="javascript:"
-                    @click="addCategoryFilter(propertyName)">
+                    href
+                    @click.prevent="addCategoryFilter(propertyName)">
                     {{ propertyName }}
                     <div class="pull-right">
                       {{ value }}
@@ -98,8 +98,8 @@
                   :key="propertyName"
                 >
                   <a
-                    href="javascript:"
-                    @click="addTaxonFilter(propertyName)">
+                    href
+                    @click.prevent="addTaxonFilter(propertyName)">
                     {{ propertyName }}
                     <div class="pull-right">
                       {{ value }}
