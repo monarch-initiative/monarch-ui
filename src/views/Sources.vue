@@ -21,10 +21,28 @@
         <div class="col-3"> <a
           :href="source.url"
           target="_blank">{{ source.url }}</a></div>
+            <script type="application/ld+json">
+            {
+              "@context": "http://schema.org",
+              "@type": "Dataset",
+              "name": "Monarch transformation of {{ source.title }}",
+              "description": "Monarch transformation of: {{ source.description }}",
+              "url": "{{ source.url }}",
+              "includedInDataCatalog": "https://monarchinitiative.org",
+              "creator": {
+                            "@type": "Organization",
+                            "name": "{{source.id}}"
+              },
+              "license": "{{ source.license }}"
+              }
+            </script>
+          
       </div>
     </div>
     <monarch-footer/>
   </div>
+
+
 </template>
 
 <script>
