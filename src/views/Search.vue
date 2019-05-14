@@ -23,7 +23,7 @@
           class="container col-md-3"
         >
           <div
-            v-if="categoryFilters.length>0 || taxonFilters.length>0"
+            v-if="categoryFilters.length > 0 || taxonFilters.length > 0"
             class="b-row card" >
             <div class="card-header">
               Filters
@@ -43,7 +43,7 @@
                 </li>
               </ul>
             </div>
-            <div v-if="taxonFilters.length>0">
+            <div v-if="taxonFilters.length > 0">
               <div class="offset-1 font-weight-bold">Taxa</div>
               <ul>
                 <li
