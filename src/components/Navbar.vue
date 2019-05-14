@@ -75,6 +75,10 @@
             About Us
           </b-dropdown-item>
 
+          <b-dropdown-item
+                  to="/about/citing">
+            Citing Monarch
+          </b-dropdown-item>
           <!--
           <b-dropdown-item
             to="/page/disclaimer">
