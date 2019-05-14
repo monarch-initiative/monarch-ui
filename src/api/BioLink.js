@@ -335,6 +335,9 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   params.append('exclude_automatic_assertions', false);
   params.append('exclude_automatic_assertions', false);
   params.append('use_compact_associations', true);
+  params.append('highlight_class', 'hilite');
+  params.append('boost_q', 'category:genotype^-10');
+  params.append('prefix', '-OMIA');
 
   let categoriesLocal = categories;
   if (!categoriesLocal || categoriesLocal.length === 0) {
