@@ -72,6 +72,11 @@ export function idToLabel(id) {
   return taxonIdToLabelMap[id];
 }
 
+export function labelToId(label) {
+  const entry = Object.entries(taxonIdToLabelMap).find(e => e[1] === label);
+  return entry ? entry[0] : null;
+}
+
 const cardTypesSupportingTaxon = [
   'gene',
   'genotype',

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { isTaxonCardType } from '../lib/TaxonMap';
+import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
+// import { idToLabel } from '../lib/TaxonMap';
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -325,7 +326,7 @@ const categoriesAll = [
 const categoriesSome = categoriesAll.slice(0, 5);
 
 
-export async function getSearchResults(query, start, rows, categories, prefixes) {
+export async function getSearchResults(query, start, rows, categories, taxa) {
   const bioentityUrl = `${biolink}search/entity/${query}`;
   const params = new URLSearchParams();
   params.append('start', start);
@@ -334,6 +335,9 @@ export async function getSearchResults(query, start, rows, categories, prefixes)
   params.append('exclude_automatic_assertions', false);
   params.append('exclude_automatic_assertions', false);
   params.append('use_compact_associations', true);
+  params.append('highlight_class', 'hilite');
+  params.append('boost_q', 'category:genotype^-10');
+  params.append('prefix', '-OMIA');
 
   let categoriesLocal = categories;
   if (!categoriesLocal || categoriesLocal.length === 0) {
@@ -344,17 +348,15 @@ export async function getSearchResults(query, start, rows, categories, prefixes)
     params.append('category', elem);
   });
 
+  if (taxa && taxa.length > 0) {
+    taxa.forEach((elem) => {
+      const taxonId = elem.startsWith('NCBITaxon') ? elem : labelToId(elem);
+      params.append('taxon', taxonId);
+    });
+  }
+
   const bioentityResp = await axios.get(bioentityUrl, { params });
-  const data = bioentityResp.data;
-
-  // Debug code to detect entries without categories.
-  // data.docs.forEach((d) => {
-  //   if (!d.category) {
-  //     console.log('getSearchResults NO CATEGORY', d.id);
-  //   }
-  // });
-
-  return data;
+  return bioentityResp.data;
 }
 
 
