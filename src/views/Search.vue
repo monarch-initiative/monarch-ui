@@ -35,7 +35,7 @@
                 <li
                   v-for="category in categoryFilters"
                   :key="category"
-                  href="javascript:;"
+                  href
                   class="b-row">
                   {{ category }}
                   <button
@@ -50,7 +50,7 @@
                 <li
                   v-for="taxon in taxonFilters"
                   :key="taxon"
-                  href="javascript:;"
+                  href
                   class="b-row">
                   {{ taxon }}
                   <button
