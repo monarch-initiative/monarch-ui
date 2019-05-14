@@ -1,5 +1,4 @@
-<div
-  class="container-fluid monarch-view monarch-about-view">
+<div>
 
  Please acknowledge the use of Monarch with the following paragraph:
  
