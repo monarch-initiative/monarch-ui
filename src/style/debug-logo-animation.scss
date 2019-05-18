@@ -1,9 +1,9 @@
 .debug-area {
-  width:25px;
-  position:fixed;
+  width: 25px;
+  position: fixed;
   right: 3px;
-  top:10px;
-  z-index:1900;
+  top: 10px;
+  z-index: 1900;
 }
 
 
@@ -25,7 +25,6 @@
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
-
 
 @keyframes rotate-debug-spinner-logo-left {
   from {

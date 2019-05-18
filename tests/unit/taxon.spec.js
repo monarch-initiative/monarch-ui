@@ -1,12 +1,6 @@
 import { expect } from 'chai';
 import { labelToId, idToLabel } from '../../src/lib/TaxonMap';
 
-// Fixing the:
-//  Unknown custom element: <router-link>
-// warning...
-// See: https://stackoverflow.com/a/50639123/5667222
-//
-
 describe('taxon lookups', () => {
   it('test taxon lookups', () => {
     expect(idToLabel('NCBITaxon:78454')).to.equal('Saguinus labiatus');
