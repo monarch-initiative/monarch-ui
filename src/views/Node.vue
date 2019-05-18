@@ -201,7 +201,7 @@
           </div>
 
           <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.hits[0]"
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
             class="row">
             <genome-feature
               :mygene-data="node.geneInfo"/>
@@ -221,9 +221,6 @@
           <div v-if="!expandedCard && nodeType === 'variant'">
             <exac-variant
               :node-id="nodeId"/>
-          </div>
-          <div>
-            <common-footer/>
           </div>
         </div>
       </div>
@@ -313,7 +310,6 @@ export default {
     'exac-gene': ExacGeneSummary,
     'exac-variant': ExacVariantTable,
     'genome-feature': GenomeFeature,
-    'common-footer': require('@/components/Footer.md').default,
   },
 
   data() {
@@ -532,11 +528,11 @@ export default {
           // console.log('updateCounts', cardType, acount);
 
           if (acount > 0 && taxonTotal === 0) {
-            console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
+            // console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
             taxonFiltered = acount;
           }
           if (acount > 0 && taxonFiltered !== acount) {
-            console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
+            // console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
             // taxonFiltered = acount;
           }
           this.counts[cardType] = taxonFiltered;

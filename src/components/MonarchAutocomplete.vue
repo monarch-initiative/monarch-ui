@@ -467,7 +467,7 @@ export default {
 
   .dropCatList {
     position: absolute;
-    z-index: 1001;
+    z-index: $monarch-autocomplete-category-z;
     border-radius: 2px;
     padding-left: 2px;
     padding-right: 2px;

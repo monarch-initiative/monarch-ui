@@ -15,6 +15,7 @@ echo "pwd: `pwd`"
 
 rm -rf dist
 BUILD=nonrootdomain npm run build
+cp src/gh_404.html dist/404.html
 cd dist
 git init
 git add .

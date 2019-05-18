@@ -1,8 +1,10 @@
 <template>
   <div>
     <div
+      v-if="mygeneData.externalURL"
       class="row"
-      style="margin-left:20px">
+      style="margin-left:20px"
+    >
       <a
         :href="mygeneData.externalURL"
         target="_blank"
@@ -12,7 +14,15 @@
         '+' : '-' }} ( {{ position.end-position.start }} kb)
       </a>
     </div>
-    <div class="row">
+
+    <div
+      v-else>
+      <h6>No Position Data Available for gene {{ geneInfo.symbol }}</h6>
+    </div>
+
+    <div
+      v-if="mygeneData.externalURL"
+      class="row">
       <svg
         id="genome-feature"
         width="80%"/>
@@ -22,6 +32,7 @@
 
 <script>
 import GenomeFeatureViewer from 'GenomeFeatureViewer';
+import { idToLabel, isAGRApolloTaxon } from '../lib/TaxonMap';
 
 export default {
   props: {
@@ -43,74 +54,54 @@ export default {
     }
   },
   methods: {
-    availableGenomes(taxonId) {
-      switch (taxonId) {
-        case 6239:
-          return 'Caenorhabditis elegans';
-        case 7955:
-          return 'Danio rerio';
-        case 7227:
-          return 'Drosophila melanogaster';
-        case 9606:
-          return 'Homo sapiens';
-        case 10090:
-          return 'Mus musculus';
-        case 10116:
-          return 'Rattus norvegicus';
-        case 559292:
-          return 'Saccharomyces cerevisiae';
-        default:
-          return null;
-      }
-    },
+
     generateView(genePosition) {
       // we can only draw certain taxons
-      const genomeName = this.availableGenomes(genePosition.taxid);
-      if (!genomeName) return;
       const position = genePosition.genomic_pos;
-      if (!position) return;
+      if (isAGRApolloTaxon(genePosition.taxid) && position) {
+        const genomeName = idToLabel(`NCBITaxon:${genePosition.taxid}`);
+        let nameSuffixString = `?name=${genePosition.symbol}`;
+        if (position.ensemblgene) {
+          nameSuffixString += `&name=${position.ensemblgene}`;
+        }
 
-      let nameSuffixString = `?name=${genePosition.symbol}`;
-      if (position.ensemblgene) {
-        nameSuffixString += `&name=${position.ensemblgene}`;
+        const configGlobal = {
+          'locale': 'global',
+          'chromosome': position.chr,
+          'start': position.start,
+          'end': position.end,
+          'tracks': [
+            {
+              'id': 1,
+              'genome': genomeName,
+              'type': 'isoform',
+              'url': [
+                'https://agr-apollo.berkeleybop.io/apollo/track/',
+                '/All%20Genes/',
+                `.json${nameSuffixString}`
+              ],
+              'transcriptTypes': [
+                'mRNA', 'ncRNA', 'piRNA',
+                'lincRNA',
+                'miRNA',
+                'pre_miRNA',
+                'snoRNA',
+                'lnc_RNA',
+                'tRNA',
+                'snRNA',
+                'rRNA',
+                'ARS',
+                'antisense_RNA',
+                'C_gene_segment',
+                'V_gene_segment',
+                'pseudogene_attribute',
+                'snoRNA_gene'
+              ],
+            },
+          ]
+        };
+        const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 900, 500);
       }
-
-      const configGlobal = {
-        'locale': 'global',
-        'chromosome': position.chr,
-        'start': position.start,
-        'end': position.end,
-        'tracks': [
-          {
-            'id': 1,
-            'genome': genomeName,
-            'type': 'isoform',
-            'url': [
-              'https://agr-apollo.berkeleybop.io/apollo/track/',
-              '/All%20Genes/',
-              `.json${nameSuffixString}`
-            ],
-            'transcriptTypes': [
-              'mRNA', 'ncRNA', 'piRNA',
-              'lincRNA',
-              'miRNA',
-              'pre_miRNA',
-              'snoRNA',
-              'lnc_RNA',
-              'tRNA',
-              'snRNA',
-              'rRNA',
-              'ARS',
-              'antisense_RNA',
-              'C_gene_segment',
-              'V_gene_segment',
-              'pseudogene_attribute',
-              'snoRNA_gene'
-            ],
-          },
-        ]
-      };
-      const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 900, 500);
     }
   }
 };

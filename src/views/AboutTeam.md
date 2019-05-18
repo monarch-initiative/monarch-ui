@@ -1,81 +1,77 @@
 <div
   class="container-fluid monarch-view monarch-team-view">
-  <div class="content">
 
 # Monarch People and their Institutions
 
-<div></div>
-    <div class="card p-3 bg-light">
-      <h3>
-        Participating Institutions
-      </h3>
-      <div class="teamtoc">
-        <dl>
-          <!-- https://vuejs.org/v2/guide/list.html#v-for-on-a-lt-template-gt -->
-          <template
-            v-for="institution in institutions">
-            <dt><a v-bind:href="'#' + institution.id">{{ institution.name }}</a></dt>
-            <dd>
-              {{ institution.peopleNames.join(', ') }}
-            </dd>
-          </template>
-        </dl>
-      </div>
+  <div class="card p-3 bg-light">
+    <h3>
+      Participating Institutions
+    </h3>
+    <div class="teamtoc">
+      <dl>
+        <!-- https://vuejs.org/v2/guide/list.html#v-for-on-a-lt-template-gt -->
+        <template
+          v-for="institution in institutions">
+          <dt><a v-bind:href="'#' + institution.id">{{ institution.name }}</a></dt>
+          <dd>
+            {{ institution.peopleNames.join(', ') }}
+          </dd>
+        </template>
+      </dl>
     </div>
-    <div
-      v-for="institution in institutions"
-      v-bind:id="institution.id"
-      class="institution-target">
-      <h3>
-        <a
-          v-bind:href="institution.website"
-          target="_blank"
-          rel="noreferrer">
-          <img
-            class="teamlogo"
-            v-bind:src="institution.logo">
-          {{institution.name}}
-        </a>
-      </h3>
-      <div
-        v-for="member in institution.people"
-        class="teammember">
-        <template
-          v-if="member.alumni">
-          <div class="teammember">
-            <div class="membername">{{ member.name }} (alumni {{ member.title }})</div>
-          </div>
-        </template>
-        <template
-          v-else="!member.alumni">
-          <div class="memberhead">
-            <div class="membername">{{ member.name }}</div>
-            <div class="membertitle">{{ member.title }}</div>
-          </div>
-          <img
-            class="memberpicture"
-            v-bind:src="member.picture"/>
-          <div class="clear"></div>
-          <div
-            v-if="member.bio"
-            v-bind:is="markdownToComponent(member.bio)"
-            class="memberbio">
-          </div>
-          <!--
-          <div class="membercontact">
-            {{#email}}
-            <a title="email" href="mailto:{{email}}" target="_blank"><img class="contactlogo" src="/image/logo-email.png" /></a> {{/email}} {{#website}}
-            <a title="website" href="{{{website}}}" target="_blank"><img class="contactlogo" src="/image/logo-website.png" /></a> {{/website}} {{#twitter}}
-            <a title="twitter" href="{{{twitter}}}" target="_blank"><img class="contactlogo" src="/image/logo-twitter.png" /></a> {{/twitter}} {{#facebook}}
-            <a title="facebook" href="{{{facebook}}}" target="_blank"><img class="contactlogo" src="/image/logo-facebook.png" /></a> {{/facebook}}
-          </div>
-          -->
-        </template>
-      </div>
   </div>
-  <team-footer></team-footer>
+  <div
+    v-for="institution in institutions"
+    v-bind:id="institution.id"
+    class="institution-target">
+    <h3>
+      <a
+        v-bind:href="institution.website"
+        target="_blank"
+        rel="noreferrer">
+        <img
+          class="teamlogo"
+          v-bind:src="institution.logo">
+        {{institution.name}}
+      </a>
+    </h3>
+    <div
+      v-for="member in institution.people"
+      class="teammember">
+      <template
+        v-if="member.alumni">
+        <div class="teammember">
+          <div class="membername">{{ member.name }} (alumni {{ member.title }})</div>
+        </div>
+      </template>
+      <template
+        v-else="!member.alumni">
+        <div class="memberhead">
+          <div class="membername">{{ member.name }}</div>
+          <div class="membertitle">{{ member.title }}</div>
+        </div>
+        <img
+          class="memberpicture"
+          v-bind:src="member.picture"/>
+        <div class="clearfix"></div>
+        <div
+          v-if="member.bio"
+          v-bind:is="markdownToComponent(member.bio)"
+          class="memberbio">
+        </div>
+        <!--
+        <div class="membercontact">
+          {{#email}}
+          <a title="email" href="mailto:{{email}}" target="_blank"><img class="contactlogo" src="/image/logo-email.png" /></a> {{/email}} {{#website}}
+          <a title="website" href="{{{website}}}" target="_blank"><img class="contactlogo" src="/image/logo-website.png" /></a> {{/website}} {{#twitter}}
+          <a title="twitter" href="{{{twitter}}}" target="_blank"><img class="contactlogo" src="/image/logo-twitter.png" /></a> {{/twitter}} {{#facebook}}
+          <a title="facebook" href="{{{facebook}}}" target="_blank"><img class="contactlogo" src="/image/logo-facebook.png" /></a> {{/facebook}}
+        </div>
+        -->
+      </template>
+    </div>
+  </div>
 </div>
-
 
 <script>
 import getTeam from '@/api/Team';
@@ -84,7 +80,6 @@ import { applyLinkHandlers } from '../lib/markdown';
 
 export default {
   components: {
-    'team-footer': require('@/components/Footer.md').default,
   },
   data() {
     return {
@@ -211,6 +206,7 @@ export default {
       font-weight: 200;
       font-family: Helvetica, Arial, sans-serif;
   }
+
   .memberhead {
       float: left;
   }

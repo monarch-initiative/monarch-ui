@@ -133,9 +133,7 @@ We are proud to work with several organizations to develop ontologies, drive com
 | [![](../assets/img/partner-phenomecentral.png)](http://phenomecentral.org) | [![](../assets/img/partner-biolark.png)](http://bio-lark.org) | [![](../assets/img/partner-go.png)](http://www.geneontology.org) |
 | [![PhenoTips](../assets/img/partner-phenotips.jpg)](https://phenotips.org) | [![Disease Ontology](../assets/img/partner-do.png)](http://www.disease-ontology.org) | [![Force11](../assets/img/partner-force11.png)](https://www.force11.org)
 
-<about-footer></about-footer>
 </div>
-
 
 <style lang="scss">
 @import "~@/style/variables";
@@ -209,7 +207,6 @@ We are proud to work with several organizations to develop ontologies, drive com
 export default {
   name: 'AboutMonarch',
   components: {
-    'about-footer': require('@/components/Footer.md').default,
   },
 };
 </script>

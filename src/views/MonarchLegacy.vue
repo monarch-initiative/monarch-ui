@@ -22,7 +22,6 @@
 
     <div
       v-if="contentBody"
-      id="selenium_id_content"
       xv-bind="$props"
       v-html="contentBody"/>
 

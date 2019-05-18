@@ -1,33 +1,7 @@
 /* eslint import/prefer-default-export: 0 */
 
 import axios from 'axios';
-
-// http://docs.mygene.info/en/latest/doc/data.html#species
-function getSpeciesFromTaxId(taxid) {
-  switch (taxid) {
-    case 9606:
-      return 'Homo sapiens';
-    case 10090:
-      return 'Mus musculus';
-    case 10116:
-      return 'Rattus norvegicus';
-    case 7227:
-      return 'Drosophila melanogaster';
-    case 6239:
-      return 'Caenorhabditis elegans';
-    case 7955:
-      return 'Danio rerio';
-    // unsupported
-    // case 3702:
-    //     return 'Arabidopsis thaliana';
-    // case 8364:
-    //     return 'Xenopus tropicalis';
-    // case 9823:
-    //     return 'Sus scrofa';
-    default:
-      return null;
-  }
-}
+import { idToLabel, isAGRApolloTaxon } from '../lib/TaxonMap';
 
 export async function getGeneDescription(geneId) {
   const mygeneURL = 'https://mygene.info/v3/query';
@@ -79,7 +53,8 @@ export async function getGeneDescription(geneId) {
   try {
     const mygeneResponse = await axios.get(mygeneURL, { params: mygeneParams });
 
-    // console.log('mygeneResponse', mygeneResponse);
+    // console.log('mygeneResponse');
+    // console.log(JSON.stringify(mygeneResponse.data, null, 2));
 
     result = mygeneResponse.data;
 
@@ -147,11 +122,11 @@ export async function getGeneDescription(geneId) {
           taxid = locationObj.taxid;
         }
         // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
-        const thisSpecies = getSpeciesFromTaxId(taxid);
-        if (!thisSpecies) {
-          console.log('Species not found from mygene.info.  Not showing genome features.');
+        if (!isAGRApolloTaxon(taxid)) {
+          console.log(`Species ${taxid} not available from Apollo.  Not showing genome features.`);
         }
         else {
+          const thisSpecies = idToLabel(`NCBITaxon:${taxid}`);
           const defaultTrackName = 'All Genes'; // this is the generic track name
           const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
           const apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
@@ -159,11 +134,17 @@ export async function getGeneDescription(geneId) {
           const trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
           const trackDataWithHighlightURL = trackDataPrefix + '?name=' + symbol;
           // console.log('trackDataWithHighlight', trackDataWithHighlightURL);
-          const trackResponse = await axios.get(trackDataWithHighlightURL);
-          // console.log('trackResponse', trackResponse.data);
+          try {
+            const trackResponse = await axios.get(trackDataWithHighlightURL);
+            // console.log('trackResponse', trackResponse.data);
 
-          result.trackResponse = trackResponse.data;
-          result.externalURL = externalUrl;
+            result.trackResponse = trackResponse.data;
+            result.externalURL = externalUrl;
+          }
+          catch (e) {
+            console.log(`Error from Apollo at ${trackDataWithHighlightURL}`);
+            console.log(JSON.stringify(e, null, 2));
+          }
         }
       }
     }

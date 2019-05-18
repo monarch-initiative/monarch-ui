@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
-// import { idToLabel } from '../lib/TaxonMap';
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much

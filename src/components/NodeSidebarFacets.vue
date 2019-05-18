@@ -75,7 +75,7 @@ $facets-width: 500px;
   top: ($navbar-height + 105);
   left: (-$facets-width);
   min-height: 40px;
-  z-index: 1050;
+  z-index: $monarch-node-sidebar-flyout-z;
   transition: all 0.3s;
   overflow-y: auto;
   overflow-x: hidden;

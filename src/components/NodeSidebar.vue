@@ -220,7 +220,7 @@ $collapsed-sidebar-width: 55px;
   position: fixed;
   width: $sidebar-width;
   top: ($navbar-height);
-  z-index: 1000;
+  z-index: $monarch-node-sidebar-z;
 }
 
 .node-sidebar a,

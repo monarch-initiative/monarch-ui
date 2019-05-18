@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid py-5">
+  <div class="container-fluid monarch-view">
     <div class="row">
       <div class="col-2"/>
       <div class="col-8">

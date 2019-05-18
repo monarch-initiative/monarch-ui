@@ -1,160 +1,160 @@
 <template>
-  <div id="selenium_id_content">
-    <div
-      id="monarch-search-container"
-      class="container-fluid monarch-container">
-      <header class="intro">
-        <div class="intro-body">
-          <div class="container">
-            <div class="row">
-              <div
-                class="col-md-12 py-2">
-                <p class="intro-text">
-                  Search Results
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+  <div
+    id="monarch-search-container"
+    class="container-fluid monarch-view">
 
-      <div class="row">
+    <div class="row">
+      <div
+        class="container col-md-3"
+      >
         <div
-          class="container col-md-3"
-        >
-          <div
-            v-if="categoryFilters.length > 0 || taxonFilters.length > 0"
-            class="b-row card" >
-            <div class="card-header">
-              Filters
-            </div>
-
-            <div v-if="categoryFilters.length>0">
-              <div class="offset-1 font-weight-bold">Categories</div>
-              <ul>
-                <li
-                  v-for="category in categoryFilters"
-                  :key="category"
-                  href
-                  class="b-row">
-                  {{ category }}
-                  <button
-                    class="fa fa-remove"
-                    @click="removeCategoryFilter(category)"/>
-                </li>
-              </ul>
-            </div>
-            <div v-if="taxonFilters.length > 0">
-              <div class="offset-1 font-weight-bold">Taxa</div>
-              <ul>
-                <li
-                  v-for="taxon in taxonFilters"
-                  :key="taxon"
-                  href
-                  class="b-row">
-                  {{ taxon }}
-                  <button
-                    class="fa fa-remove"
-                    @click="removeTaxonFilter(taxon)"/>
-                </li>
-              </ul>
-            </div>
-
+          v-if="categoryFilters.length > 0 || taxonFilters.length > 0"
+          class="row card" >
+          <div class="card-header py-2">
+            Filters
           </div>
+
           <div
-            class="b-row card"
-            style="margin-top: 20px">
-            <div class="card-header">
+            v-if="categoryFilters.length > 0"
+            class="px-2">
+            <div class="font-weight-bold">
               Categories
             </div>
-            <div class="card-body">
-              <ul class="showFacetLinks col-md-12">
-                <li
-                  v-for="(value,propertyName) of facetCategories"
-                  :key="propertyName"
-                >
-                  <a
-                    href
-                    @click.prevent="addCategoryFilter(propertyName)">
-                    {{ propertyName }}
-                    <div class="pull-right">
-                      {{ value }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <ul>
+              <li
+                v-for="category in categoryFilters"
+                :key="category"
+                href
+                class="row">
+                {{ category }}
+                &nbsp;
+                <button
+                  class="fa fa-remove"
+                  @click="removeCategoryFilter(category)"/>
+              </li>
+            </ul>
           </div>
+
           <div
-            class="b-row card"
-            style="margin-top: 20px">
-            <div class="card-header">
+            v-if="taxonFilters.length > 0"
+            class="px-2">
+            <div class="font-weight-bold">
               Taxa
             </div>
-            <div class="card-body">
-              <ul class="showFacetLinks  col-md-12">
-                <li
-                  v-for="(value,propertyName) of facetTaxons"
-                  :key="propertyName"
-                >
-                  <a
-                    href
-                    @click.prevent="addTaxonFilter(propertyName)">
-                    {{ propertyName }}
-                    <div class="pull-right">
-                      {{ value }}
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
+            <ul>
+              <li
+                v-for="taxon in taxonFilters"
+                :key="taxon"
+                href
+                class="row">
+                {{ taxon }}
+                &nbsp;
+                <button
+                  class="fa fa-remove"
+                  @click="removeTaxonFilter(taxon)"/>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+        <div
+          class="row card"
+          style="margin-top: 20px">
+          <div class="card-header py-1">
+            Categories
+          </div>
+          <div class="card-body py-1">
+            <ul class="showFacetLinks col-md-12">
+              <li
+                v-for="(value, propertyName) of facetCategories"
+                :key="propertyName"
+                class="border-top border-bottom"
+              >
+                <a
+                  href
+                  @click.prevent="addCategoryFilter(propertyName)">
+                  {{ propertyName }}
+                  &nbsp;
+                  <div class="pull-right">
+                    {{ value }}
+                  </div>
+                  <div class="clearfix"/>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-        <div class="col-md-8">
-          <b-pagination
-            :total-rows="numFound"
-            :per-page="rowsPerPage"
-            v-model="currentPage"
-            responsive="true"
-            class="table-sm table-border-soft mt-2"
-            size="md"
-          />
-          <div class="search-results-rows">
-
-            <div v-if="searchResults && searchResults.length > 0 ">
-              <h3><span class="searchTerm">{{ query }}</span> has <span
-                class="searchTerm">{{ numFound }}</span> matches</h3>
-              <b-table
-                ref="results-table"
-                :fields="fields"
-                :items="rowsProvider"
-                :current-page="currentPage"
-                :per-page="rowsPerPage"
-                striped
-                responsive="true"
-                class="table-sm table-border-soft test-search-results-table"
-                hover>
-                <template
-                  slot="label"
-                  slot-scope="row"
-                >
-                  <router-link :to="row.item.toLink">
-                    {{ row.item.label }}
-                  </router-link>
-                </template>
-                <template
-                  slot="highlight"
-                  slot-scope="row"
-                >
-                  <span v-html="row.item.highlight"/>
-                </template>
-              </b-table>
-            </div>
+        <div
+          class="row card"
+          style="margin-top: 20px">
+          <div class="card-header py-1">
+            Taxa
+          </div>
+          <div class="card-body py-1">
+            <ul class="showFacetLinks col-md-12">
+              <li
+                v-for="(value, propertyName) of facetTaxons"
+                :key="propertyName"
+                class="border-top border-bottom"
+              >
+                <a
+                  href
+                  @click.prevent="addTaxonFilter(propertyName)">
+                  {{ propertyName }}
+                  &nbsp;
+                  <div class="pull-right">
+                    {{ value }}
+                  </div>
+                  <div class="clearfix"/>
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-
-        <monarch-footer/>
       </div>
+      <div class="col-md-8">
+        <b-pagination
+          :total-rows="numFound"
+          :per-page="rowsPerPage"
+          v-model="currentPage"
+          responsive="true"
+          class="table-sm table-border-soft mt-2"
+          size="md"
+        />
+        <div class="search-results-rows">
+
+          <div v-if="searchResults && searchResults.length > 0 ">
+            <h3><span class="searchTerm">{{ query }}</span> has <span
+              class="searchTerm">{{ numFound }}</span> matches</h3>
+            <b-table
+              ref="results-table"
+              :fields="fields"
+              :items="rowsProvider"
+              :current-page="currentPage"
+              :per-page="rowsPerPage"
+              striped
+              responsive="true"
+              class="table-sm table-border-soft test-search-results-table"
+              hover>
+              <template
+                slot="label"
+                slot-scope="row"
+              >
+                <router-link :to="row.item.toLink">
+                  {{ row.item.label }}
+                </router-link>
+              </template>
+              <template
+                slot="highlight"
+                slot-scope="row"
+              >
+                <span v-html="row.item.highlight"/>
+              </template>
+            </b-table>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -174,9 +174,6 @@ const validCats = {
 
 export default {
   name: 'Search',
-  components: {
-    'monarch-footer': require('@/components/Footer.md').default,
-  },
   data() {
     return {
       facets: [],
@@ -217,7 +214,7 @@ export default {
   watch: {
     '$route': function $route(to, from) {
       this.searchViaRouteParams();
-      this.$refs['results-table'].refresh();
+      this.updateResultsTable();
     }
   },
   mounted() {
@@ -225,25 +222,30 @@ export default {
   },
 
   methods: {
+    updateResultsTable() {
+      if (this.$refs['results-table']) {
+        this.$refs['results-table'].refresh();
+      }
+    },
     addTaxonFilter(taxon) {
       this.taxonFilters.push(taxon);
       this.search();
-      this.$refs['results-table'].refresh();
+      this.updateResultsTable();
     },
     removeTaxonFilter(taxon) {
       this.taxonFilters = this.taxonFilters.filter(c => c !== taxon);
       this.search();
-      this.$refs['results-table'].refresh();
+      this.updateResultsTable();
     },
     addCategoryFilter(category) {
       this.categoryFilters.push(category);
       this.search();
-      this.$refs['results-table'].refresh();
+      this.updateResultsTable();
     },
     removeCategoryFilter(category) {
       this.categoryFilters = this.categoryFilters.filter(c => c !== category);
       this.search();
-      this.$refs['results-table'].refresh();
+      this.updateResultsTable();
     },
     searchViaRouteParams() {
       this.query = this.$route.params.query;
@@ -269,7 +271,13 @@ export default {
         const searchResponse = await BL.getSearchResults(this.query, start, this.rowsPerPage, this.categoryFilters, this.taxonFilters);
         this.searchResults.length = 0;
         // this.searchParams = {};
-        this.facetCategories = searchResponse.facet_counts.category;
+        this.facetCategories = {};
+        Object.keys(searchResponse.facet_counts.category).forEach((key) => {
+          if (this.categoryFilters.indexOf(key) === -1) {
+            this.facetCategories[key] = searchResponse.facet_counts.category[key];
+          }
+        });
+
         this.facetTaxons = searchResponse.facet_counts.taxon_label;
         this.numFound = searchResponse.numFound;
         // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
