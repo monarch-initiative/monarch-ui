@@ -12,7 +12,7 @@
         <div class="col-12">
           <router-link
             :to="'/' + nodeType + '/' + c.id">
-            {{ c.label }}
+            {{ getLabel(c) }}
           </router-link>
         </div>
       </div>
@@ -30,7 +30,7 @@
         <div class="col-12">
           <router-link
             :to="'/' + nodeType + '/' + c.id">
-            {{ c.label }}
+            {{ getLabel(c) }}
           </router-link>
         </div>
       </div>
@@ -72,6 +72,12 @@ export default {
       default: false,
     },
   },
+
+  methods: {
+    getLabel(c) {
+      return c.label || c.id;
+    },
+  },
 };
 
 </script>
@@ -87,7 +93,7 @@ $neighborhood-button-width: 32px;
 #neighborhood {
   width: $neighborhood-width;
   position: fixed;
-  top: ($navbar-height + 70);
+  top: ($navbar-height + 64);
   left: (-$neighborhood-width);
   min-height: 40px;
   z-index: $monarch-node-sidebar-flyout-z;

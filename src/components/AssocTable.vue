@@ -63,9 +63,8 @@
             v-if="data.item.objectLink">
             <strong>
               <router-link
-                :to="data.item.objectLink">
-                {{ data.item.assocObject }}
-              </router-link>
+                :to="data.item.objectLink"
+                v-html="$sanitizeText(data.item.assocObject)"/>
             </strong>
           </template>
           <template
@@ -106,7 +105,9 @@
           <template
             v-if="data.item.subjectLink">
             <strong>
-              <router-link :to="data.item.subjectLink">
+              <router-link
+                :to="data.item.subjectLink"
+                v-html="$sanitizeText(data.item.assocSubject)">
                 {{ data.item.assocSubject }}
               </router-link>
             </strong>
@@ -766,7 +767,7 @@ export default {
   }
 
   .support-column-width {
-    min-width: 100px !important;
+    min-width: 120px !important;
   }
 
   .support-is-active {

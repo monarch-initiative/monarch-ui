@@ -23,14 +23,12 @@
 
     <div class="container-cards">
       <div class="wrapper">
-
         <div
           :class="{ active: isNeighborhoodShowing || isFacetsShowing }"
           class="overlay"
           @click="hideOverlay()"/>
 
-        <div
-          class="title-bar">
+        <div>
           <div
             v-if="!node">
             <div
@@ -51,12 +49,13 @@
           </div>
 
           <div
-            v-else>
+            v-else
+            class="title-bar">
             <div
               class="node-label">
               <span
                 class="node-label-label">
-                {{ node.label }}
+                <span v-html="$sanitizeText(node.label)"/>
               </span>
               <span
                 v-if="node.taxon && node.taxon.id"
@@ -121,8 +120,9 @@
               </div>
             </div>
 
-            <template
-              v-if="entrezResult">
+            <div
+              v-if="entrezResult"
+              class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
@@ -132,7 +132,7 @@
                 v-if="entrezResult"
                 class="publication-abstract"
                 v-html="entrezResult.abstractMarkdown"/>
-            </template>
+            </div>
 
             <div class="col-12">
               <span
@@ -147,7 +147,25 @@
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
+          </div>
 
+          <div
+            v-if="!expandedCard && hasGeneExac"
+            class="row py-2">
+            <exac-gene
+              :node-id="nodeId"/>
+          </div>
+
+          <div
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
+            class="row py-2">
+            <genome-feature
+              :mygene-data="node.geneInfo"/>
+          </div>
+
+          <div
+            v-if="!expandedCard"
+            class="row node-content-section">
             <div
               class="col-12">
               <b>References:</b>&nbsp;
@@ -193,19 +211,6 @@
               :parent-node-id="nodeId"
               @expand-card="expandCard(cardType)"/>
           </div>
-          <div
-            v-if="!expandedCard && hasGeneExac"
-            class="row">
-            <exac-gene
-              :node-id="nodeId"/>
-          </div>
-
-          <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
-            class="row">
-            <genome-feature
-              :mygene-data="node.geneInfo"/>
-          </div>
 
           <div
             v-if="expandedCard"
@@ -247,6 +252,14 @@ import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
 
 import MarkdownIt from 'markdown-it';
+
+
+// https://stackoverflow.com/a/34064434/5667222
+function htmlDecode(input) {
+  const doc = new DOMParser().parseFromString(input, 'text/html');
+  return doc.documentElement.textContent;
+}
+
 
 const availableCardTypes = [
   'anatomy',
@@ -497,46 +510,62 @@ export default {
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
+    buildFacets() {
+      if (!this.node.association_counts) {
+        console.log('Missing association_counts', this.node);
+      }
+      else {
+        const associationCountsByCardType = this.node.association_counts;
+
+        const taxonTotals = {};
+        const selectedTaxons = {};
+        Object.keys(associationCountsByCardType).forEach((cardType) => {
+          const associationCounts = associationCountsByCardType[cardType];
+          const count = (associationCounts && associationCounts.counts) || 0;
+          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
+
+          if (countsByTaxon) {
+            Object.keys(countsByTaxon).forEach((taxon) => {
+              selectedTaxons[taxon] = true;
+              const taxonCount = taxonTotals[taxon] || 0;
+              taxonTotals[taxon] = taxonCount + countsByTaxon[taxon];
+            });
+          }
+        });
+
+        this.facetObject.taxons = taxonTotals;
+        this.facetObject.selectedTaxons = selectedTaxons;
+        this.updateCounts();
+      }
+    },
+
     updateCounts() {
-      // console.log(JSON.stringify(Object.keys(this.node.association_counts), null, 2));
-      // console.log(JSON.stringify(Object.keys(this.node.taxonCounts), null, 2));
       const nonEmptyCards = [];
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
       }
       else {
-        // console.log('association_counts', Object.keys(this.node.association_counts).join(','));
-        // console.log(JSON.stringify(this.node.association_counts, null, 2));
-        // console.log('taxonCounts', Object.keys(this.node.taxonCounts).join(','));
-        // console.log(JSON.stringify(this.node.taxonCounts, null, 2));
+        const associationCountsByCardType = this.node.association_counts;
+        // console.log(JSON.stringify(Object.keys(associationCountsByCardType), null, 2));
+
         this.availableCards.forEach((cardType) => {
-          const taxonCount = this.node.taxonCounts[cardType];
-          const taxonTotal = taxonCount ? taxonCount.total : 0;
-          let taxonFiltered = taxonTotal;
-          if (taxonCount) {
-            // console.log('taxonCount', taxonCount);
-            Object.keys(taxonCount.taxons).forEach((t) => {
-              // console.log('this.facetObject.selectedTaxons', this.facetObject.selectedTaxons, this.facetObject.selectedTaxons[t], t);
+
+          const associationCounts = associationCountsByCardType[cardType];
+          const count = (associationCounts && associationCounts.counts) || 0;
+          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
+          const taxonTotal = count;
+          let taxonFiltered = count;
+
+          if (countsByTaxon) {
+            Object.keys(countsByTaxon).forEach((t) => {
               if (!this.facetObject.selectedTaxons[t]) {
-                taxonFiltered -= taxonCount.taxons[t];
+                taxonFiltered -= countsByTaxon[t];
               }
             });
           }
 
-          const acount = this.node.association_counts[cardType] || 0;
-          // console.log('xx', cardType, acount, taxonTotal, taxonFiltered);
-          // console.log('updateCounts', cardType, acount);
-
-          if (acount > 0 && taxonTotal === 0) {
-            // console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
-            taxonFiltered = acount;
-          }
-          if (acount > 0 && taxonFiltered !== acount) {
-            // console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
-            // taxonFiltered = acount;
-          }
           this.counts[cardType] = taxonFiltered;
-          if (acount > 0) {
+          if (count > 0) {
             nonEmptyCards.push(cardType);
           }
         });
@@ -565,13 +594,13 @@ export default {
       const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
       const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
 
-      const [nodeSummary, neighborhood] = await Promise.all(
+      const [node, neighborhood] = await Promise.all(
         [
           nodeSummaryPromise,
           neighborhoodPromise
         ]
       );
-      this.node = nodeSummary;
+      this.node = node;
 
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
@@ -595,6 +624,10 @@ export default {
         uri: this.node.uri
       });
 
+      if (!this.node.label) {
+        this.node.label = this.node.id;
+      }
+
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
 
@@ -603,8 +636,9 @@ export default {
         }
         else {
           this.entrezResult = entrezResult;
-          nodeSummary.label = entrezResult.title;
-          nodeSummary.uri = entrezResult.pubmedURL;
+          const entrezTitle = htmlDecode(entrezResult.title);
+          this.node.label = entrezTitle;
+          this.node.uri = entrezResult.pubmedURL;
 
           let abstractEnhanced = this.entrezResult.abstract;
           abstractEnhanced = abstractEnhanced.replace(
@@ -616,7 +650,6 @@ export default {
           const md = new MarkdownIt();
           const mdRendered = md.render(abstractEnhanced);
           this.entrezResult.abstractMarkdown = mdRendered;
-          // console.log(JSON.stringify(mdRendered.slice(0, 100), null, 2));
         }
       }
 
@@ -631,13 +664,13 @@ export default {
         const geneInfo = await MyGene.getGeneDescription(this.nodeId);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
-          if (nodeSummary.description) {
-            console.log('Overriding nodeSummary.description with hit.summary', nodeSummary.description, hit.summary);
+          if (node.description) {
+            console.log('Overriding node.description with hit.summary', node.description, hit.summary);
           }
 
-          nodeSummary.description = hit.summary;
+          node.description = hit.summary;
 
-          nodeSummary.geneInfo = geneInfo;
+          node.geneInfo = geneInfo;
           if (this.synonyms.indexOf(hit.name) !== -1) {
             this.synonyms.unshift(hit.name);
           }
@@ -655,32 +688,6 @@ export default {
         const taxonNumber = this.node.taxon.id.slice(ncbiTaxonPrefix.length);
         this.node.taxon.uri = `https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=info&id=${taxonNumber}`;
       }
-
-      //
-      // Build the information needed to populate the taxon facet
-      // component.
-      //
-
-      const taxons = {};
-      const selectedTaxons = {};
-      Object.keys(nodeSummary.taxonCounts).forEach((key) => {
-        const entry = nodeSummary.taxonCounts[key];
-        Object.keys(entry.taxons).forEach((taxon) => {
-          // console.log(key, taxon, entry.taxons[taxon]);
-          selectedTaxons[taxon] = true;
-          let taxonCount = taxons[taxon];
-          if (!taxonCount) {
-            taxonCount = 0;
-          }
-          else {
-            // console.log('prexisting taxons[taxon]', key, taxon, taxonCount);
-          }
-          taxons[taxon] = taxonCount + entry.taxons[taxon];
-        });
-      });
-      this.facetObject.taxons = taxons;
-      this.facetObject.selectedTaxons = selectedTaxons;
-
 
       //
       // Build out the superclass/subclass/equivclass lists from
@@ -719,11 +726,7 @@ export default {
       this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
-      //
-      // Update all the node counts based upon the taxon facets,
-      // although initially this will be all taxons.
-      //
-      this.updateCounts();
+      this.buildFacets();
 
       //
       // If we got here via someone specifying a cardType in the
@@ -748,7 +751,7 @@ export default {
 $sidebar-content-width: 500px;
 $sidebar-width: 200px;
 $sidebar-button-width: 32px;
-$title-bar-max-height: 100px;
+$title-bar-max-height: 80px;
 $line-height-compact: 1.3em;
 
 .overlay {
@@ -766,7 +769,6 @@ $line-height-compact: 1.3em;
 
 .container-fluid.node-container {
   margin-top: $title-bar-max-height;
-  xpadding: 0;
   transition: all 0.3s;
   width: 100%;
   height: 100%;
@@ -777,11 +779,10 @@ $line-height-compact: 1.3em;
 }
 
 .node-container .node-description {
-  margin: 0 -5px;
-  padding: 10px 5px;
+  margin: 10px 0;
+  padding: 0;
   line-height: $line-height-compact;
-  border-radius: 5px;
-  background: mintcream;
+  line-height: 1.2rem;
 }
 
 .wrapper {
@@ -790,7 +791,7 @@ $line-height-compact: 1.3em;
   min-height: 100%;
   width: 100%;
   margin: 0;
-  padding: 5px;
+  padding: 1px 3px;
 }
 
 
@@ -815,7 +816,7 @@ div.container-cards .node-cards-section {
   min-height: ($title-bar-max-height * 3/4);
   max-height: $title-bar-max-height;
   overflow-y: auto;
-  xfont-size: 1.0em;
+  font-size: 0.95rem;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
@@ -857,7 +858,6 @@ div.container-cards .node-cards-section {
 
 div.publication-abstract {
   margin: 0;
-  padding: 10px;
 }
 
 @media (max-width: $sidebar-collapse-width) {
@@ -868,7 +868,6 @@ div.publication-abstract {
   .title-bar {
     padding-left: ($collapsed-sidebar-width + 5);
   }
-
 }
 
 </style>

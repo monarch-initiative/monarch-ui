@@ -1,31 +1,32 @@
 <template>
-  <div>
-    <div
-      v-if="mygeneData.externalURL"
-      class="row"
-      style="margin-left:20px"
-    >
-      <a
-        :href="mygeneData.externalURL"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="fa fa-link">
-        Browse Genome at {{ position.chr }}:{{ position.start }}..{{ position.end }} {{ position.strand > 0 ?
-        '+' : '-' }} ( {{ position.end-position.start }} kb)
-      </a>
-    </div>
-
-    <div
-      v-else>
-      <h6>No Position Data Available for gene {{ geneInfo.symbol }}</h6>
-    </div>
-
+  <div
+    class="genome-feature">
     <div
       v-if="mygeneData.externalURL"
       class="row">
       <svg
         id="genome-feature"
         width="80%"/>
+    </div>
+
+    <div
+      v-if="mygeneData.externalURL"
+      class="row p-3"
+    >
+      <a
+        :href="mygeneData.externalURL"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="col-12">
+        Browse Genome at {{ position.chr }}:{{ position.start }}..{{ position.end }} {{ position.strand > 0 ?
+        '+' : '-' }} ( {{ position.end-position.start }} kb)
+        <i class="fa fa-link"/>
+      </a>
+    </div>
+
+    <div
+      v-else>
+      <h6>No Position Data Available for gene {{ geneInfo.symbol }}</h6>
     </div>
   </div>
 </template>
@@ -108,5 +109,12 @@ export default {
 </script>
 
 <style lang="scss">
-    @import "~GenomeFeatureViewerCSS";
+@import "~GenomeFeatureViewerCSS";
+@import "~@/style/variables";
+
+.genome-feature {
+  border-radius: 10px;
+  border: solid darkgray 1px;
+}
+
 </style>

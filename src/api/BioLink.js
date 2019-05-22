@@ -53,9 +53,16 @@ const servers = {
 
 };
 
-const defaultApiServer = 'production';
+const productionServers = [
+  // 'localhost',
+  'monarchinitiative.org',
+];
+
+const defaultApiServer =
+  (productionServers.indexOf(window.location.hostname) >= 0) ? 'production' : 'development';
+
 const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
-console.log('apiServer', apiServer);
+console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
 const biolink = serverConfiguration.biolink_url;
@@ -125,72 +132,17 @@ export async function getNode(nodeId, nodeType) {
   const useAssociationTypeKey = false;
   const subjectKey = useAssociationTypeKey ? 'association_type' : 'subject_category';
   const objectKey = useAssociationTypeKey ? 'association_type' : 'object_category';
-  const golrUrl1 =
-`${serverConfiguration.golr_url}select/?q=*%3A*&facet=true&fq=subject_closure:%22${nodeId}%22&rows=0&wt=json&facet.mincount=1&indent=on&facet.sort=count&facet.pivot=${objectKey},object_taxon`;
-  const golrUrl2 =
-`${serverConfiguration.golr_url}select/?q=*%3A*&facet=true&fq=object_closure:%22${nodeId}%22&rows=0&wt=json&facet.mincount=1&indent=on&facet.sort=count&facet.pivot=${subjectKey},subject_taxon`;
 
   const nodeSummary = axios.all(
     [
       axios.get(bioentityUrl, { params }),
       axios.get(getIdentifierUrl),
-      axios.get(golrUrl1, {}),
-      axios.get(golrUrl2, {}),
+      // axios.get(golrUrl1, {}),
+      // axios.get(golrUrl2, {}),
     ]
   ).then(
     axios.spread(
-      function response(bioentityResp, getIdentifierResp, golrResponse1, golrResponse2) {
-        // console.log('bioentityResp');
-        // console.log(JSON.stringify(bioentityResp.data, null, 2));
-        // console.log('golrResponse1');
-        // console.log(JSON.stringify(golrResponse1.data, null, 2));
-        // console.log('golrResponse2');
-        // console.log(JSON.stringify(golrResponse2.data, null, 2));
-        const taxonCounts = {};
-
-        const objectTaxonCounts = golrResponse1.data.facet_counts.facet_pivot[`${objectKey},object_taxon`];
-        objectTaxonCounts.forEach((facet) => {
-          let facetName = facet.value.replace(`${nodeType}_`, '');
-          //
-          // Temporary hack until BL gets taxon-faceted association counts built in.
-          // Presumably, BL will return facet names like 'anatomy', so that the following
-          // mappings are not necessary.
-          //
-          if (facetName === 'anatomical entity') {
-            facetName = 'anatomy';
-          }
-          else if (facetName === 'biological process') {
-            facetName = 'function';
-          }
-          else if (facetName === 'homology') {
-            facetName = 'homolog';
-          }
-
-          taxonCounts[facetName] = {
-            total: facet.count,
-            taxons: {},
-          };
-          if (facet.pivot) {
-            facet.pivot.forEach((taxonInfo) => {
-              taxonCounts[facetName].taxons[taxonInfo.value] = taxonInfo.count;
-            });
-          }
-        });
-
-        const subjectTaxonCounts = golrResponse2.data.facet_counts.facet_pivot[`${subjectKey},subject_taxon`];
-        subjectTaxonCounts.forEach((facet) => {
-          const facetName = facet.value.replace(`_${nodeType}`, '');
-          taxonCounts[facetName] = {
-            total: facet.count,
-            taxons: {},
-          };
-          if (facet.pivot) {
-            facet.pivot.forEach((taxonInfo) => {
-              taxonCounts[facetName].taxons[taxonInfo.value] = taxonInfo.count;
-            });
-          }
-        });
-
+      function response(bioentityResp, getIdentifierResp) {
         const bioentityResponseData = bioentityResp.data;
 
         if (!bioentityResponseData.xrefs) {
@@ -203,7 +155,6 @@ export async function getNode(nodeId, nodeType) {
         }
 
         bioentityResponseData.type = nodeType;
-        bioentityResponseData.taxonCounts = taxonCounts;
         bioentityResponseData.uri = getIdentifierResp.data;
         return bioentityResponseData;
       }
@@ -234,6 +185,12 @@ function canUseSuperclassNode(nodeId, nodeType, superId) {
   }
   return result;
 }
+
+const neighborhoodTypes = [
+  'disease',
+  'phenotype',
+  'anatomy',
+];
 
 export async function getNeighborhood(nodeId, nodeType) {
   // const graphUrl = `${biolink}graph/node/${nodeId}`;
@@ -288,13 +245,13 @@ export async function getNeighborhood(nodeId, nodeType) {
           equivalentClasses.push(edge.sub);
         }
       }
-      else {
-        console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
-        console.log(JSON.stringify(edge, null, 2));
-      }
+      // else {
+      //   console.log('getNeighborhood unhandled edge type', nodeId, edge.pred);
+      //   console.log(JSON.stringify(edge, null, 2));
+      // }
     });
   }
-  if (nodeType === 'gene' || nodeType === 'variant') {
+  if (neighborhoodTypes.indexOf(nodeType) === -1) {
     superclasses.length = 0;
     subclasses.length = 0;
   }
@@ -320,9 +277,18 @@ const categoriesAll = [
   'individual',
   'publication',
   'model',
+  'anatomical entity',
 ];
 
-const categoriesSome = categoriesAll.slice(0, 5);
+
+function pruneUnusableCategories(data) {
+  const categoryCounts = data.facet_counts.category;
+  Object.keys(categoryCounts).forEach((key) => {
+    if (categoriesAll.indexOf(key) === -1) {
+      delete categoryCounts[key];
+    }
+  });
+}
 
 
 export async function getSources() {
@@ -365,6 +331,7 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   }
 
   const bioentityResp = await axios.get(bioentityUrl, { params });
+  pruneUnusableCategories(bioentityResp.data);
   return bioentityResp.data;
 }
 
