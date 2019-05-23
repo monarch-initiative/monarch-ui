@@ -325,6 +325,16 @@ const categoriesAll = [
 const categoriesSome = categoriesAll.slice(0, 5);
 
 
+export async function getSources() {
+  const url = `${biolink}metadata/datasets`;
+  const params = new URLSearchParams();
+
+  const bioentityResp = await axios.get(url, { params });
+  const data = bioentityResp.data;
+
+  return data;
+}
+
 export async function getSearchResults(query, start, rows, categories, taxa) {
   const bioentityUrl = `${biolink}search/entity/${query}`;
   const params = new URLSearchParams();
