@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 // import { shallowMount } from '@vue/test-utils';
 import { shallowMountWithRouting } from './test-utils';
-import MonarchFooter from '@/components/Footer.md';
+import MonarchFooter from '@/components/Footer.vue';
 
 // Fixing the:
 //  Unknown custom element: <router-link>
@@ -9,7 +9,7 @@ import MonarchFooter from '@/components/Footer.md';
 // See: https://stackoverflow.com/a/50639123/5667222
 //
 
-describe('Footer.md', () => {
+describe('Footer.vue', () => {
   it('renders About Monarch', () => {
     const wrapper = shallowMountWithRouting(MonarchFooter);
     expect(wrapper.text()).to.include('About Monarch');

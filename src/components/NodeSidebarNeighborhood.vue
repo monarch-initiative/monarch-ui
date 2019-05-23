@@ -90,7 +90,7 @@ $neighborhood-button-width: 32px;
   top: ($navbar-height + 70);
   left: (-$neighborhood-width);
   min-height: 40px;
-  z-index: 1050;
+  z-index: $monarch-node-sidebar-flyout-z;
   transition: all 0.3s;
   overflow-y: auto;
   overflow-x: hidden;

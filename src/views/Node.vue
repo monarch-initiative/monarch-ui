@@ -201,7 +201,7 @@
           </div>
 
           <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.hits[0]"
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
             class="row">
             <genome-feature
               :mygene-data="node.geneInfo"/>
@@ -225,6 +225,9 @@
         </div>
       </div>
     </div>
+    <script
+      type="application/ld+json"
+      v-html="jsonld"/>
   </div>
 </template>
 
@@ -311,6 +314,25 @@ export default {
 
   data() {
     return {
+      jsonld: [
+        {
+          '@context': 'http://schema.org',
+          '@type': 'Organization',
+          'url': 'https://monarchinitiative.org',
+          'email': 'info@monarchinitiative.org'
+        },
+        // specify actions
+        {
+          '@context': 'http://schema.org',
+          '@type': 'WebSite',
+          'url': 'https://monarchinitiative.org',
+          'potentialAction': {
+            '@type': 'SearchAction',
+            'target': 'https://monarchiniative.org/search/{term}',
+            'query-input': 'required name=term'
+          }
+        },
+      ],
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
@@ -506,11 +528,11 @@ export default {
           // console.log('updateCounts', cardType, acount);
 
           if (acount > 0 && taxonTotal === 0) {
-            console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
+            // console.log('mismatch1', acount, taxonFiltered, taxonCount, cardType);
             taxonFiltered = acount;
           }
           if (acount > 0 && taxonFiltered !== acount) {
-            console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
+            // console.log('mismatch2', acount, taxonFiltered, taxonCount.total, cardType);
             // taxonFiltered = acount;
           }
           this.counts[cardType] = taxonFiltered;

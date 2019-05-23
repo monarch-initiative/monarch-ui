@@ -56,7 +56,6 @@
         <h4>For the top 15 species in Monarch</h4>
       </div>
     </section>
-    <monarch-footer/>
   </div>
 </template>
 
@@ -64,7 +63,6 @@
 export default {
   name: 'Analytics',
   components: {
-    'monarch-footer': require('@/components/Footer.md').default,
   },
   data() {
     return {

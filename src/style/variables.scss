@@ -1,4 +1,5 @@
 $navbar-height: 36px !default;
+$footer-height: 30px !default;
 
 // $body-color:                $gray-900 !default;
 // $font-size-base: 0.875rem;   // 14px !default;
@@ -18,6 +19,23 @@ $nav-link-padding-y:        0 !default;
 $nav-link-padding-x:        0 !default;
 
 
+/*
+  Copied from bootstrap/scss/_variables.scss for reference:
+    $zindex-dropdown:                   1000 !default;
+    $zindex-sticky:                     1020 !default;
+    $zindex-fixed:                      1030 !default;
+    $zindex-modal-backdrop:             1040 !default;
+    $zindex-modal:                      1050 !default;
+    $zindex-popover:                    1060 !default;
+    $zindex-tooltip:                    1070 !default;
+*/
+
+$monarch-node-title-z: 1;
+$monarch-node-sidebar-z: 100;
+$monarch-node-sidebar-flyout-z: ($monarch-node-sidebar-z + 2);
+$monarch-node-overlay-z: ($monarch-node-sidebar-z + 1);
+$monarch-autocomplete-category-z: 1001;
+$monarch-footer-z: ($monarch-node-sidebar-z + 10);
 
 $grid-breakpoints: (
   xs: 0,

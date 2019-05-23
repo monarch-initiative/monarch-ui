@@ -11,10 +11,6 @@
     <vml-home-data-component/>
     <vml-home-partners-component/>
 
-    <div class="row">
-      <home-footer/>
-    </div>
-
   </div>
 </template>
 
@@ -51,8 +47,6 @@ export default {
     'vml-home-news-component': require('@/components/HomeNews.md').default,
     'vml-home-data-component': require('@/components/HomeData.md').default,
     'vml-home-partners-component': require('@/components/HomePartners.md').default,
-
-    'home-footer': require('@/components/HomeFooter.vue').default,
   },
 };
 </script>

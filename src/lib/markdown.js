@@ -77,6 +77,10 @@ to="${href}">
 
     return result;
   };
+
+  parser.renderer.rules.blockquote_open = function link(tokens, idx, options, env, self) {
+    return '<blockquote class="blockquote">';
+  };
 }
 
 module.exports = {

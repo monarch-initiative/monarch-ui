@@ -56,6 +56,11 @@ const router = new Router({
       component: require('@/views/AboutTeam.md').default,
     },
     {
+      path: '/about/citing',
+      name: 'about-citing',
+      component: require('@/views/Citing.md').default,
+    },
+    {
       path: '/search/:query?',
       name: 'search',
       // route level code-splitting

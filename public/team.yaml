@@ -16,82 +16,85 @@
 #
 
 institutions:
+  - id: osu
+    name: Oregon State University
+    logo: img/team/osu.png
+    website: https://oregonstate.edu/
+    people:
+    - name: Melissa Haendel
+      picture: img/team/MelissaHaendel.jpg
+      title: Monarch PI
+      alumni: false
+      bio: |
+        Dr. Haendel is currently a PI of the Monarch Initiative.
+        She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
+    - name: Julie McMurry
+      picture: img/team/JulieMcMurry.jpg
+      title: Associate Director
+      alumni: false
+      bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
+    - name: Tom Conlin
+      picture: img/team/TomConlin.png
+      title: Bioinformaticist
+      alumni: false
+      bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
+    - name: Dan Keith
+      picture: img/team/DanielKeith.png
+      title: Bioinformatics Semantic Engineer
+      alumni: false
+      bio: |+
+        Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
+        He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
+        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis. 
+    - name: Moni Munoz-Torres
+      picture: img/team/MoniMunozTorres.jpg
+      title: Program Manager
+      alumni: false
+      bio: Moni is a curator of genomes, and her work has focused on facilitating the development of software tools that accomplish these tasks, both structural and functional genome curation. She is a highly accomplished genomics scientist with extensive experience at the computer and at the bench. She has had substantial experience in project management, especially for bioinformatics software development and for genome curation efforts. And has been very successful in building and growing communities around genome curation efforts. Moni is the Program Manager for the Monarch Initiative.
+    - name: Kent Shefchek
+      picture: img/team/KentShefchek.jpg
+      title: Bioinformatics Software Engineer
+      alumni: false
+      bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
+    - name: Anne Thessen
+      picture: img/team/AnneThessen.png
+      title: Biodiversity Informaticist
+      alumni: false
+      bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.  
+    - name: Tim Putman
+      picture: img/team/TimPutman.jpg
+      title: Bioinformatic Biologist
+      alumni: true
+      bio: Tim needs his bio to be filled out.  
   - id: ohsu
     name: Oregon Health & Science University
-    logo: img/team/ohsu.gif
+    logo: img/team/ohsu.jpg
     website: http://ohsu.edu
     people:
-      - name: Melissa Haendel
-        picture: img/team/MelissaHaendel.jpg
-        title: Monarch PI
-        alumni: false
-        bio: |
-          Dr. Haendel is currently a PI of the Monarch Initiative.
-          She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
-      - name: Nicole Vasilevsky
-        picture: img/team/NicoleVasilevsky.jpg
-        title: Lead Biocurator
-        alumni: false
-        bio: Dr. Vasilevsky is the lead biocurator for the Monarch project. She has a BA in Biology from Reed College and a Ph.D. in Cell Biology from Oregon Health & Science University. Nicole contributes to biocuration efforts for Monarch, and ontology development for the Human Phenotye Ontology (HPO), the Monarch Merged Disease Ontology (MONDO), the Cell Ontology (CL), and others.
       - name: Matthew Brush
         picture: img/team/MatthewBrush.jpg
         title: Ontologist
         alumni: false
         bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
-      - name: Julie McMurry
-        picture: img/team/JulieMcMurry.jpg
-        title: Software Program Manager
-        alumni: false
-        bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
-      - name: Kent Shefchek
-        picture: img/team/KentShefchek.jpg
-        title: Bioinformatics Software Engineer
-        alumni: false
-        bio: Kent is a Software Engineer for the OHSU ontology development group where he develops the Monarch API, front end visualizations, and the data ingest pipeline. Kent has a BS in Biology from the University of Maryland, College Park and a MS in Biotechnology with a specialization in Bioinformatics from the University of Maryland, University College.
-      - name: Dan Keith
-        picture: img/team/DanielKeith.png
-        title: Bioinformatics Semantic Engineer
-        alumni: false
-        bio: |+
-          Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
-          He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
-          Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
-
-          ###### Markdown Headers Work in YAML!
-          - This is **bold** and this is *italic*
-          - this is an [internal link](/about/monarch)
-          - [external link](https://en.wikipedia.org/wiki/Monarch_butterfly)
-          - [internal link with a hash](/about/monarch/#collaborations-and-partners)
-          - [intrapage link with just a hash](#monarch-people-and-their-institutions)
-      - name: Tim Putman
-        picture: img/team/TimPutman.jpg
-        title: Bioinformatic Biologist
-        alumni: false
-        bio: Tim needs his bio to be filled out.
-      - name: Tom Conlin
-        picture: img/team/TomConlin.png
-        title: Bioinformaticist
-        alumni: false
-        bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
-      - name: Lilly Winfree
-        picture: img/team/LillyWinfree.jpg
-        title: Science and Data Analyst
-        alumni: false
-        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
-      - name: Anne E Thessen
-        picture: img/team/AnneThessen.png
-        title: Biodiversity Informaticist
-        alumni: false
-        bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.
       - name: Shahim Essaid
         picture: img/team/ShahimEssaid.jpg
         title: Ontologist
-        alumni: true
-        bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
+        alumni: false
+        bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.   
+      - name: Nicole Vasilevsky
+        picture: img/team/NicoleVasilevsky.jpg
+        title: Lead Biocurator
+        alumni: false
+        bio: Dr. Vasilevsky is the lead biocurator for the Monarch project. She has a BA in Biology from Reed College and a Ph.D. in Cell Biology from Oregon Health & Science University. Nicole contributes to biocuration efforts for Monarch, and ontology development for the Human Phenotye Ontology (HPO), the Monarch Disease Ontology (Mondo), the Cell Ontology (CL), and others.
       - name: Bryan Laraway
         title: Data Wrangler
         alumni: true
         bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
+      - name: Lilly Winfree
+        picture: img/team/LillyWinfree.jpg
+        title: Science and Data Analyst
+        alumni: true
+        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.  
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
     logo: img/team/lbnl.jpeg
@@ -102,30 +105,45 @@ institutions:
         title: Monarch PI
         alumni: false
         bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
-      - name: Suzanna Lewis
-        picture: img/team/SuzannaLewis.jpg
-        title: Genomics
-        alumni: false
-        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Seth Carbon
         picture: img/team/person-unknown.png
         title: Software Engineer
         alumni: false
         bio: Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC).
+      - name: Eric Douglass
+        picture: img/team/person-unknown.png
+        title: Software Engineer
+        alumni: false
       - name: Nathan Dunn
         picture: img/team/NathanDunn.jpg
         title: Software Engineer
         alumni: false
         bio: Nathan Dunn has a a MS in Chemical Engineering from the University of Washington and a PhD in Computer Science from the University of Oregon where he focused on using artifical neural networks to model the C. elegans nervous system. Since then he has worked in various capacities supporting scientific research.  His current focus is on development of collaborative genomic editing tools.
-      - name: Eric Douglass
-        picture: img/team/person-unknown.png
-        title: Software Engineer
+      - name: Nomi Harris
+        picture: img/team/NomiHarris.jpg
+        title: Program Manager
         alumni: false
+        bio: Nomi Harris has an MS in computer science from MIT. She is the program manager for Berkeley Bioinformatics Open-source Projects (BBOP), and works on Monarch as well as a variety of other projects.
+      - name: Justin Reese
+        picture: img/team/JustinReese.jpg
+        title: Software developer
+        alumni: false
+        bio: Justin is a a computational biologist with an interest in integrating bioinformatics data to facilitate discovery, especially with respect to human disease. He develops software for the Monarch Initiative and other projects.
       - name: Deepak Unni
         picture: img/team/DeepakUnni.jpg
         title: Bioinformatics Software Developer
         alumni: false
         bio: Deepak Unni has an MS in Bioinformatics from Georgia Tech and has previously worked on NGS data analysis, genomic data integration, and the development of Apollo - a manual collaborative genome annotation editing tool. He joined Berkeley Bioinformatics Open-source Projects (BBOP), at LBNL, in 2018.
+      - name: Sarah Kim
+        picture: img/team/person-unknown.png
+        title: Web Developer/Designer
+        alumni: true
+        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.
+      - name: Suzanna Lewis
+        picture: img/team/SuzannaLewis.jpg
+        title: Genomics
+        alumni: true
+        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.  
       - name: Jeremy Nguyen Xuan
         picture: img/team/person-unknown.png
         title: Software Engineer
@@ -146,11 +164,6 @@ institutions:
         title: Lead Bioinformatician
         alumni: true
         bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
-      - name: Sarah Kim
-        picture: img/team/person-unknown.png
-        title: Web Developer/Designer
-        alumni: true
-        bio: Sarah is currently a undergraduate Computer Science student at UC Berkeley. She is working on the front-end of the Monarch website.
 
   - id: jax
     name: The Jackson Laboratory
@@ -162,16 +175,16 @@ institutions:
         picture: img/team/PeterRobinson.jpg
         alumni: false
         bio:  Dr. Robinson has a BA in Mathematics as well as an M.S. in computer science from Columbia University, and an MD from University of Pennsylvania. He worked as a clinician and researcher at the Charité Universitätsmedizin Berlin, Germany, between 1996 and 2016, and achieved certification (“Facharzt”) in pediatrics, as well as a Habilitation (“Privatdozent”) in Human Genetics. He was Professor for Medical Genomics at the Charité until August, 2016, when he relocated to the Jackson Laboratory for Genomic Medicine in Farmington, CT, USA. Much of Peter’s work has involved the development of computational resources and algorithms for the study of human hereditary diseases, including the development of the Human Phenotype Ontology (HPO) as well as the bioinformatics analysis of next-generation sequencing data including exome, genome, RNA-Seq, ChIP-Seq, and TCR sequencing experiments. Wetlab highlights include the identification of the disease genes CA8, PIGV, PIGO, and PGAP2 as well as investigations of treatment strategies for Marfan syndrome related to inhibition of a class of GxxPG-containing fragments of the extracellular matrix.
-      - name: Leigh Carmody
-        title: Scientific Curator
-        picture: img/team/CarmodyLeigh_headshot_Nov2016.jpg
-        alumni: false
-        bio:  Leigh Carmody, Ph.D., obtained her doctorate of philosophy in Molecular Physiology & Biophysics from Vanderbilt University in Spring 2007 where she studied targeting of signaling molecules to F-actin cytoskeleton/dendritic spines. Dr. Carmody continued her studies as a postdoctoral fellow at Massachusetts Institute of Technology where she investigated the role of Rac1 in dendritic spine motility. Late 2008, she joined the Broad Institute of MIT & Harvard as a Scientist where she aided in early-stage drug discovery efforts to identify chemical leads directed at cancer targets and neglected parasitic infections.  Dr. Carmody joined Jackson Laboratory in 2015 as a Project Manager, and is currently a Scientific Curator annotating phenotyping and genomics data for the human phenotype ontology (HPO) database.
       - name: Hannah Blau
         title: Research Software Engineer
         picture: img/team/HannahBlau.jpg
         alumni: false
         bio:  Hannah Blau holds the Ph.D. in Computer Science from the University of Massachusetts Amherst, M.S.E. in Computer and Information Science from the University of Pennsylvania, and B.A. in French from Yale University. She worked as an AI Engineer/Research Scientist at the Artificial Intelligence Center of the Bull Corporation (Louveciennes, France), the Machine Learning Group of the Daimler-Benz Research Centre (Ulm, Germany), and the Automated Reasoning Group of the Honeywell Technology Center (Minneapolis, Minnesota). While in the Ph.D. program she served as data scientist for Professor M. Darby Dyar, Chair of Astronomy at Mount Holyoke College (South Hadley, Massachusetts).
+      - name: Leigh Carmody
+        title: Scientific Curator
+        picture: img/team/CarmodyLeigh_headshot_Nov2016.jpg
+        alumni: false
+        bio:  Leigh Carmody, Ph.D., obtained her doctorate of philosophy in Molecular Physiology & Biophysics from Vanderbilt University in Spring 2007 where she studied targeting of signaling molecules to F-actin cytoskeleton/dendritic spines. Dr. Carmody continued her studies as a postdoctoral fellow at Massachusetts Institute of Technology where she investigated the role of Rac1 in dendritic spine motility. Late 2008, she joined the Broad Institute of MIT & Harvard as a Scientist where she aided in early-stage drug discovery efforts to identify chemical leads directed at cancer targets and neglected parasitic infections.  Dr. Carmody joined Jackson Laboratory in 2015 as a Project Manager, and is currently a Scientific Curator annotating phenotyping and genomics data for the human phenotype ontology (HPO) database.
   - id: charite
     name: Charité - Universitätsmedizin Berlin
     logo: img/team/charite.png
@@ -207,26 +220,6 @@ institutions:
         alumni: false
         title: Computational Biologist
         bio: Dr. Cacheiro holds a BSc in Biology, a MSc in Statistics, and a PhD in Molecular Medicine. Pilar performs computational and statistical analyses of model organism data to assist identification and characterization of human disease-associated genes.
-  - id: garvan
-    name: Garvan Institute
-    logo: img/team/garvan.png
-    website: http://garvan.org.au/
-    people:
-      - name: Tudor Groza
-        alumni: false
-        picture: img/team/TudorGroza.jpg
-        title: Phenomics Team Leader
-        bio: Dr. Groza is Phenomics Team Leader in the Kinghorn Centre for Clinical Genomics, at the Garvan Institute of Medical Research, Sydney Australia. Tudor has a BSc and an MSc, both in Computer Science, from Technical University of Cluj Napoca, Romania and a PhD in Semantic Web / Computer Science from the Digital Enterprise Research Institute (DERI) Galway, National University of Ireland, Galway. His current research covers the entire phenotype analytics stack, from representation and acquisition (from publications or clinical reports) to decision making - including disorder prediction, patient matchmaking or variant prioritisation.
-      - name: Craig McNamara
-        alumni: false
-        picture: img/team/CraigMcNamara.jpg
-        title: Developer
-        bio: Craig is a UX & front-end engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics, where he is leading the front-end development of several components, including PhenoDisquss and the Patient Archive. Craig is an expert in UX design and testing, as well as development using AngularJS, and has a double degree in Software Engineering and Multimedia Design from the University of Queensland.
-      - name: Edwin Zhang
-        alumni: true
-        picture: img/team/EdwinZhang.jpg
-        title: Developer
-        bio: Edwin is a Software Engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics. He is in charge with the development of the backend of the collaborative knowledge curation platform PhenoDisquss. Edwin is an expert in data structures, algorithms and big data and has a BS in Telecommunication Engineering from Nanjing Institute of Technology and two MS - one in Computer Science (University of Wollongong) and one in Information Technology (University of Technology Sydney).
   - id: renci
     name: Renaissance Computing Institute, University of North Carolina at Chapel Hill
     logo: img/team/renci.png
@@ -237,9 +230,44 @@ institutions:
         title: Senior Research Scientist
         alumni: false
         bio: "Dr. Balhoff has a PhD in Biology from Duke University. He is interested in the application of ontologies and automated reasoning to facilitate the use and integration of biological data."
+  - id: embl-ebi
+    name: European Bioinformatics Institute (EMBL-EBI)
+    logo: img/team/ebi.png
+    website: https://www.ebi.ac.uk
+    people:
+      - name: David Osumi-Sutherland
+        picture: img/team/DavidOS.jpg
+        title: Monarch PI
+        alumni: false
+        bio: Dr. Osumi-Sutherland has a PhD in Developmental Biology from the University of Warwick. Being a major contributor to the Gene Ontology, Flybase and Cell Ontology, he has over ten years of experience on semantic integration. Dr. Osumi-Sutherland is a PI and founder of the Virtual Fly Brain project. He is developing tools that facilitate the reconciliation of the ontologies used by the Monarch Initiative, to improve their general maintainability, quality and integration.
+      - name: Nicolas Matentzoglu
+        picture: img/team/NicolasMatentzoglu.jpg
+        title: Semantic Web Developer
+        alumni: false
+        bio: Dr. Matentzoglu has a PhD in ontology reasoning and modularity from the University of Manchester. Together with Dr. Osumi-Sutherland, he is working on improving the integration of and extending the various ontologies used by the Monarch Initiative.
+  - id: garvan
+    name: Garvan Institute (past)
+    logo: img/team/garvan.png
+    website: http://garvan.org.au/
+    people:
+      - name: Tudor Groza
+        alumni: true
+        picture: img/team/TudorGroza.jpg
+        title: Phenomics Team Leader
+        bio: Dr. Groza is Phenomics Team Leader in the Kinghorn Centre for Clinical Genomics, at the Garvan Institute of Medical Research, Sydney Australia. Tudor has a BSc and an MSc, both in Computer Science, from Technical University of Cluj Napoca, Romania and a PhD in Semantic Web / Computer Science from the Digital Enterprise Research Institute (DERI) Galway, National University of Ireland, Galway. His current research covers the entire phenotype analytics stack, from representation and acquisition (from publications or clinical reports) to decision making - including disorder prediction, patient matchmaking or variant prioritisation.
+      - name: Craig McNamara
+        alumni: true
+        picture: img/team/CraigMcNamara.jpg
+        title: Developer
+        bio: Craig is a UX & front-end engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics, where he is leading the front-end development of several components, including PhenoDisquss and the Patient Archive. Craig is an expert in UX design and testing, as well as development using AngularJS, and has a double degree in Software Engineering and Multimedia Design from the University of Queensland.
+      - name: Edwin Zhang
+        alumni: true
+        picture: img/team/EdwinZhang.jpg
+        title: Developer
+        bio: Edwin is a Software Engineer in the Phenomics Team at the Kinghorn Centre for Clinical Genomics. He is in charge with the development of the backend of the collaborative knowledge curation platform PhenoDisquss. Edwin is an expert in data structures, algorithms and big data and has a BS in Telecommunication Engineering from Nanjing Institute of Technology and two MS - one in Computer Science (University of Wollongong) and one in Information Technology (University of Technology Sydney).
   - id: pitt
-    name: University of Pittsburgh
-    logo: img/team/pitt.png
+    name: University of Pittsburgh (past)
+    logo: img/team/pitt.jpeg
     website: http://pitt.edu
     people:
       - name: Harry Hochheiser
@@ -267,18 +295,3 @@ institutions:
         alumni: true
         title: Senior Research Scientist, Department of Biomedical Informatics
         bio: Jeremy is trained in General Medicine, Medical Informatics and Intelligent Systems.  His claim to fame is programming the first real-time disease surveillance system in 1999—the Real-time Outbreak and Disease Surveillance System (RODS).  RODS and its open source derivatives have subsequently been deployed in over 16 states and a couple of countries.  He has also managed the IT infrastructure of the National Retail Monitor which provides over-the-counter medication sales data from over 33,000 retail stores to health departments across the U.S..  In his free time he enjoys hacking micro controllers, piano and 3d printing.
-  - id: embl-ebi
-    name: European Bioinformatics Institute (EMBL-EBI)
-    logo: img/team/ebi.png
-    website: https://www.ebi.ac.uk
-    people:
-      - name: David Osumi-Sutherland
-        picture: img/team/DavidOS.jpg
-        title: Monarch PI
-        alumni: false
-        bio: Dr. Osumi-Sutherland has a PhD in Developmental Biology from the University of Warwick. Being a major contributor to the Gene Ontology, Flybase and Cell Ontology, he has over ten years of experience on semantic integration. Dr. Osumi-Sutherland is a PI and founder of the Virtual Fly Brain project. He is developing tools that facilitate the reconciliation of the ontologies used by the Monarch Initiative, to improve their general maintainability, quality and integration.
-      - name: Nicolas Matentzoglu
-        picture: img/team/NicolasMatentzoglu.jpg
-        title: Semantic Web Developer
-        alumni: false
-        bio: Dr. Matentzoglu has a PhD in ontology reasoning and modularity from the University of Manchester. Together with Dr. Osumi-Sutherland, he is working on improving the integration of and extending the various ontologies used by the Monarch Initiative.

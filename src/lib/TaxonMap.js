@@ -72,6 +72,11 @@ export function idToLabel(id) {
   return taxonIdToLabelMap[id];
 }
 
+export function labelToId(label) {
+  const entry = Object.entries(taxonIdToLabelMap).find(e => e[1] === label);
+  return entry ? entry[0] : null;
+}
+
 const cardTypesSupportingTaxon = [
   'gene',
   'genotype',
@@ -82,4 +87,19 @@ const cardTypesSupportingTaxon = [
 
 export function isTaxonCardType(cardType) {
   return cardTypesSupportingTaxon.indexOf(cardType) >= 0;
+}
+
+
+const apolloAGRTaxons = [
+  6239, // 'Caenorhabditis elegans'
+  7955, // 'Danio rerio'
+  7227, // 'Drosophila melanogaster'
+  9606, // 'Homo sapiens'
+  10090, // 'Mus musculus'
+  10116, // 'Rattus norvegicus'
+  559292, // 'Saccharomyces cerevisiae'
+];
+
+export function isAGRApolloTaxon(taxonId) {
+  return apolloAGRTaxons.indexOf(taxonId) >= 0;
 }

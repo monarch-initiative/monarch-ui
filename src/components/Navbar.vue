@@ -21,28 +21,6 @@
       is-nav=""
     >
       <b-navbar-nav>
-        <!--
-        <b-nav-item-dropdown
-          text="Browse"
-        >
-          <b-dropdown-item
-            to="/disease">
-            Diseases
-          </b-dropdown-item>
-          <b-dropdown-item
-            to="/phenotype">
-            Phenotypes
-          </b-dropdown-item>
-          <b-dropdown-item
-            to="/gene">
-            Genes
-          </b-dropdown-item>
-          <b-dropdown-item
-            to="/model">
-            Models
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-        -->
         <b-nav-item-dropdown
           text="Tools"
         >
@@ -75,22 +53,17 @@
             About Us
           </b-dropdown-item>
 
-          <!--
           <b-dropdown-item
-            to="/page/disclaimer">
-            Disclaimer
+            to="/about/citing">
+            Citing Monarch
           </b-dropdown-item>
-
           <b-dropdown-item
-            to="/page/pubs">
-            Publications
+            href="https://medium.com/@MonarchInit"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Blog
           </b-dropdown-item>
-
-          <b-dropdown-item
-            to="/page/links">
-            Link To Us
-          </b-dropdown-item>
-          -->
 
           <b-dropdown-item
             to="/about/README">
@@ -104,12 +77,20 @@
 
           <b-dropdown-item
             href="https://github.com/monarch-initiative"
-            target="_blank">
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub Organization
           </b-dropdown-item>
+        </b-nav-item-dropdown>
 
-          <b-dropdown-divider/>
-
+        <b-nav-item-dropdown
+          text="…"
+        >
+          <b-dropdown-header
+            class="text-info bg-white">
+            Interesting nodes for Demo or Debugging
+          </b-dropdown-header>
           <b-dropdown-item
             to="/disease/MONDO:0007947">
             Disease: Marfan syndrome MONDO:0007947
@@ -119,7 +100,6 @@
             to="/disease/OMIM:105830">
             Disease: Angelman syndrome OMIM:105830
           </b-dropdown-item>
-
 
           <b-dropdown-item
             to="/disease/MONDO:0007739#gene">
@@ -137,48 +117,33 @@
           </b-dropdown-item>
 
           <b-dropdown-item
-            to="/gene/HGNC:11773">
-            Gene: TGFBR2 HGNC:11773
-          </b-dropdown-item>
-
-          <b-dropdown-item
-            to="/gene/HGNC:11180">
-            Gene: SOD2 HGNC:11180
-          </b-dropdown-item>
-
-          <b-dropdown-item
             to="/disease/MONDO:0010156">
             Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>
 
+          <b-dropdown-divider/>
+
+          <b-dropdown-item
+            to="/gene/HGNC:11773">
+            Gene: TGFBR2 <em>Homo sapiens</em> HGNC:11773
+          </b-dropdown-item>
+
+          <b-dropdown-item
+            to="/gene/HGNC:11180">
+            Gene: SOD2 <em>Homo sapiens</em> HGNC:11180
+          </b-dropdown-item>
+
           <b-dropdown-item
             to="/gene/ZFIN:ZDB-GENE-980526-333">
-            sox3 (Danio rerio) ZFIN:ZDB-GENE-980526-333
+            Gene: sox3 <em>Danio rerio</em> ZFIN:ZDB-GENE-980526-333
           </b-dropdown-item>
 
+          <b-dropdown-item
+            to="/gene/NCBIGene:428534">
+            Gene: SOX17 <em>Gallus gallus</em> NCBIGene:428534
+          </b-dropdown-item>
         </b-nav-item-dropdown>
 
-        <!--
-        <b-nav-item-dropdown
-          text="Data"
-        >
-          <b-dropdown-item
-            to="/page/releases">
-            Releases
-          </b-dropdown-item>
-
-          <b-dropdown-item
-            to="/page/services">
-            Monarch Web Services
-          </b-dropdown-item>
-
-          <b-dropdown-item
-            to="/about/sources">
-            Data Sources
-          </b-dropdown-item>
-
-        </b-nav-item-dropdown>
-      -->
       </b-navbar-nav>
 
       <b-navbar-nav
