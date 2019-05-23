@@ -8,7 +8,7 @@
       <div class="row border">
         <div class="col-1">  id </div>
         <div class="col-6">  title </div>
-        <div class="col-2">  sourceDate </div>
+        <div class="col-2">  version </div>
         <div class="col-3">  url </div>
       </div>
       <div
@@ -17,7 +17,7 @@
         class="row">
         <div class="col-1"> {{ source.id }}</div>
         <div class="col-6"> {{ source.title }}</div>
-        <div class="col-2"> {{ source.sourceDate }}</div>
+        <div class="col-2"> {{ source.meta.version[0] }}</div>
         <div class="col-3"> <a
           :href="source.url"
           target="_blank">{{ source.url }}</a></div>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import getSources from '@/api/Sources';
+import * as BL from '@/api/BioLink';
 
 export default {
   name: 'Sources',
@@ -59,7 +59,7 @@ export default {
     };
   },
   async mounted() {
-    this.sources = (await getSources()).sources;
+    this.sources = (await BL.getSources());
     console.log('Num sources=', this.sources);
   },
   // mounted() {
