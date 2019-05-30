@@ -140,19 +140,19 @@ export default {
 };
 </script>
 <style>
-    #exacGene {
-        border-radius: 10px;
-        border: solid darkgray 1px;
-    }
+  #exacGene {
+    border-radius: 10px;
+    border: solid darkgray 1px;
+  }
 
-    #mgi-link {
-        text-align: left;
-        margin-bottom: 4px;
-    }
+  #mgi-link {
+    text-align: left;
+    margin-bottom: 4px;
+  }
 
-    #exac-link {
-        text-align: right;
-        margin-bottom: 4px;
-    }
+  #exac-link {
+    text-align: right;
+    margin-bottom: 4px;
+  }
 
 </style>

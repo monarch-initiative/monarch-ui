@@ -92,11 +92,11 @@ const router = new Router({
     },
     {
       path: '/*',
-      name: 'MonarchLegacy',
+      name: 'RouteError',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "MonarchLegacy" */ './views/MonarchLegacy.vue'),
+      component: () => import(/* webpackChunkName: "routeerror" */ './views/RouteError.vue'),
     },
   ],
 

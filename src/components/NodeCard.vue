@@ -72,8 +72,8 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 
-$card-height: 75px;
-$card-width: 400px;
+$card-height: 65px;
+$card-width: 300px;
 
 .card.node-card {
   margin: 0 auto;

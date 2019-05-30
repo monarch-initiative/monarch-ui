@@ -22,6 +22,15 @@
 import Vue from 'vue';
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
+import sanitizeHTML from 'sanitize-html';
+
+Vue.prototype.$sanitizeText = function sanitizeText(dirty) {
+  const result = sanitizeHTML(dirty, {
+    allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img', 'sup'])
+  });
+
+  return result;
+};
 
 Vue.component('monarch-footer', Footer);
 export default {

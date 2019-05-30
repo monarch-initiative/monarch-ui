@@ -26,7 +26,7 @@
                 :key="category"
                 href
                 class="row">
-                {{ category }}
+                {{ biolinkCategory(category) }}
                 &nbsp;
                 <button
                   class="fa fa-remove"
@@ -66,14 +66,14 @@
           <div class="card-body py-1">
             <ul class="showFacetLinks col-md-12">
               <li
-                v-for="(value, propertyName) of facetCategories"
-                :key="propertyName"
+                v-for="(value, category) of facetCategories"
+                :key="category"
                 class="border-top border-bottom"
               >
                 <a
                   href
-                  @click.prevent="addCategoryFilter(propertyName)">
-                  {{ propertyName }}
+                  @click.prevent="addCategoryFilter(category)">
+                  {{ biolinkCategory(category) }}
                   &nbsp;
                   <div class="pull-right">
                     {{ value }}
@@ -93,14 +93,14 @@
           <div class="card-body py-1">
             <ul class="showFacetLinks col-md-12">
               <li
-                v-for="(value, propertyName) of facetTaxons"
-                :key="propertyName"
+                v-for="(value, taxon) of facetTaxons"
+                :key="taxon"
                 class="border-top border-bottom"
               >
                 <a
                   href
-                  @click.prevent="addTaxonFilter(propertyName)">
-                  {{ propertyName }}
+                  @click.prevent="addTaxonFilter(taxon)">
+                  {{ taxon }}
                   &nbsp;
                   <div class="pull-right">
                     {{ value }}
@@ -141,7 +141,7 @@
                 slot-scope="row"
               >
                 <router-link :to="row.item.toLink">
-                  {{ row.item.label }}
+                  <span v-html="row.item.label"/>
                 </router-link>
               </template>
               <template
@@ -162,15 +162,9 @@
 
 <script>
 import * as BL from '@/api/BioLink';
+import { reduceCategoryList } from '@/lib/CategoryMap';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
-const validCats = {
-  'gene': 'gene',
-  'phenotype': 'phenotype',
-  'genotype': 'genotype',
-  'disease': 'disease',
-  'variant': 'variant',
-};
 
 export default {
   name: 'Search',
@@ -185,8 +179,8 @@ export default {
       rowsPerPage: DEFAULT_ROWS_PER_PAGE,
       categoryFilters: [],
       taxonFilters: [],
-      facetCategories: [],
-      facetTaxons: [],
+      facetCategories: {},
+      facetTaxons: {},
       numFound: 0,
       numRowsDisplayed: 0,
       selenium_id: '',
@@ -226,6 +220,9 @@ export default {
       if (this.$refs['results-table']) {
         this.$refs['results-table'].refresh();
       }
+    },
+    biolinkCategory(category) {
+      return reduceCategoryList([category]);
     },
     addTaxonFilter(taxon) {
       this.taxonFilters.push(taxon);
@@ -272,6 +269,7 @@ export default {
         this.searchResults.length = 0;
         // this.searchParams = {};
         this.facetCategories = {};
+        // console.log(JSON.stringify(searchResponse.facet_counts.category, null, 2));
         Object.keys(searchResponse.facet_counts.category).forEach((key) => {
           if (this.categoryFilters.indexOf(key) === -1) {
             this.facetCategories[key] = searchResponse.facet_counts.category[key];
@@ -283,14 +281,15 @@ export default {
         // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
         searchResponse.docs.forEach((elem, index) => {
           const highlight = searchResponse.highlighting[elem.id];
+          const simplifiedCategory = reduceCategoryList(elem.category);
           const resultPacket = {
-            category: elem.category[0],
+            category: simplifiedCategory,
             taxon: elem.taxon_label,
             label: elem.label[0],
             curie: elem.id,
             rows: this.rows,
             highlight: highlight.highlight,
-            toLink: '/' + elem.category[0] + '/' + elem.id,
+            toLink: '/' + simplifiedCategory + '/' + elem.id,
             match: highlight.match,
             hasHighlight: highlight.has_highlight,
           };

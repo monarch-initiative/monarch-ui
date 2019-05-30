@@ -28,16 +28,6 @@
             to="/analyze/phenotypes">
             Analyze Phenotypes
           </b-dropdown-item>
-          <!--
-          <b-dropdown-item
-            to="/annotate/text">
-            Annotate Text
-          </b-dropdown-item>
-          <b-dropdown-item
-            to="/page/exomes">
-            Exomes
-          </b-dropdown-item>
-          -->
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown
@@ -124,6 +114,11 @@
           <b-dropdown-divider/>
 
           <b-dropdown-item
+            to="/gene/MGI:2447362#model">
+            Gene: Slc24a4 <em>Mus musculus</em> MGI:2447362 (models)
+          </b-dropdown-item>
+
+          <b-dropdown-item
             to="/gene/HGNC:11773">
             Gene: TGFBR2 <em>Homo sapiens</em> HGNC:11773
           </b-dropdown-item>
@@ -141,6 +136,14 @@
           <b-dropdown-item
             to="/gene/NCBIGene:428534">
             Gene: SOX17 <em>Gallus gallus</em> NCBIGene:428534
+          </b-dropdown-item>
+
+
+          <b-dropdown-divider/>
+
+          <b-dropdown-item
+            to="/publication/PMID:28650316">
+            Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
           </b-dropdown-item>
         </b-nav-item-dropdown>
 

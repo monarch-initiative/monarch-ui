@@ -72,7 +72,7 @@ $facets-width: 500px;
 #facets {
   width: $facets-width;
   position: fixed;
-  top: ($navbar-height + 105);
+  top: ($navbar-height + 95);
   left: (-$facets-width);
   min-height: 40px;
   z-index: $monarch-node-sidebar-flyout-z;

@@ -92,7 +92,7 @@
               v-if="suggestion.has_hl"
               class="col-5"
             >
-              <span v-html="suggestion.highlight"/>
+              <span v-html="$sanitizeText(suggestion.highlight)"/>
             </div>
             <div
               v-else
@@ -156,6 +156,7 @@
 
 <script>
 import * as BL from '@/api/BioLink';
+import { reduceCategoryList } from '@/lib/CategoryMap';
 
 const debounce = require('lodash/debounce');
 
@@ -308,7 +309,7 @@ export default {
         searchResponse.docs.forEach((elem) => {
           const resultPacket = {
             match: elem.match,
-            category: this.categoryMap(elem.category),
+            category: reduceCategoryList(elem.category),
             taxon: this.checkTaxon(elem.taxon_label),
             curie: elem.id,
             highlight: elem.highlight,
@@ -397,25 +398,6 @@ export default {
     },
     firstCap(elem) {
       return elem.charAt(0).toUpperCase() + elem.substr(1);
-    },
-    categoryMap(catList) {
-      const validCats = {
-        'gene': 'gene',
-        'variant': 'variant',
-        'phenotype': 'phenotype',
-        'genotype': 'genotype',
-        'disease': 'disease'
-      };
-      const categoryObj = catList.reduce((map, cat) => {
-        const catKey = validCats[cat];
-        if (catKey) {
-          map[catKey] = catKey;
-        }
-        return map;
-      }, {});
-      return categoryObj.gene
-        || categoryObj.variant
-        || Object.keys(categoryObj).join(',');
     },
     checkTaxon(taxon) {
       if (typeof taxon === 'string') {
