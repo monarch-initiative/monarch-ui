@@ -150,20 +150,6 @@
           </div>
 
           <div
-            v-if="!expandedCard && hasGeneExac"
-            class="row py-2">
-            <exac-gene
-              :node-id="nodeId"/>
-          </div>
-
-          <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
-            class="row py-2">
-            <genome-feature
-              :mygene-data="node.geneInfo"/>
-          </div>
-
-          <div
             v-if="!expandedCard"
             class="row node-content-section">
             <div
@@ -197,6 +183,28 @@
                 </span>
               </span>
             </div>
+          </div>
+
+
+          <div
+            v-if="!expandedCard && hasGeneExac"
+            class="row py-2">
+            <exac-gene
+              :node-id="nodeId"/>
+          </div>
+
+          <div
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
+            class="row py-2">
+            <genome-feature
+              :mygene-data="node.geneInfo"/>
+          </div>
+
+          <div
+            v-if="!expandedCard && reactomeId"
+            class="row py-0">
+            <reactome-viewer
+              :reactome-id="reactomeId"/>
           </div>
 
           <div
@@ -250,6 +258,7 @@ import AssocTable from '@/components/AssocTable.vue';
 import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
+import ReactomeViewer from '@/components/ReactomeViewer.vue';
 
 import MarkdownIt from 'markdown-it';
 
@@ -323,6 +332,7 @@ export default {
     'exac-gene': ExacGeneSummary,
     'exac-variant': ExacVariantTable,
     'genome-feature': GenomeFeature,
+    'reactome-viewer': ReactomeViewer,
   },
 
   data() {
@@ -412,6 +422,7 @@ export default {
       expandedCard: null,
       hasGeneExac: false,
       entrezResult: null,
+      reactomeId: null,
 
       counts: {
         disease: 0,
@@ -590,6 +601,7 @@ export default {
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
       this.modifiers = null;
+      this.reactomeId = null;
 
       const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
       const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
@@ -675,6 +687,11 @@ export default {
             this.synonyms.unshift(hit.name);
           }
         }
+      }
+
+      const reactomePrefix = 'REACT:';
+      if (this.nodeType === 'pathway' && this.nodeId.indexOf(reactomePrefix) === 0) {
+        this.reactomeId = this.nodeId.slice(reactomePrefix.length);
       }
 
       //
@@ -806,15 +823,14 @@ div.container-cards .node-content-section {
 }
 
 div.container-cards .node-cards-section {
-  margin-top: 10px;
+  margin-top: 50px;
 }
 
 .title-bar {
   border-bottom: 1px solid lightgray;
   background: aliceblue;
   position: fixed;
-  min-height: ($title-bar-max-height * 3/4);
-  max-height: $title-bar-max-height;
+  height: $title-bar-max-height;
   overflow-y: auto;
   font-size: 0.95rem;
   line-height: $line-height-compact;

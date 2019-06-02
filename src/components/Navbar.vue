@@ -145,6 +145,21 @@
             to="/publication/PMID:28650316">
             Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
           </b-dropdown-item>
+
+          <b-dropdown-divider/>
+
+          <b-dropdown-item
+            to="/pathway/REACT:R-MMU-425561">
+            Pathway: Sodium/Calcium exchangers REACT:R-MMU-425561
+          </b-dropdown-item>
+          <b-dropdown-item
+            to="/pathway/REACT:R-SSC-381753">
+            Pathway: Olfactory Signaling Pathway REACT:R-SSC-381753
+          </b-dropdown-item>
+          <b-dropdown-item
+            to="/pathway/REACT:R-RNO-1461973">
+            Pathway: Defensins REACT:R-RNO-1461973
+          </b-dropdown-item>
         </b-nav-item-dropdown>
 
       </b-navbar-nav>
