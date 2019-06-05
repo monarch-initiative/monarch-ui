@@ -39,11 +39,23 @@ const applyLinkHandlers = monarchMarkdown.applyLinkHandlers;
 
 var Token = require('markdown-it/lib/token');
 
+function slugify(s) {
+  const cleaned = String(s).trim().toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[\:`()]/g, '')
+    .replace(/\//g, '');
+  const result = encodeURIComponent(cleaned);
+  // console.log('slugify', s, result);
+  return result;
+};
+
+
 // https://github.com/valeriangalliat/markdown-it-anchor#usage
 const miaOptions = {
   permalink: true,
   permalinkBefore: false,
-  permalinkSymbol: '&#x1F517;'
+  permalinkSymbol: '&#x1F517;',
+  slugify: slugify,
 };
 
 

@@ -75,7 +75,19 @@ const vueConfig = {
       .loader('vue-loader')
       .end()
       .use('vue-markdown-loader')
-      // Original: .loader('vue-markdown-loader/lib/markdown-compiler')
+      .loader('vue-markdown-loader-improved.js')
+      .options(mdLoaderPlain);
+
+    config.module
+      .rule('CONTRIBUTING')
+      .test(/\.md$/)
+      .include
+      .add(path.resolve('./CONTRIBUTING.md'))
+      .end()
+      .use('vue-loader')
+      .loader('vue-loader')
+      .end()
+      .use('vue-markdown-loader')
       .loader('vue-markdown-loader-improved.js')
       .options(mdLoaderPlain);
 
