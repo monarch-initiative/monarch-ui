@@ -1,6 +1,6 @@
 ## Contributing to the monarch-ui
 
-Thanks for helping make this project better. The [README QuickStart](README) provides easy instructions for someone who wants to *evaluate* the monarch-ui by quickly building and testing it.
+Thanks for helping make this project better. The [README QuickStart](./README.md#quickstart) provides easy instructions for someone who wants to *evaluate* the monarch-ui by quickly building and testing it.
 
 This document is oriented towards *contributors* who wish to improve the source code, make suggestions, report bugs, improve documentation, or otherwise help make the Monarch Initiative UI better or more useful. The monarch-ui project currently uses a form of [GitHub Flow](http://guides.github.com/overviews/flow/) to accept source code modifications via pull requests from a *forked* repo.
 
@@ -234,8 +234,8 @@ Note that we are pushing to 'origin', which is our forked repo. We are definitel
 
 Once you are satisfied that your changes are ready to submit as a Pull Request, please ensure that the code passes Testing and Linting as described here:
 
-- [Linting](README#linting)
-- [Testing](README#testing)
+- [Linting](./README.md#linting)
+- [Testing](./README.md#testing)
 
 #### Reconcile branch with upstream changes
 

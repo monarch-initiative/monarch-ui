@@ -159,7 +159,7 @@ In order to build the application locally, you will need to obtain the source co
 
 #### Obtaining the source code
 
-If your intent is to eventually contribute source code to the project via *pull requests*, then we recommend that you first *fork* the `monarch-ui` repo and then *git clone* this fork to your local development machine. Details on using the *GitHub Flow* workflow for contributing to open source projects are provided in [CONTRIBUTING](./CONTRIBUTING)
+If your intent is to eventually contribute source code to the project via *pull requests*, then we recommend that you first *fork* the `monarch-ui` repo and then *git clone* this fork to your local development machine. Details on using the *GitHub Flow* workflow for contributing to open source projects are provided in [CONTRIBUTING](./CONTRIBUTING.md)
 
 For example, if your GitHub username is `abc`, and you've forked the `monarch-ui` repo to your user, then you can get a local copy of your forked repo with (assuming that `monarch_stuff` exists on your machine)
 
@@ -189,7 +189,7 @@ node -v
 
 If the above command fails or if it reports a version number significantly different from `v8.12.0`, then you should install [nvm - Node Version Manager](https://github.com/nvm-sh/nvm) and then install a compatible version of NodeJS.
 
-In the event that you do not already have a compatible version of NodeJS installed, we have provided detailed instructions at the end of the `CONTRIBUTING` document here [Installing NodeJS](CONTRIBUTING#installing-nodejs).
+In the event that you do not already have a compatible version of NodeJS installed, we have provided detailed instructions at the end of the `CONTRIBUTING` document here [Installing NodeJS](CONTRIBUTING.md#installing-nodejs).
 
 #### Project setup
 
