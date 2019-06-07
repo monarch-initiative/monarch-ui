@@ -61,6 +61,11 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/about/CONTRIBUTING">
+            Contributing
+          </b-dropdown-item>
+
+          <b-dropdown-item
             to="/sources">
             Sources
           </b-dropdown-item>

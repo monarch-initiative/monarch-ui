@@ -110,7 +110,39 @@ div.vue-markdown-plain {
   margin-top: $navbar-height;
   padding: 20px;
   xborder: 5px solid lightgreen;
+
+  pre {
+    background-color: #f6f8fa;
+    border-radius: 3px;
+    font-size: 85%;
+    line-height: 1.45;
+    overflow: auto;
+    padding: 16px;
+
+    code {
+      background-color: unset;
+      border-radius: unset;
+      color: unsete;
+      background-color: unset;
+      border-radius: unset;
+      font-size: unset;
+      margin: unset;
+      padding: unset;
+    }
+  }
+
+  code {
+    background-color: #f6f8fa;
+    border-radius: 3px;
+    color: #24292e;
+    background-color: rgba(27,31,35,.05);
+    border-radius: 3px;
+    font-size: 85%;
+    margin: 0;
+    padding: .2em .4em;
+  }
 }
+
 
 :target::before {
   content: "";
