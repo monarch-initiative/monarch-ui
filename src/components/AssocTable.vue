@@ -126,12 +126,13 @@
           slot-scope="data"
         >
           <a
+            v-if="data.item.frequency"
             :href="data.item.frequency.url"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <small
-              v-if="data.item.frequency.id">{{ data.item.frequency.label }}
+            <small>
+              {{ data.item.frequency.label }}
             </small>
           </a>
         </template>
@@ -142,12 +143,13 @@
           slot-scope="data"
         >
           <a
+            v-if="data.item.onset"
             :href="data.item.onset.url"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <small
-              v-if="data.item.onset.id">{{ data.item.onset.label }}
+            <small>
+              {{ data.item.onset.label }}
             </small>
           </a>
         </template>
@@ -651,8 +653,12 @@ export default {
           });
 
           elem.relation.url = this.relationHref(elem.relation);
-          elem.frequency.url = this.frequencyHref(elem.frequency);
-          elem.onset.url = this.onsetHref(elem.onset);
+          if (elem.frequency) {
+            elem.frequency.url = this.frequencyHref(elem.frequency);
+          }
+          if (elem.onset) {
+            elem.onset.url = this.onsetHref(elem.onset);
+          }
         }
       });
 
@@ -816,7 +822,7 @@ export default {
   .assoc-object,
   .assoc-subject {
     min-width: 200px;
-    word-break: break-all;
+    // word-break: break-all;
   }
 
 
