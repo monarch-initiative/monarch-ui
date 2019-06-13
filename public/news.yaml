@@ -1,6 +1,9 @@
 news:
   items:     
-    - url: 'https://medium.com/@MonarchInit/video-interview-with-monarchs-julie-mcmurry-f327afaab284'
+   - url: 'https://medium.com/@MonarchInit/integrating-laboratory-tests-for-deep-phenotyping-and-biomarker-discovery-f9948cbddbb2?postPublishedType=initial'
+      date: 'June 10, 2019'
+      title: 'Integrating laboratory tests for deep phenotyping and biomarker discovery'  
+   - url: 'https://medium.com/@MonarchInit/video-interview-with-monarchs-julie-mcmurry-f327afaab284'
       date: 'February 06, 2019'
       title: 'Video: Interview with Monarch’s Julie McMurry'  
     - url: 'https://medium.com/@MonarchInit/monarch-initiative-scientist-nicole-vasilevsky-to-give-keynote-at-rocky-2018-f0ebb027d51c'
