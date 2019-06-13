@@ -80,12 +80,23 @@
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown
-          text="…"
+          text="Examples"
         >
           <b-dropdown-header
             class="text-info bg-white">
             Interesting nodes for Demo or Debugging
           </b-dropdown-header>
+
+          <b-dropdown-item
+            to="/disease/MONDO:0007669#phenotype">
+            Disease: renal cysts and diabetes syndrome MONDO:0007669
+          </b-dropdown-item>
+
+          <b-dropdown-item
+            to="/phenotype/HP:0001994#disease">
+            Phenotype: Renal Fanconi syndrome HP:0001994
+          </b-dropdown-item>
+
           <b-dropdown-item
             to="/disease/MONDO:0007947">
             Disease: Marfan syndrome MONDO:0007947

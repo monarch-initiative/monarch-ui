@@ -51,7 +51,7 @@ const router = new Router({
     },
     {
       path: '/about/contributing',
-      name: 'about-readme',
+      name: 'about-contributing',
       component: require('../CONTRIBUTING.md').default,
     },
     {

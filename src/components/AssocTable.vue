@@ -121,6 +121,40 @@
         </template>
 
         <template
+          v-if="hasFrequencyOnset"
+          slot="frequency"
+          slot-scope="data"
+        >
+          <a
+            v-if="data.item.frequency"
+            :href="data.item.frequency.url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <small>
+              {{ data.item.frequency.label }}
+            </small>
+          </a>
+        </template>
+
+        <template
+          v-if="hasFrequencyOnset"
+          slot="onset"
+          slot-scope="data"
+        >
+          <a
+            v-if="data.item.onset"
+            :href="data.item.onset.url"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <small>
+              {{ data.item.onset.label }}
+            </small>
+          </a>
+        </template>
+
+        <template
           slot="support"
           slot-scope="data"
         >
@@ -201,7 +235,8 @@
           </div>
         </template>
       </b-table>
-      <div v-if="totalAssociations > rowsPerPage">
+      <div
+        v-if="totalAssociations > rowsPerPage">
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
@@ -219,6 +254,12 @@
 import * as BL from '@/api/BioLink';
 import sourceToImage from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
+
+function isFrequencyOnsetType(nodeType, cardType) {
+  return (nodeType === 'disease' && cardType === 'phenotype') ||
+         (nodeType === 'phenotype' && cardType === 'disease');
+}
+
 
 export default {
   components: {
@@ -253,6 +294,7 @@ export default {
       rowsPerPage: 25,
       totalAssociations: 0,
       hasTaxon: false,
+      hasFrequencyOnset: false,
       associationData: '',
       dataFetched: false,
       dataError: false,
@@ -605,10 +647,18 @@ export default {
             taxonLabel: objectTaxon.label,
             taxonId: objectTaxon.id,
             relation: elem.relation,
+            frequency: elem.frequency,
+            onset: elem.onset,
             _showDetails: false,
           });
 
           elem.relation.url = this.relationHref(elem.relation);
+          if (elem.frequency) {
+            elem.frequency.url = this.frequencyHref(elem.frequency);
+          }
+          if (elem.onset) {
+            elem.onset.url = this.onsetHref(elem.onset);
+          }
         }
       });
 
@@ -618,6 +668,7 @@ export default {
     },
     generateFields() {
       this.hasTaxon = false;
+      this.hasFrequencyOnset = false;
 
       const fields = [
         {
@@ -645,6 +696,19 @@ export default {
         },
       ];
 
+      if (isFrequencyOnsetType(this.nodeType, this.cardType)) {
+        this.hasFrequencyOnset = true;
+        fields.splice(3, 0, {
+          key: 'frequency',
+          label: 'Frequency',
+          class: 'frequency-column-width',
+        });
+        fields.splice(4, 0, {
+          key: 'onset',
+          label: 'Onset',
+          class: 'onset-column-width',
+        });
+      }
       if (isTaxonCardType(this.cardType)) {
         this.hasTaxon = true;
         fields.splice(0, 0, {
@@ -702,6 +766,16 @@ export default {
       const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
+    frequencyHref(frequency) {
+      const curie = frequency.id || '';
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
+      return `http://purl.obolibrary.org/obo/${identifier}`;
+    },
+    onsetHref(onset) {
+      const curie = onset.id || '';
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
+      return `http://purl.obolibrary.org/obo/${identifier}`;
+    },
     sourceLabel(url) {
       const result = url.split(/[/]+/)
         .pop()
@@ -738,10 +812,17 @@ export default {
     cursor: unset;
   }
 
+  .table.b-table th {
+    padding: 1px 4px;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+
   .assoc-object,
   .assoc-subject {
     min-width: 200px;
-    word-break: break-all;
+    // word-break: break-all;
   }
 
 
@@ -768,6 +849,14 @@ export default {
 
   .support-column-width {
     min-width: 120px !important;
+  }
+
+  .frequency-column-width {
+    min-width: 80px !important;
+  }
+
+  .onset-column-width {
+    min-width: 80px !important;
   }
 
   .support-is-active {
