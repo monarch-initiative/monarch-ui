@@ -1,5 +1,7 @@
 <template>
-  <div id="app" class="page-wrapper">
+  <div
+    id="app"
+    class="page-wrapper">
 
     <div class="content-wrapper">
       <monarch-navbar/>
