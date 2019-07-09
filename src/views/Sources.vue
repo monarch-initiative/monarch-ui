@@ -39,7 +39,6 @@
         </script>
       </div>
     </div>
-    <monarch-footer/>
   </div>
 
 
