@@ -41,24 +41,6 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/about/readme',
-      name: 'about-readme',
-      component: require('../README.md').default,
-    },
-    {
-      path: '/about/README.md',
-      redirect: '/about/readme',
-    },
-    {
-      path: '/about/contributing',
-      name: 'about-contributing',
-      component: require('../CONTRIBUTING.md').default,
-    },
-    {
-      path: '/about/CONTRIBUTING.md',
-      redirect: '/about/contributing',
-    },
-    {
       path: '/about/monarch',
       name: 'about-monarch',
       component: require('@/views/AboutMonarch.md').default,

@@ -219,7 +219,7 @@ export default {
     dynamicPlaceholder: {
       type: String,
       required: false,
-      default: 'search for phenotypes, diseases, genes ...'
+      default: 'Search for phenotypes, diseases, genes ...'
     }
   },
   data() {

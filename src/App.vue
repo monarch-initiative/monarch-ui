@@ -1,16 +1,14 @@
 <template>
-  <div
-    id="app"
-    class="page-wrapper">
+  <div id="app" class="page-wrapper">
 
-    <div
-      class="content-wrapper">
+    <div class="content-wrapper">
       <monarch-navbar/>
-      <router-view/>
+      <div class="main-wrapper">
+        <router-view/>
+      </div>
     </div>
 
-    <div
-      class="footer-wrapper">
+    <div class="footer-wrapper">
       <monarch-footer
         :compact="useCompactFooter"/>
     </div>
@@ -63,10 +61,6 @@ $fa-font-path: "~font-awesome/fonts" !default;
 @import "~bootstrap/scss/bootstrap";
 @import '~bootstrap-vue/dist/bootstrap-vue.css';
 
-.container-fluid.monarch-view {
-  margin-top: $navbar-height;
-}
-
 [v-cloak] {
   display: none;
 }
@@ -92,6 +86,14 @@ $fa-font-path: "~font-awesome/fonts" !default;
   height: $footer-height;
   padding: 0;
   margin: 0;
+}
+
+.monarch-view {
+  padding-top: 15px;
+}
+
+#app.page-wrapper .main-wrapper {
+  padding: $navbar-height 15px;
 }
 
 

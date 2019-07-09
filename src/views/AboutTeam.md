@@ -1,7 +1,6 @@
-<div
-  class="container-fluid monarch-view monarch-team-view">
+<div class="container-fluid monarch-view monarch-team-view">
 
-# Monarch People and their Institutions
+## Monarch People and their Institutions
 
   <div class="card p-3 bg-light">
     <h3>
@@ -20,44 +19,27 @@
       </dl>
     </div>
   </div>
-  <div
-    v-for="institution in institutions"
-    v-bind:id="institution.id"
-    class="institution-target">
+  <div v-for="institution in institutions" v-bind:id="institution.id" class="institution-target">
     <h3>
-      <a
-        v-bind:href="institution.website"
-        target="_blank"
-        rel="noreferrer">
-        <img
-          class="teamlogo"
-          v-bind:src="institution.logo">
+      <a v-bind:href="institution.website" target="_blank" rel="noreferrer">
+        <img class="teamlogo" v-bind:src="institution.logo">
         {{institution.name}}
       </a>
     </h3>
-    <div
-      v-for="member in institution.people"
-      class="teammember">
-      <template
-        v-if="member.alumni">
+    <div v-for="member in institution.people" class="teammember">
+      <template v-if="member.alumni">
         <div class="teammember">
           <div class="membername">{{ member.name }} (alumni {{ member.title }})</div>
         </div>
       </template>
-      <template
-        v-else="!member.alumni">
+      <template v-else="!member.alumni">
         <div class="memberhead">
           <div class="membername">{{ member.name }}</div>
           <div class="membertitle">{{ member.title }}</div>
         </div>
-        <img
-          class="memberpicture"
-          v-bind:src="member.picture"/>
+        <img class="memberpicture" v-bind:src="member.picture"/>
         <div class="clearfix"></div>
-        <div
-          v-if="member.bio"
-          v-bind:is="markdownToComponent(member.bio)"
-          class="memberbio">
+        <div v-if="member.bio" v-bind:is="markdownToComponent(member.bio)" class="memberbio">
         </div>
         <!--
         <div class="membercontact">
@@ -115,6 +97,10 @@ export default {
 .container-fluid.monarch-view.monarch-team-view {
   h1, h2, h3, h4, h5, h6 {
     clear:both;
+  }
+  
+  h2 {
+    text-align: center;
   }
 
   figure {

@@ -4,9 +4,7 @@
       This code can probably be refactored so there is less duplication
       between the Compact and the Home layouts.
     -->
-    <div
-      v-if="compact"
-      class="row footer compact">
+    <div v-if="compact" class="row footer compact">
       <div class="col-3">
         <i class="fa fa-creative-commons fa-fw"/>
         CC-BY 3.0, except where noted.
@@ -34,60 +32,53 @@
       </div>
     </div>
 
-    <div
-      v-else
-      class="row footer">
+    <div v-else class="row footer">
       <div class="col-12 col-lg-3">
         <div class="media">
-          <img
-            class="img-fluid monarch-logo"
-            src="../assets/img/monarch-logo-white-stacked.png"
-            alt="Monarch logo">
+          <img class="img-fluid monarch-logo" src="../assets/img/monarch-logo-white-stacked.png" alt="Monarch logo">
         </div>
       </div>
-      <div class="col-12 col-md-4 col-lg-3 about-section">
-        <h6> Contact Us </h6>
-        <ul class="list-inline banner-social-buttons">
+      <div class="offset-lg-2 col-12 col-md-4 col-lg-2 about-section">
+        <h6 class="category-header"> Contact Us </h6>
+        <ul class="list-inline banner-social-buttons fa-ul">
           <li>
-            <a href="mailto:info@monarchinitiative.org"><i class="fa fa-envelope fa-fw"/> <span class="network-name">Mail</span></a>
+            <a href="mailto:info@monarchinitiative.org"><i class="fa fa-envelope fa-fw"/>Mail</a>
           </li>
           <li>
-            <a
-              target="_blank"
-              href="https://github.com/monarch-initiative/"><i class="fa fa-github fa-fw"/> <span class="network-name">Github</span></a>
+            <a target="_blank"
+              href="https://github.com/monarch-initiative/"><i class="fa fa-github fa-fw"/>Github</a>
           </li>
           <li>
-            <a
-              target="_blank"
-              href="https://twitter.com/MonarchInit"><i class="fa fa-twitter fa-fw"/> <span class="network-name">Twitter</span></a>
+            <a target="_blank"
+              href="https://twitter.com/MonarchInit"><i class="fa fa-twitter fa-fw"/>Twitter</a>
           </li>
         </ul>
       </div>
-      <div class="col-12 col-md-4 col-lg-3 about-section">
-        <h6> About </h6>
-        <ul class="list-inline">
+      <div class="col-12 col-md-4 col-lg-2 about-section">
+        <h6 class="category-header"> About </h6>
+        <ul class="list-inline fa-ul">
           <li>
-            <router-link to="/about/monarch"><i class="fa fa-info fa-fw"/>  <span class="network-name">About Monarch</span></router-link>
+            <router-link to="/about/monarch"><i class="fa fa-info fa-fw"/>About Monarch</router-link>
           </li>
           <li>
-            <router-link to="/about/team"><i class="fa fa-users fa-fw"/> <span class="network-name">Team</span></router-link>
+            <router-link to="/about/team"><i class="fa fa-users fa-fw"/>Team</router-link>
           </li>
           <li>
-            <router-link to="/about/disclaimer"><i class="fa fa-file fa-fw"/> <span class="network-name">Disclaimer</span></router-link>
+            <router-link to="/about/disclaimer"><i class="fa fa-file fa-fw"/>Disclaimer</router-link>
           </li>
         </ul>
       </div>
-      <div class="col-12 col-md-4 col-lg-3 about-section">
-        <h6> Data </h6>
-        <ul class="list-inline">
+      <div class="col-12 col-md-4 col-lg-2 about-section">
+        <h6 class="category-header"> Data </h6>
+        <ul class="list-inline fa-ul">
           <li>
-            <a href="https://archive.monarchinitiative.org/latest/"><i class="fa fa-download fa-fw"/> <span class="network-name">Data Downloads</span></a>
+            <a href="https://archive.monarchinitiative.org/latest/"><i class="fa fa-download fa-fw"/>Data Downloads</a>
           </li>
           <li>
-            <router-link to="/page/releases"><i class="fa fa-folder-open fa-fw"/> <span class="network-name">Releases</span></router-link>
+            <router-link to="/page/releases"><i class="fa fa-folder-open fa-fw"/>Releases</router-link>
           </li>
           <li>
-            <router-link to="/page/services"><i class="fa fa-database fa-fw"/> <span class="network-name">APIs</span></router-link>
+            <router-link to="/page/services"><i class="fa fa-database fa-fw"/>APIs</router-link>
           </li>
         </ul>
       </div>
@@ -118,7 +109,7 @@ export default {
 @import "~@/style/variables";
 
 div.footer {
-  margin: 0px;
+  margin: 0;
   padding: 20px 10px;
 
   width: 100%;
@@ -130,6 +121,20 @@ div.footer {
     color: white;
   }
 
+  .fa-ul {
+    margin-left: 4.14286em !important;
+  }
+  .fa-ul > li {
+    text-align: justify;
+  }
+
+  .fa-ul li i {
+    margin-right: 15px;
+  }
+
+  .category-header {
+    text-align: center;
+  }
   .monarch-logo {
     max-height:100px;
     margin:auto;
@@ -157,7 +162,7 @@ div.footer {
 
 div.footer.compact {
   min-height: $footer-height;
-  margin: 0px;
+  margin: 0;
   padding: 5px 0;
 
   font-size: 0.875rem;
