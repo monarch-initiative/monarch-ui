@@ -1,6 +1,6 @@
 <div class="container-fluid monarch-view publications">
   <div class="content">
-    <h1 class="text-center">Selected Monarch Publications</h1>
+    <h2 class="text-center">Selected Monarch Publications</h2>
       <div class="card">
         <h3>2019</h3>
           <div class="text">
