@@ -116,7 +116,7 @@
               v-if="node.description"
               class="col-12">
               <div class="node-description">
-                {{ node.description }}
+                <b>Description:</b> {{ node.description }}
               </div>
             </div>
 
