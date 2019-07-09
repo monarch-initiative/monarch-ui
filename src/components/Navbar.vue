@@ -26,7 +26,7 @@
         >
           <b-dropdown-item
             to="/analyze/phenotypes">
-            Analyze Phenotypes
+            Phenotype Profile Search
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
