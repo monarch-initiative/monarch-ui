@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row border">
         <div class="col-4">  Source </div>
-        <div class="col-4">  Source Version </div>	
+        <div class="col-4">  Source Version </div>
         <div class="col-4">  Monarch data release date </div>
       </div>
       <div
@@ -15,11 +15,11 @@
         <div class="col-4">
           <a
             :href="source.ttlUrl"
-            target="_blank">{{ source.sourceDisplayName}}
+            target="_blank">{{ source.sourceDisplayName }}
           </a>
         </div>
-        <div class="col-4"> {{ source.sourceVersion }}</div>	
-	<div class="col-4"> {{ source.monarchDataReleaseDate }}</div>	
+        <div class="col-4"> {{ source.sourceVersion }}</div>
+        <div class="col-4"> {{ source.monarchDataReleaseDate }}</div>
         <script type="application/ld+json">
           {
           "@context": "http://schema.org",

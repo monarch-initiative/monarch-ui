@@ -297,16 +297,16 @@ export async function getSources() {
 
   const bioentityResp = await axios.get(url, { params });
 
-    // remove this after we get this stuff from the API
-    for (var i = 0; i < bioentityResp.data.length; i++) {
-	var sourceDisplayName = bioentityResp.data[i].id.split(/[:.]+/)[1]
-	sourceDisplayName = sourceDisplayName.charAt(0).toUpperCase() + sourceDisplayName.slice(1);
-	bioentityResp.data[i].sourceDisplayName = sourceDisplayName
-	bioentityResp.data[i].ttlUrl = "https://data.monarchinitiative.org/ttl/" + bioentityResp.data[i].id.split(":")[1]
-	bioentityResp.data[i].sourceVersion = bioentityResp.data[i].meta.version[0]	
-	bioentityResp.data[i].monarchDataReleaseDate = "2019-02-22"
-    }
-    
+  // remove this after we get this stuff from the API
+  for (let i = 0; i < bioentityResp.data.length; i++) {
+    let sourceDisplayName = bioentityResp.data[i].id.split(/[:.]+/)[1];
+    sourceDisplayName = sourceDisplayName.charAt(0).toUpperCase() + sourceDisplayName.slice(1);
+    bioentityResp.data[i].sourceDisplayName = sourceDisplayName;
+    bioentityResp.data[i].ttlUrl = 'https://data.monarchinitiative.org/ttl/' + bioentityResp.data[i].id.split(':')[1];
+    bioentityResp.data[i].sourceVersion = bioentityResp.data[i].meta.version[0];
+    bioentityResp.data[i].monarchDataReleaseDate = '2019-02-22';
+  }
+
   const data = bioentityResp.data;
 
   return data;
