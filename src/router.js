@@ -50,7 +50,7 @@ const router = new Router({
       redirect: '/about/readme',
     },
     {
-      path:'/about/publications',
+      path: '/about/publications',
       name: 'about-publications',
       component: require('@/views/Publications.md').default,
     },
