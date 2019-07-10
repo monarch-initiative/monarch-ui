@@ -44,6 +44,11 @@
           </b-dropdown-item>
 
           <b-dropdown-item
+            to="/about/publications">
+            Publications
+          </b-dropdown-item>
+
+          <b-dropdown-item
             to="/about/citing">
             Citing Monarch
           </b-dropdown-item>
