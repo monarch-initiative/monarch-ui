@@ -1,7 +1,7 @@
 <template>
   <div>
     <br><br>
-    <h1>Monarch Sources</h1>
+    <h2>Monarch Sources</h2>
     <div class="container">
       <div class="row border">
         <div class="col-4">  Source </div>

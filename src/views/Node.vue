@@ -220,9 +220,7 @@
               @expand-card="expandCard(cardType)"/>
           </div>
 
-          <div
-            v-if="expandedCard"
-            class="expanded-card-view row">
+          <div v-if="expandedCard" class="expanded-card-view row">
             <assoc-table
               :facets="facetObject"
               :card-counts="counts"
