@@ -33,8 +33,13 @@
           <b-dropdown-item to="/about/team">
             Our Team
           </b-dropdown-item>
+          <b-dropdown-item
+            to="/about/publications">
+            Publications
+          </b-dropdown-item>
 
-          <b-dropdown-item to="/about/citing">
+          <b-dropdown-item
+            to="/about/citing">
             Citing Monarch
           </b-dropdown-item>
 
