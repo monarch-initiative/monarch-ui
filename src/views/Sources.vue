@@ -17,7 +17,9 @@
         <div class="col-6"> {{ source.title }}</div>
         <div class="col-2"> {{ source.meta.version[0] }}</div>
         <div class="col-3">
-          <a :href="source.url" target="_blank">{{ source.url }}</a>
+          <a
+            :href="source.url"
+            target="_blank">{{ source.url }}</a>
         </div>
         <script type="application/ld+json">
           {

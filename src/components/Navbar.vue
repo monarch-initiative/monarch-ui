@@ -1,11 +1,22 @@
 <template>
 
-  <b-navbar id="monarchng-navbar" class="fixed-top" fixed="true" toggleable="sm" type="dark" variant="info">
+  <b-navbar
+    id="monarchng-navbar"
+    class="fixed-top"
+    fixed="true"
+    toggleable="sm"
+    type="dark"
+    variant="info">
     <b-navbar-brand to="/">
-      <img class="branding-logo" src="../assets/img/monarch-logo-white.png" alt="Monarch Initiative logo"
+      <img
+        class="branding-logo"
+        src="../assets/img/monarch-logo-white.png"
+        alt="Monarch Initiative logo"
         title="Monarch Initiative front page">
     </b-navbar-brand>
-    <b-collapse id="nav_collapse" is-nav="">
+    <b-collapse
+      id="nav_collapse"
+      is-nav="">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Tools">
           <b-dropdown-item
@@ -20,6 +31,10 @@
 
           <b-dropdown-item to="/about/team">
             Our Team
+          </b-dropdown-item>
+          <b-dropdown-item
+            to="/about/publications">
+            Publications
           </b-dropdown-item>
 
           <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
@@ -130,7 +145,9 @@
 
       <b-navbar-nav
         class="ml-auto">
-        <div v-if="this.$route.path !== '/'" class="nav-ac">
+        <div
+          v-if="this.$route.path !== '/'"
+          class="nav-ac">
           <monarch-autocomplete :full-width-search="true"/>
         </div>
       </b-navbar-nav>

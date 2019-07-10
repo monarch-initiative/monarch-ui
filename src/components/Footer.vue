@@ -22,10 +22,15 @@
 
     </div>
 
-    <div v-else class="row footer">
+    <div
+      v-else
+      class="row footer">
       <div class="col-12 col-lg-3">
         <div class="media">
-          <img class="img-fluid monarch-logo" src="../assets/img/monarch-logo-white-stacked.png" alt="Monarch logo">
+          <img
+            class="img-fluid monarch-logo"
+            src="../assets/img/monarch-logo-white-stacked.png"
+            alt="Monarch logo">
         </div>
       </div>
       <div class="offset-lg-2 col-12 col-md-4 col-lg-2 about-section">
@@ -35,11 +40,13 @@
             <a href="mailto:info@monarchinitiative.org"><i class="fa fa-envelope fa-fw"/>Mail</a>
           </li>
           <li>
-            <a target="_blank"
+            <a
+              target="_blank"
               href="https://github.com/monarch-initiative/"><i class="fa fa-github fa-fw"/>Github</a>
           </li>
           <li>
-            <a target="_blank"
+            <a
+              target="_blank"
               href="https://twitter.com/MonarchInit"><i class="fa fa-twitter fa-fw"/>Twitter</a>
           </li>
         </ul>
