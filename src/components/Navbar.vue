@@ -23,6 +23,10 @@
             to="/analyze/phenotypes">
             Phenotype Profile Search
           </b-dropdown-item>
+          <b-dropdown-item
+                  to="/tools/other-tools">
+            Other Monarch Tools
+          </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="About">
