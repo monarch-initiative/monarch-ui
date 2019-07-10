@@ -19,7 +19,7 @@
   @import "~@/style/variables";
 
   div.container-fluid.monarch-home-view {
-    margin-top: $navbar-height;
+    padding: 0;
     background: $monarch-bg-color;
     > .row > div {
       width: 100%;

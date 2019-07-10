@@ -50,6 +50,13 @@ module.exports = {
     'no-param-reassign': 0,
     'no-underscore-dangle': 0,
     'operator-linebreak': 0,
+    'vue/max-attributes-per-line': ['error', {
+      'singleline': 3,
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': false
+      }
+    }]
   },
   parserOptions: {
     parser: 'babel-eslint'
