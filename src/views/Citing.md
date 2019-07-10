@@ -1,6 +1,6 @@
 <div class="container-fluid monarch-view">
 
-<h2 class="page-title"> Citing Monarch Initiative</h2> 
+<h2 class="page-title"> Citing The Monarch Initiative</h2> 
 Please acknowledge the use of Monarch with the following paragraph:
 
 > {YOUR resource} uses and displays data and algorithms from the Monarch Initiative. The Monarch Initiative (https://monarchinitiative.org) makes biomedical knowledge exploration more efficient and effective by providing tools for genotype-phenotype analysis, genomic diagnostics, and precision medicine across broad areas of disease.
