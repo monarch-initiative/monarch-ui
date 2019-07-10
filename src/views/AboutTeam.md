@@ -1,6 +1,6 @@
 <div class="container-fluid monarch-view monarch-team-view">
 
-## Monarch People and their Institutions
+## Monarch Team and Collaborators
 
   <div class="card p-3 bg-light">
     <h3>

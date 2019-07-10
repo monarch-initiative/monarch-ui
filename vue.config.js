@@ -27,8 +27,9 @@ mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
 const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/GenomeFeatureViewer.css');
-
+process.env.VUE_APP_VERSION = require('./package.json').version;
 const vueConfig = {
+
   runtimeCompiler: true,
   // outputDir: 'dist',
   publicPath: baseURL,
@@ -64,7 +65,6 @@ const vueConfig = {
     config.resolveLoader.modules.add(
       path.resolve('./src/loaders/')
     );
-
     config.module
       .rule('README')
       .test(/\.md$/)

@@ -5,31 +5,21 @@
       between the Compact and the Home layouts.
     -->
     <div v-if="compact" class="row footer compact">
-      <div class="col-3">
+      <div class="col-lg-4 version">
+        <router-link to="/about/monarch">
+          <i>The Monarch Initiative {{version}}</i>
+        </router-link>
+      </div>
+      <div class="offset-lg-1 col-3">
+          <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">
+            Report Issue or Suggest Content
+          </b-button>
+      </div>
+      <div class="col-lg-4 copyright">
         <i class="fa fa-creative-commons fa-fw"/>
         CC-BY 3.0, except where noted.
       </div>
-      <div class="col-3">
-        <a href="mailto:info@monarchinitiative.org">
-          <i class="fa fa-envelope fa-fw"/>
-        <span class="network-name">Contact Us</span></a>
-      </div>
-      <div class="col-3">
-        <router-link to="/about/monarch">
-          <i class="fa fa-info fa-fw"/>
-          <span class="network-name">
-            About Monarch
-          </span>
-        </router-link>
-      </div>
-      <div class="col-3">
-        <a href="https://archive.monarchinitiative.org/latest/">
-          <i class="fa fa-download fa-fw"/>
-          <span class="network-name">
-            Data Downloads
-          </span>
-        </a>
-      </div>
+
     </div>
 
     <div v-else class="row footer">
@@ -100,6 +90,7 @@ export default {
   data() {
     return {
       isCompact: true,
+      version: process.env.VUE_APP_VERSION
     };
   },
 };
@@ -157,6 +148,25 @@ div.footer {
         color: red;
       }
     }
+  }
+
+  .version {
+    padding: 10px 0 0 15px;
+  }
+  
+  .copyright {
+    text-align: right;
+    padding: 10px 15px 0 0;
+  }
+
+  .issue-btn {
+    &:active {
+      background-color: #b4c2cf !important;
+      border-color: #ffff !important;
+    }
+    color: #fff;
+    background-color: #15556a;
+    border-color: #ffff;
   }
 }
 

@@ -51,9 +51,19 @@ const router = new Router({
       component: require('@/views/AboutTeam.md').default,
     },
     {
-      path: '/about/citing',
+      path: '/help/citing',
       name: 'about-citing',
       component: require('@/views/Citing.md').default,
+    },
+    {
+      path: '/help/links',
+      name: 'link-to-us',
+      component: require('@/views/LinkToUs.md').default
+    },
+    {
+      path: '/help/contact',
+      name: 'contact-us',
+      component: require('@/views/Contact.md').default
     },
     {
       path: '/search/:query?',
