@@ -19,17 +19,17 @@
           type="button"
           @click="toggleFilterBox"
         >
-          {{ categories.map((c) => { return firstCap(c); }).join(', ') }}
+          {{ selectDisplay }}
         </button>
         <div
           v-if="catDropDown"
           class="dropdown-menu list-group dropCatList px-4"
+          v-click-outside="closeFilterBox"
         >
           <div class="form-group">
-            <b-form-checkbox-group
-              v-model="categories"
+            <b-form-radio-group
+              v-model="category"
               :options="options"
-              plain
               stacked/>
           </div>
         </div>
@@ -42,15 +42,14 @@
         v-model="value"
         class="form-control xform-control-sm test-input-search-text"
         type="text"
-        autofocus="autoFocus"
         @input="debounceInput"
         @keydown="inputChanged"
         @keydown.enter="enter"
         @keydown.down="down"
         @keydown.up="up"
         @keydown.esc="clearSearch"
-        @blur="clearSearch"
-        @focus="closeFilterBox"
+        @focus="toggleSuggestions"
+        v-click-outside="toggleSuggestions"
       >
 
       <div
@@ -111,29 +110,12 @@
           </div>
         </div>
         <div class="row mx-3">
-          <!--
-          <div
-            v-if="suggestions.length && !singleCategory"
-            class="btn btn-outline-success col m-2"
-            v-on:click="showMore"
-          >
-            Show all results for '{{value}}'
-          </div>
- -->
           <div
             v-if="suggestions.length === 0"
             class="col border"
           >
             <b>No results for '{{ value }}'</b>
           </div>
-          <!--
-          <div
-            class="btn btn-outline-secondary col m-2"
-            @click="clearSearch"
-          >
-            Clear Search
-          </div>
- -->
         </div>
       </div>
     </div>
@@ -155,8 +137,9 @@
 </template>
 
 <script>
-import * as BL from '@/api/BioLink';
+import * as biolink from '@/api/BioLink';
 import { reduceCategoryList } from '@/lib/CategoryMap';
+import vClickOutside from 'v-click-outside'
 
 const debounce = require('lodash/debounce');
 
@@ -184,6 +167,9 @@ export default {
     allLower(word) {
       return word.toLowerCase();
     }
+  },
+  directives: {
+    clickOutside: vClickOutside.directive
   },
   props: {
     showSearchButton: {
@@ -225,7 +211,8 @@ export default {
   data() {
     return {
       destroying: false,
-      categories: [],
+      category: "all",
+      selectDisplay: "All",
       exampleSearches,
       options: [
 
@@ -241,17 +228,19 @@ export default {
   watch: {
     value() {
       if (!this.value) {
-        this.open = false;
+        this.clearSearch();
       }
     },
-    categories(newValue) {
+    category(newValue) {
+      this.selectDisplay = this.options.find(opts => opts.value === newValue).text;
+      this.closeFilterBox();
       if (!this.definedCategories) {
         this.suggestions = [];
         if (this.value.length > 0) {
           this.fetchData();
         }
       }
-    }
+    },
   },
   mounted() {
     if (this.definedCategories) {
@@ -261,10 +250,13 @@ export default {
           value: elem,
         });
       });
-      this.definedCategories.forEach(elem => this.categories.push(elem));
     }
     else {
       this.options = [
+        {
+          text: 'All',
+          value: 'all'
+        },
         {
           text: 'Gene',
           value: 'gene',
@@ -295,7 +287,7 @@ export default {
     debounceInput: debounce(
       function debounceInput() {
         if (!this.destroying) {
-          if (this.value && this.value.length > 0) {
+          if (this.value && this.value.length >= 3) {
             this.fetchData();
           }
         }
@@ -303,7 +295,7 @@ export default {
     ),
     async fetchData() {
       try {
-        const searchResponse = await BL.getSearchTermSuggestions(this.value, this.categories, this.allowedPrefixes);
+        const searchResponse = await biolink.getSearchTermSuggestions(this.value, this.category, this.allowedPrefixes);
         this.suggestions = [];
         this.current = -1;
         searchResponse.docs.forEach((elem) => {
@@ -345,11 +337,17 @@ export default {
       this.value = '';
       this.open = false;
       this.suggestions = [];
-      this.categories = [];
     },
     up() {
       if (this.current > 0) {
         this.current -= 1;
+      }
+    },
+    toggleSuggestions() {
+      if(this.open){
+        this.open = false;
+      } else if (this.suggestions.length > 0){
+        this.open = true;
       }
     },
     closeFilterBox() {
@@ -357,9 +355,6 @@ export default {
     },
     toggleFilterBox() {
       this.catDropDown = !this.catDropDown;
-      // if (this.catDropDown) {
-      //   this.suggestions = [];
-      // }
     },
     inputChanged() {
       this.catDropDown = false;
@@ -385,7 +380,6 @@ export default {
       }
       this.value = '';
       this.open = false;
-      this.categories = [];
       this.suggestions = [];
     },
     showMore() {
@@ -406,11 +400,12 @@ export default {
       return null;
     },
     useExample(searchString, category) {
-      this.categories = [];
-      if (category) {
-        this.categories.push(category);
-      }
       this.value = searchString;
+      if (category) {
+        this.category = category;
+      }else {
+        this.fetchData();
+      }
     }
   },
 };

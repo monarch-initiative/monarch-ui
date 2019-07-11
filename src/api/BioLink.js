@@ -347,7 +347,7 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
 }
 
 
-export async function getSearchTermSuggestions(term, categories, prefixes) {
+export async function getSearchTermSuggestions(term, category, prefixes) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
@@ -363,16 +363,18 @@ export async function getSearchTermSuggestions(term, categories, prefixes) {
   }
   params.append('prefix', '-OMIA');
 
-  let categoriesLocal = categories;
-  if (!categoriesLocal || categoriesLocal.length === 0) {
-    categoriesLocal = categoriesAll;
+  if (!category || category === 'all') {
+    category = categoriesAll;
+
+  } else {
+    category = [category];
   }
 
-  categoriesLocal.forEach((elem) => {
+  category.forEach((elem) => {
     params.append('category', elem);
   });
 
-  if (categoriesLocal.indexOf('gene') >= 0) {
+  if (category.indexOf('gene') >= 0) {
     params.append('boost_fx', 'pow(edges,0.334)');
   }
 
