@@ -72,20 +72,16 @@
           <b-dropdown-item to="/help/links">
             Link to Us
           </b-dropdown-item>
-          <b-dropdown-divider/>
+        </b-nav-item-dropdown>
 
-          <b-dropdown-header class="text-info bg-white">
-            Examples
-          </b-dropdown-header>
-
-          <b-dropdown-item to="/disease/MONDO:0007669#phenotype">
-            Disease: renal cysts and diabetes syndrome MONDO:0007669
-          </b-dropdown-item>
-
+        <b-nav-item-dropdown text="Examples">
           <b-dropdown-item to="/phenotype/HP:0001994#disease">
             Phenotype: Renal Fanconi syndrome HP:0001994
           </b-dropdown-item>
 
+          <b-dropdown-item to="/disease/MONDO:0007669#phenotype">
+            Disease: renal cysts and diabetes syndrome MONDO:0007669
+          </b-dropdown-item>
           <b-dropdown-item to="/disease/MONDO:0007947">
             Disease: Marfan syndrome MONDO:0007947
           </b-dropdown-item>
@@ -109,7 +105,7 @@
           <b-dropdown-item to="/disease/MONDO:0010156">
             Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>
-
+          <b-dropdown-divider/>
           <b-dropdown-item to="/gene/MGI:2447362#model">
             Gene: Slc24a4 <em>Mus musculus</em> MGI:2447362 (models)
           </b-dropdown-item>
@@ -129,7 +125,7 @@
           <b-dropdown-item to="/gene/NCBIGene:428534">
             Gene: SOX17 <em>Gallus gallus</em> NCBIGene:428534
           </b-dropdown-item>
-
+          <b-dropdown-divider/>
           <b-dropdown-item to="/publication/PMID:28650316">
             Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
           </b-dropdown-item>
