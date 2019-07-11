@@ -28,7 +28,6 @@
             Other Monarch Tools
           </b-dropdown-item>
         </b-nav-item-dropdown>
-
         <b-nav-item-dropdown text="About">
           <b-dropdown-item to="/about/monarch">
             About Monarch
@@ -42,43 +41,47 @@
             Publications
           </b-dropdown-item>
 
-          <b-dropdown-item
-            to="/about/citing">
-            Citing Monarch
-          </b-dropdown-item>
-
-          <b-dropdown-item
-            href="https://medium.com/@MonarchInit"
-            target="_blank"
-            rel="noopener noreferrer">
+          <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
             Blog
           </b-dropdown-item>
 
-          <b-dropdown-item to="/sources">
-            Sources
+          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+            GitHub Organization
           </b-dropdown-item>
 
-          <b-dropdown-item
-            href="https://github.com/monarch-initiative"
-            target="_blank"
-            rel="noopener noreferrer">
-            GitHub Organization
+          <b-dropdown-divider/>
+
+          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
+            Data Downloads
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/sources">
+            Data Sources
+          </b-dropdown-item>
+
+        </b-nav-item-dropdown>
+        <b-nav-item-dropdown text="Help">
+          <b-dropdown-item to="/help/contact">
+            Contact Us
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/help/citing">
+            Citing Monarch
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/help/links">
+            Link to Us
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Examples">
-          <b-dropdown-header class="text-info bg-white">
-            Interesting nodes for Demo or Debugging
-          </b-dropdown-header>
-
-          <b-dropdown-item to="/disease/MONDO:0007669#phenotype">
-            Disease: renal cysts and diabetes syndrome MONDO:0007669
-          </b-dropdown-item>
-
           <b-dropdown-item to="/phenotype/HP:0001994#disease">
             Phenotype: Renal Fanconi syndrome HP:0001994
           </b-dropdown-item>
 
+          <b-dropdown-item to="/disease/MONDO:0007669#phenotype">
+            Disease: renal cysts and diabetes syndrome MONDO:0007669
+          </b-dropdown-item>
           <b-dropdown-item to="/disease/MONDO:0007947">
             Disease: Marfan syndrome MONDO:0007947
           </b-dropdown-item>
@@ -102,9 +105,7 @@
           <b-dropdown-item to="/disease/MONDO:0010156">
             Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>
-
           <b-dropdown-divider/>
-
           <b-dropdown-item to="/gene/MGI:2447362#model">
             Gene: Slc24a4 <em>Mus musculus</em> MGI:2447362 (models)
           </b-dropdown-item>
@@ -124,15 +125,10 @@
           <b-dropdown-item to="/gene/NCBIGene:428534">
             Gene: SOX17 <em>Gallus gallus</em> NCBIGene:428534
           </b-dropdown-item>
-
-
           <b-dropdown-divider/>
-
           <b-dropdown-item to="/publication/PMID:28650316">
             Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
           </b-dropdown-item>
-
-          <b-dropdown-divider/>
 
           <b-dropdown-item to="/pathway/REACT:R-MMU-425561">
             Pathway: Sodium/Calcium exchangers REACT:R-MMU-425561
