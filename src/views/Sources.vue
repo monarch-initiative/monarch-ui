@@ -4,30 +4,29 @@
     <h2>Monarch Sources</h2>
     <div class="container">
       <div class="row border">
-        <div class="col-1">  id </div>
-        <div class="col-6">  title </div>
-        <div class="col-2">  version </div>
-        <div class="col-3">  url </div>
+        <div class="col-4">  Source </div>
+        <div class="col-4">  Source Version </div>
+        <div class="col-4">  Monarch data release date </div>
       </div>
       <div
         v-for="(source, index) in sources"
         :key="index"
         class="row">
-        <div class="col-1"> {{ source.id }}</div>
-        <div class="col-6"> {{ source.title }}</div>
-        <div class="col-2"> {{ source.meta.version[0] }}</div>
-        <div class="col-3">
+        <div class="col-4">
           <a
-            :href="source.url"
-            target="_blank">{{ source.url }}</a>
+            :href="source.ttlUrl"
+            target="_blank">{{ source.sourceDisplayName }}
+          </a>
         </div>
+        <div class="col-4"> {{ source.sourceVersion }}</div>
+        <div class="col-4"> {{ source.monarchDataReleaseDate }}</div>
         <script type="application/ld+json">
           {
           "@context": "http://schema.org",
           "@type": "Dataset",
-          "name": "Monarch transformation of {{ source.title }}",
+          "name": "Monarch transformation of {{ source.sourceDisplayName }}",
           "description": "Monarch transformation of: {{ source.description }}",
-          "url": "{{ source.url }}",
+          "url": "{{ source.ttlUrl }}",
           "includedInDataCatalog": "https://monarchinitiative.org",
           "creator": {
           "@type": "Organization",

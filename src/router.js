@@ -89,6 +89,11 @@ const router = new Router({
       component: require('@/views/Contact.md').default
     },
     {
+      path: '/tools/other-tools',
+      name: 'other-tools',
+      component: require('@/views/OtherTools.md').default,
+    },
+    {
       path: '/search/:query?',
       name: 'search',
       // route level code-splitting
