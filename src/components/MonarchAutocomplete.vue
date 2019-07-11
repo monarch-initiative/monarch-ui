@@ -343,10 +343,10 @@ export default {
         this.current -= 1;
       }
     },
-    toggleSuggestions() {
+    toggleSuggestions(event) {
       if(this.open){
         this.open = false;
-      } else if (this.suggestions.length > 0){
+      } else if (this.suggestions.length > 0 && event.target.nodeName === "INPUT"){
         this.open = true;
       }
     },
@@ -434,6 +434,7 @@ export default {
     border-radius: 2px;
     border: solid black 1px;
     overflow-y: auto;
+    cursor: pointer;
 
     &.full-width-search {
       position: fixed !important;
@@ -476,6 +477,10 @@ export default {
 
   .autorootdiv.home-search .input-group.input-group-sm {
     width: unset;
+  }
+
+  &.home-search {
+    margin: 0 10% 0 10%;
   }
 }
 </style>
