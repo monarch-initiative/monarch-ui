@@ -2,9 +2,11 @@
     <h2 class="page-title"> Contacting The Monarch Initiative </h2>
     <div class="contact">
         <p>
-            If you have a specific question about Monarch, its data, usage, software, or services, please create a 
-            ticket on our <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a>
-             and join the rest of the Monarch Initiative community on GitHub!
+            If you have a specific question about Monarch, its data, usage, software, or services, you can create a 
+            ticket on our helpdesk <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a> 
+            or get live feedback on <a href="https://gitter.im/monarch-initiative/helpdesk" target="__blank">gitter</a>.
+            We invite you to join the rest of the Monarch Initiative community on 
+            <a href="https://github.com/monarch-initiative" target="__blank">GitHub!</a>
         </p>
         <p>
             If you are having trouble using or connecting to any of our public services, please check our 
