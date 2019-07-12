@@ -47,10 +47,6 @@
     h2 {
         text-align: center;
     }
-    & .contact {
-        font-style: italic;
-        text-align: center;
-    }
 }
 
 </style>
