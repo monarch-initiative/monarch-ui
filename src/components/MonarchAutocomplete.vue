@@ -205,7 +205,7 @@ export default {
     dynamicPlaceholder: {
       type: String,
       required: false,
-      default: 'Search for phenotypes, diseases, genes ...'
+      default: 'Explore Monarch for phenotypes, diseases, genes and more..'
     }
   },
   data() {

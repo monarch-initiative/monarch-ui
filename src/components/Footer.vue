@@ -114,8 +114,9 @@ div.footer {
   text-align: center;
   color: white;
   background-color: $monarch-bg-color;
+  box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2), 0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 
-  a {
+a {
     color: white;
   }
 
@@ -185,6 +186,7 @@ div.footer.compact {
   font-size: 0.875rem;
   text-align: left;
   background-color: $monarch-bg-color;
+  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12)
 }
 
 </style>

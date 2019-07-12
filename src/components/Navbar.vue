@@ -220,7 +220,7 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
   background-image: -webkit-linear-gradient(left, #0B556B 0%, #232733 100%) !important;
   background-image: linear-gradient(to right, #0B556B 0%, #232733 100%) !important;
   background-repeat: repeat-x !important;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0) !important;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 .nav-ac {

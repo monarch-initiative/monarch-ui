@@ -5,10 +5,9 @@
     <div class="row">
       <vml-home-intro-component/>
     </div>
-    <vml-home-about-monarch-component/>
     <vml-home-what-we-do-component/>
-    <vml-home-news-component/>
     <vml-home-data-component/>
+    <vml-home-news-component/>
     <vml-home-partners-component/>
 
   </div>
@@ -21,7 +20,7 @@
   div.container-fluid.monarch-home-view {
     padding: 0;
     background: $monarch-bg-color;
-    > .row > div {
+    .row > div {
       width: 100%;
     }
 

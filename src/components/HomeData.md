@@ -6,11 +6,14 @@
         class="btn btn-link"
         role="button">
         <img
-          style="max-height:35px;"
+          class="icon"
           src="@/assets/img/icon-diseases.png"
           alt="disease">
       </router-link>
-      <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
+      <span class="network-name">
+          <p class="amount">218,313</p>
+          <p class="text">Disease-Phenotype Associations</p>
+      </span>
     </div>
     <div class="col-sm">
       <router-link
@@ -18,11 +21,13 @@
         class="btn btn-link"
         role="button">
         <img
-          style="max-height:35px;"
+          class="icon"
           src="@/assets/img/icon-genes.png"
           alt="disease">
       </router-link>
-      <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
+      <span class="network-name">
+      <p class="amount">793,526</p>
+      <p class="text">Gene-Phenotype Associations</p>
     </div>
     <div class="col-sm">
       <router-link
@@ -30,11 +35,13 @@
         class="btn btn-link"
         role="button">
         <img
-          style="max-height:35px;"
+          class="icon"
           src="@/assets/img/icon-models.png"
           alt="disease">
       </router-link>
-      <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
+      <span class="network-name">
+      <p class="amount">20,870</p>
+      <p class="text">Model Associations</p>
     </div>
   </div>
 </div>
@@ -49,5 +56,21 @@
   padding-bottom: 50px;
   background: $home-section-dark-bg;
   text-align: center;
+  
+  .icon {
+    max-height: 50px;
+  }
+  
+  .network-name {
+    .amount {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 0;
+    }
+    
+    .text {
+        font-size: 18px;
+    }
+  }
 }
 </style>
