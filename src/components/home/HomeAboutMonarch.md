@@ -16,6 +16,7 @@
 div.about-monarch-section {
   text-align: center;
   padding: 15px 0;
-  background: $home-section-light-bg;
+  background-image: url("../../assets/img/network.jpg");
+  color: white;
 }
 </style>
