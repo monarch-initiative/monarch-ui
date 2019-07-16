@@ -344,12 +344,10 @@ export default {
       }
     },
     toggleSuggestions(event) {
-      if(event.target){
-        if(this.open){
-          this.open = false;
-        } else if (this.suggestions.length > 0){
-          this.open = true;
-        }
+      if(this.open){
+        this.open = false;
+      } else if (this.suggestions.length > 0 && event.target.nodeName === "INPUT"){
+        this.open = true;
       }
     },
     closeFilterBox() {
