@@ -29,89 +29,25 @@
         <div class="media">
           <img
             class="img-fluid monarch-logo"
-            src="../assets/img/monarch-logo-white-stacked.png"
+            src="../assets/img/monarch-logo-white.png"
             alt="Monarch logo">
         </div>
       </div>
-      <div class="offset-lg-2 col-md-3 col-lg-2 about-section">
-        <h5 class="category-header"> Tools </h5>
-        <i class="fa fa-level-up fa-fw arrow-icon"/>
-        <ul class="list-inline banner-social-buttons fa-ul">
-          <li>
-            <router-link to="/analyze/phenotypes">Phenotype Profile Search</router-link>
-          </li>
-          <li>
-            <router-link to="/tools/other-tools">Other Tools</router-link>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-3 col-lg-2 about-section">
-        <h5 class="category-header"> About </h5>
-        <i class="fa fa-level-up fa-fw arrow-icon"/>
-        <ul class="list-inline banner-social-buttons fa-ul">
-          <li>
-            <router-link to="/about/monarch">About Monarch</router-link>
-          </li>
-          <li>
-            <router-link to="/about/team">Our Team</router-link>
-          </li>
-          <li>
-            <router-link to="/sources">Disclaimer</router-link>
-          </li>
-          <li>
-            <router-link to="/sources">Data Sources</router-link>
-          </li>
-          <li>
-            <router-link to="/analyze/phenotypes">Monarch API</router-link>
-          </li>
-          <li>
-            <router-link to="/analyze/phenotypes">Releases</router-link>
-          </li>
-          <li>
-            <a href="https://archive.monarchinitiative.org/latest/" target="_blank">
-              Data Downloads
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-3 col-lg-2 about-section">
-        <h5 class="category-header"> Documentation </h5>
-        <i class="fa fa-level-up fa-fw arrow-icon"/>
-        <ul class="list-inline banner-social-buttons fa-ul">
-          <li>
-            <router-link to="/about/publications">Publications</router-link>
-          </li>
-          <li>
-            <router-link to="/about/team">Github Organization</router-link>
-          </li>
-          <li>
-            <router-link to="/analyze/phenotypes">Guidelines</router-link>
-          </li>
-          <li>
-            <router-link to="/sources">Phenotype Ontologies</router-link>
-          </li>
-          <li>
-            <router-link to="/analyze/phenotypes">Project</router-link>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-3 col-lg-2 about-section">
-        <h5 class="category-header"> Help </h5>
-        <i class="fa fa-level-up fa-fw arrow-icon"/>
-        <ul class="list-inline fa-ul">
-          <li>
-            <router-link to="/help/contact">Contact Us</router-link>
-          </li>
-          <li>
-            <router-link to="/help/cite">Cite Monarch</router-link>
-          </li>
-          <li>
-            <router-link to="/help/linkout">Link to Monarch</router-link>
-          </li>
-        </ul>
+
+      <div class="socials col-lg-10">
+        <div class="icons">
+          <a href="mailto:info@monarchinitiative.org">
+            <i class="fa fa-envelope fa-fw"/>
+          </a>
+          <a target="_blank" href="https://twitter.com/MonarchInit">
+            <i class="fa fa-twitter fa-fw"/>
+          </a>
+          <a target="_blank" href="https://github.com/monarch-initiative/">
+            <i class="fa fa-github fa-fw"/>
+          </a>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -139,8 +75,8 @@ export default {
 
 div.footer {
   margin: 0;
-  padding: 20px 10px;
-
+  padding: 0 10px;
+  height: $footer-height;
   width: 100%;
   text-align: center;
   color: white;
@@ -155,21 +91,23 @@ div.footer {
     text-align: left;
   }
 
-  .arrow-icon {
-    z-index: 10000;
-    float: left;
-    transform: rotate(90deg);
-    font-size: 18px;
+  .socials .icons {
+    float:right;
+    i {
+      font-size: 28px;
+      margin: 15px 5px 0 0;
+    }
+
+    i:hover {
+      opacity: 0.8;
+      cursor: pointer;
+    }
   }
 
   .monarch-logo {
-    max-height:100px;
-    margin:auto;
-    padding:5px 5px 5px 5px;
-  }
-
-  .category-header {
-    text-align: left;
+    width: 150px;
+    margin: 10px 15px 0 0;
+    padding: 5px 5px 5px 5px;
   }
 
   .about-section {
