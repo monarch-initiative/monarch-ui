@@ -1,10 +1,7 @@
 <div class="home-page-section news-section">
   <div class="row">
     <div class="col-sm offset-lg-1 col-lg-6">
-
-<h5> News from <a href="https://medium.com/@MonarchInit" target="__blank">@MonarchInit</a></h5>
-<i class="fas fa-newspaper"></i>
-<div></div>
+     <h5 class="news"><i class="fa fa-newspaper-o fa-fw"></i> News from <a href="https://medium.com/@MonarchInit" target="__blank">@MonarchInit</a></h5>
       <ul class="list-inline">
         <li
           v-for="(item, index) in newsItems"
@@ -45,6 +42,11 @@
 div.news-section {
   text-align: center;
   background: $home-section-light-bg;
+  
+  h5.news {
+    border-bottom: 1px solid rgba(15,70,100,.12);
+    padding-bottom: 8px;
+  }
 
   .news-date {
       width: fit-content;

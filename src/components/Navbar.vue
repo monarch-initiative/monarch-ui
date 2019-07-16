@@ -211,7 +211,7 @@ nav#monarchng-navbar.navbar .navbar-brand {
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
   height: 28px;
   width: auto;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   padding: 0;
 }
 

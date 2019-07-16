@@ -121,8 +121,8 @@
     </div>
     <div
       v-if="homeSearch"
-      class="p-0 m-0">
-      Examples:
+      class="examples">
+      e.g.
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
@@ -156,7 +156,7 @@ const exampleSearches = [
     category: 'phenotype'
   },
   {
-    searchString: 'Shh',
+    searchString: 'SHH',
     category: 'gene'
   }
 ];
@@ -478,6 +478,10 @@ export default {
 
   .example-button{
      background-color:  cadetblue;
+  }
+
+  .examples {
+    margin-top: 15px;
   }
 
   .autorootdiv .input-group.input-group-sm {

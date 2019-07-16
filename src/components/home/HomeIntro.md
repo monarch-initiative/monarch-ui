@@ -33,6 +33,7 @@ div.intro {
   text-align: center;
   color: white;
   background-color: $monarch-bg-color;
+  height: 275px;
 
   vertical-align: middle;
 

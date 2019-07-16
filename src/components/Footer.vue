@@ -95,7 +95,7 @@ div.footer {
     float:right;
     i {
       font-size: 28px;
-      margin: 15px 5px 0 0;
+      margin: 15px 15px 0 0;
     }
 
     i:hover {

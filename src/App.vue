@@ -67,8 +67,12 @@ $fa-font-path: "~font-awesome/fonts" !default;
   display: none;
 }
 
-// https://medium.freecodecamp.org/how-to-keep-your-footer-where-it-belongs-59c6aa05c59c
-
+.row {
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
 #app.page-wrapper {
   position: absolute;
   min-height: 100vh;
@@ -95,7 +99,7 @@ $fa-font-path: "~font-awesome/fonts" !default;
 }
 
 #app.page-wrapper .main-wrapper {
-  padding: $navbar-height 15px;
+  padding: $navbar-height 0 0 0;
 }
 
 
@@ -127,8 +131,6 @@ div.vue-markdown-plain {
       background-color: unset;
       border-radius: unset;
       color: unsete;
-      background-color: unset;
-      border-radius: unset;
       font-size: unset;
       margin: unset;
       padding: unset;
@@ -176,6 +178,10 @@ blockquote.blockquote {
   font-size: ($font-size-base * 1.1);
   border-radius: 5px;
   border-left: 2px solid lightgray;
+}
+
+html, body {
+  font-family: 'Poppins', sans-serif;
 }
 
 </style>
