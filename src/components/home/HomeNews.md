@@ -1,6 +1,6 @@
 <div class="home-page-section news-section">
   <div class="row">
-    <div class="col-sm col-lg-7">
+    <div class="col-sm offset-lg-1 col-lg-6">
 
 <h5> News from <a href="https://medium.com/@MonarchInit" target="__blank">@MonarchInit</a></h5>
 <i class="fas fa-newspaper"></i>
@@ -47,11 +47,13 @@ div.news-section {
   background: $home-section-light-bg;
 
   .news-date {
-      width: 150px;
-      float: left;
+      width: fit-content;
       text-align: left;
       margin-right: 15px;
+      display: block;
+      font-style: italic;
   }
+  
   ul {
     padding: 0 10px;
     text-align: left;

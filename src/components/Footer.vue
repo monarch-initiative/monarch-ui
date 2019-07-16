@@ -25,7 +25,7 @@
     <div
       v-else
       class="row footer">
-      <div class="col-12 col-lg-3">
+      <div class="col-lg-2">
         <div class="media">
           <img
             class="img-fluid monarch-logo"
@@ -33,49 +33,80 @@
             alt="Monarch logo">
         </div>
       </div>
-      <div class="offset-lg-2 col-12 col-md-4 col-lg-2 about-section">
-        <h6 class="category-header"> Contact Us </h6>
+      <div class="offset-lg-2 col-md-3 col-lg-2 about-section">
+        <h5 class="category-header"> Tools </h5>
+        <i class="fa fa-level-up fa-fw arrow-icon"/>
         <ul class="list-inline banner-social-buttons fa-ul">
           <li>
-            <a href="mailto:info@monarchinitiative.org"><i class="fa fa-envelope fa-fw"/>Mail</a>
+            <router-link to="/analyze/phenotypes">Phenotype Profile Search</router-link>
           </li>
           <li>
-            <a
-              target="_blank"
-              href="https://github.com/monarch-initiative/"><i class="fa fa-github fa-fw"/>Github</a>
-          </li>
-          <li>
-            <a
-              target="_blank"
-              href="https://twitter.com/MonarchInit"><i class="fa fa-twitter fa-fw"/>Twitter</a>
+            <router-link to="/tools/other-tools">Other Tools</router-link>
           </li>
         </ul>
       </div>
-      <div class="col-12 col-md-4 col-lg-2 about-section">
-        <h6 class="category-header"> About </h6>
-        <ul class="list-inline fa-ul">
+      <div class="col-md-3 col-lg-2 about-section">
+        <h5 class="category-header"> About </h5>
+        <i class="fa fa-level-up fa-fw arrow-icon"/>
+        <ul class="list-inline banner-social-buttons fa-ul">
           <li>
-            <router-link to="/about/monarch"><i class="fa fa-info fa-fw"/>About Monarch</router-link>
+            <router-link to="/about/monarch">About Monarch</router-link>
           </li>
           <li>
-            <router-link to="/about/team"><i class="fa fa-users fa-fw"/>Team</router-link>
+            <router-link to="/about/team">Our Team</router-link>
           </li>
           <li>
-            <router-link to="/about/disclaimer"><i class="fa fa-file fa-fw"/>Disclaimer</router-link>
+            <router-link to="/sources">Disclaimer</router-link>
+          </li>
+          <li>
+            <router-link to="/sources">Data Sources</router-link>
+          </li>
+          <li>
+            <router-link to="/analyze/phenotypes">Monarch API</router-link>
+          </li>
+          <li>
+            <router-link to="/analyze/phenotypes">Releases</router-link>
+          </li>
+          <li>
+            <a href="https://archive.monarchinitiative.org/latest/" target="_blank">
+              Data Downloads
+            </a>
           </li>
         </ul>
       </div>
-      <div class="col-12 col-md-4 col-lg-2 about-section">
-        <h6 class="category-header"> Data </h6>
+      <div class="col-md-3 col-lg-2 about-section">
+        <h5 class="category-header"> Documentation </h5>
+        <i class="fa fa-level-up fa-fw arrow-icon"/>
+        <ul class="list-inline banner-social-buttons fa-ul">
+          <li>
+            <router-link to="/about/publications">Publications</router-link>
+          </li>
+          <li>
+            <router-link to="/about/team">Github Organization</router-link>
+          </li>
+          <li>
+            <router-link to="/analyze/phenotypes">Guidelines</router-link>
+          </li>
+          <li>
+            <router-link to="/sources">Phenotype Ontologies</router-link>
+          </li>
+          <li>
+            <router-link to="/analyze/phenotypes">Project</router-link>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-3 col-lg-2 about-section">
+        <h5 class="category-header"> Help </h5>
+        <i class="fa fa-level-up fa-fw arrow-icon"/>
         <ul class="list-inline fa-ul">
           <li>
-            <a href="https://archive.monarchinitiative.org/latest/"><i class="fa fa-download fa-fw"/>Data Downloads</a>
+            <router-link to="/help/contact">Contact Us</router-link>
           </li>
           <li>
-            <router-link to="/page/releases"><i class="fa fa-folder-open fa-fw"/>Releases</router-link>
+            <router-link to="/help/cite">Cite Monarch</router-link>
           </li>
           <li>
-            <router-link to="/page/services"><i class="fa fa-database fa-fw"/>APIs</router-link>
+            <router-link to="/help/linkout">Link to Monarch</router-link>
           </li>
         </ul>
       </div>
@@ -116,28 +147,29 @@ div.footer {
   background-color: $monarch-bg-color;
   box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2), 0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 
-a {
+  a {
     color: white;
   }
 
-  .fa-ul {
-    margin-left: 4.14286em !important;
-  }
   .fa-ul > li {
-    text-align: justify;
+    text-align: left;
   }
 
-  .fa-ul li i {
-    margin-right: 15px;
+  .arrow-icon {
+    z-index: 10000;
+    float: left;
+    transform: rotate(90deg);
+    font-size: 18px;
   }
 
-  .category-header {
-    text-align: center;
-  }
   .monarch-logo {
     max-height:100px;
     margin:auto;
     padding:5px 5px 5px 5px;
+  }
+
+  .category-header {
+    text-align: left;
   }
 
   .about-section {

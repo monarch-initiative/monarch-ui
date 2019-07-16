@@ -1,9 +1,7 @@
 <div
   class="intro">
 
-![](../assets/img/monarch-logo-white-stacked.png)
-
-##### Advancing *translational science* by **semantically integrating** biological information across species.
+![](../../assets/img/monarch-logo-white-stacked.png)
 
   <embedded-autocomplete
     :home-search="true"

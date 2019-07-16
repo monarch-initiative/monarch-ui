@@ -344,10 +344,12 @@ export default {
       }
     },
     toggleSuggestions(event) {
-      if(this.open){
-        this.open = false;
-      } else if (this.suggestions.length > 0 && event.target.nodeName === "INPUT"){
-        this.open = true;
+      if(event.target){
+        if(this.open){
+          this.open = false;
+        } else if (this.suggestions.length > 0){
+          this.open = true;
+        }
       }
     },
     closeFilterBox() {
@@ -415,13 +417,16 @@ export default {
 @import "~@/style/variables";
 
 .monarch-autocomplete {
+
   .text-align-right {
     text-align: right;
   }
+
   .autocomplete-input {
     position: relative;
     height: 300px;
   }
+
   .loading {
     background-color: #ffffff;
     background-image: url("../assets/img/infinity.gif");
@@ -429,6 +434,7 @@ export default {
     background-position: 99%;
     background-repeat: no-repeat;
   }
+
   .dropList {
     width: 100%;
     border-radius: 2px;
@@ -450,10 +456,13 @@ export default {
     padding-left: 2px;
     padding-right: 2px;
   }
+
   li:hover {
     background-color: cornflowerblue;
     color: white;
+    cursor: pointer;
   }
+
   .active {
     background-color: cornflowerblue;
     color: white;

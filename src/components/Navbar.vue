@@ -36,40 +36,62 @@
           <b-dropdown-item to="/about/team">
             Our Team
           </b-dropdown-item>
-          <b-dropdown-item
-            to="/about/publications">
-            Publications
-          </b-dropdown-item>
 
           <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
-            Blog
+            Disclaimer
+          </b-dropdown-item>
+
+          <b-dropdown-divider/>
+
+          <b-dropdown-item to="/sources">
+            Data Sources
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/sources">
+            Monarch API
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/sources">
+            Releases
+          </b-dropdown-item>
+
+          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
+            Data Downloads
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+
+        <b-nav-item-dropdown text="Documentation">
+          <b-dropdown-item to="/about/publications">
+            Publications
           </b-dropdown-item>
 
           <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
             GitHub Organization
           </b-dropdown-item>
 
-          <b-dropdown-divider/>
-
-          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
-            Data Downloads
+          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+            Guidelines
           </b-dropdown-item>
 
-          <b-dropdown-item to="/sources">
-            Data Sources
+          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+            Phenotype Ontologies
           </b-dropdown-item>
 
+          <b-dropdown-item to="/help/citing">
+            Project
+          </b-dropdown-item>
         </b-nav-item-dropdown>
+
         <b-nav-item-dropdown text="Help">
           <b-dropdown-item to="/help/contact">
             Contact Us
           </b-dropdown-item>
 
           <b-dropdown-item to="/help/citing">
-            Citing Monarch
+            Cite Monarch
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/links">
+          <b-dropdown-item to="/help/linkout">
             Link to Us
           </b-dropdown-item>
         </b-nav-item-dropdown>
