@@ -76,6 +76,11 @@ const router = new Router({
       component: require('@/views/OtherTools.md').default,
     },
     {
+      path: '/tools/text-annotate',
+      name: 'text-annotate',
+      component: () => import('./views/TextAnnotator.vue'),
+    },
+    {
       path: '/search/:query?',
       name: 'search',
       // route level code-splitting

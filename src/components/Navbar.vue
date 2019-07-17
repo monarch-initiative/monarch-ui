@@ -23,8 +23,10 @@
             to="/analyze/phenotypes">
             Phenotype Profile Search
           </b-dropdown-item>
-          <b-dropdown-item
-                  to="/tools/other-tools">
+          <b-dropdown-item to="/tools/text-annotate">
+            Text Annotator
+          </b-dropdown-item>
+          <b-dropdown-item to="/tools/other-tools">
             Other Monarch Tools
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -211,7 +213,7 @@ nav#monarchng-navbar.navbar .navbar-brand {
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
   height: 28px;
   width: auto;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   padding: 0;
 }
 
