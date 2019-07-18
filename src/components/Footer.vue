@@ -25,7 +25,7 @@
     <div
       v-else
       class="row footer">
-      <div class="col-lg-2">
+      <div class="col-4 col-lg-2">
         <div class="media">
           <img
             class="img-fluid monarch-logo"
@@ -34,7 +34,7 @@
         </div>
       </div>
 
-      <div class="socials col-lg-10">
+      <div class="socials col-8 col-lg-10">
         <div class="icons">
           <a href="mailto:info@monarchinitiative.org">
             <i class="fa fa-envelope fa-fw"/>
@@ -151,7 +151,7 @@ div.footer {
 div.footer.compact {
   min-height: $footer-height;
   margin: 0;
-  padding: 5px 0;
+  padding: 15px 0 5px 0;
 
   font-size: 0.875rem;
   text-align: left;
