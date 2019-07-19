@@ -31,19 +31,28 @@
                                     </div>
                                 </div>
                                 <div class="content">
-                                        <b-form-textarea
-                                                id="textarea"
-                                                v-model="form.message"
-                                                placeholder="Enter something..."
-                                                rows="3"
-                                                max-rows="6"
-                                                v-if="!annotatedText"
-                                                :class="['textarea', ($v.form.message.$error) ? 'is-danger' : '']"
-                                        >
-                                        </b-form-textarea>
-
+                                        <div class="step1" v-if="!resultsStep">
+                                            <b-form-textarea
+                                                    id="textarea"
+                                                    v-model="form.message"
+                                                    placeholder="Enter something..."
+                                                    rows="12"
+                                                    max-rows="6"
+                                                    :class="['textarea', ($v.form.message.$error) ? 'is-danger' : '']"
+                                            >
+                                            </b-form-textarea>
+                                        </div>
+                                        <div class="step2" v-if="resultsStep">
+                                            <div class="step2" v-html="annotatedText"></div>
+                                        </div>
+                                        <div class="spinner" v-if="showSpinner">
+                                            <b-spinner type="grow" label="Spinning"></b-spinner>
+                                        </div>
+                                        <div class="error" v-if="errorAnnotating">
+                                        <h4>Sorry, looks like we couldn't process that text. If you think this is an error,
+                                        please open a ticket <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank"> here</a> and we can address it right way.</h4>
+                                        </div>
                                 </div>
-                                {{annotatedText}}
                                 <div :class="['bottom', (!annotatedText) ? 'only-submit' : '']">
                                     <b-button ref="backButton" v-if="annotatedText" @click="back" :disabled="!validForm" class="stepper-button back">
                                         <i class="fa fa-caret-left fa-fw"></i>Back
@@ -61,14 +70,13 @@
     </div>
 </template>
 <script>
-    import axios from 'axios/index';
-    import HorizontalStepper from 'vue-stepper';
-    import { validationMixin } from 'vuelidate'
-    import { required } from 'vuelidate/lib/validators'
+    import { validationMixin } from 'vuelidate';
+    import { required } from 'vuelidate/lib/validators';
+    import * as biolink from '@/api/BioLink';
+
 
     export default {
         components: {
-            HorizontalStepper
         },
         props: {
         },
@@ -80,7 +88,11 @@
                     message: ""
                 },
                 annotatedText: "",
-                resultsStep: false
+                resultsStep: false,
+                dataStep: true,
+                errorAnnotating: false,
+                showSpinner: false,
+
             };
         },
         watch: {
@@ -109,6 +121,20 @@
             }
         },
         computed: {
+            enterAnimation() {
+                if (this.resultsStep === true && this.dataStep === false) {
+                    return "animated quick fadeInLeft";
+                } else {
+                    return "animated quick fadeInRight";
+                }
+            },
+            leaveAnimation() {
+                if (this.resultStep === false && this.dataStep === true) {
+                    return "animated quick fadeOutLeft";
+                } else {
+                    return "animated quick fadeOutRight";
+                }
+            }
         },
         mounted() {
             if(!this.$v.$invalid) {
@@ -148,16 +174,22 @@
                 // Empty the form field?
                 this.annotatedText = '';
                 this.resultsStep = false;
+                this.errorAnnotating = false;
             },
 
-            annotateText(){
+            async annotateText(){
                 this.resultsStep = true;
-                // Call some endpoint and wait for a response. If, then return then
-                this.annotatedText = "OMG ANNOTATED TEXT";
-                //
-                console.log(this.annotatedText);
+                this.dataStep = false;
+                this.showSpinner = true;
+                const at = await biolink.annotateText(this.form.message, false);
+                this.showSpinner = false;
+                if (at.status !== 200) {
+                    this.errorAnnotating = true;
+                }else {
+                    // Call some endpoint and wait for a response. If, then return then
+                    this.annotatedText = at.data;
+                }
             }
-
         }
     };
 </script>
@@ -169,10 +201,27 @@
 
         .content {
             overflow: hidden;
-            margin: 3.5rem 0;
+            margin: 5rem 0 3.5rem 0;
+            min-height: 200px;
+
+            .step1 {
+                text-align: justify;
+            }
 
             .hidden {
                 display: none;
+            }
+
+            .spinner {
+                text-align: center;
+                margin-top: 50px;
+                .spinner-grow {
+                    animation: spinner-grow .80s linear infinite;
+                    color: $monarch-bg-color;
+                }
+            }
+            .error{
+                text-align: center;
             }
         }
         .bottom {

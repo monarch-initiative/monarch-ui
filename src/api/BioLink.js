@@ -504,6 +504,30 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
   return returnedPromise;
 }
 
+export async function annotateText(queryText, longestOnly) {
+  const baseUrl = 'https://scigraph-ontology.monarchinitiative.org/scigraph/annotations';
+
+  const params = new URLSearchParams();
+  params.append('content', queryText);
+  return new Promise((resolve, reject) => {
+    axios.post(baseUrl, params, {
+            headers: { 'content-type': 'application/x-www-form-urlencoded' }
+        }
+    ).then((resp) => {
+          const responseData = resp;
+          if (typeof responseData !== 'object') {
+            reject(responseData);
+          }
+          else {
+            resolve(responseData);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+  });
+}
+
 
 export function debugServerName() {
   return (serverConfiguration.app_base.length > 0)
