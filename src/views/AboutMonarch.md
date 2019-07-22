@@ -1,6 +1,8 @@
 <div class="container-fluid monarch-view monarch-about-view">
 
 <h2 class="page-title">The Monarch Initiative</h2>
+<div class="row">
+
 <p>The Monarch Initiative is an integrative data and analytic platform connecting phenotypes to genotypes across species. 
 The correlation of phenotypic outcomes and disease with genetic variation and environmental factors is a core pursuit 
 in biology and biomedicine.</p>
@@ -14,7 +16,7 @@ that represents the most comprehensive integration of disease entities ever achi
 development of genomics standards within GA4GH. We have developed algorithms and tools that are in use by multiple 
 communities for tasks including the identification of animal models of human disease through phenotypic similarity, 
 phenotype-driven computational support for differential diagnostics, and translational research.</p>
-
+</div>
 <div class="row">
     <div class="col-lg-4">
         <figure>
@@ -36,8 +38,34 @@ phenotype-driven computational support for differential diagnostics, and transla
         </figure>
         Find out more about cross specific phenotype analysis.
     </div>
+    <div class="col-lg-4">
+             <figure>
+              <img src="http://journals.plos.org/plosbiology/article/figure/image?id=10.1371/journal.pbio.1000247.g001&size=medium" style="max-height:300px;" />
+              <figcaption>
+               Fig 1. Comparison of PAX6 abnormal phenotypes in human and model organism eyes. 
+               (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009</a>
+              </figcaption>
+            </figure>
+            Find out more about cross specific phenotype analysis.
+    </div>
 </div>
+<br><br>
+<div class="row">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac magna consectetur, aliquet est in, pretium libero.
+ Vestibulum nibh turpis, placerat sit amet accumsan nec, euismod nec sapien. Mauris eu lacus sed ipsum pharetra feugiat.
+  Nunc feugiat ornare malesuada. In tempor laoreet felis, nec egestas ex. Vestibulum convallis eros id diam eleifend, 
+  vitae viverra eros auctor. Mauris mi est, egestas et enim vel, elementum fermentum enim. In ut tortor purus. 
+  Vestibulum sit amet tellus lobortis, viverra augue congue, sollicitudin risus. Ut mi mauris, porttitor ut feugiat 
+  quis, euismod eget quam. Fusce sagittis rhoncus lorem eu aliquet. Nullam dictum purus in magna sollicitudin, in 
+  dapibus diam tristique.</p>
 
+<p>Sed a consectetur sem. Sed vel gravida nibh, vitae ultricies sapien. Etiam pretium, erat volutpat tincidunt tempor, 
+velit neque rutrum ex, ac blandit magna mi in dui. Sed venenatis sodales orci id dignissim. Nunc eget lacinia orci. 
+Suspendisse ultrices interdum interdum. Quisque et pharetra dolor. Vivamus consequat, mauris in pellentesque fringilla, 
+ligula lorem dapibus metus, aliquet dictum turpis purus vel lectus. Pellentesque tempus mattis dui nec aliquet. 
+Curabitur ipsum eros, mollis vel nisi sit amet, auctor consectetur nulla. Nam commodo nunc interdum, bibendum sem ut, 
+ultrices tortor. In a vestibulum ante. Pellentesque nec dapibus eros, laoreet congue magna.</p>
+</div>
 <div class="callouts row">
     <h4 class="title">
         Checkout some of our tools and resources below!
