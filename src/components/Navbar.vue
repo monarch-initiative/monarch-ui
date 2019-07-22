@@ -24,7 +24,7 @@
             Phenotype Profile Search
           </b-dropdown-item>
           <b-dropdown-item
-                  to="/tools/other-tools">
+            to="/tools/other-tools">
             Other Monarch Tools
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -36,40 +36,62 @@
           <b-dropdown-item to="/about/team">
             Our Team
           </b-dropdown-item>
-          <b-dropdown-item
-            to="/about/publications">
-            Publications
-          </b-dropdown-item>
 
           <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
-            Blog
+            Disclaimer
+          </b-dropdown-item>
+
+          <b-dropdown-divider/>
+
+          <b-dropdown-item to="/sources">
+            Data Sources
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/sources">
+            Monarch API
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/sources">
+            Releases
+          </b-dropdown-item>
+
+          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
+            Data Downloads
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+
+        <b-nav-item-dropdown text="Documentation">
+          <b-dropdown-item to="/about/publications">
+            Publications
           </b-dropdown-item>
 
           <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
             GitHub Organization
           </b-dropdown-item>
 
-          <b-dropdown-divider/>
-
-          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
-            Data Downloads
+          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+            Guidelines
           </b-dropdown-item>
 
-          <b-dropdown-item to="/sources">
-            Data Sources
+          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+            Phenotype Ontologies
           </b-dropdown-item>
 
+          <b-dropdown-item to="/help/citing">
+            Project
+          </b-dropdown-item>
         </b-nav-item-dropdown>
+
         <b-nav-item-dropdown text="Help">
           <b-dropdown-item to="/help/contact">
             Contact Us
           </b-dropdown-item>
 
           <b-dropdown-item to="/help/citing">
-            Citing Monarch
+            Cite Monarch
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/links">
+          <b-dropdown-item to="/help/linkout">
             Link to Us
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -189,7 +211,7 @@ nav#monarchng-navbar.navbar .navbar-brand {
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
   height: 28px;
   width: auto;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   padding: 0;
 }
 
@@ -220,7 +242,7 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
   background-image: -webkit-linear-gradient(left, #0B556B 0%, #232733 100%) !important;
   background-image: linear-gradient(to right, #0B556B 0%, #232733 100%) !important;
   background-repeat: repeat-x !important;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffdfdfdf', GradientType=0) !important;
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
 }
 
 .nav-ac {

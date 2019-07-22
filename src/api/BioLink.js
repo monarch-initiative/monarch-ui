@@ -365,7 +365,8 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
 
   if (!category || category === 'all') {
     category = categoriesAll;
-  } else {
+  }
+  else {
     category = [category];
   }
 

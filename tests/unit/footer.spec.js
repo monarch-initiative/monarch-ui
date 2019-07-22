@@ -12,6 +12,7 @@ import MonarchFooter from '@/components/Footer.vue';
 describe('Footer.vue', () => {
   it('renders About Monarch', () => {
     const wrapper = shallowMountWithRouting(MonarchFooter);
-    expect(wrapper.text()).to.include('About Monarch');
+
+    expect(wrapper.text()).to.include('The Monarch Initiative');
   });
 });

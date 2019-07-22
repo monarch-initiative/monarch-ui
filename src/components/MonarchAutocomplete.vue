@@ -22,9 +22,9 @@
           {{ selectDisplay }}
         </button>
         <div
+          v-click-outside="closeFilterBox"
           v-if="catDropDown"
           class="dropdown-menu list-group dropCatList px-4"
-          v-click-outside="closeFilterBox"
         >
           <div class="form-group">
             <b-form-radio-group
@@ -35,6 +35,7 @@
         </div>
       </div>
       <input
+        v-click-outside="toggleSuggestions"
         :placeholder="dynamicPlaceholder"
         :class="{
           'loading': loading
@@ -49,7 +50,6 @@
         @keydown.up="up"
         @keydown.esc="clearSearch"
         @focus="toggleSuggestions"
-        v-click-outside="toggleSuggestions"
       >
 
       <div
@@ -121,8 +121,8 @@
     </div>
     <div
       v-if="homeSearch"
-      class="p-0 m-0">
-      Examples:
+      class="examples">
+      e.g.
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
@@ -139,7 +139,7 @@
 <script>
 import * as biolink from '@/api/BioLink';
 import { reduceCategoryList } from '@/lib/CategoryMap';
-import vClickOutside from 'v-click-outside'
+import vClickOutside from 'v-click-outside';
 
 const debounce = require('lodash/debounce');
 
@@ -156,7 +156,7 @@ const exampleSearches = [
     category: 'phenotype'
   },
   {
-    searchString: 'Shh',
+    searchString: 'SHH',
     category: 'gene'
   }
 ];
@@ -205,14 +205,14 @@ export default {
     dynamicPlaceholder: {
       type: String,
       required: false,
-      default: 'Search for phenotypes, diseases, genes ...'
+      default: 'Explore Monarch for phenotypes, diseases, genes and more..'
     }
   },
   data() {
     return {
       destroying: false,
-      category: "all",
-      selectDisplay: "All",
+      category: 'all',
+      selectDisplay: 'All',
       exampleSearches,
       options: [
 
@@ -344,9 +344,10 @@ export default {
       }
     },
     toggleSuggestions(event) {
-      if(this.open){
+      if (this.open) {
         this.open = false;
-      } else if (this.suggestions.length > 0 && event.target.nodeName === "INPUT"){
+      }
+      else if (this.suggestions.length > 0 && event.target.nodeName === 'INPUT') {
         this.open = true;
       }
     },
@@ -403,7 +404,8 @@ export default {
       this.value = searchString;
       if (category) {
         this.category = category;
-      }else {
+      }
+      else {
         this.fetchData();
       }
     }
@@ -415,13 +417,16 @@ export default {
 @import "~@/style/variables";
 
 .monarch-autocomplete {
+
   .text-align-right {
     text-align: right;
   }
+
   .autocomplete-input {
     position: relative;
     height: 300px;
   }
+
   .loading {
     background-color: #ffffff;
     background-image: url("../assets/img/infinity.gif");
@@ -429,6 +434,7 @@ export default {
     background-position: 99%;
     background-repeat: no-repeat;
   }
+
   .dropList {
     width: 100%;
     border-radius: 2px;
@@ -450,10 +456,13 @@ export default {
     padding-left: 2px;
     padding-right: 2px;
   }
+
   li:hover {
     background-color: cornflowerblue;
     color: white;
+    cursor: pointer;
   }
+
   .active {
     background-color: cornflowerblue;
     color: white;
@@ -469,6 +478,10 @@ export default {
 
   .example-button{
      background-color:  cadetblue;
+  }
+
+  .examples {
+    margin-top: 15px;
   }
 
   .autorootdiv .input-group.input-group-sm {
