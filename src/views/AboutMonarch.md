@@ -25,7 +25,7 @@ and disease with genetic variation and environmental factors is a core pursuit i
     <div class="col-lg-6">
          <h5 class="figure-title">Cross specific phenotype comparison.</h5>
          <figure>
-          <img src="http://journals.plos.org/plosbiology/article/figure/image?id=10.1371/journal.pbio.1000247.g001&size=medium" style="max-height:375px;" />
+          <img src="../assets/img/cross-species-comparison.png" style="max-height:375px;" />
           <figcaption>
            Fig 2. Comparison of PAX6 abnormal phenotypes in human and model organism eyes. 
            (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009</a>
@@ -50,28 +50,30 @@ phenotype-driven computational support for differential diagnostics, and transla
     <h4 class="title">
         Checkout some of our tools and resources below!
     </h4>
-    <b-card-group class="offset-lg-3 col-lg-9">
-        <b-card
-            title="Phenotype Profile Search"
-            class="col-lg-4"
-          >
+    <b-card-group>
+        <b-card title="Phenotype Profile Search" class="col-lg-4">
             <b-card-text>
-              Target your search based off a list of phenotypes. 
+              Targeted search based off a list of phenotypes. 
             </b-card-text>
             <router-link to="/about/monarch-api">
                 <b-button class="card-btn">Search <i class="fa fa-caret-right"></b-button>
             </router-link>
           </b-card>
-          <b-card
-              title="Monarch API"
-              class="col-lg-4"
-          >
+          <b-card title="Monarch API" class="col-lg-4">
               <b-card-text>
-                Semantic integrated knowledge base at your fingertips. 
+                Developer friendly API's for open source data.
               </b-card-text>
               <router-link to="/about/monarch-api">
                 <b-button class="card-btn">Learn More <i class="fa fa-caret-right"></b-button>
               </router-link>
+          </b-card>
+          <b-card title="PhenoPackets" class="col-lg-4">
+            <b-card-text>
+              A standard to communicate bioinformation. 
+            </b-card-text>
+            <router-link to="/about/monarch-api">
+              <b-button class="card-btn">Explore <i class="fa fa-caret-right"></b-button>
+            </router-link>
           </b-card>
     </b-card-group deck>
 </div>
