@@ -287,21 +287,21 @@ const availableCardTypes = [
 ];
 
 const icons = {
-  anatomy: require('../assets/img/icon-anatomy.png'),
-  cellline: require('../assets/img/icon-anatomy.png'),
-  disease: require('../assets/img/icon-diseases.png'),
-  function: require('../assets/img/icon-anatomy.png'),
-  gene: require('../assets/img/icon-genes.png'),
-  genotype: require('../assets/img/icon-anatomy.png'),
-  homolog: require('../assets/img/icon-anatomy.png'),
-  interaction: require('../assets/img/icon-anatomy.png'),
-  publication: require('../assets/img/icon-anatomy.png'),
-  model: require('../assets/img/icon-models.png'),
-  'ortholog-disease': require('../assets/img/icon-anatomy.png'),
-  'ortholog-phenotype': require('../assets/img/icon-anatomy.png'),
-  pathway: require('../assets/img/icon-anatomy.png'),
-  phenotype: require('../assets/img/icon-phenotypes.png'),
-  variant: require('../assets/img/icon-genes.png')
+  anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
+  disease: require('../assets/img/icon-diseases.png'), // need
+  function: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  gene: require('../assets/img/monarch-ui-icon_GENE.png'),
+  genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
+  homolog: require('../assets/img/icon-anatomy.png'), // need
+  interaction: require('../assets/img/icon-anatomy.png'), // need
+  publication: require('../assets/img/monarch-ui-icon_PUBLICATION.png'),
+  model: require('../assets/img/monarch-ui-icon_MODEL.png'),
+  'ortholog-disease': require('../assets/img/icon-anatomy.png'), // need
+  'ortholog-phenotype': require('../assets/img/icon-anatomy.png'), // need
+  pathway: require('../assets/img/monarch-ui-icon_ANATOMY.png'), // need
+  phenotype: require('../assets/img/monarch-ui-icon_PHENOTYPE.png'),
+  variant: require('../assets/img/monarch-ui-icon_VARIANT.png')
 };
 
 const labels = {
