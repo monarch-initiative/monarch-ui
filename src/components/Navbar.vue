@@ -23,9 +23,11 @@
             to="/analyze/phenotypes">
             Phenotype Profile Search
           </b-dropdown-item>
+
           <b-dropdown-item to="/tools/text-annotate">
             Text Annotator
           </b-dropdown-item>
+
           <b-dropdown-item to="/tools/other-tools">
             Other Monarch Tools
           </b-dropdown-item>
@@ -71,17 +73,14 @@
             GitHub Organization
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
-            Guidelines
+          <b-dropdown-item href="http://monarch-initiative.blogspot.com/2015/01/how-to-annotate-patients-phenotypic.html" target="_blank" rel="noopener noreferrer">
+            Phenotype Curation Guidelines
           </b-dropdown-item>
 
           <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
-            Phenotype Ontologies
+            Phenotype Ontologies Project
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/citing">
-            Project
-          </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Help">
@@ -94,7 +93,7 @@
           </b-dropdown-item>
 
           <b-dropdown-item to="/help/linkout">
-            Link to Us
+            Link to Monarch
           </b-dropdown-item>
         </b-nav-item-dropdown>
 

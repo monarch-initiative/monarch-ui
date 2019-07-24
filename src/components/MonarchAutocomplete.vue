@@ -22,9 +22,9 @@
           {{ selectDisplay }}
         </button>
         <div
+          v-click-outside="closeFilterBox"
           v-if="catDropDown"
           class="dropdown-menu list-group dropCatList px-4"
-          v-click-outside="closeFilterBox"
         >
           <div class="form-group">
             <b-form-radio-group
@@ -35,6 +35,7 @@
         </div>
       </div>
       <input
+        v-click-outside="toggleSuggestions"
         :placeholder="dynamicPlaceholder"
         :class="{
           'loading': loading
@@ -49,7 +50,6 @@
         @keydown.up="up"
         @keydown.esc="clearSearch"
         @focus="toggleSuggestions"
-        v-click-outside="toggleSuggestions"
       >
 
       <div
@@ -121,8 +121,8 @@
     </div>
     <div
       v-if="homeSearch"
-      class="p-0 m-0">
-      Examples:
+      class="examples">
+      e.g.
       <button
         v-for="(example, index) in exampleSearches"
         :key="index"
@@ -139,7 +139,7 @@
 <script>
 import * as biolink from '@/api/BioLink';
 import { reduceCategoryList } from '@/lib/CategoryMap';
-import vClickOutside from 'v-click-outside'
+import vClickOutside from 'v-click-outside';
 
 const debounce = require('lodash/debounce');
 
@@ -156,7 +156,7 @@ const exampleSearches = [
     category: 'phenotype'
   },
   {
-    searchString: 'Shh',
+    searchString: 'SHH',
     category: 'gene'
   }
 ];
@@ -211,8 +211,8 @@ export default {
   data() {
     return {
       destroying: false,
-      category: "all",
-      selectDisplay: "All",
+      category: 'all',
+      selectDisplay: 'All',
       exampleSearches,
       options: [
 
@@ -344,12 +344,11 @@ export default {
       }
     },
     toggleSuggestions(event) {
-      if(event.target){
-        if(this.open){
-          this.open = false;
-        } else if (this.suggestions.length > 0){
-          this.open = true;
-        }
+      if (this.open) {
+        this.open = false;
+      }
+      else if (this.suggestions.length > 0 && event.target.nodeName === 'INPUT') {
+        this.open = true;
       }
     },
     closeFilterBox() {
@@ -405,7 +404,8 @@ export default {
       this.value = searchString;
       if (category) {
         this.category = category;
-      }else {
+      }
+      else {
         this.fetchData();
       }
     }
@@ -478,6 +478,10 @@ export default {
 
   .example-button{
      background-color:  cadetblue;
+  }
+
+  .examples {
+    margin-top: 15px;
   }
 
   .autorootdiv .input-group.input-group-sm {
