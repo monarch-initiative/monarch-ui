@@ -5,6 +5,7 @@ const nonrootdomain = process.env.BUILD === 'nonrootdomain';
 const baseURL = nonrootdomain ? '/monarch-ui/' : '/';
 
 const markdownItClass = require('markdown-it');
+process.env.VUE_APP_VERSION = require('./package.json').version;
 
 const mdLoader = markdownItClass({
   html: true,
@@ -27,7 +28,7 @@ mdLoaderPlain.wrapperClass = 'vue-markdown-plain';
 
 const GenomeFeatureViewer = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/index.js');
 const GenomeFeatureViewerCSS = path.resolve(__dirname, 'node_modules/genomefeaturecomponent/src/GenomeFeatureViewer.css');
-process.env.VUE_APP_VERSION = require('./package.json').version;
+
 const vueConfig = {
 
   runtimeCompiler: true,
