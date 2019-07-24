@@ -403,6 +403,12 @@ export default {
       ]
     };
   },
+  created() {
+    if(this.$route.params.phenotypes){
+      this.phenoCurieList = this.$route.params.phenotypes;
+    }
+
+  },
   computed: {
     showComparableList() {
       let show = false;

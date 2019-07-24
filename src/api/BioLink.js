@@ -66,6 +66,7 @@ console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
 const biolink = serverConfiguration.biolink_url;
+const scigraph = serverConfiguration.scigraph_url;
 
 /**
   Lighter-weight BL node info. Used by LocalNav.vue
@@ -505,7 +506,7 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
 }
 
 export async function annotateText(queryText, longestOnly) {
-  const baseUrl = 'https://scigraph-ontology.monarchinitiative.org/scigraph/annotations';
+  const baseUrl = `${scigraph}annotations`;
 
   const params = new URLSearchParams();
   params.append('content', queryText);

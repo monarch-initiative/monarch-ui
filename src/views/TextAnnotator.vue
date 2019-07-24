@@ -75,6 +75,10 @@
                                     <b-button ref="submitButton" v-if="!resultsStep" @click="annotateText" :disabled="!validForm" class="stepper-button submit">
                                         Submit<i class="fa fa-caret-right fa-fw"></i>
                                     </b-button>
+                                    <b-button ref="analyzePhenotypes" v-if="annotatedText" :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes } }"
+                                              :disabled="!validForm" class="stepper-button submit">
+                                        Analyze Phenotypes<i class="fa fa-caret-right fa-fw"></i>
+                                    </b-button>
                                 </div>
                             </div>
                         </div>
@@ -108,6 +112,7 @@
                 errorAnnotating: false,
                 showSpinner: false,
                 longestOnly: false,
+                phenotypes: ''
 
             };
         },
@@ -132,6 +137,7 @@
                 if(val){
                     const componentref = this;
                     this.$nextTick(()=>{
+                        this.storePhenotypes();
                         Array.from(this.$refs.step2text.children).forEach(child => {
                         child.addEventListener('mouseenter', function(elem) {
                             // If a popover container doesnt exist, create append and show,
@@ -179,10 +185,6 @@
         },
         methods: {
             back() {
-                // Want to go back to the text area.
-                // Reset Annotated Text.
-                // Reset the validator
-                // Empty the form field?
                 this.annotatedText = '';
                 this.resultsStep = false;
                 this.errorAnnotating = false;
@@ -233,6 +235,21 @@
                 popoverContainer.appendChild(header);
                 popoverContainer.appendChild(body);
                 return popoverContainer;
+            },
+
+            storePhenotypes(){
+                // get all span annotations
+                let phenotypes = [];
+                let allAnnotations = document.getElementsByClassName("sciCrunchAnnotation");
+                Array.from(allAnnotations).forEach(annotation => {
+                    const data = annotation.getAttribute('data-sciGraph');
+                    if(data.includes("HP:")){
+                        // REGEX for the phenotype
+                        const phenotype = data.match(/HP:[0-9]{7}/)[0];
+                        phenotypes.push(phenotype);
+                    }
+                });
+                this.phenotypes = phenotypes.join(",");
             }
         }
     };

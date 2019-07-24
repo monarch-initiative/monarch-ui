@@ -90,7 +90,7 @@ const router = new Router({
     },
     {
       path: '/analyze/phenotypes',
-      name: 'analyzephenotypes',
+      name: 'analyze-phenotypes',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
