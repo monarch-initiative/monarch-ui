@@ -513,20 +513,19 @@ export async function annotateText(queryText, longestOnly) {
   params.append('content', queryText);
   return new Promise((resolve, reject) => {
     axios.post(baseUrl, params, {
-            headers: { 'content-type': 'application/x-www-form-urlencoded' }
-        }
-    ).then((resp) => {
-          const responseData = resp;
-          if (typeof responseData !== 'object') {
-            reject(responseData);
-          }
-          else {
-            resolve(responseData);
-          }
-        })
-        .catch((err) => {
-          reject(err);
-        });
+      headers: { 'content-type': 'application/x-www-form-urlencoded' }
+    }).then((resp) => {
+      const responseData = resp;
+      if (typeof responseData !== 'object') {
+        reject(responseData);
+      }
+      else {
+        resolve(responseData);
+      }
+    })
+      .catch((err) => {
+        reject(err);
+      });
   });
 }
 
