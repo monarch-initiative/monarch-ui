@@ -76,6 +76,11 @@ const router = new Router({
       component: require('@/views/OtherTools.md').default,
     },
     {
+      path: '/tools/text-annotate',
+      name: 'text-annotate',
+      component: () => import(/* webpackChunkName: "text-annotate" */ './views/TextAnnotator.vue'),
+    },
+    {
       path: '/search/:query?',
       name: 'search',
       // route level code-splitting
@@ -85,11 +90,11 @@ const router = new Router({
     },
     {
       path: '/analyze/phenotypes',
-      name: 'analyzephenotypes',
+      name: 'analyze-phenotypes',
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "analyzephenotypes" */ './views/AnalyzePhenotypes.vue'),
+      component: () => import(/* webpackChunkName: "analyze-phenotypes" */ './views/AnalyzePhenotypes.vue'),
     },
     {
       path: '/analytics',
