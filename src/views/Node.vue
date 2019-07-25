@@ -232,7 +232,7 @@ const availableCardTypes = [
 const icons = {
   anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
   cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
-  disease: require('../assets/img/icon-diseases.png'), // need
+  disease: require('../assets/img/monarch-ui-icon_DISEASE.png'), // need
   function: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
   gene: require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
