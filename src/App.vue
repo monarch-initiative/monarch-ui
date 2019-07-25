@@ -82,6 +82,8 @@ $fa-font-path: "~font-awesome/fonts" !default;
 #app.page-wrapper .content-wrapper {
   padding-bottom: $footer-height;
   margin: 0;
+  min-height: 100vh;
+  display: flex;
 }
 
 #app.page-wrapper .footer-wrapper {
@@ -100,6 +102,8 @@ $fa-font-path: "~font-awesome/fonts" !default;
 
 #app.page-wrapper .main-wrapper {
   padding: $navbar-height 0 0 0;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 

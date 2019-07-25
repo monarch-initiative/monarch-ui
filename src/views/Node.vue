@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="node-wrapper">
     <node-sidebar
       v-if="node"
       ref="sidebar"
@@ -26,40 +26,29 @@
         <div
           :class="{ active: isNeighborhoodShowing || isFacetsShowing }"
           class="overlay"
-          @click="hideOverlay()"/>
+          @click="hideOverlay()"></div>
 
-        <div>
-          <div
-            v-if="!node">
-            <div
-              v-if="nodeError">
+          <div class="loading" v-if="!node">
+            <div v-if="nodeError">
               <small>
                 <h6>
                   Error loading {{ labels[nodeType] }}: {{ nodeId }}
                 </h6>
-                <pre
-                  class="pre-scrollable">{{ nodeError }}</pre>
+                <pre class="pre-scrollable">{{ nodeError }}</pre>
               </small>
             </div>
-            <div
-              v-else>
-              <br>
-              <h5 class="text-center">Loading Data for {{ labels[nodeType] }}: {{ nodeId }}</h5>
+            <div v-else>
+              <b-spinner class="loading-spinner" type="grow" label="Spinning"></b-spinner>
+              <h5 class="text-center">{{ labels[nodeType] }}: {{ nodeId }}</h5>
             </div>
           </div>
 
-          <div
-            v-else
-            class="title-bar">
-            <div
-              class="node-label">
-              <span
-                class="node-label-label">
+          <div v-else class="title-bar">
+            <div class="node-label">
+              <span class="node-label-label">
                 <span v-html="$sanitizeText(node.label)"/>
               </span>
-              <span
-                v-if="node.taxon && node.taxon.id"
-                class="node-label-taxon">
+              <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
                 &nbsp;
                 <a
                   :href="node.taxon.uri"
@@ -83,83 +72,53 @@
              -->
             </div>
 
-            <div
-              class="node-synonyms">
-              <span
-                v-for="(s, index) in synonyms"
-                :key="index"
-                class="synonym"
-              >
+            <div class="node-synonyms">
+              <span v-for="(s, index) in synonyms" :key="index" class="synonym">
                 {{ s }}
               </span>
             </div>
-
           </div>
-        </div>
+        <div v-if="node" class="container-fluid node-container">
 
-        <div
-          v-if="node"
-          class="container-fluid node-container">
-
-          <div
-            v-if="nodeDebug"
-            class="row node-content-section">
+          <div v-if="nodeDebug" class="row node-content-section">
             <div class="col-12">
               <pre>{{ nodeDebug }}</pre>
             </div>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-content-section">
-            <div
-              v-if="node.description"
-              class="col-12">
+          <div v-if="!expandedCard" class="row node-content-section">
+            <div v-if="node.description" class="col-12">
               <div class="node-description">
                 <b>Description:</b> {{ node.description }}
               </div>
             </div>
 
-            <div
-              v-if="entrezResult"
-              class="col-12">
+            <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
               </h6>
 
-              <div
-                v-if="entrezResult"
-                class="publication-abstract"
-                v-html="entrezResult.abstractMarkdown"/>
+              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown"></div>
             </div>
 
             <div class="col-12">
-              <span
-                v-if="inheritance">
+              <span v-if="inheritance">
                 <b>Heritability:</b>&nbsp;{{ inheritance }}
               </span>
             </div>
 
             <div class="col-12">
-              <span
-                v-if="modifiers">
+              <span v-if="modifiers">
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-content-section">
-            <div
-              class="col-12">
+          <div v-if="!expandedCard" class="row node-content-section">
+            <div class="col-12">
               <b>References:</b>&nbsp;
-              <span
-                v-for="(r, index) in references"
-                :key="index"
-                class="synonym"
-              >
+              <span v-for="(r, index) in references" :key="index" class="synonym">
                 <a
                   :href="r.uri"
                   target="_blank"
@@ -170,14 +129,9 @@
               </span>
             </div>
 
-            <div
-              v-if="equivalentClasses && equivalentClasses.length > 0"
-              class="col-12">
+            <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
               <b>Equivalent IDs:</b>&nbsp;
-
-              <span
-                v-for="(r, index) in equivalentClasses"
-                :key="index">
+              <span v-for="(r, index) in equivalentClasses" :key="index">
                 <span>
                   {{ r.id }}&nbsp;
                 </span>
@@ -186,30 +140,20 @@
           </div>
 
 
-          <div
-            v-if="!expandedCard && hasGeneExac"
-            class="row py-2">
-            <exac-gene
-              :node-id="nodeId"/>
+          <div v-if="!expandedCard && hasGeneExac" class="row py-2">
+            <exac-gene :node-id="nodeId"/>
           </div>
 
-          <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
-            class="row py-2">
+          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="row py-2">
             <genome-feature
               :mygene-data="node.geneInfo"/>
           </div>
 
-          <div
-            v-if="!expandedCard && reactomeId"
-            class="row py-0">
-            <reactome-viewer
-              :reactome-id="reactomeId"/>
+          <div v-if="!expandedCard && reactomeId" class="row py-0">
+            <reactome-viewer :reactome-id="reactomeId"/>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-cards-section">
+          <div v-if="!expandedCard" class="row node-cards-section">
             <node-card
               v-for="cardType in nonEmptyCards"
               :key="cardType"
@@ -230,8 +174,7 @@
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
-            <exac-variant
-              :node-id="nodeId"/>
+            <exac-variant :node-id="nodeId"/>
           </div>
         </div>
       </div>
@@ -246,7 +189,7 @@
 <script>
 
 import us from 'underscore';
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
 
@@ -601,8 +544,8 @@ export default {
       this.modifiers = null;
       this.reactomeId = null;
 
-      const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
-      const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
+      const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
+      const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
 
       const [node, neighborhood] = await Promise.all(
         [
@@ -769,6 +712,11 @@ $sidebar-button-width: 32px;
 $title-bar-max-height: 80px;
 $line-height-compact: 1.3em;
 
+
+.node-wrapper {
+  min-height: 100%;
+}
+
 .overlay {
   position: fixed;
   width: 100vw;
@@ -797,7 +745,6 @@ $line-height-compact: 1.3em;
   margin: 10px 0;
   padding: 0;
   line-height: $line-height-compact;
-  line-height: 1.2rem;
 }
 
 .wrapper {
@@ -806,22 +753,29 @@ $line-height-compact: 1.3em;
   min-height: 100%;
   width: 100%;
   margin: 0;
-  padding: 1px 3px;
 }
 
 
 div.container-cards {
   width: unset;
   padding: 0;
-  margin: $navbar-height 0 0 $sidebar-width;
-}
+  margin: 0 0 0 $sidebar-width;
 
-div.container-cards .node-content-section {
-  line-height: $line-height-compact;
-}
+  .loading {
+    margin:15% auto;
 
-div.container-cards .node-cards-section {
-  margin-top: 50px;
+    & .loading-spinner {
+      margin: 0 0 0 40%;
+    }
+  }
+
+  & .node-content-section {
+    line-height: $line-height-compact;
+  }
+
+  & .node-cards-section {
+    margin-top: 50px;
+  }
 }
 
 .title-bar {
@@ -840,36 +794,30 @@ div.container-cards .node-cards-section {
   margin: 0;
   width: 100%;
   z-index: 1;
-}
 
-.title-bar .node-synonyms {
-  line-height: 1.0em;
-  margin: 5px;
-  padding: 0 5px;
-}
+  & .node-synonyms {
+    line-height: 1.0em;
+    margin: 5px;
+    padding: 0 5px;
+  }
 
-.title-bar .synonym {
-  padding: 0 2px;
-  margin: 0 15px 0 0;
-  font-size: 0.9em;
-  font-weight: 500;
-}
+  & .synonym {
+    padding: 0 2px;
+    margin: 0 15px 0 0;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
 
-.title-bar .node-label {
-  margin: 2px;
-}
+  & .node-label {
+    margin: 2px;
+  }
 
-.title-bar .node-label-label {
-  font-size: 1.4em;
-  font-weight: 500;
-}
+  & .node-label-label {
+    font-size: 1.4em;
+    font-weight: 500;
+  }
 
-.title-bar .node-label-id {
 }
-
-.title-bar .node-label-taxon {
-}
-
 div.publication-abstract {
   margin: 0;
 }

@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="node-sidebar">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
       :node-type="nodeType"
@@ -9,71 +9,47 @@
       :superclasses="superclasses"
     />
 
-    <div class="node-sidebar">
-      <ul
-        v-if="nodeType"
-        class="list-group">
+    <div>
+      <ul v-if="nodeType" class="list-group">
         <li class="list-group-item list-group-item-node">
-          <a
-            :href="debugServerURL"
-            target="_blank">
-            <img
-              :src="$parent.icons[nodeType]"
-              class="entity-type-icon">
+          <a :href="debugServerURL" target="_blank">
+            <img :src="$parent.icons[nodeType]" class="entity-type-icon">
             <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
           </a>
           <a
             :href="'http://beta.monarchinitiative.org' + $route.path"
             class="debug-link-to-alpha"
-            target="_blank"/>
+            target="_blank"></a>
+        </li>
+        <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
+          <b-link @click="expandCard(null)">
+            <i class="fa fa-fw fa-th-large"></i>
+            <span class="list-group-item-value">Overview</span>
+          </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <b-link
-            :disabled="neighborhoodDisabled"
-            class="pl-1"
-            @click="toggleNeighborhood()">
-            <i class="fa fa-2x fa-fw fa-crosshairs"/>
+          <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
+            <i class="fa fa-fw fa-share-alt neighbors"></i>
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <b-link
-            :disabled="facetsDisabled"
-            class="pl-1"
-            @click="toggleFacets()">
-            <i class="fa fa-2x fa-fw fa-list"/>
+          <b-link :disabled="facetsDisabled" @click="toggleFacets()">
+            <i class="fa fa-fw fa-cubes"></i>
             <span class="list-group-item-value">Facets</span>
           </b-link>
         </li>
-
-        <li
-          :class="{ active: !expandedCard }"
-          class="list-group-item list-group-item-squat">
-          <b-link
-            class="pl-1"
-            @click="expandCard(null)">
-            <i class="fa fa-2x fa-fw fa-th-large"/>
-            <span class="list-group-item-value">Overview</span>
-          </b-link>
-        </li>
-
         <li
           v-for="cardType in cardsToDisplay"
           :class="{ active: expandedCard === cardType }"
           :key="cardType"
           class="list-group-item">
-          <a
-            :href="'#' + cardType"
-            @click="expandCard(cardType)">
-            <img
-              :src="$parent.icons[cardType]"
-              class="entity-type-icon">
-            <span
-              class="list-group-item-value">
-              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
-
+          <a :href="'#' + cardType" @click="expandCard(cardType)">
+            <img :src="$parent.icons[cardType]" class="entity-type-icon">
+            <span class="list-group-item-value">
+              {{ $parent.labels[cardType] }} <span class="count">{{ cardCounts[cardType] }}</span>
             </span>
           </a>
         </li>
@@ -81,9 +57,7 @@
       </ul>
     </div>
 
-    <node-sidebar-facets
-      :is-visible="isFacetsShowing"
-      v-model="facetObject"
+    <node-sidebar-facets :is-visible="isFacetsShowing" v-model="facetObject"
     />
 
   </div>
@@ -92,7 +66,7 @@
 
 
 <script>
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 
 import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
 import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
@@ -173,7 +147,7 @@ export default {
       const debugHash = (this.$route.hash.length > 1)
         ? (this.$route.hash + 's')
         : '';
-      const result = BL.debugServerName() + this.$route.path + debugHash;
+      const result = biolinkService.debugServerName() + this.$route.path + debugHash;
       return result;
     },
   },
@@ -227,6 +201,7 @@ $collapsed-sidebar-width: 50px;
   width: $sidebar-width;
   top: ($navbar-height);
   z-index: $monarch-node-sidebar-z;
+  box-shadow: -4px -1px 10px 0px;
 
   a,
   a:hover,
@@ -237,23 +212,21 @@ $collapsed-sidebar-width: 50px;
   }
 
   li.list-group-item {
-    margin: 0;
-    padding: 0;
+    padding: 5px 0 0 0;
     background-color: transparent;
+    border: 0;
 
-    &.active > a {
-      color: #fff;
-      font-weight: 600;
+    & .fa {
+      font-size: 1.6em;
 
-      &> a:before {
-        background: #39a5dc;
-        content: " ";
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 3px;
+      &.neighbors {
+        transform: rotate(90deg);
       }
+    }
+
+    & .count {
+      float: right;
+      padding: 0 15px 0 0;
     }
 
     > a {
@@ -264,14 +237,13 @@ $collapsed-sidebar-width: 50px;
       font-size: 0.9rem;
       font-weight: 400;
       font-stretch: condensed;
-      height: 63px;
       line-height: 26px;
       position: relative;
       white-space: nowrap;
       width: $sidebar-width;
       text-decoration: none;
       margin: 0;
-      padding: 2px 0 0 10px;
+      padding: 0 0 0 10px;
       height: 35px;
 
       &:hover {
@@ -280,6 +252,15 @@ $collapsed-sidebar-width: 50px;
         &.disabled {
           color: unset;
         }
+      }
+    }
+
+    &.active {
+      background: linear-gradient(to right, #262a2b91, #262a2b36,#262a2b0a) !important;
+      color: white !important;
+
+      & a {
+        color: white;
       }
     }
 
@@ -316,23 +297,23 @@ $collapsed-sidebar-width: 50px;
     &.list-group-item-squat {
 
       a {
-        padding: 0;
-        margin: 0;
         height: 30px;
 
         i.fa {
-          margin: 0 0 0 3px;
+          margin: 0 0 0 2px;
           padding: 0;
         }
 
         .list-group-item-value {
-          padding: 5px 0 0 0;
           vertical-align: text-bottom;
         }
       }
     }
-  }
 
+    & .list-group-item-value {
+      margin: 0 0 0 10px;
+    }
+  }
 
   .node-filter-section {
     padding: 0;
