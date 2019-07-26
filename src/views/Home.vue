@@ -4,7 +4,7 @@
     <vml-home-about-monarch-component/>
     <vml-home-news-component/>
     <vml-home-partners-component/>
-    <div class="spacer"></div>
+    <div class="spacer"/>
   </div>
 </template>
 

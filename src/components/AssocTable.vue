@@ -9,7 +9,7 @@
 
     <div v-show="!dataFetched && !dataError" class="loading-div">
 
-      <b-spinner class="loading-spinner" type="grow" label="Spinning"></b-spinner>
+      <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
     </div>
 
     <div v-show="dataFetched && !dataError">
@@ -83,7 +83,9 @@
         </template>
 
         <template v-if="hasFrequencyOnset" slot="frequency" slot-scope="data">
-          <a v-if="data.item.frequency" :href="data.item.frequency.url"
+          <a
+            v-if="data.item.frequency"
+            :href="data.item.frequency.url"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -123,9 +125,13 @@
               &blacktriangleright;&nbsp;
             </span>
 
-            <span v-for="(icon, index) in data.item.supportIcons" :key="index"
+            <span
+              v-for="(icon, index) in data.item.supportIcons"
+              :key="index"
             >
-              <i :class="icon" class="fa fa-fw"
+              <i
+                :class="icon"
+                class="fa fa-fw"
               />
             </span>
             <small>{{ data.item.supportLength }}</small>
@@ -164,7 +170,9 @@
                 <small>{{ support.type }}</small>
               </div>
               <div class="col-1 px-1" style="text-align: center;">
-                <i :class="support.typeIcon" class="fa fa-fw text-info"
+                <i
+                  :class="support.typeIcon"
+                  class="fa fa-fw text-info"
                 />
               </div>
             </div>

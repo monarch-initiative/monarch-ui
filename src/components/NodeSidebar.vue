@@ -19,25 +19,25 @@
           <a
             :href="'http://beta.monarchinitiative.org' + $route.path"
             class="debug-link-to-alpha"
-            target="_blank"></a>
+            target="_blank"/>
         </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
-            <i class="fa fa-fw fa-th-large"></i>
+            <i class="fa fa-fw fa-th-large"/>
             <span class="list-group-item-value">Overview</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
-            <i class="fa fa-fw fa-share-alt neighbors"></i>
+            <i class="fa fa-fw fa-share-alt neighbors"/>
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="facetsDisabled" @click="toggleFacets()">
-            <i class="fa fa-fw fa-cubes"></i>
+            <i class="fa fa-fw fa-cubes"/>
             <span class="list-group-item-value">Facets</span>
           </b-link>
         </li>
@@ -57,7 +57,9 @@
       </ul>
     </div>
 
-    <node-sidebar-facets :is-visible="isFacetsShowing" v-model="facetObject"
+    <node-sidebar-facets
+      :is-visible="isFacetsShowing"
+      v-model="facetObject"
     />
 
   </div>

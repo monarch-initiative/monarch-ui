@@ -17,7 +17,7 @@
 
       <div class="row currentclass">
         <div class="col-12">
-          {{ nodeLabel }} <i class="fa fa-flag" aria-hidden="true"></i>
+          {{ nodeLabel }} <i class="fa fa-flag" aria-hidden="true"/>
         </div>
       </div>
 

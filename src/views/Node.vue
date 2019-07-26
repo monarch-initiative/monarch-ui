@@ -26,41 +26,41 @@
         <div
           :class="{ active: isNeighborhoodShowing || isFacetsShowing }"
           class="overlay"
-          @click="hideOverlay()"></div>
+          @click="hideOverlay()"/>
 
-          <div class="loading" v-if="!node">
-            <div v-if="nodeError">
-              <small>
-                <h6>
-                  Error loading {{ labels[nodeType] }}: {{ nodeId }}
-                </h6>
-                <pre class="pre-scrollable">{{ nodeError }}</pre>
-              </small>
-            </div>
-            <div v-else>
-              <b-spinner class="loading-spinner" type="grow" label="Spinning"></b-spinner>
-              <h5 class="text-center">{{ nodeId }}</h5>
-            </div>
+        <div v-if="!node" class="loading">
+          <div v-if="nodeError">
+            <small>
+              <h6>
+                Error loading {{ labels[nodeType] }}: {{ nodeId }}
+              </h6>
+              <pre class="pre-scrollable">{{ nodeError }}</pre>
+            </small>
           </div>
+          <div v-else>
+            <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
+            <h5 class="text-center">{{ nodeId }}</h5>
+          </div>
+        </div>
 
-          <div v-else class="title-bar">
-            <div class="node-label">
-              <span class="node-label-label">
-                <span v-html="$sanitizeText(node.label)"/>
-              </span>
-              <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
-                &nbsp;
-                <a
-                  :href="node.taxon.uri"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="node-label-id">
-                  <em>{{ node.taxon.label }}</em>
-                </a>
-              </span>
+        <div v-else class="title-bar">
+          <div class="node-label">
+            <span class="node-label-label">
+              <span v-html="$sanitizeText(node.label)"/>
+            </span>
+            <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
               &nbsp;
+              <a
+                :href="node.taxon.uri"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="node-label-id">
+                <em>{{ node.taxon.label }}</em>
+              </a>
+            </span>
+            &nbsp;
 
-              <!--
+            <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
                 :href="entrezResult.abstractURL"
@@ -70,14 +70,14 @@
                 Entrez: {{ node.id }}
               </a>
              -->
-            </div>
-
-            <div class="node-synonyms">
-              <span v-for="(s, index) in synonyms" :key="index" class="synonym">
-                {{ s }}
-              </span>
-            </div>
           </div>
+
+          <div class="node-synonyms">
+            <span v-for="(s, index) in synonyms" :key="index" class="synonym">
+              {{ s }}
+            </span>
+          </div>
+        </div>
         <div v-if="node" class="container-fluid node-container">
 
           <div v-if="nodeDebug" class="row node-content-section">
@@ -99,7 +99,7 @@
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
               </h6>
 
-              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown"></div>
+              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown"/>
             </div>
 
             <div class="col-12">
@@ -430,7 +430,7 @@ export default {
   },
 
   updated() {
-    //console.log('updated', this.nodeId);
+    // console.log('updated', this.nodeId);
   },
 
   destroyed() {
