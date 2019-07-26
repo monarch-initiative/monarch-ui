@@ -50,7 +50,7 @@ phenotype-driven computational support for differential diagnostics, and transla
     <h4 class="title">
         Checkout some of our tools and resources below!
     </h4>
-    <b-card-group>
+    <b-card-group class="col-lg-12">
         <b-card title="Phenotype Profile Search" class="col-lg-4">
             <b-card-text>
               Targeted search based off a list of phenotypes. 
