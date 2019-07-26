@@ -70,8 +70,6 @@ $fa-font-path: "~font-awesome/fonts" !default;
 .row {
   padding-right: 15px;
   padding-left: 15px;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 #app.page-wrapper {
   position: absolute;

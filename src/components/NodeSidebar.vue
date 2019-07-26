@@ -187,7 +187,6 @@ export default {
 @import "~@/style/variables";
 
 $title-bar-height: 70px;
-$sidebar-width: 200px;
 $collapsed-sidebar-width: 50px;
 
 .node-sidebar {
@@ -206,7 +205,7 @@ $collapsed-sidebar-width: 50px;
   a,
   a:hover,
   a:focus {
-    color: inherit;
+    color: white;
     text-decoration: none;
     transition: all 0.3s;
   }
@@ -240,23 +239,27 @@ $collapsed-sidebar-width: 50px;
       line-height: 26px;
       position: relative;
       white-space: nowrap;
-      width: $sidebar-width;
       text-decoration: none;
       margin: 0;
       padding: 0 0 0 10px;
       height: 35px;
 
+      &.disabled {
+        color: #989898;
+        cursor: no-drop;
+      }
+
       &:hover {
         color: white;
 
         &.disabled {
-          color: unset;
+          color: #989898;
         }
       }
     }
 
     &.active {
-      background: linear-gradient(to right, #262a2b91, #262a2b36,#262a2b0a) !important;
+      background: linear-gradient(to left, #262a2b91, #262a2b36,#262a2b0a) !important;
       color: white !important;
 
       & a {

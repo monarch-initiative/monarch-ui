@@ -1,14 +1,10 @@
 <template>
-  <div
-    class="container-fluid monarch-home-view">
-
-    <div class="row">
-      <vml-home-intro-component/>
-    </div>
+  <div class="container-fluid monarch-home-view">
+    <vml-home-intro-component/>
     <vml-home-about-monarch-component/>
     <vml-home-news-component/>
     <vml-home-partners-component/>
-    <div class="spacer"/>
+    <div class="spacer"></div>
   </div>
 </template>
 
@@ -19,6 +15,11 @@
   div.container-fluid.monarch-home-view {
     padding: 0;
     background: $monarch-bg-color;
+
+    .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
     .row > div {
       width: 100%;
     }

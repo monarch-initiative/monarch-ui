@@ -39,7 +39,7 @@
             </div>
             <div v-else>
               <b-spinner class="loading-spinner" type="grow" label="Spinning"></b-spinner>
-              <h5 class="text-center">{{ labels[nodeType] }}: {{ nodeId }}</h5>
+              <h5 class="text-center">{{ nodeId }}</h5>
             </div>
           </div>
 
@@ -153,7 +153,7 @@
             <reactome-viewer :reactome-id="reactomeId"/>
           </div>
 
-          <div v-if="!expandedCard" class="row node-cards-section">
+          <!--<div v-if="!expandedCard" class="row node-cards-section">
             <node-card
               v-for="cardType in nonEmptyCards"
               :key="cardType"
@@ -162,9 +162,9 @@
               :parent-node="node"
               :parent-node-id="nodeId"
               @expand-card="expandCard(cardType)"/>
-          </div>
+          </div>-->
 
-          <div v-if="expandedCard" class="expanded-card-view row">
+          <div v-if="expandedCard" class="expanded-card-view">
             <assoc-table
               :facets="facetObject"
               :card-counts="counts"
@@ -394,7 +394,7 @@ export default {
           label: 'Source',
           field: 'source'
         }
-      ]
+      ],
     };
   },
 
@@ -430,7 +430,7 @@ export default {
   },
 
   updated() {
-    // console.log('updated', this.nodeId);
+    //console.log('updated', this.nodeId);
   },
 
   destroyed() {
@@ -707,7 +707,6 @@ export default {
 @import "~@/style/variables";
 
 $sidebar-content-width: 500px;
-$sidebar-width: 200px;
 $sidebar-button-width: 32px;
 $title-bar-max-height: 80px;
 $line-height-compact: 1.3em;
@@ -762,11 +761,8 @@ div.container-cards {
   margin: 0 0 0 $sidebar-width;
 
   .loading {
-    margin:15% auto;
-
-    & .loading-spinner {
-      margin: 0 0 0 40%;
-    }
+    margin: 15% calc(50% - 14%);
+    text-align: center;
   }
 
   & .node-content-section {
@@ -790,8 +786,7 @@ div.container-cards {
   left: 0;
   right: 222px;
   padding: 5px;
-  padding-left: ($sidebar-width + 5);
-  margin: 0;
+  margin: 0 0 0 $sidebar-width;
   width: 100%;
   z-index: 1;
 
