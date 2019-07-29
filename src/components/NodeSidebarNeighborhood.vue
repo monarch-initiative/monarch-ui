@@ -17,7 +17,7 @@
 
       <div class="row currentclass">
         <div class="col-12">
-          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true"></i>
+          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true"/>
         </div>
       </div>
 
@@ -39,42 +39,42 @@
 
 <script>
 
-  export default {
-    name: 'NodeSidebarNeighborhood',
-    props: {
-      nodeType: {
-        type: String,
-        required: false,
-        default: '',
-      },
-      nodeLabel: {
-        type: String,
-        required: false,
-        default: '',
-      },
-      superclasses: {
-        type: Array,
-        required: false,
-        default: null,
-      },
-      subclasses: {
-        type: Array,
-        required: false,
-        default: null,
-      },
-      isVisible: {
-        type: Boolean,
-        required: false,
-        default: false,
-      },
+export default {
+  name: 'NodeSidebarNeighborhood',
+  props: {
+    nodeType: {
+      type: String,
+      required: false,
+      default: '',
     },
+    nodeLabel: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    superclasses: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    subclasses: {
+      type: Array,
+      required: false,
+      default: null,
+    },
+    isVisible: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+  },
 
-    methods: {
-      getLabel(c) {
-        return c.label || c.id;
-      },
+  methods: {
+    getLabel(c) {
+      return c.label || c.id;
     },
-  };
+  },
+};
 
 </script>
 

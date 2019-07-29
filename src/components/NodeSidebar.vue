@@ -10,7 +10,7 @@
     />
 
     <div>
-      <ul v-if="nodeType" class="list-group" v-click-outside="hideNeighborhoodOrFacets">
+      <ul v-click-outside="hideNeighborhoodOrFacets" v-if="nodeType" class="list-group">
         <!--<li class="list-group-item list-group-item-node">
           <a :href="debugServerURL" target="_blank">
             <img :src="$parent.icons[nodeType]" class="entity-type-icon">
@@ -23,21 +23,21 @@
         </li>-->
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
-            <i class="fa fa-fw fa-th-large"></i>
+            <i class="fa fa-fw fa-th-large"/>
             <span class="list-group-item-value">Overview</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
-            <i class="fa fa-fw fa-share-alt neighbors"></i>
+            <i class="fa fa-fw fa-share-alt neighbors"/>
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="facetsDisabled" @click="toggleFacets()">
-            <i class="fa fa-fw fa-cubes"></i>
+            <i class="fa fa-fw fa-cubes"/>
             <span class="list-group-item-value">Facets</span>
           </b-link>
         </li>
@@ -184,9 +184,10 @@ export default {
       this.$emit('toggle-neighborhood');
     },
     hideNeighborhoodOrFacets() {
-      if(this.isNeighborhoodShowing){
+      if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-      } else if(this.isFacetsShowing){
+      }
+      else if (this.isFacetsShowing) {
         this.toggleFacets();
       }
     }

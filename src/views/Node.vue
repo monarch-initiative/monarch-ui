@@ -23,8 +23,7 @@
 
     <div class="container-cards">
       <div class="wrapper">
-        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay">
-        </div>
+        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay"/>
 
         <div v-if="!node" class="loading">
           <div v-if="nodeError">
@@ -42,21 +41,21 @@
         </div>
 
         <div v-else class="title-bar">
-            <h4 class="node-label-label">
-              {{node.label}} <span class="node-label-id">{{node.id}}</span>
-            </h4>
-            <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
-              <a
-                :href="node.taxon.uri"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="node-label-id">
-                <em>{{ node.taxon.label }}</em>
-              </a>
-            </span>
-            &nbsp;
+          <h4 class="node-label-label">
+            {{ node.label }} <span class="node-label-id">{{ node.id }}</span>
+          </h4>
+          <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
+            <a
+              :href="node.taxon.uri"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="node-label-id">
+              <em>{{ node.taxon.label }}</em>
+            </a>
+          </span>
+          &nbsp;
 
-            <!--
+          <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
                 :href="entrezResult.abstractURL"
@@ -80,15 +79,15 @@
               <div class="node-description">
                 <b>Description</b><br>
                 <div class="description">
-                   {{ node.description }}
+                  {{ node.description }}
                 </div>
               </div>
             </div>
             <div v-if="node.synonyms" class="col-12 node-synonyms">
-                <b>Synonyms</b><br>
-                <span v-for="(s, index) in synonyms" :key="index" class="synonym">
-                  {{ s }}
-                </span>
+              <b>Synonyms</b><br>
+              <span v-for="(s, index) in synonyms" :key="index" class="synonym">
+                {{ s }}
+              </span>
             </div>
             <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
