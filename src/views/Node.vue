@@ -23,16 +23,14 @@
 
     <div class="container-cards">
       <div class="wrapper">
-        <div
-          :class="{ active: isNeighborhoodShowing || isFacetsShowing }"
-          class="overlay"
-          @click="hideOverlay()"/>
+        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay">
+        </div>
 
         <div v-if="!node" class="loading">
           <div v-if="nodeError">
             <small>
               <h6>
-                Error loading {{ labels[nodeType] }}: {{ nodeId }}
+                Error loading {{ labels[nodeType] }}:&nbsp; {{ nodeId }}
               </h6>
               <pre class="pre-scrollable">{{ nodeError }}</pre>
             </small>
@@ -44,12 +42,10 @@
         </div>
 
         <div v-else class="title-bar">
-          <div class="node-label">
-            <span class="node-label-label">
-              <span v-html="$sanitizeText(node.label)"/>
-            </span>
+            <h4 class="node-label-label">
+              {{node.label}} <span class="node-label-id">{{node.id}}</span>
+            </h4>
             <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
-              &nbsp;
               <a
                 :href="node.taxon.uri"
                 target="_blank"
@@ -70,13 +66,6 @@
                 Entrez: {{ node.id }}
               </a>
              -->
-          </div>
-
-          <div class="node-synonyms">
-            <span v-for="(s, index) in synonyms" :key="index" class="synonym">
-              {{ s }}
-            </span>
-          </div>
         </div>
         <div v-if="node" class="container-fluid node-container">
 
@@ -89,10 +78,18 @@
           <div v-if="!expandedCard" class="row node-content-section">
             <div v-if="node.description" class="col-12">
               <div class="node-description">
-                <b>Description:</b> {{ node.description }}
+                <b>Description</b><br>
+                <div class="description">
+                   {{ node.description }}
+                </div>
               </div>
             </div>
-
+            <div v-if="node.synonyms" class="col-12 node-synonyms">
+                <b>Synonyms</b><br>
+                <span v-for="(s, index) in synonyms" :key="index" class="synonym">
+                  {{ s }}
+                </span>
+            </div>
             <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
@@ -708,7 +705,7 @@ export default {
 
 $sidebar-content-width: 500px;
 $sidebar-button-width: 32px;
-$title-bar-max-height: 80px;
+$title-bar-max-height: 60px;
 $line-height-compact: 1.3em;
 
 
@@ -730,7 +727,7 @@ $line-height-compact: 1.3em;
 }
 
 .container-fluid.node-container {
-  margin-top: $title-bar-max-height;
+  margin-top: ($title-bar-max-height + 15);
   transition: all 0.3s;
   width: 100%;
   height: 100%;
@@ -744,6 +741,10 @@ $line-height-compact: 1.3em;
   margin: 10px 0;
   padding: 0;
   line-height: $line-height-compact;
+
+  .description {
+    margin-top: 5px;
+  }
 }
 
 .wrapper {
@@ -776,7 +777,8 @@ div.container-cards {
 
 .title-bar {
   border-bottom: 1px solid lightgray;
-  background: aliceblue;
+  background: #1b5f75;
+  color: white;
   position: fixed;
   height: $title-bar-max-height;
   overflow-y: auto;
@@ -808,9 +810,15 @@ div.container-cards {
   }
 
   & .node-label-label {
-    font-size: 1.4em;
-    font-weight: 500;
+    margin-top: 10px;
+    padding-left: 15px;
+
+    & .node-label-id {
+      font-size: 1rem;
+      color: #cce34c;
+    }
   }
+
 
 }
 div.publication-abstract {

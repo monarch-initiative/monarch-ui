@@ -17,7 +17,7 @@
 
       <div class="row currentclass">
         <div class="col-12">
-          {{ nodeLabel }} <i class="fa fa-flag" aria-hidden="true"/>
+          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true"></i>
         </div>
       </div>
 
@@ -39,43 +39,42 @@
 
 <script>
 
-export default {
-  name: 'NodeSidebarNeighborhood',
+  export default {
+    name: 'NodeSidebarNeighborhood',
+    props: {
+      nodeType: {
+        type: String,
+        required: false,
+        default: '',
+      },
+      nodeLabel: {
+        type: String,
+        required: false,
+        default: '',
+      },
+      superclasses: {
+        type: Array,
+        required: false,
+        default: null,
+      },
+      subclasses: {
+        type: Array,
+        required: false,
+        default: null,
+      },
+      isVisible: {
+        type: Boolean,
+        required: false,
+        default: false,
+      },
+    },
 
-  props: {
-    nodeType: {
-      type: String,
-      required: false,
-      default: '',
+    methods: {
+      getLabel(c) {
+        return c.label || c.id;
+      },
     },
-    nodeLabel: {
-      type: String,
-      required: false,
-      default: '',
-    },
-    superclasses: {
-      type: Array,
-      required: false,
-      default: null,
-    },
-    subclasses: {
-      type: Array,
-      required: false,
-      default: null,
-    },
-    isVisible: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
-  },
-
-  methods: {
-    getLabel(c) {
-      return c.label || c.id;
-    },
-  },
-};
+  };
 
 </script>
 
@@ -100,7 +99,7 @@ $neighborhood-button-width: 32px;
   background: ghostwhite;
   border:2px solid lightgray;
   border-radius: 5px;
-  max-height: 80%;
+  max-height: 75%;
   font-size: 0.95rem;
   padding: 5px;
 }

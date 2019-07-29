@@ -10,8 +10,8 @@
     />
 
     <div>
-      <ul v-if="nodeType" class="list-group">
-        <li class="list-group-item list-group-item-node">
+      <ul v-if="nodeType" class="list-group" v-click-outside="hideNeighborhoodOrFacets">
+        <!--<li class="list-group-item list-group-item-node">
           <a :href="debugServerURL" target="_blank">
             <img :src="$parent.icons[nodeType]" class="entity-type-icon">
             <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
@@ -20,24 +20,24 @@
             :href="'http://beta.monarchinitiative.org' + $route.path"
             class="debug-link-to-alpha"
             target="_blank"/>
-        </li>
+        </li>-->
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
-            <i class="fa fa-fw fa-th-large"/>
+            <i class="fa fa-fw fa-th-large"></i>
             <span class="list-group-item-value">Overview</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
-            <i class="fa fa-fw fa-share-alt neighbors"/>
+            <i class="fa fa-fw fa-share-alt neighbors"></i>
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="facetsDisabled" @click="toggleFacets()">
-            <i class="fa fa-fw fa-cubes"/>
+            <i class="fa fa-fw fa-cubes"></i>
             <span class="list-group-item-value">Facets</span>
           </b-link>
         </li>
@@ -72,6 +72,7 @@ import * as biolinkService from '@/api/BioLink';
 
 import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
 import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
+import vClickOutside from 'v-click-outside';
 
 export default {
   name: 'NodeSidebar',
@@ -80,7 +81,9 @@ export default {
     'node-sidebar-neighborhood': NodeSidebarNeighborhood,
     'node-sidebar-facets': NodeSidebarFacets,
   },
-
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   props: {
     cardsToDisplay: {
       type: Array,
@@ -180,6 +183,13 @@ export default {
     toggleNeighborhood() {
       this.$emit('toggle-neighborhood');
     },
+    hideNeighborhoodOrFacets() {
+      if(this.isNeighborhoodShowing){
+        this.toggleNeighborhood();
+      } else if(this.isFacetsShowing){
+        this.toggleFacets();
+      }
+    }
   }
 };
 
@@ -210,6 +220,10 @@ $collapsed-sidebar-width: 50px;
     color: white;
     text-decoration: none;
     transition: all 0.3s;
+  }
+
+  ul.list-group {
+    margin: 2px 0 0 0;
   }
 
   li.list-group-item {
@@ -266,6 +280,10 @@ $collapsed-sidebar-width: 50px;
 
       & a {
         color: white;
+      }
+
+      & .list-group-item-value {
+        color: #cce34c !important;
       }
     }
 
