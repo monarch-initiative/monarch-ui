@@ -238,7 +238,7 @@ const icons = {
   model: require('../assets/img/monarch-ui-icon_MODEL.png'),
   'ortholog-disease': require('../assets/img/monarch-ui-icon_ORTHOLOG_DISEASE.png'),
   'ortholog-phenotype': require('../assets/img/monarch-ui-icon_ORTHOLOG_PHENOTYPE.png'),
-  pathway: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  pathway: require('../assets/img/monarch-ui-icon_PATHWAYS.png'),
   phenotype: require('../assets/img/monarch-ui-icon_PHENOTYPE.png'),
   variant: require('../assets/img/monarch-ui-icon_VARIANT.png')
 };
