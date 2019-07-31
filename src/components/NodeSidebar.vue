@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="node-sidebar">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
       :node-type="nodeType"
@@ -9,71 +9,47 @@
       :superclasses="superclasses"
     />
 
-    <div class="node-sidebar">
-      <ul
-        v-if="nodeType"
-        class="list-group">
-        <li class="list-group-item list-group-item-node">
-          <a
-            :href="debugServerURL"
-            target="_blank">
-            <img
-              :src="$parent.icons[nodeType]"
-              class="entity-type-icon">
+    <div>
+      <ul v-click-outside="hideNeighborhoodOrFacets" v-if="nodeType" class="list-group">
+        <!--<li class="list-group-item list-group-item-node">
+          <a :href="debugServerURL" target="_blank">
+            <img :src="$parent.icons[nodeType]" class="entity-type-icon">
             <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
           </a>
           <a
             :href="'http://beta.monarchinitiative.org' + $route.path"
             class="debug-link-to-alpha"
             target="_blank"/>
+        </li>-->
+        <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
+          <b-link @click="expandCard(null)">
+            <i class="fa fa-fw fa-th-large"/>
+            <span class="list-group-item-value">Overview</span>
+          </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <b-link
-            :disabled="neighborhoodDisabled"
-            class="pl-1"
-            @click="toggleNeighborhood()">
-            <i class="fa fa-2x fa-fw fa-crosshairs"/>
+          <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
+            <i class="fa fa-fw fa-share-alt neighbors"/>
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <b-link
-            :disabled="facetsDisabled"
-            class="pl-1"
-            @click="toggleFacets()">
-            <i class="fa fa-2x fa-fw fa-list"/>
+          <b-link :disabled="facetsDisabled" @click="toggleFacets()">
+            <i class="fa fa-fw fa-cubes"/>
             <span class="list-group-item-value">Facets</span>
           </b-link>
         </li>
-
-        <li
-          :class="{ active: !expandedCard }"
-          class="list-group-item list-group-item-squat">
-          <b-link
-            class="pl-1"
-            @click="expandCard(null)">
-            <i class="fa fa-2x fa-fw fa-th-large"/>
-            <span class="list-group-item-value">Overview</span>
-          </b-link>
-        </li>
-
         <li
           v-for="cardType in cardsToDisplay"
           :class="{ active: expandedCard === cardType }"
           :key="cardType"
           class="list-group-item">
-          <a
-            :href="'#' + cardType"
-            @click="expandCard(cardType)">
-            <img
-              :src="$parent.icons[cardType]"
-              class="entity-type-icon">
-            <span
-              class="list-group-item-value">
-              {{ $parent.labels[cardType] }} ({{ cardCounts[cardType] }})
-
+          <a :href="'#' + cardType" @click="expandCard(cardType)">
+            <img :src="$parent.icons[cardType]" class="entity-type-icon">
+            <span class="list-group-item-value">
+              {{ $parent.labels[cardType] }} <span class="count">{{ cardCounts[cardType] }}</span>
             </span>
           </a>
         </li>
@@ -92,10 +68,11 @@
 
 
 <script>
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 
 import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
 import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
+import vClickOutside from 'v-click-outside';
 
 export default {
   name: 'NodeSidebar',
@@ -104,7 +81,9 @@ export default {
     'node-sidebar-neighborhood': NodeSidebarNeighborhood,
     'node-sidebar-facets': NodeSidebarFacets,
   },
-
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   props: {
     cardsToDisplay: {
       type: Array,
@@ -173,7 +152,7 @@ export default {
       const debugHash = (this.$route.hash.length > 1)
         ? (this.$route.hash + 's')
         : '';
-      const result = BL.debugServerName() + this.$route.path + debugHash;
+      const result = biolinkService.debugServerName() + this.$route.path + debugHash;
       return result;
     },
   },
@@ -204,6 +183,14 @@ export default {
     toggleNeighborhood() {
       this.$emit('toggle-neighborhood');
     },
+    hideNeighborhoodOrFacets() {
+      if (this.isNeighborhoodShowing) {
+        this.toggleNeighborhood();
+      }
+      else if (this.isFacetsShowing) {
+        this.toggleFacets();
+      }
+    }
   }
 };
 
@@ -213,7 +200,6 @@ export default {
 @import "~@/style/variables";
 
 $title-bar-height: 70px;
-$sidebar-width: 200px;
 $collapsed-sidebar-width: 50px;
 
 .node-sidebar {
@@ -227,33 +213,36 @@ $collapsed-sidebar-width: 50px;
   width: $sidebar-width;
   top: ($navbar-height);
   z-index: $monarch-node-sidebar-z;
+  box-shadow: -4px -1px 10px 0px;
 
   a,
   a:hover,
   a:focus {
-    color: inherit;
+    color: white;
     text-decoration: none;
     transition: all 0.3s;
   }
 
+  ul.list-group {
+    margin: 2px 0 0 0;
+  }
+
   li.list-group-item {
-    margin: 0;
-    padding: 0;
+    padding: 5px 0 0 0;
     background-color: transparent;
+    border: 0;
 
-    &.active > a {
-      color: #fff;
-      font-weight: 600;
+    & .fa {
+      font-size: 1.6em;
 
-      &> a:before {
-        background: #39a5dc;
-        content: " ";
-        height: 100%;
-        left: 0;
-        position: absolute;
-        top: 0;
-        width: 3px;
+      &.neighbors {
+        transform: rotate(90deg);
       }
+    }
+
+    & .count {
+      float: right;
+      padding: 0 15px 0 0;
     }
 
     > a {
@@ -264,22 +253,38 @@ $collapsed-sidebar-width: 50px;
       font-size: 0.9rem;
       font-weight: 400;
       font-stretch: condensed;
-      height: 63px;
       line-height: 26px;
       position: relative;
       white-space: nowrap;
-      width: $sidebar-width;
       text-decoration: none;
       margin: 0;
-      padding: 2px 0 0 10px;
+      padding: 0 0 0 10px;
       height: 35px;
+
+      &.disabled {
+        color: #989898;
+        cursor: no-drop;
+      }
 
       &:hover {
         color: white;
 
         &.disabled {
-          color: unset;
+          color: #989898;
         }
+      }
+    }
+
+    &.active {
+      background: linear-gradient(to left, #262a2b91, #262a2b36,#262a2b0a) !important;
+      color: white !important;
+
+      & a {
+        color: white;
+      }
+
+      & .list-group-item-value {
+        color: #cce34c !important;
       }
     }
 
@@ -316,23 +321,23 @@ $collapsed-sidebar-width: 50px;
     &.list-group-item-squat {
 
       a {
-        padding: 0;
-        margin: 0;
         height: 30px;
 
         i.fa {
-          margin: 0 0 0 3px;
+          margin: 0 0 0 2px;
           padding: 0;
         }
 
         .list-group-item-value {
-          padding: 5px 0 0 0;
           vertical-align: text-bottom;
         }
       }
     }
-  }
 
+    & .list-group-item-value {
+      margin: 0 0 0 10px;
+    }
+  }
 
   .node-filter-section {
     padding: 0;

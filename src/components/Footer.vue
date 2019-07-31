@@ -10,7 +10,7 @@
           <i>The Monarch Initiative {{ version }}</i>
         </router-link>
       </div>
-      <div class="offset-lg-1 col-3">
+      <div class="col-4 report">
         <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">
           Report Issue or Suggest Content
         </b-button>
@@ -82,6 +82,11 @@ div.footer {
   color: white;
   background-color: $monarch-bg-color;
   box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2), 0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+
+
+  .report {
+    text-align: center;
+  }
 
   a {
     color: white;
