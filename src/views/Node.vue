@@ -229,7 +229,7 @@ const icons = {
   anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
   cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
   disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  function: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
   gene: require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
   homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
