@@ -235,17 +235,17 @@ const availableCardTypes = [
 const icons = {
   anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
   cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
-  disease: require('../assets/img/monarch-ui-icon_DISEASE.png'), // need
-  function: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
+  function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
   gene: require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
-  homolog: require('../assets/img/icon-anatomy.png'), // need
-  interaction: require('../assets/img/icon-anatomy.png'), // need
+  homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
+  interaction: require('../assets/img/monarch-ui-icon_INTERACTIONS.png'),
   publication: require('../assets/img/monarch-ui-icon_PUBLICATION.png'),
   model: require('../assets/img/monarch-ui-icon_MODEL.png'),
-  'ortholog-disease': require('../assets/img/icon-anatomy.png'), // need
-  'ortholog-phenotype': require('../assets/img/icon-anatomy.png'), // need
-  pathway: require('../assets/img/monarch-ui-icon_ANATOMY.png'), // need
+  'ortholog-disease': require('../assets/img/monarch-ui-icon_ORTHOLOG_DISEASE.png'),
+  'ortholog-phenotype': require('../assets/img/monarch-ui-icon_ORTHOLOG_PHENOTYPE.png'),
+  pathway: require('../assets/img/monarch-ui-icon_PATHWAYS.png'),
   phenotype: require('../assets/img/monarch-ui-icon_PHENOTYPE.png'),
   variant: require('../assets/img/monarch-ui-icon_VARIANT.png')
 };
