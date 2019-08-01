@@ -14,7 +14,7 @@
               role="button">
               <img
                 style="max-height:35px;"
-                src="../assets/img/icon-diseases.png"
+                src="../assets/img/monarch-ui-icon_DISEASE.png"
                 alt="disease">
             </router-link>
             <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
@@ -26,7 +26,7 @@
               role="button">
               <img
                 style="max-height:35px;"
-                src="../assets/img/icon-genes.png"
+                src="../assets/img/monarch-ui-icon_GENE.png"
                 alt="genes">
             </router-link>
             <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
@@ -38,7 +38,7 @@
               role="button">
               <img
                 style="max-height:35px;"
-                src="../assets/img/icon-models.png"
+                src="../assets/img/monarch-ui-icon_MODEL.png"
                 alt="models">
             </router-link>
             <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
