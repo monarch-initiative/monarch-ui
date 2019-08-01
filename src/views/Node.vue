@@ -41,6 +41,10 @@
         </div>
 
         <div v-else class="title-bar">
+          <div class="node-type">
+            <img :src="icons[nodeType]" class="entity-type-icon">
+            {{ labels[nodeType] }}
+          </div>
           <h4 class="node-label-label">
             {{ node.label }} <span class="node-label-id">{{ node.id }}</span>
           </h4>
@@ -83,12 +87,6 @@
                 </div>
               </div>
             </div>
-            <div v-if="node.synonyms" class="col-12 node-synonyms">
-              <b>Synonyms</b><br>
-              <span v-for="(s, index) in synonyms" :key="index" class="synonym">
-                {{ s }}
-              </span>
-            </div>
             <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
@@ -123,6 +121,15 @@
                   {{ r.label }}
                 </a>
               </span>
+            </div>
+
+            <div v-if="!expandedCard && node.synonyms" class="col-12 node-synonyms">
+              <b>Synonyms</b><br>
+              <ul>
+                <li v-for="(s, index) in synonyms" :key="index" class="synonym">
+                  {{ s }}
+                </li>
+              </ul>
             </div>
 
             <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
@@ -786,16 +793,10 @@ div.container-cards {
   top: ($navbar-height);
   left: 0;
   right: 222px;
-  padding: 5px;
+  padding: 5px 15% 5px 5px;
   margin: 0 0 0 $sidebar-width;
   width: 100%;
   z-index: 1;
-
-  & .node-synonyms {
-    line-height: 1.0em;
-    margin: 5px;
-    padding: 0 5px;
-  }
 
   & .synonym {
     padding: 0 2px;
@@ -808,6 +809,16 @@ div.container-cards {
     margin: 2px;
   }
 
+  .node-type {
+    margin-top: 10px;
+    float:right;
+    font-size: 1.4rem;
+    & .entity-type-icon{
+      height: 30px;
+    }
+  }
+
+
   & .node-label-label {
     margin-top: 10px;
     padding-left: 15px;
@@ -817,9 +828,18 @@ div.container-cards {
       color: #cce34c;
     }
   }
-
-
 }
+
+.node-synonyms {
+  line-height: 1.0em;
+  margin: 5px;
+  padding: 0 5px;
+
+  & ul {
+    list-style: none;
+  }
+}
+
 div.publication-abstract {
   margin: 0;
 }
