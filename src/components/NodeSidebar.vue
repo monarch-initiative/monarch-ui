@@ -1,6 +1,6 @@
 <template>
 
-  <div class="node-sidebar">
+  <div class="node-sidebar" v-click-outside="hideNeighborhoodOrFacets">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
       :node-type="nodeType"
@@ -10,7 +10,7 @@
     />
 
     <div>
-      <ul v-click-outside="hideNeighborhoodOrFacets" v-if="nodeType" class="list-group">
+      <ul v-if="nodeType" class="list-group">
         <!--<li class="list-group-item list-group-item-node">
           <a :href="debugServerURL" target="_blank">
             <img :src="$parent.icons[nodeType]" class="entity-type-icon">

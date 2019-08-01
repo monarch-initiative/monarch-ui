@@ -46,7 +46,7 @@
             {{ labels[nodeType] }}
           </div>
           <h4 class="node-label-label">
-            {{ node.label }} <span class="node-label-id">{{ node.id }}</span>
+            <span v-html="node.label"></span>&nbsp;<span class="node-label-id">{{ node.id }}</span>
           </h4>
           <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
             <a
@@ -124,7 +124,7 @@
             </div>
 
             <div v-if="!expandedCard && node.synonyms" class="col-12 node-synonyms">
-              <b>Synonyms</b><br>
+              <b>Synonyms</b><br><br>
               <ul>
                 <li v-for="(s, index) in synonyms" :key="index" class="synonym">
                   {{ s }}
@@ -832,8 +832,8 @@ div.container-cards {
 
 .node-synonyms {
   line-height: 1.0em;
-  margin: 5px;
-  padding: 0 5px;
+  margin: 5px 0;
+  padding: 0 10px;
 
   & ul {
     list-style: none;
