@@ -40,11 +40,7 @@
           </div>
         </div>
 
-        <div v-else class="title-bar">
-          <div class="node-type">
-            <img :src="icons[nodeType]" class="entity-type-icon">
-            {{ labels[nodeType] }}
-          </div>
+        <div ref="titleBar" v-else class="title-bar">
           <h4 class="node-label-label">
             <span v-html="node.label"></span>&nbsp;<span class="node-label-id">{{ node.id }}</span>
           </h4>
@@ -557,7 +553,6 @@ export default {
         ]
       );
       this.node = node;
-
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
       }
@@ -700,6 +695,13 @@ export default {
           this.expandCard(cardType);
         });
       }
+      this.$nextTick((_) => {
+        if(this.$refs.titleBar.scrollHeight > 100){
+          this.$refs.titleBar.style.fontSize = "1.2rem";
+        } else {
+          this.$refs.titleBar.style.fontSize = "";
+        }
+      });
     }
   }
 };
@@ -788,15 +790,15 @@ div.container-cards {
   position: fixed;
   height: $title-bar-max-height;
   overflow-y: auto;
-  font-size: 0.95rem;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
   right: 222px;
-  padding: 5px 15% 5px 5px;
   margin: 0 0 0 $sidebar-width;
   width: 100%;
   z-index: 1;
+  font-size: 1.5rem;
+  padding: 5px 15% 5px 5px;
 
   & .synonym {
     padding: 0 2px;
@@ -808,20 +810,11 @@ div.container-cards {
   & .node-label {
     margin: 2px;
   }
-
-  .node-type {
-    margin-top: 10px;
-    float:right;
-    font-size: 1.4rem;
-    & .entity-type-icon{
-      height: 30px;
-    }
-  }
-
-
   & .node-label-label {
-    margin-top: 10px;
+    margin: 0;
     padding-left: 15px;
+    padding-top: 15px;
+    font-size: inherit;
 
     & .node-label-id {
       font-size: 1rem;
