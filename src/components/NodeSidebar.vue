@@ -1,6 +1,6 @@
 <template>
 
-  <div class="node-sidebar" v-click-outside="hideNeighborhoodOrFacets">
+  <div v-click-outside="hideNeighborhoodOrFacets" class="node-sidebar">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
       :node-type="nodeType"
@@ -12,7 +12,7 @@
     <div>
       <ul v-if="nodeType" class="list-group">
         <li class="list-group-item title">
-            {{ $parent.labels[nodeType] }}
+          {{ $parent.labels[nodeType] }}
         </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">

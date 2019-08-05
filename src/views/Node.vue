@@ -40,9 +40,9 @@
           </div>
         </div>
 
-        <div ref="titleBar" v-else class="title-bar">
+        <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
-            <span v-html="node.label"></span>&nbsp;<span class="node-label-id">{{ node.id }}</span>
+            <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
           </h4>
           <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
             <a
@@ -696,10 +696,11 @@ export default {
         });
       }
       this.$nextTick((_) => {
-        if(this.$refs.titleBar.scrollHeight > 100){
-          this.$refs.titleBar.style.fontSize = "1.2rem";
-        } else {
-          this.$refs.titleBar.style.fontSize = "";
+        if (this.$refs.titleBar.scrollHeight > 100) {
+          this.$refs.titleBar.style.fontSize = '1.2rem';
+        }
+        else {
+          this.$refs.titleBar.style.fontSize = '';
         }
       });
     }
