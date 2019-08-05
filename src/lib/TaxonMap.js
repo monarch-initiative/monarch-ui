@@ -82,7 +82,9 @@ const cardTypesSupportingTaxon = [
   'genotype',
   'model',
   'variant',
-  'homolog'
+  'homolog',
+  'ortholog-phenotype',
+  'ortholog-disease'
 ];
 
 export function isTaxonCardType(cardType) {
