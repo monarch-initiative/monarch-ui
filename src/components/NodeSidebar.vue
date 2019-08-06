@@ -1,6 +1,6 @@
 <template>
 
-  <div class="node-sidebar">
+  <div v-click-outside="hideNeighborhoodOrFacets" class="node-sidebar">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
       :node-type="nodeType"
@@ -10,17 +10,10 @@
     />
 
     <div>
-      <ul v-click-outside="hideNeighborhoodOrFacets" v-if="nodeType" class="list-group">
-        <!--<li class="list-group-item list-group-item-node">
-          <a :href="debugServerURL" target="_blank">
-            <img :src="$parent.icons[nodeType]" class="entity-type-icon">
-            <span class="list-group-item-value">{{ $parent.labels[nodeType] }}</span>
-          </a>
-          <a
-            :href="'http://beta.monarchinitiative.org' + $route.path"
-            class="debug-link-to-alpha"
-            target="_blank"/>
-        </li>-->
+      <ul v-if="nodeType" class="list-group">
+        <li class="list-group-item title">
+          {{ $parent.labels[nodeType] }}
+        </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
             <i class="fa fa-fw fa-th-large"/>
@@ -231,6 +224,14 @@ $collapsed-sidebar-width: 50px;
     padding: 5px 0 0 0;
     background-color: transparent;
     border: 0;
+
+    &.title {
+      text-transform: uppercase;
+      color: white;
+      text-align: center;
+      padding: 5px 0;
+      cursor: default;
+    }
 
     & .fa {
       font-size: 1.6em;

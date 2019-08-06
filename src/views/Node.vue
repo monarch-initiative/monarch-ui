@@ -40,9 +40,9 @@
           </div>
         </div>
 
-        <div v-else class="title-bar">
+        <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
-            {{ node.label }} <span class="node-label-id">{{ node.id }}</span>
+            <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
           </h4>
           <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
             <a
@@ -83,12 +83,6 @@
                 </div>
               </div>
             </div>
-            <div v-if="node.synonyms" class="col-12 node-synonyms">
-              <b>Synonyms</b><br>
-              <span v-for="(s, index) in synonyms" :key="index" class="synonym">
-                {{ s }}
-              </span>
-            </div>
             <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
@@ -123,6 +117,15 @@
                   {{ r.label }}
                 </a>
               </span>
+            </div>
+
+            <div v-if="!expandedCard && node.synonyms" class="col-12 node-synonyms">
+              <b>Synonyms</b><br><br>
+              <ul>
+                <li v-for="(s, index) in synonyms" :key="index" class="synonym">
+                  {{ s }}
+                </li>
+              </ul>
             </div>
 
             <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
@@ -550,7 +553,6 @@ export default {
         ]
       );
       this.node = node;
-
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
       }
@@ -693,6 +695,14 @@ export default {
           this.expandCard(cardType);
         });
       }
+      this.$nextTick((_) => {
+        if (this.$refs.titleBar.scrollHeight > 100) {
+          this.$refs.titleBar.style.fontSize = '1.2rem';
+        }
+        else {
+          this.$refs.titleBar.style.fontSize = '';
+        }
+      });
     }
   }
 };
@@ -781,21 +791,15 @@ div.container-cards {
   position: fixed;
   height: $title-bar-max-height;
   overflow-y: auto;
-  font-size: 0.95rem;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
   right: 222px;
-  padding: 5px;
   margin: 0 0 0 $sidebar-width;
   width: 100%;
   z-index: 1;
-
-  & .node-synonyms {
-    line-height: 1.0em;
-    margin: 5px;
-    padding: 0 5px;
-  }
+  font-size: 1.5rem;
+  padding: 5px 15% 5px 5px;
 
   & .synonym {
     padding: 0 2px;
@@ -807,19 +811,29 @@ div.container-cards {
   & .node-label {
     margin: 2px;
   }
-
   & .node-label-label {
-    margin-top: 10px;
+    margin: 0;
     padding-left: 15px;
+    padding-top: 15px;
+    font-size: inherit;
 
     & .node-label-id {
       font-size: 1rem;
       color: #cce34c;
     }
   }
-
-
 }
+
+.node-synonyms {
+  line-height: 1.0em;
+  margin: 5px 0;
+  padding: 0 10px;
+
+  & ul {
+    list-style: none;
+  }
+}
+
 div.publication-abstract {
   margin: 0;
 }
