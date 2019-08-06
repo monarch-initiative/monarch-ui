@@ -77,7 +77,7 @@
             Phenotype Curation Guidelines
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item href="https://github.com/obophenotype/upheno" target="_blank" rel="noopener noreferrer">
             Phenotype Ontologies Project
           </b-dropdown-item>
 
