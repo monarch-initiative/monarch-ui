@@ -51,8 +51,8 @@
             Data Sources
           </b-dropdown-item>
 
-          <b-dropdown-item to="/sources">
-            Monarch API
+          <b-dropdown-item to="/about/monarch-web-services">
+            Monarch Web Services
           </b-dropdown-item>
 
           <b-dropdown-item to="/sources">

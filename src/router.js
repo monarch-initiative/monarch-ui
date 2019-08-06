@@ -51,6 +51,11 @@ const router = new Router({
       component: require('@/views/AboutMonarch.md').default,
     },
     {
+      path: '/about/monarch-web-services',
+      name: 'monarch-web-services',
+      component: require('@/views/Services.md').default,
+    },
+    {
       path: '/about/team',
       name: 'about-team',
       component: require('@/views/AboutTeam.md').default,
