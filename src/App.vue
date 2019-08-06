@@ -96,6 +96,7 @@ $fa-font-path: "~font-awesome/fonts" !default;
 
 .monarch-view {
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 #app.page-wrapper .main-wrapper {
