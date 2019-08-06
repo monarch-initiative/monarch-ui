@@ -111,9 +111,10 @@ institutions:
         alumni: false
         bio: Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC).
       - name: Eric Douglass
-        picture: img/team/person-unknown.png
+        picture: img/team/EricDouglass1.jpg
         title: Software Engineer
         alumni: false
+        bio: Eric is a software engineer that works with Seth and Chris on data validation pipelines, Turtle and Ontologies in triplestores and other tools. He comes from a background originally in physics from Lewis and Clark college and then software development in industry, Eric got his first taste of ontologies at his first tech job in Portland.
       - name: Nathan Dunn
         picture: img/team/NathanDunn.jpg
         title: Software Engineer
