@@ -33,7 +33,7 @@
           slot="taxon"
           slot-scope="data"
         >
-          <a :href="'https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=' + data.item.taxonId"><i>{{ data.item.taxonLabel }}</i></a>
+          <i>{{ data.item.taxonLabel }}</i>
         </template>
 
         <template slot="assocObject" slot-scope="data">
