@@ -1,37 +1,18 @@
 <template>
-  <div
-    class="assoc-table">
-    <div
-      v-if="dataError"
-      class="border p-2 m-2">
+  <div class="assoc-table">
+    <div v-if="dataError" class="border p-2 m-2">
       <h3>BioLink Error</h3>
       <div class="col-xs-12">
         {{ dataError }}
       </div>
     </div>
 
-    <div
-      v-show="!dataFetched && !dataError"
-      class="loading-div">
+    <div v-show="!dataFetched && !dataError" class="loading-div">
 
-      <b-progress
-        :value="100"
-        height="4rem"
-        variant="info"
-        striped
-        animated
-        class="m-1">
-        <b-progress-bar
-          :value="100"
-          class="p-4">
-          <h3>&nbsp;Loading Associations …&nbsp;</h3>
-        </b-progress-bar>
-      </b-progress>
-
+      <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
     </div>
 
-    <div
-      v-show="dataFetched && !dataError">
+    <div v-show="dataFetched && !dataError">
 
       <h5>
         &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
@@ -55,76 +36,53 @@
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
-        <template
-          slot="assocObject"
-          slot-scope="data"
-        >
-          <template
-            v-if="data.item.objectLink">
+        <template slot="assocObject" slot-scope="data">
+          <template v-if="data.item.objectLink">
             <strong>
-              <router-link
-                :to="data.item.objectLink"
-                v-html="$sanitizeText(data.item.assocObject)"/>
+              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)"/>
             </strong>
           </template>
-          <template
-            v-else>
+          <template v-else>
             <strong>
               {{ data.item.assocObject }}
             </strong>
           </template>
         </template>
 
-        <template
-          slot="relation"
-          slot-scope="data"
-        >
+        <template slot="relation" slot-scope="data">
           <small>
             <a
               :href="data.item.relation.url"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <span
-                v-if="data.item.relation.inverse">
+              <span v-if="data.item.relation.inverse">
                 <b>&Larr;</b>
               </span>
               {{ data.item.relation.label }}
-              <span
-                v-if="data.item.relation.inverse">
+              <span v-if="data.item.relation.inverse">
                 <b>&Larr;</b>
               </span>
             </a>
           </small>
         </template>
 
-        <template
-          slot="assocSubject"
-          slot-scope="data"
-        >
-          <template
-            v-if="data.item.subjectLink">
+        <template slot="assocSubject" slot-scope="data">
+          <template v-if="data.item.subjectLink">
             <strong>
-              <router-link
-                :to="data.item.subjectLink"
-                v-html="$sanitizeText(data.item.assocSubject)">
+              <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
                 {{ data.item.assocSubject }}
               </router-link>
             </strong>
           </template>
-          <template
-            v-else>
+          <template v-else>
             <strong>
               {{ data.item.assocSubject }}
             </strong>
           </template>
         </template>
 
-        <template
-          v-if="hasFrequencyOnset"
-          slot="frequency"
-          slot-scope="data"
-        >
+        <template v-if="hasFrequencyOnset" slot="frequency" slot-scope="data">
           <a
             v-if="data.item.frequency"
             :href="data.item.frequency.url"
@@ -154,21 +112,16 @@
           </a>
         </template>
 
-        <template
-          slot="support"
-          slot-scope="data"
-        >
+        <template slot="support" slot-scope="data">
           <b-button
             :pressed.sync="data.item._showDetails"
             size="small"
             class="btn btn-xs px-1 py-0 m-0"
             variant="outline-info">
-            <span
-              v-if="data.item._showDetails">
+            <span v-if="data.item._showDetails">
               &blacktriangledown;&nbsp;
             </span>
-            <span
-              v-else>
+            <span v-else>
               &blacktriangleright;&nbsp;
             </span>
 
@@ -185,27 +138,21 @@
           </b-button>
         </template>
 
-        <template
-          slot="row-details"
-          slot-scope="row"
-        >
+        <template slot="row-details" slot-scope="row">
           <div class="container-fluid support-section py-0">
             <div
               v-for="(support, index) in row.item.support"
               :key="index"
               class="row"
             >
-              <div
-                class="col-9 px-1">
+              <div class="col-9 px-1">
                 <template
                   v-if="support.useRouter">
-                  <router-link
-                    :to="support.url">
+                  <router-link :to="support.url">
                     {{ support.label }}
                   </router-link>
                 </template>
-                <template
-                  v-else>
+                <template v-else>
                   <a
                     :href="support.url"
                     target="_blank"
@@ -219,13 +166,10 @@
                   </a>
                 </template>
               </div>
-              <div
-                class="col-2 px-1">
+              <div class="col-2 px-1">
                 <small>{{ support.type }}</small>
               </div>
-              <div
-                class="col-1 px-1"
-                style="text-align: center;">
+              <div class="col-1 px-1" style="text-align: center;">
                 <i
                   :class="support.typeIcon"
                   class="fa fa-fw text-info"
@@ -556,7 +500,7 @@ export default {
         }
         const objectElem = elem.object;
         const subjectElem = elem.subject;
-        const objectTaxon = this.parseTaxon(objectElem);
+        let objectTaxon = this.parseTaxon(objectElem);
         // const subjectTaxon = this.parseTaxon(subjectElem);
 
         const support = [];
@@ -605,19 +549,15 @@ export default {
         }
 
         const supportLength = support.length;
-        // console.log('support');
-        // console.log(JSON.stringify(support, null, 2));
-        // console.log('taxon.id', taxon.id, this.allFacets.includes(taxon.id), this.trueFacets.includes(taxon.id));
         if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
           // console.log('skipping', objectTaxon.id, elem);
         }
         else {
           let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
-          if (simplifiedCardType === 'interaction') {
+          if (simplifiedCardType === 'interaction' || simplifiedCardType === 'homolog' ||
+                  simplifiedCardType === 'phenotype' || simplifiedCardType === 'disease') {
             simplifiedCardType = 'gene';
-          }
-          else if (simplifiedCardType === 'homolog') {
-            simplifiedCardType = 'gene';
+            objectTaxon = this.parseTaxon(subjectElem);
           }
 
           let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
@@ -790,10 +730,14 @@ export default {
 <style lang="scss">
 @import "~@/style/variables";
 .assoc-table {
-
+  width: 100%;
   .loading-div {
-    margin: 0;
-    padding: 50px;
+      margin: 15% calc(50% - 14%);
+      text-align: center;
+  }
+
+  .table {
+    width:inherit;
   }
   .table.b-table tr {
     outline: 1px solid lightgray;

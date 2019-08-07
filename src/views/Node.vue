@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="node-wrapper">
     <node-sidebar
       v-if="node"
       ref="sidebar"
@@ -23,55 +23,39 @@
 
     <div class="container-cards">
       <div class="wrapper">
-        <div
-          :class="{ active: isNeighborhoodShowing || isFacetsShowing }"
-          class="overlay"
-          @click="hideOverlay()"/>
+        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay"/>
 
-        <div>
-          <div
-            v-if="!node">
-            <div
-              v-if="nodeError">
-              <small>
-                <h6>
-                  Error loading {{ labels[nodeType] }}: {{ nodeId }}
-                </h6>
-                <pre
-                  class="pre-scrollable">{{ nodeError }}</pre>
-              </small>
-            </div>
-            <div
-              v-else>
-              <br>
-              <h5 class="text-center">Loading Data for {{ labels[nodeType] }}: {{ nodeId }}</h5>
-            </div>
+        <div v-if="!node" class="loading">
+          <div v-if="nodeError">
+            <small>
+              <h6>
+                Error loading {{ labels[nodeType] }}:&nbsp; {{ nodeId }}
+              </h6>
+              <pre class="pre-scrollable">{{ nodeError }}</pre>
+            </small>
           </div>
+          <div v-else>
+            <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
+            <h5 class="text-center">{{ nodeId }}</h5>
+          </div>
+        </div>
 
-          <div
-            v-else
-            class="title-bar">
-            <div
-              class="node-label">
-              <span
-                class="node-label-label">
-                <span v-html="$sanitizeText(node.label)"/>
-              </span>
-              <span
-                v-if="node.taxon && node.taxon.id"
-                class="node-label-taxon">
-                &nbsp;
-                <a
-                  :href="node.taxon.uri"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="node-label-id">
-                  <em>{{ node.taxon.label }}</em>
-                </a>
-              </span>
-              &nbsp;
+        <div v-else ref="titleBar" class="title-bar">
+          <h4 class="node-label-label">
+            <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
+          </h4>
+          <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
+            <a
+              :href="node.taxon.uri"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="node-label-id">
+              <em>{{ node.taxon.label }}</em>
+            </a>
+          </span>
+          &nbsp;
 
-              <!--
+          <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
                 :href="entrezResult.abstractURL"
@@ -81,85 +65,50 @@
                 Entrez: {{ node.id }}
               </a>
              -->
-            </div>
-
-            <div
-              class="node-synonyms">
-              <span
-                v-for="(s, index) in synonyms"
-                :key="index"
-                class="synonym"
-              >
-                {{ s }}
-              </span>
-            </div>
-
-          </div>
         </div>
+        <div v-if="node" class="container-fluid node-container">
 
-        <div
-          v-if="node"
-          class="container-fluid node-container">
-
-          <div
-            v-if="nodeDebug"
-            class="row node-content-section">
+          <div v-if="nodeDebug" class="row node-content-section">
             <div class="col-12">
               <pre>{{ nodeDebug }}</pre>
             </div>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-content-section">
-            <div
-              v-if="node.description"
-              class="col-12">
+          <div v-if="!expandedCard" class="row node-content-section">
+            <div v-if="node.description" class="col-12">
               <div class="node-description">
-                <b>Description:</b> {{ node.description }}
+                <b>Description</b><br>
+                <div class="description">
+                  {{ node.description }}
+                </div>
               </div>
             </div>
-
-            <div
-              v-if="entrezResult"
-              class="col-12">
+            <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
               <h6>Authors:
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
               </h6>
 
-              <div
-                v-if="entrezResult"
-                class="publication-abstract"
-                v-html="entrezResult.abstractMarkdown"/>
+              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown"/>
             </div>
 
             <div class="col-12">
-              <span
-                v-if="inheritance">
+              <span v-if="inheritance">
                 <b>Heritability:</b>&nbsp;{{ inheritance }}
               </span>
             </div>
 
             <div class="col-12">
-              <span
-                v-if="modifiers">
+              <span v-if="modifiers">
                 <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
               </span>
             </div>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-content-section">
-            <div
-              class="col-12">
+          <div v-if="!expandedCard" class="row node-content-section">
+            <div class="col-12">
               <b>References:</b>&nbsp;
-              <span
-                v-for="(r, index) in references"
-                :key="index"
-                class="synonym"
-              >
+              <span v-for="(r, index) in references" :key="index" class="synonym">
                 <a
                   :href="r.uri"
                   target="_blank"
@@ -170,14 +119,18 @@
               </span>
             </div>
 
-            <div
-              v-if="equivalentClasses && equivalentClasses.length > 0"
-              class="col-12">
-              <b>Equivalent IDs:</b>&nbsp;
+            <div v-if="!expandedCard && node.synonyms" class="col-12 node-synonyms">
+              <b>Synonyms</b><br><br>
+              <ul>
+                <li v-for="(s, index) in synonyms" :key="index" class="synonym">
+                  {{ s }}
+                </li>
+              </ul>
+            </div>
 
-              <span
-                v-for="(r, index) in equivalentClasses"
-                :key="index">
+            <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
+              <b>Equivalent IDs:</b>&nbsp;
+              <span v-for="(r, index) in equivalentClasses" :key="index">
                 <span>
                   {{ r.id }}&nbsp;
                 </span>
@@ -186,30 +139,20 @@
           </div>
 
 
-          <div
-            v-if="!expandedCard && hasGeneExac"
-            class="row py-2">
-            <exac-gene
-              :node-id="nodeId"/>
+          <div v-if="!expandedCard && hasGeneExac" class="row py-2">
+            <exac-gene :node-id="nodeId"/>
           </div>
 
-          <div
-            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
-            class="row py-2">
+          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="row py-2">
             <genome-feature
               :mygene-data="node.geneInfo"/>
           </div>
 
-          <div
-            v-if="!expandedCard && reactomeId"
-            class="row py-0">
-            <reactome-viewer
-              :reactome-id="reactomeId"/>
+          <div v-if="!expandedCard && reactomeId" class="row py-0">
+            <reactome-viewer :reactome-id="reactomeId"/>
           </div>
 
-          <div
-            v-if="!expandedCard"
-            class="row node-cards-section">
+          <!--<div v-if="!expandedCard" class="row node-cards-section">
             <node-card
               v-for="cardType in nonEmptyCards"
               :key="cardType"
@@ -218,9 +161,9 @@
               :parent-node="node"
               :parent-node-id="nodeId"
               @expand-card="expandCard(cardType)"/>
-          </div>
+          </div>-->
 
-          <div v-if="expandedCard" class="expanded-card-view row">
+          <div v-if="expandedCard" class="expanded-card-view">
             <assoc-table
               :facets="facetObject"
               :card-counts="counts"
@@ -230,8 +173,7 @@
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
-            <exac-variant
-              :node-id="nodeId"/>
+            <exac-variant :node-id="nodeId"/>
           </div>
         </div>
       </div>
@@ -246,7 +188,7 @@
 <script>
 
 import us from 'underscore';
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
 
@@ -287,21 +229,21 @@ const availableCardTypes = [
 ];
 
 const icons = {
-  anatomy: require('../assets/img/icon-anatomy.png'),
-  cellline: require('../assets/img/icon-anatomy.png'),
-  disease: require('../assets/img/icon-diseases.png'),
-  function: require('../assets/img/icon-anatomy.png'),
-  gene: require('../assets/img/icon-genes.png'),
-  genotype: require('../assets/img/icon-anatomy.png'),
-  homolog: require('../assets/img/icon-anatomy.png'),
-  interaction: require('../assets/img/icon-anatomy.png'),
-  publication: require('../assets/img/icon-anatomy.png'),
-  model: require('../assets/img/icon-models.png'),
-  'ortholog-disease': require('../assets/img/icon-anatomy.png'),
-  'ortholog-phenotype': require('../assets/img/icon-anatomy.png'),
-  pathway: require('../assets/img/icon-anatomy.png'),
-  phenotype: require('../assets/img/icon-phenotypes.png'),
-  variant: require('../assets/img/icon-genes.png')
+  anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
+  cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
+  disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
+  function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
+  gene: require('../assets/img/monarch-ui-icon_GENE.png'),
+  genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
+  homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
+  interaction: require('../assets/img/monarch-ui-icon_INTERACTIONS.png'),
+  publication: require('../assets/img/monarch-ui-icon_PUBLICATION.png'),
+  model: require('../assets/img/monarch-ui-icon_MODEL.png'),
+  'ortholog-disease': require('../assets/img/monarch-ui-icon_ORTHOLOG_DISEASE.png'),
+  'ortholog-phenotype': require('../assets/img/monarch-ui-icon_ORTHOLOG_PHENOTYPE.png'),
+  pathway: require('../assets/img/monarch-ui-icon_PATHWAYS.png'),
+  phenotype: require('../assets/img/monarch-ui-icon_PHENOTYPE.png'),
+  variant: require('../assets/img/monarch-ui-icon_VARIANT.png')
 };
 
 const labels = {
@@ -451,7 +393,7 @@ export default {
           label: 'Source',
           field: 'source'
         }
-      ]
+      ],
     };
   },
 
@@ -601,8 +543,8 @@ export default {
       this.modifiers = null;
       this.reactomeId = null;
 
-      const nodeSummaryPromise = BL.getNode(this.nodeId, this.nodeType);
-      const neighborhoodPromise = BL.getNeighborhood(this.nodeId, this.nodeType);
+      const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
+      const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
 
       const [node, neighborhood] = await Promise.all(
         [
@@ -611,7 +553,6 @@ export default {
         ]
       );
       this.node = node;
-
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
       }
@@ -754,6 +695,14 @@ export default {
           this.expandCard(cardType);
         });
       }
+      this.$nextTick((_) => {
+        if (this.$refs.titleBar.scrollHeight > 100) {
+          this.$refs.titleBar.style.fontSize = '1.2rem';
+        }
+        else {
+          this.$refs.titleBar.style.fontSize = '';
+        }
+      });
     }
   }
 };
@@ -764,10 +713,14 @@ export default {
 @import "~@/style/variables";
 
 $sidebar-content-width: 500px;
-$sidebar-width: 200px;
 $sidebar-button-width: 32px;
-$title-bar-max-height: 80px;
+$title-bar-max-height: 60px;
 $line-height-compact: 1.3em;
+
+
+.node-wrapper {
+  min-height: 100%;
+}
 
 .overlay {
   position: fixed;
@@ -783,7 +736,7 @@ $line-height-compact: 1.3em;
 }
 
 .container-fluid.node-container {
-  margin-top: $title-bar-max-height;
+  margin-top: ($title-bar-max-height + 15);
   transition: all 0.3s;
   width: 100%;
   height: 100%;
@@ -797,7 +750,10 @@ $line-height-compact: 1.3em;
   margin: 10px 0;
   padding: 0;
   line-height: $line-height-compact;
-  line-height: 1.2rem;
+
+  .description {
+    margin-top: 5px;
+  }
 }
 
 .wrapper {
@@ -806,68 +762,76 @@ $line-height-compact: 1.3em;
   min-height: 100%;
   width: 100%;
   margin: 0;
-  padding: 1px 3px;
 }
 
 
 div.container-cards {
   width: unset;
   padding: 0;
-  margin: $navbar-height 0 0 $sidebar-width;
-}
+  margin: 0 0 0 $sidebar-width;
 
-div.container-cards .node-content-section {
-  line-height: $line-height-compact;
-}
+  .loading {
+    margin: 15% calc(50% - 14%);
+    text-align: center;
+  }
 
-div.container-cards .node-cards-section {
-  margin-top: 50px;
+  & .node-content-section {
+    line-height: $line-height-compact;
+  }
+
+  & .node-cards-section {
+    margin-top: 50px;
+  }
 }
 
 .title-bar {
   border-bottom: 1px solid lightgray;
-  background: aliceblue;
+  background: #1b5f75;
+  color: white;
   position: fixed;
   height: $title-bar-max-height;
   overflow-y: auto;
-  font-size: 0.95rem;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
   right: 222px;
-  padding: 5px;
-  padding-left: ($sidebar-width + 5);
-  margin: 0;
+  margin: 0 0 0 $sidebar-width;
   width: 100%;
   z-index: 1;
+  font-size: 1.5rem;
+  padding: 5px 15% 5px 5px;
+
+  & .synonym {
+    padding: 0 2px;
+    margin: 0 15px 0 0;
+    font-size: 0.9em;
+    font-weight: 500;
+  }
+
+  & .node-label {
+    margin: 2px;
+  }
+  & .node-label-label {
+    margin: 0;
+    padding-left: 15px;
+    padding-top: 15px;
+    font-size: inherit;
+
+    & .node-label-id {
+      font-size: 1rem;
+      color: #cce34c;
+    }
+  }
 }
 
-.title-bar .node-synonyms {
+.node-synonyms {
   line-height: 1.0em;
-  margin: 5px;
-  padding: 0 5px;
-}
+  margin: 5px 0;
+  padding: 0 10px;
 
-.title-bar .synonym {
-  padding: 0 2px;
-  margin: 0 15px 0 0;
-  font-size: 0.9em;
-  font-weight: 500;
-}
-
-.title-bar .node-label {
-  margin: 2px;
-}
-
-.title-bar .node-label-label {
-  font-size: 1.4em;
-  font-weight: 500;
-}
-
-.title-bar .node-label-id {
-}
-
-.title-bar .node-label-taxon {
+  & ul {
+    list-style: none;
+  }
 }
 
 div.publication-abstract {

@@ -70,8 +70,6 @@ $fa-font-path: "~font-awesome/fonts" !default;
 .row {
   padding-right: 15px;
   padding-left: 15px;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
 }
 #app.page-wrapper {
   position: absolute;
@@ -82,6 +80,8 @@ $fa-font-path: "~font-awesome/fonts" !default;
 #app.page-wrapper .content-wrapper {
   padding-bottom: $footer-height;
   margin: 0;
+  min-height: 100vh;
+  display: flex;
 }
 
 #app.page-wrapper .footer-wrapper {
@@ -100,6 +100,8 @@ $fa-font-path: "~font-awesome/fonts" !default;
 
 #app.page-wrapper .main-wrapper {
   padding: $navbar-height 0 0 0;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 

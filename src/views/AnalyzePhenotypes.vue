@@ -414,6 +414,12 @@ export default {
       return show;
     }
   },
+  created() {
+    if (this.$route.params.phenotypes) {
+      this.phenoCurieList = this.$route.params.phenotypes;
+    }
+
+  },
   async mounted() {
     // await this.applyExampleData();
   },
