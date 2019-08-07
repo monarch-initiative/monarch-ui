@@ -33,24 +33,16 @@ institutions:
       title: Associate Director
       alumni: false
       bio: Julie specializes in ontology-aware tools that facilitate synthesis research. She holds a BA in Biology (Rhode Island College), with post-bac training in Computer Science (Harvard Extension School), as well as Immunology & Virology (Brown University). She holds a MSc in Public Health from the University of London.
-    - name: Tom Conlin
-      picture: img/team/TomConlin.png
-      title: Bioinformaticist
-      alumni: false
-      bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
-    - name: Dan Keith
-      picture: img/team/DanielKeith.png
-      title: Bioinformatics Semantic Engineer
-      alumni: true
-      bio: |+
-        Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
-        He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
-        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis. 
     - name: Moni Munoz-Torres
       picture: img/team/MoniMunozTorres.jpg
       title: Program Manager
       alumni: false
       bio: Moni is a curator of genomes, and her work has focused on facilitating the development of software tools that accomplish these tasks, both structural and functional genome curation. She is a highly accomplished genomics scientist with extensive experience at the computer and at the bench. She has had substantial experience in project management, especially for bioinformatics software development and for genome curation efforts. And has been very successful in building and growing communities around genome curation efforts. Moni is the Program Manager for the Monarch Initiative.
+    - name: Tom Conlin
+      picture: img/team/TomConlin.png
+      title: Bioinformaticist
+      alumni: false
+      bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
     - name: Kent Shefchek
       picture: img/team/KentShefchek.jpg
       title: Bioinformatics Software Engineer
@@ -66,6 +58,14 @@ institutions:
       title: Bioinformatic Biologist
       alumni: true
       bio: Tim needs his bio to be filled out.  
+    - name: Dan Keith
+      picture: img/team/DanielKeith.png
+      title: Bioinformatics Semantic Engineer
+      alumni: true
+      bio: |+
+        Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
+        He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
+        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis. 
   - id: ohsu
     name: Oregon Health & Science University
     logo: img/team/ohsu.jpg
@@ -106,7 +106,7 @@ institutions:
         alumni: false
         bio: "Dr. Mungall is currently a PI of the Monarch Initiative. He has a BSc in Computer Science from the University of Edinburgh and a Ph.D. from University of Edinburgh in Biological Sciences. He is currently the PI of the Monarch Initiative and his current research focuses on the use of informatics techniques and tools to integrate and interpret life science data across a variety of domains. In particular, he is interested in connecting biological models at multiple scales: the biochemical, molecular, cellular, organismal and ecological."
       - name: Seth Carbon
-        picture: img/team/person-unknown.png
+        picture: img/team/SethCarbon.png
         title: Software Engineer
         alumni: false
         bio: Seth is an occasional software engineer for the Monarch Initiative. He specializes in tools for science and education and has participated in projects in a broad range of fields, including Bioinformatics, Planetary Science, Geology, and Linguistics. His current focus is on capturing and making use of ontology and annotation data. His educational background is undergraduate degrees in Mathematics and Computer Science (UCSC).
@@ -185,7 +185,17 @@ institutions:
         title: Scientific Curator
         picture: img/team/CarmodyLeigh_headshot_Nov2016.jpg
         alumni: false
+        bio:  Michael is a software engineer, working to make a difference where biology and computer science meet. He specializes in full-stack web applications, scripting, and bioinformatics related technologies such as bioPerl, bioPython, and NGS frameworks. He has additional interests in machine learning and data mining algorithms. He aims to bridge the gap between the vast amounts of data and the need for results or visualizations.
+      - name: Michael Gargano
+        title: Software Engineer
+        picture: img/team/mike-gargano.jpg
+        alumni: false
         bio:  Leigh Carmody, Ph.D., obtained her doctorate of philosophy in Molecular Physiology & Biophysics from Vanderbilt University in Spring 2007 where she studied targeting of signaling molecules to F-actin cytoskeleton/dendritic spines. Dr. Carmody continued her studies as a postdoctoral fellow at Massachusetts Institute of Technology where she investigated the role of Rac1 in dendritic spine motility. Late 2008, she joined the Broad Institute of MIT & Harvard as a Scientist where she aided in early-stage drug discovery efforts to identify chemical leads directed at cancer targets and neglected parasitic infections.  Dr. Carmody joined Jackson Laboratory in 2015 as a Project Manager, and is currently a Scientific Curator annotating phenotyping and genomics data for the human phenotype ontology (HPO) database.
+      - name: Vida Ravanmehr
+        title: Postdoctoral Associate
+        picture: img/team/vida-ravanmehr.jpg
+        alumni: false
+        bio:  Vida Ravanmehr obtained her PhD in Electrical and Computer Engineering from the University of Arizona in 2015 and her bachelor’s degree and master’s degree in Applied Mathematics from Isfahan University of Technology, Iran in 2005 and 2008, respectively. After completing her PhD studies, she joined the University of Illinois at Urbana-Champaign as a Postdoctoral Research Associate. She is now a Postdoctoral Associate in the Robinson lab working on the Human Phenotype Ontology (HPO) project.
   - id: charite
     name: Charité - Universitätsmedizin Berlin
     logo: img/team/charite.png
@@ -213,12 +223,12 @@ institutions:
         bio: Dr. Jacobsen has a BSc in Biochemistry from the Imperial College, London and a Ph.D. from the University of Cambridge, in Structural Biology. He has developed several tools for investigating the use of model organism phenotype data to better understand the role of gene mutation in human disease.
       - name: Tomasz Konopka
         picture: img/team/person-unknown.png
-        alumni: false
+        alumni: true
         title: Bioinformatician
         bio: Dr. Konopka has a PhD in physics from the University of Waterloo. Since turning to bioinformatics, he has developed computational methods for sequence-data analysis and contributed to characterizations of molecular signatures due to genetic mutations. He is interested in the mechanisms, uncertainties, and ambiguities associated with linking genotypes to phenotypes.
       - name: Pilar Cacheiro
         picture: img/team/PilarCacheiro.jpg
-        alumni: false
+        alumni: true
         title: Computational Biologist
         bio: Dr. Cacheiro holds a BSc in Biology, a MSc in Statistics, and a PhD in Molecular Medicine. Pilar performs computational and statistical analyses of model organism data to assist identification and characterization of human disease-associated genes.
   - id: renci
