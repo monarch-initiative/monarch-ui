@@ -41,7 +41,7 @@ institutions:
     - name: Dan Keith
       picture: img/team/DanielKeith.png
       title: Bioinformatics Semantic Engineer
-      alumni: false
+      alumni: true
       bio: |+
         Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
         He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
