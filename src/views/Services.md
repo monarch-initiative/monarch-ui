@@ -1,10 +1,10 @@
 <div class="container-fluid monarch-view services">
     <h2 class="page-title">Monarch Web Services</h2> 
     <div class="row architecture">
-        <div class="col-12 col-lg-6 offset-desktop-1 col-desktop-4 image">
+        <div class="col-12 col-lg-5 offset-desktop-1 col-desktop-4 image">
             <img class="services" src="../assets/img/Monarch-Architecture2.png"/>
         </div>
-        <div class="col-12 col-lg-6 text">
+        <div class="col-12 col-lg-6 offset-lg-1 text">
         <h5><strong>Architecture</strong></h5>
         <p>Structured and unstructured data sources are loaded into SciGraph via dipper (1) , 
         our data ingest pipeline. A variety of ontologies are processed in the Monarch Integration Layer 
@@ -26,9 +26,9 @@
             <span class="entities">
                 <ul>
                     <li>genes, gene products, proteins</li>
-                    <li>diseases, phenotypes, traits and clinical measurements</li>
+                    <li>diseases, phenotypes, traits, and clinical measurements</li>
                     <li>pathways, biological process</li>
-                    <li>small molecules, drugs, chemical entities</li>
+                    <li>substances: small molecules, drugs, chemical entities</li>
                     <li>biological and molecular roles and activities</li>
                     <li>genotypes, alleles, sequence variants; for plants, germplasms</li>
                 </ul>
@@ -38,7 +38,7 @@
                     <li>environmental contexts and exposures</li>
                     <li>individual organisms: patients, cohorts, model organisms</li>
                     <li>cell lines and cell types</li>
-                    <li>investigations: experiments, clinical trials and 'natural experiments'</li>
+                    <li>investigations: experiments, clinical trials, and 'natural experiments'</li>
                     <li>genomic features, phylogenies</li>
                     <li>publications, ontology terms, database metadata</li>
                 </ul>
