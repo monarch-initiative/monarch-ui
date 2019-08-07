@@ -1,10 +1,10 @@
 <div class="container-fluid monarch-view services">
     <h2 class="page-title">Monarch Web Services</h2> 
     <div class="row architecture">
-        <div class="col-12 col-lg-5 offset-desktop-1 col-desktop-4 image">
+        <div class="col-12 col-lg-6 offset-desktop-1 col-desktop-4 image">
             <img class="services" src="../assets/img/Monarch-Architecture2.png"/>
         </div>
-        <div class="col-12 col-lg-6 offset-lg-1 text">
+        <div class="col-12 col-lg-5 offset-lg-1 text">
         <h5><strong>Architecture</strong></h5>
         <p>Structured and unstructured data sources are loaded into SciGraph via dipper (1) , 
         our data ingest pipeline. A variety of ontologies are processed in the Monarch Integration Layer 
