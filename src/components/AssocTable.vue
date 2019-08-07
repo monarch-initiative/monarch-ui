@@ -500,7 +500,7 @@ export default {
         }
         const objectElem = elem.object;
         const subjectElem = elem.subject;
-        const objectTaxon = this.parseTaxon(objectElem);
+        let objectTaxon = this.parseTaxon(objectElem);
         // const subjectTaxon = this.parseTaxon(subjectElem);
 
         const support = [];
@@ -549,19 +549,15 @@ export default {
         }
 
         const supportLength = support.length;
-        // console.log('support');
-        // console.log(JSON.stringify(support, null, 2));
-        // console.log('taxon.id', taxon.id, this.allFacets.includes(taxon.id), this.trueFacets.includes(taxon.id));
         if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
           // console.log('skipping', objectTaxon.id, elem);
         }
         else {
           let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
-          if (simplifiedCardType === 'interaction') {
+          if (simplifiedCardType === 'interaction' || simplifiedCardType === 'homolog' ||
+                  simplifiedCardType === 'phenotype' || simplifiedCardType === 'disease') {
             simplifiedCardType = 'gene';
-          }
-          else if (simplifiedCardType === 'homolog') {
-            simplifiedCardType = 'gene';
+            objectTaxon = this.parseTaxon(subjectElem);
           }
 
           let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
