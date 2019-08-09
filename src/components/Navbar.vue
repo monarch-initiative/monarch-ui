@@ -165,7 +165,6 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
-
       <b-navbar-nav
         class="ml-auto">
         <div
@@ -177,8 +176,17 @@
     </b-collapse>
 
     <b-navbar-toggle target="nav_collapse"/>
+    <div id="popover-button-variant" v-if="this.$route.path !== '/'" class="beta">
+      BETA
+    </div>
 
+    <b-popover target="popover-button-variant" variant="danger" triggers="hover" placement="bottomleft">
+      <template slot="title">Monarch UI BETA</template>
+      The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality,
+      if you believe you see an issue or want to suggest content please see the footer of this page.
+    </b-popover>
   </b-navbar>
+
 </template>
 
 <script>
@@ -249,5 +257,15 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
 .nav-ac {
   margin:1px 25px 1px 0;
   height: 30px;
+}
+
+.beta {
+  padding: 18px;
+  background-color: red;
+  color: white;
+  border-bottom: solid 2px ghostwhite;
+  font-style: oblique;
+  cursor: default;
+  font-weight: bolder;
 }
 </style>
