@@ -1,57 +1,87 @@
 <div class="container-fluid monarch-view monarch-about-view">
 
 <h2 class="page-title">The Monarch Initiative</h2>
-<div class="row">
-
-<p>The Monarch Initiative is an integrative data and analytic platform connecting phenotypes to genotypes across 
-species, bridging basic and applied research with semantics-based analysis. The correlation of phenotypic outcomes 
-and disease with genetic variation and environmental factors is a core pursuit in biology and biomedicine.</p>
- 
+<div class="top-section col-12">
+    <p>The Monarch Initiative is an integrative data and analytic platform connecting phenotypes to genotypes across 
+    species, bridging basic and applied research with semantics-based analysis. The correlation of phenotypic outcomes 
+    and disease with genetic variation and environmental factors is a core pursuit in biology and biomedicine. 
+    We have created or currently contribute to many essential bio-ontologies that together enable sophisticated and 
+    semantically integrated computational analysis across gene, genotype, variant, disease, and phenotype data. We have 
+    developed algorithms and tools that are in use by multiple communities for tasks including the identification of 
+    animal models of human disease through phenotypic similarity, phenotype-driven computational support for differential diagnostics, and translational research. 
+    </p>
 </div>
 <div class="row">
-    <div class="col-lg-6">
-        <h5 class="figure-title">The phenotype annotation coverage of human coding genes.</h4>
+    <div class="col-12 col-lg-6">
         <figure class="cross-species">
-          <img src="../assets/img/cross-species.jpeg" style="max-height:300px;" />
-          <figcaption>
-           Fig 1. This figure shows the availability of curated phenotypes that have been attributed to human genes 
-           (directly or inferred via orthology) across a range of model organisms (teal circle). Phenotypes for human 
-           genes curated in humans are shown in green, and they only represent 20% of the total number of protein-coding 
-           genes in the human genome (HGNC, 07-2019). Data from more species raises the phenotypic coverage of human 
-           coding genes to 82%.
+          <img src="../assets/img/phenotype-cov-hum-6.png"/>
+          <figcaption class="phenotype-coverage">
+           Fig 1. Model organisms provide key insight into phenotypic manifestations of human coding genes. 
+           Human coding genes with disease/phenotype-causing mutations are shown on the left; model organism 
+           orthologs of human coding genes with associated phenotypes are on the right. By including just 5 species, 
+           we can boost coverage by 61%, up to ~82% of human protein coding genes reported by the HUGO Gene Nomenclature 
+           Committee (HGNC). There are 13 sources of data integrated within the Monarch Initiative.
           </figcaption>
         </figure>
     </div>
-    <div class="col-lg-6">
-         <h5 class="figure-title">Cross specific phenotype comparison.</h5>
-         <figure>
-          <img src="../assets/img/cross-species-comparison.png" style="max-height:375px;" />
-          <figcaption>
-           Fig 2. Comparison of PAX6 abnormal phenotypes in human and model organism eyes. 
-           (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009</a>
-          </figcaption>
+    <div class="col-12 col-lg-5">
+        <figure class="comparison">
+          <img src="../assets/img/cross-species-comparison.png"/>
+              <figcaption>
+               Fig 2. Comparison of PAX6 abnormal phenotypes in human and model organism eyes. 
+               (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009</a>
+              </figcaption>
         </figure>
     </div>
+</div>
+
+<div class="goals-banner offset-2 col-8">
+  <h3 id="our-goals"><strong>Monarch's Vision</strong></h3>
+  <div id="our-goals-list">
+     <p>Integrate, align, and re-distribute cross-species gene, genotype, variant, disease, and phenotype data</p>
+     <p>Provide a portal for exploration of phenotype-based similarity</p>
+     <p>Facilitate identification of animal models of human disease through phenotypic similarity</p>
+     <p>Enable quantitative comparison of cross-species phenotypes</p>
+     <p>Develop embeddable widgets for data exploration</p>
+     <p>Influence genotype and phenotype reporting standards</p>
+     <p>Improve ontologies to better curate genotype-phenotype data</p>
+  </div>
 </div>
 <br><br>
-<div class="row">
-<p>We have created or currently contribute to many essential bio-ontologies that together enable sophisticated and 
-semantically integrated computational analysis across gene, genotype, variant, disease, and phenotype data. We lead 
-the development of the <a href="https://hpo.jax.org/">Human Phenotype Ontology</a>, which is used across the world for genomic 
-diagnostics in genetic disease and other areas. We have created <a href="http://obofoundry.org/ontology/mondo.html" target="__blank">MONDO</a>, a unified disease ontology 
-that represents the most comprehensive integration of disease entities ever achieved. We are a Driver Project for the 
+<p> We lead the development of the <a href="https://hpo.jax.org/">Human Phenotype Ontology</a>, which is used across the world for genomic 
+diagnostics in genetic disease and other areas. We are a Driver Project for the 
 <a href="https://www.ga4gh.org/" target="__blank">Global Alliance for Genomics and Health</a> (GA4GH), and are major contributors to the 
-development of genomics standards within GA4GH. We have developed algorithms and tools that are in use by multiple 
-communities for tasks including the identification of animal models of human disease through phenotypic similarity, 
-phenotype-driven computational support for differential diagnostics, and translational research.</p>
-
+development of genomics standards within GA4GH. Additionally, we have developed <a href="http://obofoundry.org/ontology/mondo.html" target="__blank">MONDO</a>, a unified disease 
+ontology that represents the most comprehensive integration of disease entities ever achieved. </p>
+<div class="row">
+    <div class="col-12 col-lg-6">
+        <figure class="ecosystems">
+              <img src="../assets/img/HPO-figure-for-monarchui.png"/>
+              <figcaption>
+              Fig 3. The <a href="https://hpo.jax.org" target="__blank">Human Phenotype Ontology</a> provides a standardized vocabulary of 
+              phenotypic abnormalities encountered in human disease. 
+              <a href="https://currentprotocols.onlinelibrary.wiley.com/doi/abs/10.1002/cphg.9" target="__blank">See also</a>
+              </figcaption>
+        </figure>
+    </div>
+    <div class="col-12 col-lg-6">
+        <figure class="ecosystems phenopackets">
+              <img src="../assets/img/phenopackets-ecosystem2.png"/>
+              <figcaption>
+               Fig 4. <a href="http://phenopackets.org/" target="__blank">Phenopackets</a>: Phenopackets is a standard 
+               exchange format for phenotypes and environmental factors. This packet of phenotype data can be used 
+               anywhere, and can be written by anyone. This work is being done in collaboration with the <a href="https://www.ga4gh.org/" target="__blank">Global 
+               Alliance for Genomics and Health (GA4GH)</a>. 
+              </figcaption>
+        </figure>
+    </div>
 </div>
 <div class="callouts row">
     <h4 class="title">
         Checkout some of our tools and resources below!
     </h4>
     <b-card-group class="col-lg-12">
-        <b-card title="Phenotype Profile Search" class="col-lg-4">
+        <b-card title="Phenotype Profile Search" class="col-12 col-lg-6">
             <b-card-text>
               Targeted search based off a list of phenotypes. 
             </b-card-text>
@@ -59,21 +89,13 @@ phenotype-driven computational support for differential diagnostics, and transla
                 <b-button class="card-btn">Search <i class="fa fa-caret-right"></b-button>
             </router-link>
           </b-card>
-          <b-card title="Monarch API" class="col-lg-4">
+          <b-card title="Monarch API" class="col-12 col-lg-6">
               <b-card-text>
-                Developer friendly API's for open source data.
+                Developer friendly API's for the initiative's data.
               </b-card-text>
               <router-link to="/about/monarch-api">
-                <b-button class="card-btn">Learn More <i class="fa fa-caret-right"></b-button>
+                <b-button class="card-btn">Documentation <i class="fa fa-caret-right"></b-button>
               </router-link>
-          </b-card>
-          <b-card title="PhenoPackets" class="col-lg-4">
-            <b-card-text>
-              A standard to communicate bioinformation. 
-            </b-card-text>
-            <router-link to="/about/monarch-api">
-              <b-button class="card-btn">Explore <i class="fa fa-caret-right"></b-button>
-            </router-link>
           </b-card>
     </b-card-group deck>
 </div>
@@ -88,11 +110,27 @@ phenotype-driven computational support for differential diagnostics, and transla
     clear:both;
   }
   
+  .monarch-hr {
+    border-top-color: $monarch-bg-color;
+    border-top-width: 2px;
+  }
+  
+  
+  .goals-banner {
+      padding: 20px;
+      height: auto;
+      margin-top: 25px;
+      color: white;
+      background-color: $monarch-bg-color;
+      border-radius: 0.5rem;
+      text-align: center;
+  }
   figure {
     margin: 0 auto;
   }
   .callouts {
     margin: 50px 0 50px;
+    border-radius: 0.5rem;
     
     .title {
         text-align: center;
@@ -110,16 +148,35 @@ phenotype-driven computational support for differential diagnostics, and transla
     }
   
   }
-
-  .cross-species img {
-    margin-top: 25px;
-    margin-bottom: 25px;
-  }
+  
   figure {
     display:table;
+    
+    &.comparison {
+        img {
+            max-width: 500px;
+        }
+    }
+    &.cross-species {
+        img {
+            max-width: 650px;
+        }
+    }
+    
+    &.ecosystems {
+    
+        img {
+            max-width: 650px;
+        }
 
+        &.phenopackets img {
+         max-width: 750px;
+        }
+    }
     img {
       padding:15px;
+      height: auto;
+      width: 100%;
     }
   }
 
@@ -175,7 +232,9 @@ phenotype-driven computational support for differential diagnostics, and transla
       }
     }
   }
-
+    .phenotype-coverage {
+        
+    }
 }
 
 </style>
