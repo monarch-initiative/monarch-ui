@@ -4,7 +4,7 @@
         <div class="col-12 col-lg-6 offset-desktop-1 col-desktop-4 image">
             <img class="services" src="../assets/img/Monarch-Architecture2.png"/>
         </div>
-        <div class="col-12 col-lg-5 offset-lg-1 text">
+        <div class="col-12 col-lg-6 text">
         <h5><strong>Architecture</strong></h5>
         <p>Structured and unstructured data sources are loaded into SciGraph via dipper (1) , 
         our data ingest pipeline. A variety of ontologies are processed in the Monarch Integration Layer 
@@ -53,7 +53,9 @@
     .image {
         text-align: center;
         img.services {
-            max-height: 350px;
+            height: auto;
+            max-width: 650px;
+            width: 100%;
         }
     }
     .text {
