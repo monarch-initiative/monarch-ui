@@ -177,7 +177,9 @@
 
     <b-navbar-toggle target="nav_collapse"/>
     <div v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-         title="Monarch UI BETA" v-if="this.$route.path !== '/'" class="beta">
+         title="Monarch UI BETA"
+         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment === 'development'"
+         class="beta">
       BETA
     </div>
   </b-navbar>
@@ -186,7 +188,7 @@
 
 <script>
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
-
+import * as biolinkService from '@/api/BioLink';
 export default {
   name: 'MonarchNavbar',
   components: {
@@ -199,6 +201,9 @@ export default {
   mounted() {
   },
   methods: {
+    getEnvironment() {
+      return biolinkService.getCurrentServerEnvironment();
+    }
   }
 };
 </script>

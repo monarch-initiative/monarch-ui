@@ -92,6 +92,13 @@ export async function getNodeSummary(nodeId, nodeType) {
   return nodeSummary;
 }
 
+/*
+  Return our envrionment
+ */
+export function getCurrentServerEnvironment(){
+  return apiServer;
+}
+
 
 /**
   Get node info to support Node.vue
