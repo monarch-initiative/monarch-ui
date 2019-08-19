@@ -178,7 +178,7 @@
     <b-navbar-toggle target="nav_collapse"/>
     <div v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
          title="Monarch UI BETA"
-         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment === 'development'"
+         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
          class="beta">
       BETA
     </div>
