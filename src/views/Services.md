@@ -84,6 +84,7 @@
         .description {
             font-size: 1.2rem;
             float: right;
+            display: inline-flex;
         }
         .entities {
             font-size: 1rem;
