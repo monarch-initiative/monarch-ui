@@ -553,14 +553,16 @@ export default {
           // console.log('skipping', objectTaxon.id, elem);
         }
         else {
-          let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
-          if (simplifiedCardType === 'interaction' || simplifiedCardType === 'homolog' ||
-                  simplifiedCardType === 'phenotype' || simplifiedCardType === 'disease') {
-            simplifiedCardType = 'gene';
+          let modifiedCardType = this.cardType;
+          if (modifiedCardType === 'interaction' || modifiedCardType  === 'ortholog-phenotype' || modifiedCardType  === 'ortholog-disease') {
+            modifiedCardType  = 'gene';
             objectTaxon = this.parseTaxon(subjectElem);
+          } else if(modifiedCardType === 'homolog') {
+            modifiedCardType  = 'gene';
+            objectTaxon = this.parseTaxon(objectElem);
           }
 
-          let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
+          let objectLink = `/${modifiedCardType}/${objectElem.id}`;
           if (objectElem.id.indexOf(':.well-known') === 0) {
             objectLink = null;
           }
