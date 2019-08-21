@@ -96,6 +96,7 @@ $fa-font-path: "~font-awesome/fonts" !default;
 
 .monarch-view {
   padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 #app.page-wrapper .main-wrapper {
@@ -184,6 +185,181 @@ blockquote.blockquote {
 
 html, body {
   font-family: 'Poppins', sans-serif;
+}
+
+@media (min-width: 2400px) {
+
+  .col-desktop-1, .col-desktop-2, .col-desktop-3, .col-desktop-4, .col-desktop-5, .col-desktop-6, .col-desktop-7, .col-desktop-8, .col-desktop-9, .col-desktop-10, .col-desktop-11, .col-desktop-12 {
+    float: left;
+  }
+
+  .col-desktop-12 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .col-desktop-11 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 91.66666667%;
+    flex: 0 0 91.66666667%;
+    max-width: 91.66666667%;
+  }
+
+  .col-desktop-10 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 83.33333333%;
+    flex: 0 0 83.33333333%;
+    max-width: 83.33333333%;
+  }
+
+  .col-desktop-9 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 75%;
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+
+  .col-desktop-8 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 66.66666667%;
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+  }
+
+  .col-desktop-7 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 58.33333333%;
+    flex: 0 0 58.33333333%;
+    max-width: 58.33333333%;
+  }
+
+  .col-desktop-6 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .col-desktop-5 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 41.66666667%;
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+  }
+
+  .col-desktop-4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 33.33333333%;
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+  }
+
+  .col-desktop-3 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 25%;
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+
+  .col-desktop-2 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 16.66666667%;
+    flex: 0 0 16.66666667%;
+    max-width: 16.66666667%;
+  }
+
+  .col-desktop-1 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 8.33333333%;
+    flex: 0 0 8.33333333%;
+    max-width: 8.33333333%;
+  }
+
+  .offset-desktop-12 {
+    margin-left: 100%;
+  }
+
+  .offset-desktop-11 {
+    margin-left: 91.66666667%;
+  }
+
+  .offset-desktop-10 {
+    margin-left: 83.33333333%;
+  }
+
+  .offset-desktop-9 {
+    margin-left: 75%;
+  }
+
+  .offset-desktop-8 {
+    margin-left: 66.66666667%;
+  }
+
+  .offset-desktop-7 {
+    margin-left: 58.33333333%;
+  }
+
+  .offset-desktop-6 {
+    margin-left: 50%;
+  }
+
+  .offset-desktop-5 {
+    margin-left: 41.66666667%;
+  }
+
+  .offset-desktop-4 {
+    margin-left: 33.33333333%;
+  }
+
+  .offset-desktop-3 {
+    margin-left: 25%;
+  }
+
+  .offset-desktop-2 {
+    margin-left: 16.66666667%;
+  }
+
+  .offset-desktop-1 {
+    margin-left: 8.33333333%;
+  }
+
+  .col-desktop-offset-0 {
+    margin-left: 0;
+  }
+
+  .visible-desktop {
+    display: block !important;
+  }
+
+  table.visible-desktop {
+    display: table;
+  }
+
+  tr.visible-desktop {
+    display: table-row !important;
+  }
+
+  th.visible-desktop, td.visible-desktop {
+    display: table-cell !important;
+  }
+
+  .visible-desktop-block {
+    display: block !important;
+  }
+
+  .visible-desktop-inline {
+    display: inline !important;
+  }
+
+  .visible-desktop-inline-block {
+    display: inline-block !important;
+  }
+
+  .hidden-desktop {
+    display: none !important;
+  }
 }
 
 </style>
