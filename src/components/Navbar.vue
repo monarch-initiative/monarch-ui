@@ -165,12 +165,9 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
-      <b-navbar-nav
-        class="ml-auto">
-        <div
-          v-if="this.$route.path !== '/'"
-          class="nav-ac">
-          <monarch-autocomplete :full-width-search="true"/>
+      <b-navbar-nav class="ml-auto" v-if="$route.path !== '/'">
+        <div class="nav-ac nav-search">
+          <monarch-autocomplete :full-width-search="false"/>
         </div>
       </b-navbar-nav>
     </b-collapse>
@@ -257,6 +254,10 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
 .nav-ac {
   margin:1px 25px 1px 0;
   height: 30px;
+}
+
+.nav-search {
+  min-width: 30vw;
 }
 
 .beta {
