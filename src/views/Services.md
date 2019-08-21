@@ -70,6 +70,10 @@
         color: white;
         border-radius: 0.5rem;
         background-color: $monarch-bg-color;
+        display: block;
+        @media screen and (min-width: 768px) {
+            display: inline-flex;
+        }
         .logo-wrapper {
             margin: 0 auto;
             text-align: center;
@@ -84,7 +88,7 @@
         .description {
             font-size: 1.2rem;
             float: right;
-            display: inline-flex;
+            display: block;
         }
         .entities {
             font-size: 1rem;
