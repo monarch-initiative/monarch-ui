@@ -469,6 +469,7 @@
 .publications .card .text b.title { 
     font-weight: 900;
     text-decoration: underline;
+    font-size: 18px;
 }
 
 </style>
