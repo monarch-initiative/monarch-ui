@@ -20,7 +20,7 @@
            Human coding genes with disease/phenotype-causing mutations are shown on the left; model organism 
            orthologs of human coding genes with associated phenotypes are on the right. By including just 5 species, 
            we can boost coverage by 61%, up to ~82% of human protein coding genes reported by the HUGO Gene Nomenclature 
-           Committee (HGNC). There are 13 sources of data integrated within the Monarch Initiative.
+           Committee (HGNC). There are 33 sources of data integrated within the Monarch Initiative.
           </figcaption>
         </figure>
     </div>
