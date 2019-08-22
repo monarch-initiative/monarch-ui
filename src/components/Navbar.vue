@@ -65,7 +65,7 @@
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Documentation">
-          <b-dropdown-item to="/about/publications">
+          <b-dropdown-item to="/documentation/publications">
             Publications
           </b-dropdown-item>
 
