@@ -9,12 +9,19 @@
               <div class="displayName">
                   <h5>{{ source.sourceDisplayName }}</h5>
               </div>
-              <div class="displayName">
+              <div class="display-name">
                   {{ source.sourceDescription }}
               </div>
-              <div class="sourceUsage">
-                  <h6>How do we use it?</h6>
+              <div v-if="source.monarchUsage" class="source-usage">
+                  <h6><i>How do we use it?</i></h6>
                 {{source.monarchUsage}}
+              </div>
+              <div class="versions">
+                  <div class="source-version">
+                  </div>
+                  <div class="monarch-version">
+                      Monarch Ingestion: {{source.monarchReleaseDate}}
+                  </div>
               </div>
           </div>
       </div>
@@ -54,5 +61,16 @@ export default {
     padding: 15px;
     background-color: $monarch-bg-color;
     color: white;
+      margin-bottom: 5px;
+  }
+
+  .source-usage {
+      margin-top: 15px;
+  }
+
+  .versions {
+      .monarch-version {
+          float: right;
+      }
   }
 </style>
