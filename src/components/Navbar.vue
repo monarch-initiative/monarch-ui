@@ -47,7 +47,7 @@
 
           <b-dropdown-divider/>
 
-          <b-dropdown-item to="/sources">
+          <b-dropdown-item to="/about/data-sources">
             Data Sources
           </b-dropdown-item>
 
