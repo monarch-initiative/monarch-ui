@@ -1,11 +1,12 @@
 <template>
   <div class="container-fluid monarch-view">
     <div class="row">
-      <div class="col-2"/>
-      <div class="col-8">
-        <h1>Phenotype Profile Search</h1>
+      <div class="offset-2 col-8 text-center">
+        <h2>Phenotype Analysis</h2>
+        <p>This Phenotype Analysis Tool enables you search our database using the OwlSim Semantic Similarity analysis
+          engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
+          their overlap.</p>
       </div>
-      <div class="col-2"/>
     </div>
     <div class="row">
       <div class="col-1"/>
