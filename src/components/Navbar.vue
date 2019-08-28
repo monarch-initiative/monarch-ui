@@ -54,11 +54,7 @@
           <b-dropdown-item to="/about/monarch-web-services">
             Monarch Web Services
           </b-dropdown-item>
-
-          <b-dropdown-item to="/sources">
-            Releases
-          </b-dropdown-item>
-
+          
           <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
             Data Downloads
           </b-dropdown-item>
