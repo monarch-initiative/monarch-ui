@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid monarch-view data-sources">
-    <h2 class="text-center">Monarch Sources</h2>
+    <h2 class="text-center page-title">Monarch Sources</h2>
       <div class="source-wrapper">
         <div v-for="(source, index) in sortedSource"
             :key="index"
@@ -58,10 +58,10 @@ export default {
 <style lang="scss">
   @import "~@/style/variables";
   .source {
+    border: 5px solid $monarch-bg-color;
     padding: 15px;
-    background-color: $monarch-bg-color;
-    color: white;
-      margin-bottom: 5px;
+    color: black;
+    margin-bottom: 5px;
   }
 
   .source-usage {
@@ -71,6 +71,9 @@ export default {
   .versions {
       .monarch-version {
           float: right;
+          padding-top: 5px;
+          border-top: 2px solid $monarch-bg-color;
+          margin-top: 15px;
       }
   }
 </style>
