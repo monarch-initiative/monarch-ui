@@ -41,19 +41,24 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/about/publications',
-      name: 'about-publications',
-      component: require('@/views/Publications.md').default,
-    },
-    {
       path: '/about/monarch',
       name: 'about-monarch',
       component: require('@/views/AboutMonarch.md').default,
     },
     {
+      path: '/about/monarch-web-services',
+      name: 'monarch-web-services',
+      component: require('@/views/Services.md').default,
+    },
+    {
       path: '/about/team',
       name: 'about-team',
       component: require('@/views/AboutTeam.md').default,
+    },
+    {
+      path: '/documentation/publications',
+      name: 'about-publications',
+      component: require('@/views/Publications.md').default,
     },
     {
       path: '/help/cite',
