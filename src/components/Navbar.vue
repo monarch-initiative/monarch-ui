@@ -41,7 +41,7 @@
             Our Team
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item href="/about/disclaimer">
             Disclaimer
           </b-dropdown-item>
 
