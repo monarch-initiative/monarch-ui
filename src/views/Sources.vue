@@ -1,49 +1,36 @@
 <template>
-  <div>
-    <br><br>
-    <h2>Monarch Sources</h2>
-    <div class="container">
-      <div class="row border">
-        <div class="col-4">  Source </div>
-        <div class="col-4">  Source Version </div>
-        <div class="col-4">  Monarch data release date </div>
-      </div>
-      <div
-        v-for="(source, index) in sources"
-        :key="index"
-        class="row">
-        <div class="col-4">
-          <a
-            :href="source.ttlUrl"
-            target="_blank">{{ source.sourceDisplayName }}
-          </a>
-        </div>
-        <div class="col-4"> {{ source.sourceVersion }}</div>
-        <div class="col-4"> {{ source.monarchDataReleaseDate }}</div>
-        <script type="application/ld+json">
-          {
-          "@context": "http://schema.org",
-          "@type": "Dataset",
-          "name": "Monarch transformation of {{ source.sourceDisplayName }}",
-          "description": "Monarch transformation of: {{ source.description }}",
-          "url": "{{ source.ttlUrl }}",
-          "includedInDataCatalog": "https://monarchinitiative.org",
-          "creator": {
-          "@type": "Organization",
-          "name": "{{ source.id }}"
-          },
-          "license": "{{ source.license }}"
-          }
-        </script>
+  <div class="container-fluid monarch-view data-sources">
+    <h2 class="text-center page-title">Monarch Sources</h2>
+      <div class="source-wrapper">
+        <div v-for="(source, index) in sortedSource"
+            :key="index"
+            class="row source-wrapper">
+          <div class="offset-1 col-10 source">
+              <div class="displayName">
+                  <h5>{{ source.sourceDisplayName }}</h5>
+              </div>
+              <div class="display-name">
+                  {{ source.sourceDescription }}
+              </div>
+              <div v-if="source.monarchUsage" class="source-usage">
+                  <h6><i>How do we use it?</i></h6>
+                {{source.monarchUsage}}
+              </div>
+              <div class="versions">
+                  <div class="source-version">
+                  </div>
+                  <div class="monarch-version">
+                      Monarch Ingestion: {{source.monarchReleaseDate}}
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>
-
-
 </template>
 
 <script>
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 
 export default {
   name: 'Sources',
@@ -53,14 +40,40 @@ export default {
     };
   },
   async mounted() {
-    this.sources = (await BL.getSources());
-    console.log('Num sources=', this.sources);
+    this.sources = await biolinkService.getSources();
+    this.sources = this.sources.sources;
   },
-  // mounted() {
-  // }
+  computed: {
+    sortedSource: function() {
+      return this.sources.sort(function(a,b){
+          if(a.sourceDisplayName < b.sourceDisplayName) { return -1; }
+          if(a.sourceDisplayName > b.sourceDisplayName) { return 1; }
+          return 0;
+      })
+    }
+  }
 };
 </script>
 
-<style>
+<style lang="scss">
+  @import "~@/style/variables";
+  .source {
+    border: 5px solid $monarch-bg-color;
+    padding: 15px;
+    color: black;
+    margin-bottom: 5px;
+  }
 
+  .source-usage {
+      margin-top: 15px;
+  }
+
+  .versions {
+      .monarch-version {
+          float: right;
+          padding-top: 5px;
+          border-top: 2px solid $monarch-bg-color;
+          margin-top: 15px;
+      }
+  }
 </style>
