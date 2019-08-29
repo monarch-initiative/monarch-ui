@@ -41,7 +41,7 @@
             Our Team
           </b-dropdown-item>
 
-          <b-dropdown-item href="/about/disclaimer">
+          <b-dropdown-item to="/about/disclaimer">
             Disclaimer
           </b-dropdown-item>
 
