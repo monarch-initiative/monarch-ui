@@ -2,97 +2,95 @@
   <div class="container-fluid monarch-view">
     <div class="row">
       <div class="offset-2 col-8 text-center">
-        <h2>Phenotype Analysis</h2>
-        <p>This Phenotype Analysis Tool enables you search our database using the OwlSim Semantic Similarity analysis
+        <h2 class="page-title">Phenotype Profile Search</h2>
+        <p>This Phenotype Profile Search enables you search our database using the OwlSim Semantic Similarity analysis
           engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
           their overlap.</p>
       </div>
     </div>
     <div class="row">
       <div class="col-1"/>
-      <div class="col-10 card card-body">
-        <h4>Create A Profile of Phenotypes</h4>
-        <monarch-autocomplete
-          :home-search="false"
-          :allowed-prefixes="acceptedPrefixes"
-          :defined-categories="searchPhenoCategories"
-          :dynamic-placeholder="phenoSearchPH"
-          @interface="handlePhenotypes"
-        />
-        <b-form-textarea
-          id="textarea1"
-          v-model="phenoCurieList"
-          :rows="3"
-          :max-rows="6"
-          placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
-          class="my-2"
-        />
+      <div class="col-10 card card-body step-1">
+        <div v-if="currentStep === 1">
+          <h4>Create A Profile of Phenotypes</h4>
+          <monarch-autocomplete
+            :home-search="false"
+            :allowed-prefixes="acceptedPrefixes"
+            :defined-categories="searchPhenoCategories"
+            :dynamic-placeholder="phenoSearchPH"
+            @interface="handlePhenotypes"
+          />
+          <b-form-textarea
+            id="textarea1"
+            v-model="phenoCurieList"
+            :rows="3"
+            :max-rows="6"
+            placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+            class="my-2"
+          />
 
-        <div
-          v-if="phenoCurieList"
-          class="btn btn-outline-info"
-          @click="generatePGDataFromPhenotypeList"
-        >
-          Submit Phenotype List
-        </div>
-        <b-alert
-          :show="showPhenotypeAlert"
-          variant="danger"
-          class="my-2"
-          dismissible
-          @dismissed="showPhenotypeAlert=false"
-        >
-          Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype curies from the Human Phenotype Ontology (e.g.
-          HP:0000002)
-        </b-alert>
-      </div>
-      <div class="col-1"/>
-    </div>
-    <!--results below here-->
-    <div
-      v-if="phenotypes.length"
-      class="row my-2"
-    >
-      <div class="col-1"/>
-      <div class="col-10 card">
-        <div class="p-3">
-          <h4>Phenotype Profile</h4>
-          <div class="flex-container">
-
-            <div
-              v-for="(phenotype, index) in phenotypes"
-              :key="index"
-              class="m-1"
-            >
-              <div
-                class="btn-group"
-                role="group"
-              >
-                <button
-                  v-b-modal.phenotypeModal
-                  class="btn btn-sm btn-info"
-                  @click="displayPhenotypeModal(phenotype)"
-                >
-                  <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-info"
-                  @click="popPhenotype(index)"
-                >
-                  <strong>x</strong>
-                </button>
-              </div>
-            </div>
+          <div
+            v-if="phenoCurieList"
+            class="btn btn-outline-info"
+            @click="generatePGDataFromPhenotypeList"
+          >
+            Submit Phenotype List
           </div>
+          <b-alert
+            :show="showPhenotypeAlert"
+            variant="danger"
+            class="my-2"
+            dismissible
+            @dismissed="showPhenotypeAlert=false"
+          >
+            Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
+            HP:0000002)
+          </b-alert>
         </div>
+        <div class="flex-container" v-if="phenotypes.length">
+          <b-button variant="light"
+                    :class="showCollapse ? 'collapsed' : null"
+                    :aria-expanded="showCollapse ? 'true' : 'false'"
+                    aria-controls="collapse-4"
+                    @click="showCollapse = !showCollapse"
+                    class="m-1 current-phenotype-profile">
+            Current Phenotype Profile ( {{phenotypes.length}} phenotypes )
+            <i class="fa fa-chevron-down" v-if="showCollapse" aria-hidden="true"></i>
+            <i class="fa fa-chevron-right" v-if="!showCollapse" aria-hidden="true"></i>
+          </b-button>
+          <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
+                <div
+                        v-for="(phenotype, index) in phenotypes"
+                        :key="index"
+                        class="m-1 group-badge-phenotypes"
+                        >
+                  <div class="btn-group" role="group">
+                  <button v-b-modal.phenotypeModal class="btn btn-sm btn-info more-info"
+                          @click="displayPhenotypeModal(phenotype)"
+                  >
+                    <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
+                  </button>
+                  <button
+                          type="button"
+                          class="btn btn-sm btn-info pop-phenotype"
+                          @click="popPhenotype(index)"
+                  >
+                    <strong>x</strong>
+                  </button>
+                  </div>
+                </div>
+          </b-collapse>
+        </div>
+        <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="currentStep = 2; showCollapse = false" variant="outline-primary" class="confirm-profile">Confirm Profile</b-button>
+        <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1; showCollapse = true" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
       </div>
       <div class="col-1"/>
     </div>
-    <div class="row py-2">
+    <!-- Compareable -->
+    <div v-if="currentStep === 2" class="row py-2">
       <div class="col-1"/>
       <div class="col-10 card card-body">
-        <h4>Create A Profile of comparables</h4>
+        <h4>Create a Comparison Profile</h4>
         <monarch-autocomplete
           :home-search="false"
           :defined-categories="searchCompCategories"
@@ -141,6 +139,7 @@
       </div>
       <div class="col-1"/>
     </div>
+
     <!--results below here-->
     <div
       v-if="selectedGroups.length > 0"
@@ -174,10 +173,7 @@
         <div class="col-1"/>
       </div>
     </div>
-    <div
-      v-if="genes.length"
-      class="row my-2"
-    >
+    <div v-if="genes.length" class="row my-2">
       <div class="col-1"/>
       <div class="col-10 card">
         <div class="p-3">
@@ -188,10 +184,7 @@
               :key="gene.curie"
               class="m-1"
             >
-              <div
-                class="btn-group"
-                role="group"
-              >
+              <div class="btn-group" role="group">
                 <button
                   v-b-modal.geneModal
                   class="btn btn-sm btn-info"
@@ -215,7 +208,7 @@
       <div class="col-1"/>
     </div>
     <div
-      v-if="phenotypes.length"
+      v-if="false"
       class="row"
     >
       <div class="col-1"/>
@@ -262,10 +255,7 @@
       size="xl"
       title="selectedPhenotype.label"
     >
-      <div
-        slot="modal-title"
-        class="w-100"
-      >
+      <div slot="modal-title" class="w-100">
         <strong>{{ selectedPhenotype.match }}</strong> | {{ selectedPhenotype.curie }}
       </div>
       <div
@@ -284,14 +274,11 @@
       size="xl"
       title="selectedGene.label"
     >
-      <div
-        slot="modal-title"
-        class="w-100"
+      <div slot="modal-title" class="w-100"
       >
         {{ selectedGene.match }} | {{ selectedGene.curie }}
       </div>
-      <div
-        v-if="geneModal">
+      <div v-if="geneModal">
         <local-nav
           :anchor-id="selectedGene.curie"
           :anchor-type="'gene'"
@@ -331,11 +318,13 @@ export default {
       geneModal: false,
       selectedGene: {},
       acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
-      phenoSearchPH: 'search for phenotypes or disease',
+      phenoSearchPH: 'Find your phenotype or disease by name.',
       geneSearchPH: 'search for genes',
       searchPhenoCategories: ['Phenotype', 'disease'],
       searchCompCategories: ['gene'],
       mode: 'search',
+      currentStep: 1,
+      showCollapse: true,
       showPhenogrid: false,
       pgIndex: 0,
       rejectedPhenotypeCuries: [],
@@ -781,11 +770,23 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+  @import "~@/style/variables";
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
+
+  .group-badge-phenotypes .pop-phenotype {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+  }
+
+  .group-badge-phenotypes .more-info {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
   .wizard-style {
     margin-top: 100px;
   }
@@ -802,7 +803,48 @@ export default {
     padding-left: 4px;
     padding-right: 0;
   }
+
   .full-height {
     height: 100%;
+  }
+
+  .confirm-profile{
+    max-width: 200px;
+    width: 100%;
+    margin-top: 2rem;
+    align-self: flex-end;
+    color: #17a2b8;
+    border-color: #17a2b8;
+  }
+
+  .edit-profile{
+    max-width: 200px;
+    width: 100%;
+    margin-top: 2rem;
+    align-self: flex-end;
+  }
+
+  .current-phenotype-profile {
+    color: #888888;
+    flex: 0 0 100%;
+    margin-top: 25px;
+    cursor: pointer;
+    font-size: 1.2rem;
+
+    & .fa {
+      margin-left: 1rem;
+    }
+
+    &.collapsed > .when-opened, &:not(.collapsed) > .when-closed {
+      display: none;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    & #collapse-phenotypes{
+      margin-top: 1rem;
+    }
   }
 </style>
