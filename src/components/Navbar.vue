@@ -84,7 +84,7 @@
             Contact Us
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/citing">
+          <b-dropdown-item to="/help/cite">
             Cite Monarch
           </b-dropdown-item>
 
