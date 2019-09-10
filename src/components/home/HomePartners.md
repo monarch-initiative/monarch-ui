@@ -32,8 +32,8 @@
             </a> 
         </div>
         <div class="col-sm-4 col-xl-2 collab">
-            <a href="http://www.sanger.ac.uk/" target="__blank">
-               <img src="../../assets/img/sanger.png" alt="sanger">
+            <a href="https://www.ebi.ac.uk/" target="__blank">
+               <img src="../../assets/img/ebi.png" alt="ebi">
             </a>
         </div>     
     </div>
