@@ -85,16 +85,16 @@ ontology that represents the most comprehensive integration of disease entities 
             <b-card-text>
               Targeted search based off a list of phenotypes. 
             </b-card-text>
-            <router-link to="/about/monarch-api">
+            <router-link to="/analyze/phenotypes">
                 <b-button class="card-btn">Search <i class="fa fa-caret-right"></b-button>
             </router-link>
           </b-card>
-          <b-card title="Monarch API" class="col-12 col-lg-6">
+          <b-card title="Monarch Web Services" class="col-12 col-lg-6">
               <b-card-text>
                 Developer friendly API's for the initiative's data.
               </b-card-text>
-              <router-link to="/about/monarch-api">
-                <b-button class="card-btn">Documentation <i class="fa fa-caret-right"></b-button>
+              <router-link to="/about/monarch-web-services">
+                <b-button class="card-btn">Learn More<i class="fa fa-caret-right"></b-button>
               </router-link>
           </b-card>
     </b-card-group deck>
@@ -130,7 +130,6 @@ ontology that represents the most comprehensive integration of disease entities 
   }
   .callouts {
     margin: 50px 0 50px;
-    border-radius: 0.5rem;
     
     .title {
         text-align: center;
@@ -141,6 +140,7 @@ ontology that represents the most comprehensive integration of disease entities 
         background-color: #0B556B;
         margin-right: 15px;
         color: white;
+        border-radius: 0.5rem !important;
         .card-btn {
             background-color: $monarch-button-color;
             color: black;
