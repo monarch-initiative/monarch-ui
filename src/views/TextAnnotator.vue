@@ -260,7 +260,7 @@ export default {
           phenotypes.push(phenotype);
         }
       });
-      this.phenotypes = phenotypes.join(',');
+      this.phenotypes = [...new Set(phenotypes)].join(',');
     }
   }
 };
