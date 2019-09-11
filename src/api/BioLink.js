@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
+import {labelToId, isTaxonCardType, isSubjectCardType} from '../lib/TaxonMap';
 
 // TIP: Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -23,20 +23,6 @@ const servers = {
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
-    // 'biolink_url': 'https://api.monarchinitiative.org/api/',
-  },
-
-  production: {
-    'type': 'production',
-    'app_base': 'https://monarchinitiative.org',
-    'scigraph_url': 'https://scigraph-ontology.monarchinitiative.org/scigraph/',
-    'scigraph_data_url': 'https://scigraph-data.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
-    'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
-    'analytics_id': '',
-    // 'biolink_url': 'https://api.monarchinitiative.org/api/',
-    'biolink_url': 'https://api.monarchinitiative.org/api/',
   },
 
   beta: {
@@ -51,11 +37,22 @@ const servers = {
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
   },
 
+  production: {
+    'type': 'production',
+    'app_base': 'https://monarchinitiative.org',
+    'scigraph_url': 'https://scigraph-ontology.monarchinitiative.org/scigraph/',
+    'scigraph_data_url': 'https://scigraph-data.monarchinitiative.org/scigraph/',
+    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
+    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
+    'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
+    'analytics_id': '',
+    'biolink_url': 'https://api.monarchinitiative.org/api/',
+  }
+
 };
 
 const productionServers = [
-  // 'localhost',
-  'monarchinitiative.org',
+  'monarchinitiative.org'
 ];
 
 const defaultApiServer =
@@ -69,7 +66,7 @@ const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
 
 /**
-  Lighter-weight BL node info. Used by LocalNav.vue
+  Lighter-weight BioLink node info. Used by LocalNav.vue
  */
 
 export async function getNodeSummary(nodeId, nodeType) {
@@ -138,8 +135,6 @@ export async function getNode(nodeId, nodeType) {
     [
       axios.get(bioentityUrl, { params }),
       axios.get(getIdentifierUrl),
-      // axios.get(golrUrl1, {}),
-      // axios.get(golrUrl2, {}),
     ]
   ).then(
     axios.spread(
@@ -423,33 +418,21 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
   const biolinkMappedCardType = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
   const url = `${baseUrl}${urlExtension}`;
-  const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
 
-  if (useTaxonRestriction) {
-    // console.log('getNodeAssociations', nodeType, nodeId, cardType);
-    // console.log(JSON.stringify(params, null, 2));
-    // console.log(JSON.stringify(taxons, null, 2));
-    params.start = 0;
-    params.rows = 10000;
+
+  if (isTaxonCardType(cardType)) {
+    params.facet = true;
+    params.facet_fields = "object_taxon";
+    if(isSubjectCardType(cardType)){
+      params.facet_fields = "subject_taxon";
+    }
+
+    if(taxons != null && taxons !== -1){
+      params.taxon = taxons.length > 1 ? taxons.join(","): taxons[0];
+    }
   }
+
   const response = await axios.get(url, { params });
-
-  if (useTaxonRestriction) {
-    response.data.associations = response.data.associations.filter((d) => {
-      const subjTaxon = d.subject.taxon;
-      const objTaxon = d.object.taxon;
-      let result = false;
-      if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
-        result = true;
-      }
-      if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
-        result = true;
-      }
-      return result;
-    });
-    response.data.numFound = response.data.associations.length;
-  }
-
   return response;
 }
 

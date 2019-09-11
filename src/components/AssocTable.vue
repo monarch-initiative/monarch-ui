@@ -6,22 +6,24 @@
         {{ dataError }}
       </div>
     </div>
+    <div v-show="!dataError && initialLoad">
+      <taxon-filter @toggle-filter="toggleTaxonFilter($event)"  :is-visible="isFacetsShowing" v-model="taxonFilter"></taxon-filter>
+      <div>
+        <h5>
+          &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
+          <strong>{{ cardType }}</strong> associations.
+        </h5>
 
-    <div v-show="!dataFetched && !dataError" class="loading-div">
-
-      <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
-    </div>
-
-    <div v-show="dataFetched && !dataError">
-
-      <h5>
-        &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
-        <strong>{{ cardType }}</strong> associations.
-      </h5>
-
+        <b-button class="taxon-filter" size="sm" v-if="nodeType === 'gene' && hasTaxon"
+                  @click="toggleTaxonFilter()"
+                  variant="primary">
+        <i class="fa fa-filter" aria-hidden="true"></i> Taxon Filter</b-button>
+        <br>
+      </div>
       <b-table
         ref="tableRef"
         :items="rowsProvider"
+        :busy="tableBusy"
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
@@ -34,6 +36,12 @@
           slot-scope="data"
         >
           <i>{{ data.item.taxonLabel }}</i>
+        </template>
+
+        <template slot="table-busy">
+          <div class="text-center text-danger my-2">
+            <b-spinner class="loading-spinner" label="Spinning"></b-spinner>
+          </div>
         </template>
 
         <template slot="assocObject" slot-scope="data">
@@ -125,14 +133,8 @@
               &blacktriangleright;&nbsp;
             </span>
 
-            <span
-              v-for="(icon, index) in data.item.supportIcons"
-              :key="index"
-            >
-              <i
-                :class="icon"
-                class="fa fa-fw"
-              />
+            <span v-for="(icon, index) in data.item.supportIcons" :key="index">
+              <i :class="icon" class="fa fa-fw"></i>
             </span>
             <small>{{ data.item.supportLength }}</small>
           </b-button>
@@ -146,8 +148,7 @@
               class="row"
             >
               <div class="col-9 px-1">
-                <template
-                  v-if="support.useRouter">
+                <template v-if="support.useRouter">
                   <router-link :to="support.url">
                     {{ support.label }}
                   </router-link>
@@ -170,43 +171,32 @@
                 <small>{{ support.type }}</small>
               </div>
               <div class="col-1 px-1" style="text-align: center;">
-                <i
-                  :class="support.typeIcon"
-                  class="fa fa-fw text-info"
-                />
+                <i :class="support.typeIcon" class="fa fa-fw text-info"></i>
               </div>
             </div>
           </div>
         </template>
       </b-table>
-      <div
-        v-if="totalAssociations > rowsPerPage">
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="totalAssociations"
+          :total-rows="paginationTotals"
           class="pag-width my-1"
           align="center"
-          size="md"
-        />
-      </div>
+          size="md"></b-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import * as BL from '@/api/BioLink';
+import * as bioLinkService from '@/api/BioLink';
 import sourceToImage from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
-
-function isFrequencyOnsetType(nodeType, cardType) {
-  return (nodeType === 'disease' && cardType === 'phenotype') ||
-         (nodeType === 'phenotype' && cardType === 'disease');
-}
-
+import TaxonFilter from '@/components/TaxonFilter.vue';
 
 export default {
   components: {
+    'taxon-filter': TaxonFilter,
   },
   props: {
     nodeId: {
@@ -221,69 +211,74 @@ export default {
       type: String,
       required: true
     },
-    cardCounts: {
+    taxonCounts: {
       type: Object,
-      required: false,
-      default: null,
+      required: true,
     },
-    facets: {
-      type: Object,
-      default: null,
-      required: false
-    }
+    isFacetsShowing: {
+      type: Boolean,
+      required: false,
+    },
   },
   data() {
     return {
       currentPage: 1,
-      rowsPerPage: 25,
+      rowsPerPage: 10,
       totalAssociations: 0,
+      paginationTotals: 0,
       hasTaxon: false,
+      taxonLoaded : false,
       hasFrequencyOnset: false,
       associationData: '',
-      dataFetched: false,
+      tableBusy: false,
       dataError: false,
-      dataFetchedPage: 0,
-      dataFetchedRowsPerPage: 0,
+      initialLoad: false,
       fields: [],
       rows: [],
       lastSelection: [],
+      taxonFilter: {
+        counts: {},
+        taxons: {}
+      },
+      filterActive: null
     };
   },
   watch: {
     cardType() {
-      this.dataFetched = false;
       this.dataError = false;
       window.scroll(0, 0);
       this.currentPage = 1;
       this.generateFields();
 
       this.$refs.tableRef.refresh();
-    },
-    facets: {
-      handler() {
-        this.currentPage = 1;
-        this.$refs.tableRef.refresh();
-      },
-      deep: true
     }
   },
   mounted() {
     this.generateFields();
   },
   methods: {
-    hasFalseFacets() {
-      let foundFalseFacets = false;
-      Object.entries(this.facets.selectedTaxons)
+    filterTable(row, filter){
+      return this.taxonFilter.taxons[row.taxonId];
+    },
+    toggleTaxonFilter(shouldApply) {
+      if(this.isFacetsShowing && shouldApply){
+        this.$refs.tableRef.refresh();
+      }
+      this.$emit('toggle-facets');
+    },
+    hasFalseFilter() {
+      let foundFalseTaxons = false;
+      Object.entries(this.taxonFilter.taxons)
         .forEach((elem) => {
           if (!elem[1]) {
-            foundFalseFacets = true;
+            foundFalseTaxons = true;
           }
         });
-      return foundFalseFacets;
+      return foundFalseTaxons;
     },
-    trueFacets() {
+    trueTaxonFilters() {
       const truth = [];
-      Object.entries(this.facets.selectedTaxons)
+      Object.entries(this.taxonFilter.taxons)
         .forEach((elem) => {
           if (elem[1]) {
             truth.push(elem[0]);
@@ -292,9 +287,8 @@ export default {
       return truth;
     },
     allFacets() {
-      return Object.entries(this.facets.selectedTaxons).map(elem => elem[0]);
+      return Object.entries(this.taxonFilter.taxons).map(elem => elem[0]);
     },
-
     async rowsProvider(ctx, callback) {
       this.fetchData().then(() => {
         callback(this.rows);
@@ -302,93 +296,46 @@ export default {
         callback([]);
       });
     },
-
-    keyMap(key) {
-      const keyMappings = {
-        'Skeletal system': 'HP:0000924',
-        'Limbs': 'HP:0040064',
-        'Nervous system': 'HP:0000707',
-        'Head or neck': 'HP:0000152',
-        'Metabolism/homeostasis': 'HP:0001939',
-        'Cardiovascular system': 'HP:0001626',
-        'Integument': 'HP:0001574',
-        'Genitourinary system': 'HP:0000119',
-        'Eye': 'HP:0000478',
-        'Musculature': 'HP:0003011',
-        'Neoplasm': 'HP:0002664',
-        'Digestive system': 'HP:0025031',
-        'Immune System': 'HP:0002715',
-        'Blood and blood-forming tissues': 'HP:0001871',
-        'Endocrine': 'HP:0000818',
-        'Respiratory system': 'HP:0002086',
-        'Ear': 'HP:0000598',
-        'Connective tissue': 'HP:0003549',
-        'Prenatal development or birth': 'HP:0001197',
-        'Growth': 'HP:0001507',
-        'Constitutional': 'HP:0025142',
-        'Thoracic cavity': 'HP:0045027',
-        'Breast': 'HP:0000769',
-        'Voice': 'HP:0001608',
-        'Cellular': 'HP:0025354',
-      };
-      return keyMappings[key];
-    },
-
-    async fetchData() {
+    async fetchData(reset) {
       const that = this;
-      if (that.dataFetchedPage === that.currentPage
-           && that.dataFetchedRowsPerPage === that.rowsPerPage) {
-        console.log('####fetchData inhibited due to cached values.');
+      this.tableBusy = true;
+      this.dataError = false;
+      this.initialLoad = true;
+      try {
+        const params = {
+          fetch_objects: true,
+          start: ((this.currentPage - 1) * this.rowsPerPage),
+          rows: this.rowsPerPage
+        };
+
+        const taxons = this.hasFalseFilter() ? this.trueTaxonFilters() : null;
+        const associationsResponse = await bioLinkService.getNodeAssociations(
+          this.nodeType,
+          this.nodeId,
+          this.cardType,
+          taxons,
+          params
+        );
+        if (!associationsResponse.data || !associationsResponse.data.associations) {
+          that.associationData = null;
+          throw new Error('BioLink returned no data');
+        }
+        that.associationData = associationsResponse.data;
+        if(reset){
+          this.currentPage = 1;
+        }
+        that.tableBusy = false;
+        that.populateRows();
       }
-      else {
-        this.dataFetched = false;
-        this.dataError = false;
-        try {
-          const params = {
-            fetch_objects: true,
-            start: ((this.currentPage - 1) * this.rowsPerPage),
-            rows: this.rowsPerPage
-          };
-
-          const taxons = this.hasFalseFacets() ? this.trueFacets() : null;
-          const associationsResponse = await BL.getNodeAssociations(
-            this.nodeType,
-            this.nodeId,
-            this.cardType,
-            taxons,
-            params
-          );
-          // console.log('associationsResponse');
-          // console.log(JSON.stringify(associationsResponse, null, 2));
-
-          if (!associationsResponse.data
-              || !associationsResponse.data.associations) {
-            that.associationData = null;
-            throw new Error('BL.getNodeAssociations() returned no data');
-          }
-          that.associationData = associationsResponse.data;
-          that.dataFetched = true;
-          that.dataFetchedPage = this.currentPage;
-          that.dataFetchedRowsPerPage = this.currentPage;
-
-          // associationData.associations.forEach(a => {
-          //   console.log(a.subject.label, a.subject.taxon.label);
-          // });
-          // that.currentPage = 1;
-          that.populateRows();
-        }
-        catch (e) {
-          that.dataError = e;
-          console.log('BioLink Error', e);
-        }
+      catch (e) {
+        that.dataError = e;
+        console.log('BioLink Error', e);
       }
     },
-
     fixupRelation(elem, nodeType, cardType) {
       const relation = elem.relation;
 
       if (!relation) {
-        console.log('fixupRelation NO RELATION');
         console.log(JSON.stringify(elem, null, 2));
         elem.relation = {
           label: 'Unknown',
@@ -549,62 +496,70 @@ export default {
         }
 
         const supportLength = support.length;
-        if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
-          // console.log('skipping', objectTaxon.id, elem);
+        let simplifiedCardType = this.cardType;
+        if (simplifiedCardType === 'interaction' || simplifiedCardType === 'ortholog-phenotype' || simplifiedCardType === 'ortholog-disease') {
+          simplifiedCardType = 'gene';
+          objectTaxon = this.parseTaxon(subjectElem);
         }
-        else {
-          let simplifiedCardType = this.cardType.replace(/ortholog-/g, '');
-          if (simplifiedCardType === 'interaction' || simplifiedCardType === 'homolog' ||
-                  simplifiedCardType === 'phenotype' || simplifiedCardType === 'disease') {
-            simplifiedCardType = 'gene';
-            objectTaxon = this.parseTaxon(subjectElem);
-          }
 
-          let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
-          if (objectElem.id.indexOf(':.well-known') === 0) {
-            objectLink = null;
-          }
-          const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
+        let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
+        if (objectElem.id.indexOf(':.well-known') === 0) {
+          objectLink = null;
+        }
+        const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
 
-          this.fixupRelation(elem, this.nodeType, this.cardType);
+        this.fixupRelation(elem, this.nodeType, this.cardType);
+        this.rows.push({
+          publications: pubs,
+          publicationsLength: pubsLength,
+          annotationType: this.cardType,
+          evidence,
+          evidenceLength,
+          support,
+          supportLength,
+          supportIcons,
+          objectCurie: objectElem.id,
+          sources: elem.provided_by,
+          sourcesLength: elem.provided_by.length,
+          assocObject: objectElem.label,
+          objectLink,
+          assocSubject: subjectElem.label,
+          subjectLink,
+          taxonLabel: objectTaxon.label,
+          taxonId: objectTaxon.id,
+          relation: elem.relation,
+          frequency: elem.frequency,
+          onset: elem.onset,
+          _showDetails: false,
+        });
 
-          this.rows.push({
-            publications: pubs,
-            publicationsLength: pubsLength,
-            annotationType: this.cardType,
-            evidence,
-            evidenceLength,
-            support,
-            supportLength,
-            supportIcons,
-            objectCurie: objectElem.id,
-            sources: elem.provided_by,
-            sourcesLength: elem.provided_by.length,
-            assocObject: objectElem.label,
-            objectLink,
-            assocSubject: subjectElem.label,
-            subjectLink,
-            taxonLabel: objectTaxon.label,
-            taxonId: objectTaxon.id,
-            relation: elem.relation,
-            frequency: elem.frequency,
-            onset: elem.onset,
-            _showDetails: false,
-          });
-
-          elem.relation.url = this.relationHref(elem.relation);
-          if (elem.frequency) {
-            elem.frequency.url = this.frequencyHref(elem.frequency);
-          }
-          if (elem.onset) {
-            elem.onset.url = this.onsetHref(elem.onset);
-          }
+        elem.relation.url = this.relationHref(elem.relation);
+        if (elem.frequency) {
+          elem.frequency.url = this.frequencyHref(elem.frequency);
+        }
+        if (elem.onset) {
+          elem.onset.url = this.onsetHref(elem.onset);
         }
       });
 
-      // console.log('this.associationData', this.associationData.numFound, this.rows.length);
-      // console.log(JSON.stringify(this.associationData.associations, null, 2));
-      this.totalAssociations = this.associationData.numFound;
+      if(isTaxonCardType(this.cardType) && !this.taxonLoaded){
+        const taxonFacetTarget = Object.keys(this.associationData.facet_counts)[0];
+        Object.keys(this.associationData.facet_counts[taxonFacetTarget]).forEach(key => {
+          this.taxonFilter.taxons[key] = true;
+        });
+        this.taxonFilter.counts = this.associationData.facet_counts[taxonFacetTarget];
+        this.taxonLoaded = true;
+      }
+      this.paginationTotals = this.getTotalRowCounts();
+      console.log(this.paginationTotals);
+      this.totalAssociations = this.associationData.numFound
+    },
+    getTotalRowCounts(){
+      let count = 0;
+      for(let taxon of this.trueTaxonFilters()){
+        count += this.taxonFilter.counts[taxon];
+      }
+      return count;
     },
     generateFields() {
       this.hasTaxon = false;
@@ -636,7 +591,7 @@ export default {
         },
       ];
 
-      if (isFrequencyOnsetType(this.nodeType, this.cardType)) {
+      if (this.isFrequencyOnsetType(this.nodeType, this.cardType)) {
         this.hasFrequencyOnset = true;
         fields.splice(3, 0, {
           key: 'frequency',
@@ -690,7 +645,6 @@ export default {
       return val.charAt(0)
         .toUpperCase() + val.slice(1);
     },
-
     pubHref(curie) {
       return `/publication/${curie}`;
       // const identifier = curie.split(/[:]+/).pop();
@@ -722,6 +676,10 @@ export default {
         .split(/[.]+/)[0]
         .toUpperCase();
       return result;
+    },
+    isFrequencyOnsetType(nodeType, cardType) {
+      return (nodeType === 'disease' && cardType === 'phenotype') ||
+              (nodeType === 'phenotype' && cardType === 'disease');
     }
   }
 };
@@ -731,13 +689,17 @@ export default {
 @import "~@/style/variables";
 .assoc-table {
   width: 100%;
-  .loading-div {
-      margin: 15% calc(50% - 14%);
-      text-align: center;
+  .loading-spinner {
+    color: $monarch-bg-color;
+  }
+
+  .taxon-filter {
+    background-color: $monarch-bg-color;
+    margin-bottom: 15px;
   }
 
   .table {
-    width:inherit;
+    width: 100%;
   }
   .table.b-table tr {
     outline: 1px solid lightgray;

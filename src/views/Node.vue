@@ -11,13 +11,11 @@
       :card-counts="counts"
       :parent-node="node"
       :parent-node-id="nodeId"
-      :facet-object="facetObject"
       :is-facets-showing="isFacetsShowing"
       :is-neighborhood-showing="isNeighborhoodShowing"
       :subclasses="subclasses"
       :superclasses="superclasses"
       @expand-card="expandCard"
-      @toggle-facets="toggleFacets"
       @toggle-neighborhood="toggleNeighborhood"
     />
 
@@ -165,11 +163,12 @@
 
           <div v-if="expandedCard" class="expanded-card-view">
             <assoc-table
-              :facets="facetObject"
-              :card-counts="counts"
+              :taxon-counts="taxonCounts"
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
+              :is-facets-showing="isFacetsShowing"
+              @toggle-facets="toggleFacets"
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
@@ -299,8 +298,6 @@ export default {
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
-        selectedTaxons: {
-        },
         evidence: {
           IEA: true
         },
@@ -338,6 +335,7 @@ export default {
         models: false,
         diseases: false
       },
+      taxonCounts: {},
       node: null,
       nodeError: null,
       equivalentClasses: null,
@@ -403,8 +401,6 @@ export default {
   watch: {
     facetObject: {
       handler(val, oldVal) {
-        // console.log('facetObject');
-        // console.log(JSON.stringify(val.selectedTaxons, null, 2));
         this.updateCounts();
       },
       deep: true
@@ -412,7 +408,6 @@ export default {
 
     $route(to, _from) {
       // Only fetchData if the path is different.
-
       if (to.path !== this.path) {
         this.fetchData();
       }
@@ -461,31 +456,11 @@ export default {
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
-    buildFacets() {
+    buildCounts() {
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
       }
       else {
-        const associationCountsByCardType = this.node.association_counts;
-
-        const taxonTotals = {};
-        const selectedTaxons = {};
-        Object.keys(associationCountsByCardType).forEach((cardType) => {
-          const associationCounts = associationCountsByCardType[cardType];
-          const count = (associationCounts && associationCounts.counts) || 0;
-          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
-
-          if (countsByTaxon) {
-            Object.keys(countsByTaxon).forEach((taxon) => {
-              selectedTaxons[taxon] = true;
-              const taxonCount = taxonTotals[taxon] || 0;
-              taxonTotals[taxon] = taxonCount + countsByTaxon[taxon];
-            });
-          }
-        });
-
-        this.facetObject.taxons = taxonTotals;
-        this.facetObject.selectedTaxons = selectedTaxons;
         this.updateCounts();
       }
     },
@@ -497,25 +472,10 @@ export default {
       }
       else {
         const associationCountsByCardType = this.node.association_counts;
-        // console.log(JSON.stringify(Object.keys(associationCountsByCardType), null, 2));
-
         this.availableCards.forEach((cardType) => {
-
           const associationCounts = associationCountsByCardType[cardType];
           const count = (associationCounts && associationCounts.counts) || 0;
-          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
-          const taxonTotal = count;
-          let taxonFiltered = count;
-
-          if (countsByTaxon) {
-            Object.keys(countsByTaxon).forEach((t) => {
-              if (!this.facetObject.selectedTaxons[t]) {
-                taxonFiltered -= countsByTaxon[t];
-              }
-            });
-          }
-
-          this.counts[cardType] = taxonFiltered;
+          this.counts[cardType] = count;
           if (count > 0) {
             nonEmptyCards.push(cardType);
           }
@@ -682,7 +642,7 @@ export default {
       this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
-      this.buildFacets();
+      this.buildCounts();
 
       //
       // If we got here via someone specifying a cardType in the

@@ -27,13 +27,6 @@
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
-
-        <li class="list-group-item list-group-item-squat">
-          <b-link :disabled="facetsDisabled" @click="toggleFacets()">
-            <i class="fa fa-fw fa-cubes"/>
-            <span class="list-group-item-value">Facets</span>
-          </b-link>
-        </li>
         <li
           v-for="cardType in cardsToDisplay"
           :class="{ active: expandedCard === cardType }"
@@ -42,7 +35,7 @@
           <a :href="'#' + cardType" @click="expandCard(cardType)">
             <img :src="$parent.icons[cardType]" class="entity-type-icon">
             <span class="list-group-item-value">
-              {{ $parent.labels[cardType] }} <span class="count">{{ cardCounts[cardType] }}</span>
+              {{ $parent.labels[cardType] }} <!--<span class="count">{{ cardCounts[cardType] }}</span>-->
             </span>
           </a>
         </li>
@@ -50,10 +43,6 @@
       </ul>
     </div>
 
-    <node-sidebar-facets
-      :is-visible="isFacetsShowing"
-      v-model="facetObject"
-    />
 
   </div>
 
@@ -64,7 +53,6 @@
 import * as biolinkService from '@/api/BioLink';
 
 import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
-import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
 import vClickOutside from 'v-click-outside';
 
 export default {
@@ -72,7 +60,6 @@ export default {
 
   components: {
     'node-sidebar-neighborhood': NodeSidebarNeighborhood,
-    'node-sidebar-facets': NodeSidebarFacets,
   },
   directives: {
     clickOutside: vClickOutside.directive
@@ -113,11 +100,6 @@ export default {
       required: false,
       default: null,
     },
-    facetObject: {
-      type: Object,
-      required: false,
-      default: null,
-    },
     isNeighborhoodShowing: {
       type: Boolean,
       required: false,
@@ -137,9 +119,6 @@ export default {
   computed: {
     neighborhoodDisabled() {
       return (!this.superclasses || this.superclasses.length === 0) && (!this.subclasses || this.subclasses.length === 0);
-    },
-    facetsDisabled() {
-      return false; // this.nodeType === 'publication';
     },
     debugServerURL() {
       const debugHash = (this.$route.hash.length > 1)
