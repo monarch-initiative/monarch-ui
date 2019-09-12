@@ -41,31 +41,27 @@
             Our Team
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item to="/about/disclaimer">
             Disclaimer
           </b-dropdown-item>
 
           <b-dropdown-divider/>
 
-          <b-dropdown-item to="/sources">
+          <b-dropdown-item to="/about/data-sources">
             Data Sources
           </b-dropdown-item>
 
-          <b-dropdown-item to="/sources">
-            Monarch API
+          <b-dropdown-item to="/about/monarch-web-services">
+            Monarch Web Services
           </b-dropdown-item>
-
-          <b-dropdown-item to="/sources">
-            Releases
-          </b-dropdown-item>
-
+          
           <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
             Data Downloads
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Documentation">
-          <b-dropdown-item to="/about/publications">
+          <b-dropdown-item to="/documentation/publications">
             Publications
           </b-dropdown-item>
 
@@ -88,7 +84,7 @@
             Contact Us
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/citing">
+          <b-dropdown-item to="/help/cite">
             Cite Monarch
           </b-dropdown-item>
 
@@ -165,25 +161,27 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
-
-      <b-navbar-nav
-        class="ml-auto">
-        <div
-          v-if="this.$route.path !== '/'"
-          class="nav-ac">
-          <monarch-autocomplete :full-width-search="true"/>
+      <b-navbar-nav class="ml-auto" v-if="$route.path !== '/'">
+        <div class="nav-ac nav-search">
+          <monarch-autocomplete :full-width-search="false"/>
         </div>
       </b-navbar-nav>
     </b-collapse>
 
     <b-navbar-toggle target="nav_collapse"/>
-
+    <div v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
+         title="Monarch UI BETA"
+         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
+         class="beta">
+      BETA
+    </div>
   </b-navbar>
+
 </template>
 
 <script>
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
-
+import * as biolinkService from '@/api/BioLink';
 export default {
   name: 'MonarchNavbar',
   components: {
@@ -196,6 +194,9 @@ export default {
   mounted() {
   },
   methods: {
+    getEnvironment() {
+      return biolinkService.getCurrentServerEnvironment();
+    }
   }
 };
 </script>
@@ -249,5 +250,19 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
 .nav-ac {
   margin:1px 25px 1px 0;
   height: 30px;
+}
+
+.nav-search {
+  min-width: 30vw;
+}
+
+.beta {
+  padding: 18px;
+  background-color: red;
+  color: white;
+  border-bottom: solid 2px ghostwhite;
+  font-style: oblique;
+  cursor: default;
+  font-weight: bolder;
 }
 </style>

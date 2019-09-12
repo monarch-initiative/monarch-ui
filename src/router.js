@@ -41,19 +41,29 @@ const router = new Router({
       component: Home,
     },
     {
-      path: '/about/publications',
-      name: 'about-publications',
-      component: require('@/views/Publications.md').default,
-    },
-    {
       path: '/about/monarch',
       name: 'about-monarch',
       component: require('@/views/AboutMonarch.md').default,
     },
     {
+      path: '/about/monarch-web-services',
+      name: 'monarch-web-services',
+      component: require('@/views/Services.md').default,
+    },
+    {
       path: '/about/team',
       name: 'about-team',
       component: require('@/views/AboutTeam.md').default,
+    },
+    {
+      path: '/about/disclaimer',
+      name: 'about-disclaimer',
+      component: require('@/views/Disclaimer.md').default,
+    },
+    {
+      path: '/documentation/publications',
+      name: 'about-publications',
+      component: require('@/views/Publications.md').default,
     },
     {
       path: '/help/cite',
@@ -105,7 +115,7 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "analytics" */ './views/Analytics.vue'),
     },
     {
-      path: '/sources',
+      path: '/about/data-sources',
       name: 'sources',
       // Work done at Hackathon Seth Dan Nathan Chris
       component: () => import(/* webpackChunkName: "analytics" */ './views/Sources.vue'),
