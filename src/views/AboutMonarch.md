@@ -29,7 +29,7 @@
           <img src="../assets/img/cross-species-comparison.png"/>
               <figcaption>
                Fig 2. Comparison of PAX6 abnormal phenotypes in human and model organism eyes. 
-               (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009</a>
+               (Image from <a href="http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1000247" target="__blank">Washington et al, 2009)</a>
               </figcaption>
         </figure>
     </div>
@@ -51,16 +51,16 @@
 <p> We lead the development of the <a href="https://hpo.jax.org/">Human Phenotype Ontology</a>, which is used across the world for genomic 
 diagnostics in genetic disease and other areas. We are a Driver Project for the 
 <a href="https://www.ga4gh.org/" target="__blank">Global Alliance for Genomics and Health</a> (GA4GH), and are major contributors to the 
-development of genomics standards within GA4GH. Additionally, we have developed <a href="http://obofoundry.org/ontology/mondo.html" target="__blank">MONDO</a>, a unified disease 
+development of genomics standards within GA4GH. Additionally, we have developed <a href="http://obofoundry.org/ontology/mondo.html" target="__blank">Mondo</a>, a unified disease 
 ontology that represents the most comprehensive integration of disease entities ever achieved. </p>
 <div class="row">
     <div class="col-12 col-lg-6">
         <figure class="ecosystems">
               <img src="../assets/img/HPO-figure-for-monarchui.png"/>
               <figcaption>
-              Fig 3. The <a href="https://hpo.jax.org" target="__blank">Human Phenotype Ontology</a> provides a standardized vocabulary of 
+              Fig 3. The <a href="https://hpo.jax.org" target="__blank">Human Phenotype Ontology</a> (HPO) provides a standardized vocabulary of 
               phenotypic abnormalities encountered in human disease. 
-              <a href="https://currentprotocols.onlinelibrary.wiley.com/doi/abs/10.1002/cphg.9" target="__blank">See also</a>
+              <a href="https://currentprotocols.onlinelibrary.wiley.com/doi/abs/10.1002/cphg.9" target="__blank">More about HPO...</a>
               </figcaption>
         </figure>
     </div>
@@ -68,7 +68,7 @@ ontology that represents the most comprehensive integration of disease entities 
         <figure class="ecosystems phenopackets">
               <img src="../assets/img/phenopackets-ecosystem2.png"/>
               <figcaption>
-               Fig 4. <a href="http://phenopackets.org/" target="__blank">Phenopackets</a>: Phenopackets is a standard 
+               Fig 4. <a href="http://phenopackets.org/" target="__blank">Phenopackets</a> is a standard 
                exchange format for phenotypes and environmental factors. This packet of phenotype data can be used 
                anywhere, and can be written by anyone. This work is being done in collaboration with the <a href="https://www.ga4gh.org/" target="__blank">Global 
                Alliance for Genomics and Health (GA4GH)</a>. 
@@ -78,23 +78,23 @@ ontology that represents the most comprehensive integration of disease entities 
 </div>
 <div class="callouts row">
     <h4 class="title">
-        Checkout some of our tools and resources below!
+        Check out some of our tools and resources below!
     </h4>
     <b-card-group class="col-lg-12">
         <b-card title="Phenotype Profile Search" class="col-12 col-lg-6">
             <b-card-text>
               Targeted search based off a list of phenotypes. 
             </b-card-text>
-            <router-link to="/about/monarch-api">
+            <router-link to="/analyze/phenotypes">
                 <b-button class="card-btn">Search <i class="fa fa-caret-right"></b-button>
             </router-link>
           </b-card>
-          <b-card title="Monarch API" class="col-12 col-lg-6">
+          <b-card title="Monarch Web Services" class="col-12 col-lg-6">
               <b-card-text>
                 Developer friendly API's for the initiative's data.
               </b-card-text>
-              <router-link to="/about/monarch-api">
-                <b-button class="card-btn">Documentation <i class="fa fa-caret-right"></b-button>
+              <router-link to="/about/monarch-web-services">
+                <b-button class="card-btn">Learn More<i class="fa fa-caret-right"></b-button>
               </router-link>
           </b-card>
     </b-card-group deck>
@@ -130,7 +130,6 @@ ontology that represents the most comprehensive integration of disease entities 
   }
   .callouts {
     margin: 50px 0 50px;
-    border-radius: 0.5rem;
     
     .title {
         text-align: center;
@@ -141,6 +140,7 @@ ontology that represents the most comprehensive integration of disease entities 
         background-color: #0B556B;
         margin-right: 15px;
         color: white;
+        border-radius: 0.5rem !important;
         .card-btn {
             background-color: $monarch-button-color;
             color: black;
