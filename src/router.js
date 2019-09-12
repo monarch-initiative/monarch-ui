@@ -112,13 +112,13 @@ const router = new Router({
       // route level code-splitting
       // this generates a separate chunk (analytics.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "analytics" */ './views/Analytics.vue'),
+      component: () => import(/* webpackChunkName: "mon-analytics" */ './views/Analytics.vue'),
     },
     {
       path: '/about/data-sources',
       name: 'sources',
       // Work done at Hackathon Seth Dan Nathan Chris
-      component: () => import(/* webpackChunkName: "analytics" */ './views/Sources.vue'),
+      component: () => import(/* webpackChunkName: "data-sources" */ './views/Sources.vue'),
     },
     {
       path: '/glossary',
