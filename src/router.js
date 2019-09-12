@@ -121,6 +121,11 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "analytics" */ './views/Sources.vue'),
     },
     {
+      path: '/glossary',
+      name: 'glossary',
+      component: require('@/views/glossary.md').default,
+    },  
+    {
       path: '/*',
       name: 'RouteError',
       // route level code-splitting
