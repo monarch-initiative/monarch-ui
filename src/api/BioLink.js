@@ -693,11 +693,15 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
     }
 
     if(taxons != null && taxons !== -1){
-      params.taxon = taxons.length > 1 ? taxons.join(","): taxons[0];
+      params.taxon = taxons.length > 1 ? taxons: taxons[0];
     }
-  }
 
-  const response = await axios.get(url, { params });
+  }
+  const qs = require('qs');
+  const response = await axios.get(url, { params,
+    paramsSerializer: function(params) {
+      return qs.stringify(params, {arrayFormat: 'repeat'})
+    }});
   return response;
 }
 

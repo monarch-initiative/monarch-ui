@@ -10,14 +10,14 @@
       <taxon-filter @toggle-filter="toggleTaxonFilter($event)"  :is-visible="isFacetsShowing" v-model="taxonFilter"></taxon-filter>
       <div>
         <h5>
-          &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
-          <strong>{{ cardType }}</strong> associations.
+          <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
+          {{ cardType }} associations.
         </h5>
 
         <b-button class="taxon-filter" size="sm" v-if="nodeType === 'gene' && hasTaxon"
                   @click="toggleTaxonFilter()"
                   variant="primary">
-        <i class="fa fa-filter" aria-hidden="true"></i> Taxon Filter</b-button>
+        <i class="fa fa-filter" v-bind:class="{ 'filter-active': hasFalseFilter() }" aria-hidden="true"></i> Taxon Filter</b-button>
         <br>
       </div>
       <b-table
@@ -214,11 +214,7 @@ export default {
     taxonCounts: {
       type: Object,
       required: true,
-    },
-    isFacetsShowing: {
-      type: Boolean,
-      required: false,
-    },
+    }
   },
   data() {
     return {
@@ -227,7 +223,6 @@ export default {
       totalAssociations: 0,
       paginationTotals: 0,
       hasTaxon: false,
-      taxonLoaded : false,
       hasFrequencyOnset: false,
       associationData: '',
       tableBusy: false,
@@ -236,6 +231,7 @@ export default {
       fields: [],
       rows: [],
       lastSelection: [],
+      isFacetsShowing: false,
       taxonFilter: {
         counts: {},
         taxons: {}
@@ -245,7 +241,12 @@ export default {
   },
   watch: {
     cardType() {
+      this.taxonFilter = {counts: {}, taxons: {}};
+      this.initialLoad = false;
       this.dataError = false;
+      this.isFacetsShowing = false;
+
+
       window.scroll(0, 0);
       this.currentPage = 1;
       this.generateFields();
@@ -257,14 +258,12 @@ export default {
     this.generateFields();
   },
   methods: {
-    filterTable(row, filter){
-      return this.taxonFilter.taxons[row.taxonId];
-    },
     toggleTaxonFilter(shouldApply) {
+      console.log(shouldApply);
       if(this.isFacetsShowing && shouldApply){
         this.$refs.tableRef.refresh();
       }
-      this.$emit('toggle-facets');
+      this.isFacetsShowing = !this.isFacetsShowing;
     },
     hasFalseFilter() {
       let foundFalseTaxons = false;
@@ -286,9 +285,6 @@ export default {
         });
       return truth;
     },
-    allFacets() {
-      return Object.entries(this.taxonFilter.taxons).map(elem => elem[0]);
-    },
     async rowsProvider(ctx, callback) {
       this.fetchData().then(() => {
         callback(this.rows);
@@ -300,7 +296,6 @@ export default {
       const that = this;
       this.tableBusy = true;
       this.dataError = false;
-      this.initialLoad = true;
       try {
         const params = {
           fetch_objects: true,
@@ -310,12 +305,12 @@ export default {
 
         const taxons = this.hasFalseFilter() ? this.trueTaxonFilters() : null;
         const associationsResponse = await bioLinkService.getNodeAssociations(
-          this.nodeType,
-          this.nodeId,
-          this.cardType,
-          taxons,
-          params
-        );
+                this.nodeType,
+                this.nodeId,
+                this.cardType,
+                taxons,
+                params);
+
         if (!associationsResponse.data || !associationsResponse.data.associations) {
           that.associationData = null;
           throw new Error('BioLink returned no data');
@@ -324,8 +319,9 @@ export default {
         if(reset){
           this.currentPage = 1;
         }
-        that.tableBusy = false;
         that.populateRows();
+        that.tableBusy = false;
+        this.initialLoad = true;
       }
       catch (e) {
         that.dataError = e;
@@ -497,7 +493,8 @@ export default {
 
         const supportLength = support.length;
         let simplifiedCardType = this.cardType;
-        if (simplifiedCardType === 'interaction' || simplifiedCardType === 'ortholog-phenotype' || simplifiedCardType === 'ortholog-disease') {
+        if (simplifiedCardType === 'interaction' || simplifiedCardType === 'ortholog-phenotype'
+                || simplifiedCardType === 'ortholog-disease') {
           simplifiedCardType = 'gene';
           objectTaxon = this.parseTaxon(subjectElem);
         }
@@ -541,17 +538,14 @@ export default {
           elem.onset.url = this.onsetHref(elem.onset);
         }
       });
-
-      if(isTaxonCardType(this.cardType) && !this.taxonLoaded){
+      if(isTaxonCardType(this.cardType)){
         const taxonFacetTarget = Object.keys(this.associationData.facet_counts)[0];
         Object.keys(this.associationData.facet_counts[taxonFacetTarget]).forEach(key => {
           this.taxonFilter.taxons[key] = true;
         });
         this.taxonFilter.counts = this.associationData.facet_counts[taxonFacetTarget];
-        this.taxonLoaded = true;
       }
       this.paginationTotals = this.getTotalRowCounts();
-      console.log(this.paginationTotals);
       this.totalAssociations = this.associationData.numFound
     },
     getTotalRowCounts(){
@@ -689,6 +683,10 @@ export default {
 @import "~@/style/variables";
 .assoc-table {
   width: 100%;
+
+  .filter-active {
+    color: #cce34c;
+  }
   .loading-spinner {
     color: $monarch-bg-color;
   }

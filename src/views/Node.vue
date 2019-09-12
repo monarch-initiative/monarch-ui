@@ -11,7 +11,6 @@
       :card-counts="counts"
       :parent-node="node"
       :parent-node-id="nodeId"
-      :is-facets-showing="isFacetsShowing"
       :is-neighborhood-showing="isNeighborhoodShowing"
       :subclasses="subclasses"
       :superclasses="superclasses"
@@ -21,7 +20,7 @@
 
     <div class="container-cards">
       <div class="wrapper">
-        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay"/>
+        <div :class="{ active: isNeighborhoodShowing }" class="overlay"></div>
 
         <div v-if="!node" class="loading">
           <div v-if="nodeError">
@@ -167,8 +166,6 @@
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
-              :is-facets-showing="isFacetsShowing"
-              @toggle-facets="toggleFacets"
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
@@ -442,17 +439,10 @@ export default {
     },
 
     hideOverlay() {
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
-    },
-
-    toggleFacets() {
-      this.isNeighborhoodShowing = false;
-      this.isFacetsShowing = !this.isFacetsShowing;
     },
 
     toggleNeighborhood() {
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
@@ -497,7 +487,6 @@ export default {
       this.entrezResult = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
       this.modifiers = null;

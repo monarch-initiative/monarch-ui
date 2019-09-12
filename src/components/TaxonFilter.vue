@@ -8,10 +8,10 @@
       <b-button class=""  size="sm" @click="toggleSelectedFilter">
         Select All
       </b-button>
-
       <b-button class="exit" size="sm" @click="hideFilter">
         Apply & Close
       </b-button>
+      <p class="warning" v-if="showMessage">You must select at least 1 taxon.</p>
     </div>
     <div
       v-for="(value, key) in taxonFilter.taxons"
@@ -55,13 +55,23 @@ export default {
   data() {
     return {
       selectedAll: true,
-      localCopy: {}
+      localCopy: {},
+      showMessage: false,
+      initialDataFlag: false,
     }
   },
   mounted() {
-    this.localCopy = JSON.parse(JSON.stringify(this.taxonFilter));
+
+  },
+  beforeUpdate(){
+    if(!this.initialDataFlag){
+      this.initialDataFlag = true;
+    }
   },
   watch: {
+    isVisible(newval) {
+      this.localCopy = JSON.parse(JSON.stringify(this.taxonFilter))
+    }
   },
   methods: {
     updateTaxonFilter: function(){
@@ -75,15 +85,22 @@ export default {
       return this.taxonFilter.counts[id];
     },
     hideFilter() {
-      if(this.taxonFilter !== this.localCopy){
-        this.$emit('toggle-filter', true);
+      if(!Object.values(this.taxonFilter.taxons).includes(true)){
+        this.showMessage = true;
       }else {
-        this.$emit('toggle-filter', false);
+        this.showMessage = false;
+        const newTaxons = Object.values(this.taxonFilter.taxons);
+        const originalTaxons = Object.values(this.localCopy.taxons);
+        if(!newTaxons.sort().every(function(value, index) { return value === originalTaxons.sort()[index]})){
+          this.$emit('toggle-filter', true);
+        }else {
+          this.$emit('toggle-filter', false);
+        }
       }
     },
     toggleSelectedFilter(){
       this.selectedAll = !this.selectedAll;
-      for (var key in this.taxonFilter.taxons) {
+      for (let key in this.taxonFilter.taxons) {
         this.taxonFilter.taxons[key] = this.selectedAll;
       }
       this.updateTaxonFilter();
@@ -114,6 +131,11 @@ $filter-width: 600px;
   border-radius: 5px;
   font-size: 0.95rem;
   padding: 20px;
+}
+
+#filter .warning {
+  color: #ba121d;
+  text-align: center;
 }
 
 #filter.active {

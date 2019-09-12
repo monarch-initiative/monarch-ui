@@ -92,7 +92,7 @@ export function isTaxonCardType(cardType) {
 }
 
 export function isSubjectCardType(cardType) {
-  const subjectCardTypes = ['ortholog-phenotype', 'variant'];
+  const subjectCardTypes = ['ortholog-phenotype', 'ortholog-disease', 'variant'];
   return subjectCardTypes.includes(cardType);
 }
 
