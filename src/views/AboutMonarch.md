@@ -76,7 +76,7 @@ ontology that represents the most comprehensive integration of disease entities 
         </figure>
     </div>
 </div>
-<div class="callouts row">
+<!--<div class="callouts row">
     <h4 class="title">
         Check out some of our tools and resources below!
     </h4>
@@ -98,7 +98,7 @@ ontology that represents the most comprehensive integration of disease entities 
               </router-link>
           </b-card>
     </b-card-group deck>
-</div>
+</div>-->
 
 </div>
 
