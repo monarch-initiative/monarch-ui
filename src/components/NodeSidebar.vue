@@ -35,7 +35,7 @@
           <a :href="'#' + cardType" @click="expandCard(cardType)">
             <img :src="$parent.icons[cardType]" class="entity-type-icon">
             <span class="list-group-item-value">
-              {{ $parent.labels[cardType] }} <!--<span class="count">{{ cardCounts[cardType] }}</span>-->
+              {{ $parent.labels[cardType] }} <span class="count">{{ cardCounts[cardType] }}</span>
             </span>
           </a>
         </li>
@@ -104,12 +104,7 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    },
-    isFacetsShowing: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
+    }
   },
 
   data() {
@@ -147,20 +142,12 @@ export default {
     expandCard(cardType) {
       this.$emit('expand-card', cardType);
     },
-
-    toggleFacets() {
-      this.$emit('toggle-facets');
-    },
-
     toggleNeighborhood() {
       this.$emit('toggle-neighborhood');
     },
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-      }
-      else if (this.isFacetsShowing) {
-        this.toggleFacets();
       }
     }
   }
