@@ -67,13 +67,6 @@
              -->
         </div>
         <div v-if="node" class="container-fluid node-container">
-
-          <div v-if="nodeDebug" class="row node-content-section">
-            <div class="col-12">
-              <pre>{{ nodeDebug }}</pre>
-            </div>
-          </div>
-
           <div v-if="!expandedCard" class="row node-content-section">
             <div v-if="node.description" class="col-12">
               <div class="node-description">
@@ -354,7 +347,6 @@ export default {
       labels,
       nodeId: null,
       nodeType: null,
-      nodeDebug: null,
       nodeIcon: null,
       nodeCategory: null,
       availableCards: availableCardTypes,
@@ -790,7 +782,7 @@ div.container-cards {
   color: white;
   position: fixed;
   height: $title-bar-max-height;
-  overflow-y: auto;
+  overflow-y: hidden;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
@@ -818,8 +810,8 @@ div.container-cards {
     font-size: inherit;
 
     & .node-label-id {
-      font-size: 1rem;
-      color: #cce34c;
+      font-size: .8rem;
+      color: #a9a9a9a1;
     }
   }
 }

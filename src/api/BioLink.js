@@ -793,10 +793,3 @@ export async function annotateText(queryText, longestOnly) {
       });
   });
 }
-
-
-export function debugServerName() {
-  return (serverConfiguration.app_base.length > 0)
-    ? serverConfiguration.app_base
-    : 'https://beta.monarchinitiative.org';
-}

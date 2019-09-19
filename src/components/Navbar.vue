@@ -19,10 +19,10 @@
       is-nav="">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Tools">
-          <b-dropdown-item
+          <!--<b-dropdown-item
             to="/analyze/phenotypes">
             Phenotype Profile Search
-          </b-dropdown-item>
+          </b-dropdown-item>-->
 
           <b-dropdown-item to="/tools/text-annotate">
             Text Annotator

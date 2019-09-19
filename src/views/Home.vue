@@ -4,7 +4,7 @@
     <vml-home-about-monarch-component/>
     <vml-home-news-component/>
     <vml-home-partners-component/>
-    <div class="spacer"/>
+    <div class="spacer"></div>
   </div>
 </template>
 
@@ -27,15 +27,6 @@
     .spacer {
       height: 50px;
     }
-
-    // //
-    // // Horizontal borders for debugging home page layout
-    // //
-    // > div:not(.row),
-    // > .row > div {
-    //   border-top:2px solid orange;
-    //   border-bottom:2px solid orange;
-    // }
   }
 </style>
 

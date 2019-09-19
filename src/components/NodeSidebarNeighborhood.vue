@@ -1,7 +1,7 @@
 <template>
 
   <nav id="neighborhood" :class="{ active: isVisible }">
-
+    <i v-on:click="closeNeighborhood()" class="close fa fa-times" aria-hidden="true"></i>
     <div class="neighborhood">
       <div
         v-for="c in superclasses"
@@ -73,6 +73,10 @@ export default {
     getLabel(c) {
       return c.label || c.id;
     },
+    closeNeighborhood(){
+      console.log("trying to close");
+      this.$emit('toggleNeighborhood');
+    }
   },
 };
 
@@ -85,6 +89,11 @@ export default {
 
 $neighborhood-width: 500px;
 $neighborhood-button-width: 32px;
+
+
+.neighborhood {
+  margin-top: 5px;
+}
 
 #neighborhood {
   width: $neighborhood-width;
@@ -102,6 +111,14 @@ $neighborhood-button-width: 32px;
   max-height: 75%;
   font-size: 0.95rem;
   padding: 5px;
+}
+
+
+#neighborhood .close {
+  float: right;
+  margin-right: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 #neighborhood.active {

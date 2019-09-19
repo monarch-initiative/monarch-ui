@@ -148,10 +148,6 @@ const exampleSearches = [
     searchString: 'Marfan Syndrome'
   },
   {
-    searchString: 'Spinocerebellar Ataxia 2',
-    category: 'disease'
-  },
-  {
     searchString: 'Multicystic kidney dysplasia',
     category: 'phenotype'
   },
@@ -320,11 +316,6 @@ export default {
       const currentData = this.suggestions[this.current];
       if (currentData) {
         if (!this.definedCategories) {
-          //
-          // Need to add Taxon Filter information here so that it can be picked up
-          // by Search.vue
-          // @nathandunn this might feed into the Search.vue and taxon faceting there.
-          //
           this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
         }
         else {
