@@ -10,7 +10,7 @@
     <b-navbar-brand to="/">
       <img
         class="branding-logo"
-        src="../assets/img/monarch-logo-white.png"
+        src="../assets/img/monarch-logo-white.svg"
         alt="Monarch Initiative logo"
         title="Monarch Initiative front page">
     </b-navbar-brand>
@@ -211,7 +211,7 @@ nav#monarchng-navbar.navbar .navbar-brand {
 }
 
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
-  height: 28px;
+  height: 30px;
   width: auto;
   margin: 15px 0 0 0;
   padding: 0;
