@@ -552,11 +552,6 @@ export default {
       else {
         this.references = [];
       }
-      // We'll insert our node's id/uri as the first reference.
-      this.references.unshift({
-        label: this.node.id,
-        uri: this.node.uri
-      });
 
       if (!this.node.label) {
         this.node.label = this.node.id;
