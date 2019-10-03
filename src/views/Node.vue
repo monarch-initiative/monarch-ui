@@ -100,7 +100,7 @@
 
           <div v-if="!expandedCard" class="row node-content-section">
             <div class="col-12">
-              <b>References:</b>&nbsp;
+              <b>Mappings:</b>&nbsp;
               <span v-for="(r, index) in references" :key="index" class="synonym">
                 <a
                   :href="r.uri"
@@ -119,15 +119,6 @@
                   {{ s }}
                 </li>
               </ul>
-            </div>
-
-            <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
-              <b>Equivalent IDs:</b>&nbsp;
-              <span v-for="(r, index) in equivalentClasses" :key="index">
-                <span>
-                  {{ r.id }}&nbsp;
-                </span>
-              </span>
             </div>
           </div>
 
@@ -561,11 +552,6 @@ export default {
       else {
         this.references = [];
       }
-      // We'll insert our node's id/uri as the first reference.
-      this.references.unshift({
-        label: this.node.id,
-        uri: this.node.uri
-      });
 
       if (!this.node.label) {
         this.node.label = this.node.id;
@@ -642,7 +628,11 @@ export default {
       // the info provided by getNeighborhood()
       //
       const nodeLabelMap = neighborhood.nodeLabelMap;
-      const equivalentClasses = neighborhood.equivalentClasses;
+      /** const equivalentClasses = neighborhood.equivalentClasses;
+      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
+        id: c,
+        label: nodeLabelMap[c]
+      }));**/
       const superclasses = neighborhood.superclasses;
       const subclasses = neighborhood.subclasses;
       this.superclasses = us.map(us.uniq(superclasses), c => ({
@@ -653,10 +643,7 @@ export default {
         id: c,
         label: nodeLabelMap[c]
       }));
-      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));
+
 
       if (this.node.inheritance) {
         this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
