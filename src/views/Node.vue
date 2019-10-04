@@ -536,7 +536,7 @@ export default {
         ]
       );
 
-      // Redirect if biolink is returning a different ID then the
+      // Redirect if biolink is returning a different ID than the
       // one we provided
       if (this.nodeId !== node.id) {
         this.$router.push(node.id);
