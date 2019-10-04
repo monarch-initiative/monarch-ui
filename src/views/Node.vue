@@ -535,6 +535,13 @@ export default {
           neighborhoodPromise
         ]
       );
+
+      // Redirect if biolink is returning a different ID then the
+      // one we provided
+      if (this.nodeId !== node.id) {
+        this.$router.push(node.id);
+      }
+
       this.node = node;
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
@@ -670,18 +677,10 @@ export default {
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
         const cardType = hash.split('?')[0].slice(1);
-        this.$nextTick((_) => {
+        this.$nextTick(() => {
           this.expandCard(cardType);
         });
       }
-      this.$nextTick((_) => {
-        if (this.$refs.titleBar.scrollHeight > 100) {
-          this.$refs.titleBar.style.fontSize = '1.2rem';
-        }
-        else {
-          this.$refs.titleBar.style.fontSize = '';
-        }
-      });
     }
   }
 };
