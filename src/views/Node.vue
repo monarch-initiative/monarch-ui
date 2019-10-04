@@ -401,11 +401,9 @@ export default {
     $route(to, _from) {
       // Only fetchData if the path is different.
 
-      if (to.path !== this.path) {
-        if (!this.isRedirected) {
-          this.fetchData();
-          this.originalId = null
-        }
+      if (to.path !== this.path && !this.isRedirected) {
+        this.fetchData();
+        this.originalId = null
       }
       else {
         const strippedHash = to.hash.slice(1);
