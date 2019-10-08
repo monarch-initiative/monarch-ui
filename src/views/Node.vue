@@ -557,6 +557,7 @@ export default {
       if (this.nodeId !== node.id) {
         this.isRedirected = true;
         this.originalId = this.$route.params.id;
+        this.nodeId = node.id;
         this.$router.push(node.id);
       }
 
