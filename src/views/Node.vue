@@ -43,6 +43,9 @@
         <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
             <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
+            <span v-if="originalId" class="node-label-id">
+              (Redirected from {{ originalId }})
+            </span>
           </h4>
           <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
             <a
@@ -346,6 +349,8 @@ export default {
       hasGeneExac: false,
       entrezResult: null,
       reactomeId: null,
+      isRedirected: false,
+      originalId: null,
 
       counts: {
         disease: 0,
@@ -396,8 +401,9 @@ export default {
     $route(to, _from) {
       // Only fetchData if the path is different.
 
-      if (to.path !== this.path) {
+      if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
+        this.originalId = null
       }
       else {
         const strippedHash = to.hash.slice(1);
@@ -405,6 +411,8 @@ export default {
           this.expandCard(strippedHash);
         }
       }
+      // Reset to enforce making this explicit each time
+      this.isRedirected = false
     },
   },
   created() {
@@ -413,6 +421,14 @@ export default {
 
   updated() {
     // console.log('updated', this.nodeId);
+    if(this.$refs.titleBar){
+      if (this.$refs.titleBar.scrollHeight > 60) {
+        this.$refs.titleBar.style.fontSize = '1.1rem';
+      }
+      else {
+        this.$refs.titleBar.style.fontSize = '';
+      }
+    }
   },
 
   destroyed() {
@@ -535,6 +551,16 @@ export default {
           neighborhoodPromise
         ]
       );
+
+      // Redirect if biolink is returning a different ID than the
+      // one we provided
+      if (this.nodeId !== node.id) {
+        this.isRedirected = true;
+        this.originalId = this.$route.params.id;
+        this.nodeId = node.id;
+        this.$router.push(node.id);
+      }
+
       this.node = node;
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
@@ -590,7 +616,7 @@ export default {
       //
 
       if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
-        const geneInfo = await MyGene.getGeneDescription(this.nodeId);
+        const geneInfo = await MyGene.getGeneDescription(this.node.id);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
           if (node.description) {
@@ -607,8 +633,8 @@ export default {
       }
 
       const reactomePrefix = 'REACT:';
-      if (this.nodeType === 'pathway' && this.nodeId.indexOf(reactomePrefix) === 0) {
-        this.reactomeId = this.nodeId.slice(reactomePrefix.length);
+      if (this.nodeType === 'pathway' && this.node.id.indexOf(reactomePrefix) === 0) {
+        this.reactomeId = this.node.id.slice(reactomePrefix.length);
       }
 
       //
@@ -670,18 +696,10 @@ export default {
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
         const cardType = hash.split('?')[0].slice(1);
-        this.$nextTick((_) => {
+        this.$nextTick(() => {
           this.expandCard(cardType);
         });
       }
-      this.$nextTick((_) => {
-        if (this.$refs.titleBar.scrollHeight > 100) {
-          this.$refs.titleBar.style.fontSize = '1.2rem';
-        }
-        else {
-          this.$refs.titleBar.style.fontSize = '';
-        }
-      });
     }
   }
 };
