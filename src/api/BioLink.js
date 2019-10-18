@@ -691,8 +691,14 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
   const baseUrl = `${biolink}bioentity/`;
   const biolinkMappedCardType = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
-  const url = `${baseUrl}${urlExtension}`;
+  let url = `${baseUrl}${urlExtension}`;
   const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
+
+  // Use monarch solr until amigo-ontobio connection is ready
+  if (cardType === 'function') {
+    url = `${biolink}association/type/gene_function`;
+    params.subject = nodeId;
+  }
 
   if (useTaxonRestriction) {
     // console.log('getNodeAssociations', nodeType, nodeId, cardType);
