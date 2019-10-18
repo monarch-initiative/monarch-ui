@@ -95,10 +95,8 @@
     <div class="statements">Supporting Statements</div>
 
     <div v-if="evidenceError" class="border p-2 m-2">
-      <h3>BioLink Error</h3>
-      <div class="col-xs-12">
-        {{ evidenceError }}
-      </div>
+      <h3>Error fetching evidence</h3>
+      <!-- <div class="col-xs-12"> {{ evidenceError }} </div> -->
     </div>
 
     <div v-show="!evidenceFetched && !evidenceError" class="evidence-ajax-msg">
@@ -222,11 +220,16 @@ export default {
     //max-height: 200px;
     //overflow-y: auto;
 
+  div {
+    font-size: 0.9rem;
+  }
+
   .summary {
     font-weight: bold;
   }
 
   .summary-btn {
+    font-size: 0.9rem;
     background-color: inherit;
     border: none;
   }
