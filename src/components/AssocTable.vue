@@ -28,15 +28,11 @@
         responsive="true"
         class="table-sm"
       >
-        <template
-          v-if="hasTaxon"
-          slot="taxon"
-          slot-scope="data"
-        >
+        <template v-if="hasTaxon" v-slot:taxon="data">
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
-        <template slot="assocObject" slot-scope="data">
+        <template v-slot:assocObject="data">
           <template v-if="data.item.objectLink">
             <strong>
               <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)"/>
@@ -49,7 +45,7 @@
           </template>
         </template>
 
-        <template slot="relation" slot-scope="data">
+        <template v-slot:relation="data">
           <small>
             <a
               :href="data.item.relation.url"
@@ -67,7 +63,7 @@
           </small>
         </template>
 
-        <template slot="assocSubject" slot-scope="data">
+        <template v-slot:assocSubject="data">
           <template v-if="data.item.subjectLink">
             <strong>
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
@@ -82,7 +78,7 @@
           </template>
         </template>
 
-        <template v-if="hasFrequencyOnset" slot="frequency" slot-scope="data">
+        <template v-if="hasFrequencyOnset" v-slot:frequency="data">
           <a
             v-if="data.item.frequency"
             :href="data.item.frequency.url"
@@ -95,10 +91,7 @@
           </a>
         </template>
 
-        <template
-          v-if="hasFrequencyOnset"
-          slot="onset"
-          slot-scope="data"
+        <template v-if="hasFrequencyOnset" v-slot:onset="data"
         >
           <a
             v-if="data.item.onset"
@@ -112,7 +105,7 @@
           </a>
         </template>
 
-        <template slot="support" slot-scope="data">
+        <template v-slot:support="data">
           <b-button
             :pressed.sync="data.item._showDetails"
             size="small"
@@ -138,45 +131,8 @@
           </b-button>
         </template>
 
-        <template slot="row-details" slot-scope="row">
-          <div class="container-fluid support-section py-0">
-            <div
-              v-for="(support, index) in row.item.support"
-              :key="index"
-              class="row"
-            >
-              <div class="col-9 px-1">
-                <template
-                  v-if="support.useRouter">
-                  <router-link :to="support.url">
-                    {{ support.label }}
-                  </router-link>
-                </template>
-                <template v-else>
-                  <a
-                    :href="support.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {{ support.label }}&nbsp;
-                    <img
-                      v-if="support.icon"
-                      :src="support.icon"
-                      class="source-icon">
-                  </a>
-                </template>
-              </div>
-              <div class="col-2 px-1">
-                <small>{{ support.type }}</small>
-              </div>
-              <div class="col-1 px-1" style="text-align: center;">
-                <i
-                  :class="support.typeIcon"
-                  class="fa fa-fw text-info"
-                />
-              </div>
-            </div>
-          </div>
+        <template v-slot:row-details="row">
+          <EvidenceViewer :evidence="row.item.evidence" :evidenceCache="evidenceCache"/>
         </template>
       </b-table>
       <div
@@ -195,9 +151,12 @@
 </template>
 
 <script>
+import us from 'underscore';
 import * as BL from '@/api/BioLink';
 import sourceToImage from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
+import EvidenceViewer from '@/components/EvidenceViewer.vue'
+
 
 function isFrequencyOnsetType(nodeType, cardType) {
   return (nodeType === 'disease' && cardType === 'phenotype') ||
@@ -207,6 +166,7 @@ function isFrequencyOnsetType(nodeType, cardType) {
 
 export default {
   components: {
+    EvidenceViewer
   },
   props: {
     nodeId: {
@@ -247,6 +207,7 @@ export default {
       fields: [],
       rows: [],
       lastSelection: [],
+      evidenceCache: {}
     };
   },
   watch: {
@@ -303,37 +264,6 @@ export default {
       });
     },
 
-    keyMap(key) {
-      const keyMappings = {
-        'Skeletal system': 'HP:0000924',
-        'Limbs': 'HP:0040064',
-        'Nervous system': 'HP:0000707',
-        'Head or neck': 'HP:0000152',
-        'Metabolism/homeostasis': 'HP:0001939',
-        'Cardiovascular system': 'HP:0001626',
-        'Integument': 'HP:0001574',
-        'Genitourinary system': 'HP:0000119',
-        'Eye': 'HP:0000478',
-        'Musculature': 'HP:0003011',
-        'Neoplasm': 'HP:0002664',
-        'Digestive system': 'HP:0025031',
-        'Immune System': 'HP:0002715',
-        'Blood and blood-forming tissues': 'HP:0001871',
-        'Endocrine': 'HP:0000818',
-        'Respiratory system': 'HP:0002086',
-        'Ear': 'HP:0000598',
-        'Connective tissue': 'HP:0003549',
-        'Prenatal development or birth': 'HP:0001197',
-        'Growth': 'HP:0001507',
-        'Constitutional': 'HP:0025142',
-        'Thoracic cavity': 'HP:0045027',
-        'Breast': 'HP:0000769',
-        'Voice': 'HP:0001608',
-        'Cellular': 'HP:0025354',
-      };
-      return keyMappings[key];
-    },
-
     async fetchData() {
       const that = this;
       if (that.dataFetchedPage === that.currentPage
@@ -347,7 +277,8 @@ export default {
           const params = {
             fetch_objects: true,
             start: ((this.currentPage - 1) * this.rowsPerPage),
-            rows: this.rowsPerPage
+            rows: this.rowsPerPage,
+            unselect_evidence: true
           };
 
           const taxons = this.hasFalseFacets() ? this.trueFacets() : null;
@@ -483,72 +414,71 @@ export default {
       let count = 0;
       this.associationData.associations.forEach((elem) => {
         count += 1;
-        let pubs = [
-        ];
-        let pubsLength = 0;
-        if (elem.publications) {
-          pubs = this.parsePublications(elem.publications, elem.object.id);
-          pubsLength += pubs.length;
-        }
-        let evidence = [
-        ];
-        let evidenceLength = 0;
-        const eviResults = this.parseEvidence(elem.evidence_graph);
-        if (eviResults.length) {
-          evidence = eviResults;
-          evidenceLength = eviResults.length;
-        }
+
         const objectElem = elem.object;
         const subjectElem = elem.subject;
         let objectTaxon = this.parseTaxon(objectElem);
         // const subjectTaxon = this.parseTaxon(subjectElem);
 
-        const support = [];
+        const evidence = us.pick(
+          elem, ['id', 'provided_by', 'publications', 'evidence_types']);
+
+        // Make sure pubs have labels and add href
+        // Default should be empty array need to fix in ontobio code (golr_query)
+        if (evidence.publications !== null) {
+          evidence.publications = evidence.publications.map((pub) => {
+            return {
+              id: pub.id,
+              label: pub.label ? pub.label : pub.id,
+              url: this.pubHref(pub.id)
+            }
+          });
+        }
+        else {
+          evidence.publications = [];
+        }
+
+        // Provide icon and label for database (provided_by)
+        evidence.provided_by = evidence.provided_by.map((db) => {
+          const [icon, srcLabel] = sourceToImage(db);
+          return {
+            label: srcLabel,
+            icon: '../img/sources/' + icon
+          }
+        });
+
+        // add href for ECO code
+        evidence.evidence_types = evidence.evidence_types.map((eco) => {
+          return {
+            id: eco.id,
+            label: eco.label,
+            url: this.eviHref(eco.id)
+          }
+        });
+
         const supportIcons = [];
 
-        if (evidence.length > 0) {
+        if (evidence.evidence_types.length > 0) {
           const eviIcon = 'fa-flask'; // 'fa-legal' 'fa-chain';
           supportIcons.push(eviIcon);
-          evidence.forEach((evi) => {
-            support.push({
-              type: 'evidence',
-              typeIcon: eviIcon,
-              label: `${evi.lbl} (${evi.id})`,
-              url: this.eviHref(evi),
-            });
-          });
         }
 
-        if (pubs.length > 0) {
+        if (evidence.publications.length > 0) {
           const pubIcon = 'fa-book';
           supportIcons.push(pubIcon);
-          pubs.forEach((pub) => {
-            const href = this.pubHref(pub);
-            support.push({
-              type: 'publication',
-              typeIcon: pubIcon,
-              label: pub,
-              url: href,
-              useRouter: href.indexOf('/publication/') === 0,
-            });
-          });
         }
 
-        const sources = elem.provided_by;
-        if (sources.length > 0) {
+        if (evidence.provided_by.length > 0) {
           const sourceIcon = 'fa-database';
           supportIcons.push(sourceIcon);
-          elem.provided_by.forEach((source) => {
-            support.push({
-              type: 'source',
-              label: this.sourceLabel(source),
-              typeIcon: sourceIcon,
-              icon: '../img/sources/' + sourceToImage(source),
-            });
-          });
         }
 
-        const supportLength = support.length;
+        const supportLength = [
+          evidence.provided_by.length,
+          evidence.publications.length,
+          evidence.evidence_types.length,
+        ].reduce((accum, item) => accum + item);
+
         if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
           // console.log('skipping', objectTaxon.id, elem);
         }
@@ -571,17 +501,11 @@ export default {
           this.fixupRelation(elem, this.nodeType, this.cardType);
 
           this.rows.push({
-            publications: pubs,
-            publicationsLength: pubsLength,
             annotationType: this.cardType,
             evidence,
-            evidenceLength,
-            support,
             supportLength,
             supportIcons,
             objectCurie: objectElem.id,
-            sources: elem.provided_by,
-            sourcesLength: elem.provided_by.length,
             assocObject: objectElem.label,
             objectLink,
             assocSubject: subjectElem.label,
@@ -661,22 +585,6 @@ export default {
       }
       this.fields = fields;
     },
-    parseEvidence(evidenceGraph) {
-      let result = [];
-      if (evidenceGraph.nodes) {
-        result = evidenceGraph.nodes.filter(elem => elem.id.includes('ECO'));
-      }
-      return result;
-    },
-    parsePublications(pubsList, selfId) {
-      const pubs = [];
-      pubsList.forEach((elem) => {
-        if (elem.id !== this.nodeId && elem.id !== selfId) {
-          pubs.push(elem.id);
-        }
-      });
-      return pubs;
-    },
     parseTaxon(elemObj) {
       const taxon = {
         label: '',
@@ -693,13 +601,13 @@ export default {
         .toUpperCase() + val.slice(1);
     },
 
-    pubHref(curie) {
-      return `/publication/${curie}`;
+    pubHref(pubId) {
+      return `/publication/${pubId}`;
       // const identifier = curie.split(/[:]+/).pop();
       // return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
     },
-    eviHref(evi) {
-      const curie = evi.id || '';
+    eviHref(ecoId) {
+      const curie = ecoId || '';
       const identifier = curie.split(/[:]+/).pop();
       return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
     },
@@ -718,13 +626,6 @@ export default {
       const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
-    sourceLabel(url) {
-      const result = url.split(/[/]+/)
-        .pop()
-        .split(/[.]+/)[0]
-        .toUpperCase();
-      return result;
-    }
   }
 };
 </script>
@@ -764,6 +665,9 @@ export default {
     font-size: 0.9rem;
   }
 
+  table.b-table tr.b-table-details {
+    background-color: #eef2f5;
+  }
 
   .assoc-object,
   .assoc-subject {
@@ -807,11 +711,6 @@ export default {
 
   .support-is-active {
     background: lightblue;
-  }
-
-  .support-section {
-    max-height: 200px;
-    overflow-y: auto;
   }
 
   .list-bullets {

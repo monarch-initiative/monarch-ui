@@ -582,6 +582,7 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   params.append('start', start);
   params.append('rows', rows);
   params.append('highlight_class', 'hilite');
+  params.append('boost_q', 'category:publication^-10');
   params.append('boost_q', 'category:genotype^-10');
   params.append('boost_q', 'category:variant^-35');
   params.append('prefix', '-OMIA');
@@ -617,6 +618,7 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   params.append('rows', 10);
   params.append('start', 0);
   params.append('highlight_class', 'hilite');
+  params.append('boost_q', 'category:publication^-10');
   params.append('boost_q', 'category:genotype^-10');
   params.append('boost_q', 'category:variant^-35');
   params.append('prefix', '-OMIA');
@@ -792,6 +794,25 @@ export async function annotateText(queryText, longestOnly) {
         resolve(responseData);
       }
     })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+export async function getEvidence(evidenceId) {
+  const biolinkUrl = `${biolink}evidence/graph/${evidenceId}/table`;
+
+  return new Promise((resolve, reject) => {
+    axios.get(biolinkUrl)
+      .then((resp) => {
+        const responseData = resp;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        } else {
+          resolve(responseData);
+        }
+      })
       .catch((err) => {
         reject(err);
       });
