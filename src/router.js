@@ -133,6 +133,13 @@ const router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "routeerror" */ './views/RouteError.vue'),
     },
+    {
+      path: '/resolve/:id',
+      name: 'RouteResolver',
+      beforeEnter: (to, from, next) => {
+        // ...
+      }
+    }
   ],
 
   // https://router.vuejs.org/guide/advanced/scroll-behavior.html
