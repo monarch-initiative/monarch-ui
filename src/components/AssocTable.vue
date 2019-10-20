@@ -16,7 +16,7 @@
 
       <h5>
         &nbsp;<strong>{{ totalAssociations }}</strong>&nbsp;
-        <strong>{{ cardType }}</strong> associations.
+        <strong>{{ cardType.replace('-', ' ') }}</strong> associations.
       </h5>
 
       <b-table
@@ -484,12 +484,26 @@ export default {
         }
         else {
           let modifiedCardType = this.cardType;
-          if (modifiedCardType === 'interaction' || modifiedCardType  === 'ortholog-phenotype' || modifiedCardType  === 'ortholog-disease') {
+          if (
+            modifiedCardType === 'interaction'
+            || modifiedCardType  === 'ortholog-phenotype'
+            || modifiedCardType  === 'ortholog-disease'
+          ) {
             modifiedCardType  = 'gene';
             objectTaxon = this.parseTaxon(subjectElem);
           } else if(modifiedCardType === 'homolog') {
             modifiedCardType  = 'gene';
             objectTaxon = this.parseTaxon(objectElem);
+          } else if(
+            modifiedCardType === 'causal-disease'
+            || modifiedCardType === 'noncausal-disease'
+          ) {
+            modifiedCardType = 'disease'
+          } else if(
+            modifiedCardType === 'causal-gene'
+            || modifiedCardType === 'noncausal-gene'
+          ) {
+            modifiedCardType = 'gene'
           }
 
           let objectLink = `/${modifiedCardType}/${objectElem.id}`;

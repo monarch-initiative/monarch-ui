@@ -201,8 +201,12 @@ const availableCardTypes = [
   'anatomy',
   'cellline',
   'disease',
+  'causal-disease',
+  'noncausal-disease',
   'function',
   'gene',
+  'causal-gene',
+  'noncausal-gene',
   'genotype',
   'homolog',
   'interaction',
@@ -219,8 +223,12 @@ const icons = {
   anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
   cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
   disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
+  'causal-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
+  'noncausal-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
   function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
   gene: require('../assets/img/monarch-ui-icon_GENE.png'),
+  'causal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
+  'noncausal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
   homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
   interaction: require('../assets/img/monarch-ui-icon_INTERACTIONS.png'),
@@ -237,8 +245,12 @@ const labels = {
   anatomy: 'Anatomy',
   cellline: 'Cell Line',
   disease: 'Disease',
+  'causal-disease': 'Disease (causal)',
+  'noncausal-disease': 'Disease (noncausal)',
   function: 'Function',
   gene: 'Gene',
+  'causal-gene': 'Gene (causal)',
+  'noncausal-gene': 'Gene (noncausal)',
   genotype: 'Genotype',
   homolog: 'Homolog',
   interaction: 'Interaction',
@@ -543,7 +555,22 @@ export default {
       this.reactomeId = null;
 
       const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
-      const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
+      let neighborhoodPromise;
+
+      // The neighbors view looks for subClassOf relationships
+      // so only include types that will have those relationships
+      const filterInNeighborhood = [
+        'disease',
+        'phenotype',
+        'function',
+        'anatomy',
+      ];
+
+      if (filterInNeighborhood.includes(this.nodeType)) {
+        neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);;
+      } else {
+        neighborhoodPromise = Promise.resolve([]);
+      }
 
       const [node, neighborhood] = await Promise.all(
         [

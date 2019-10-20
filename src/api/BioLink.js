@@ -22,7 +22,9 @@ const servers = {
     'search_url': 'https://solr-dev.monarchinitiative.org/solr/search/',
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
+    //'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
+    'biolink_url': 'http://localhost:5000/api/',
+
   },
 
   production: {
@@ -196,7 +198,8 @@ export async function getNeighborhood(nodeId, nodeType) {
   }
   if (graphResponseData.edges) {
     graphResponseData.edges.forEach((edge) => {
-      if (edge.pred === 'subClassOf') {
+      // subClassOf|part of closure
+      if (edge.pred === 'subClassOf' || edge.pred === 'BFO:0000050') {
         if (edge.sub === nodeId) {
           // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
           if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
@@ -391,6 +394,12 @@ function getBiolinkAnnotation(cardType) {
   else if (cardType === 'ortholog-disease') {
     result = 'ortholog/diseases';
   }
+  else if (cardType === 'causal-disease' || cardType === 'noncausal-disease') {
+    result = 'diseases';
+  }
+  else if (cardType === 'causal-gene' || cardType === 'noncausal-gene') {
+    result = 'genes';
+  }
   else if (cardType === 'function') {
     result = cardType;
   }
@@ -410,6 +419,12 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
   if (cardType === 'function') {
     url = `${biolink}association/type/gene_function`;
     params.subject = nodeId;
+  }
+
+  if (cardType.startsWith('causal')) {
+    params.association_type = 'causal';
+  } else if (cardType.startsWith('noncausal')) {
+    params.association_type = 'non_causal';
   }
 
   if (useTaxonRestriction) {
