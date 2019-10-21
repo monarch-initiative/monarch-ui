@@ -5,6 +5,7 @@
       ref="sidebar"
       :node-type="nodeType"
       :node-label="node.label"
+      :is-group="isGroup"
       :expanded-card="expandedCard"
       :available-cards="availableCards"
       :cards-to-display="nonEmptyCards"
@@ -157,6 +158,7 @@
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
+              :is-group="isGroup"
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
@@ -355,6 +357,8 @@ export default {
       nodeType: null,
       nodeIcon: null,
       nodeCategory: null,
+      originalId: null,
+      isGroup: false,
       availableCards: availableCardTypes,
       nonEmptyCards: [],
       expandedCard: null,
@@ -362,7 +366,6 @@ export default {
       entrezResult: null,
       reactomeId: null,
       isRedirected: false,
-      originalId: null,
 
       counts: {
         disease: 0,
@@ -415,7 +418,8 @@ export default {
 
       if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
-        this.originalId = null
+        this.originalId = null;
+        this.isRedirected = false;
       }
       else {
         const strippedHash = to.hash.slice(1);
@@ -423,8 +427,6 @@ export default {
           this.expandCard(strippedHash);
         }
       }
-      // Reset to enforce making this explicit each time
-      this.isRedirected = false
     },
   },
   created() {
@@ -567,7 +569,7 @@ export default {
       ];
 
       if (filterInNeighborhood.includes(this.nodeType)) {
-        neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);;
+        neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
       } else {
         neighborhoodPromise = Promise.resolve([]);
       }
@@ -697,6 +699,10 @@ export default {
         label: nodeLabelMap[c]
       }));
 
+      if (this.subclasses.length > 0) {
+        this.isGroup = true;
+        console.log("isGroup");
+      }
 
       if (this.node.inheritance) {
         this.inheritance = this.node.inheritance.map(i => i.label).join(', ');

@@ -63,7 +63,7 @@
           </small>
         </template>
 
-        <template v-slot:assocSubject="data">
+        <template v-if="isGroup" v-slot:assocSubject="data">
           <template v-if="data.item.subjectLink">
             <strong>
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
@@ -91,8 +91,7 @@
           </a>
         </template>
 
-        <template v-if="hasFrequencyOnset" v-slot:onset="data"
-        >
+        <template v-if="hasFrequencyOnset" v-slot:onset="data">
           <a
             v-if="data.item.onset"
             :href="data.item.onset.url"
@@ -190,6 +189,11 @@ export default {
       type: Object,
       default: null,
       required: false
+    },
+    isGroup: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -549,6 +553,7 @@ export default {
     generateFields() {
       this.hasTaxon = false;
       this.hasFrequencyOnset = false;
+      let spliceStart = 2;
 
       const fields = [
         {
@@ -564,26 +569,32 @@ export default {
           // sortable: true,
         },
         {
-          key: 'assocSubject',
-          label: this.firstCap(this.nodeType),
-          class: 'assoc-subject',
-          // sortable: true,
-        },
-        {
           key: 'support',
           class: 'support-column-width',
           label: 'Support',
         },
       ];
 
+      if (this.isGroup) {
+        fields.splice(spliceStart, 0, {
+          key: 'assocSubject',
+          label: this.firstCap(this.nodeType),
+          class: 'assoc-subject',
+        });
+        spliceStart++;
+      }
+
       if (isFrequencyOnsetType(this.nodeType, this.cardType)) {
         this.hasFrequencyOnset = true;
-        fields.splice(3, 0, {
+        fields.splice(spliceStart, 0, {
           key: 'frequency',
           label: 'Frequency',
           class: 'frequency-column-width',
         });
-        fields.splice(4, 0, {
+
+        spliceStart++;
+
+        fields.splice(spliceStart, 0, {
           key: 'onset',
           label: 'Onset',
           class: 'onset-column-width',
@@ -654,7 +665,7 @@ export default {
   }
 
   .table {
-    width:inherit;
+    //width:inherit;
   }
   .table.b-table tr {
     outline: 1px solid lightgray;

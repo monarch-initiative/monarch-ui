@@ -73,7 +73,7 @@ export default {
     getLabel(c) {
       return c.label || c.id;
     },
-    closeNeighborhood(){
+    closeNeighborhood() {
       console.log("trying to close");
       this.$emit('toggleNeighborhood');
     }
