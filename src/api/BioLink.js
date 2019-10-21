@@ -22,7 +22,7 @@ const servers = {
     'search_url': 'https://solr-dev.monarchinitiative.org/solr/search/',
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
+    'biolink_url': 'https://api.monarchinitiative.org/api/',
   },
 
   production: {
