@@ -14,8 +14,8 @@ export default function sourceToImage(source) {
       .split(/[.]+/)[0]
       .toUpperCase();
     if (image.match(/biogrid/i)) {
-      image = 'source-biogrid.ico';
-      label = 'Biogrid';
+      image = 'source-biogrid.png';
+      label = 'BioGRID';
     }
     else if (source.match(/clinvar/i)) {
       image = 'source-clinvar.png';
@@ -111,7 +111,7 @@ export default function sourceToImage(source) {
       label = 'AnimalQTLdb';
     }
     else if (source.match(/go/)) {
-      image = 'partner-go.png';
+      image = 'source-geneontology.png';
     }
     else if (source.match(/gene reviews/)) {
       image = 'source-genereviews.png';

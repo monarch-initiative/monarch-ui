@@ -103,20 +103,27 @@
           </div>
 
           <div v-if="!expandedCard" class="row node-content-section">
-            <div class="col-12">
-              <b>Mappings:</b>&nbsp;
+
+            <div v-if="references.length" class="col-12">
+              <span v-if="nodeType === 'disease'"><b>Mappings:&nbsp;</b></span>
+              <span v-else><b>External Resources:&nbsp;</b></span>
               <span v-for="(r, index) in references" :key="index" class="synonym">
-                <a
-                  :href="r.uri"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="node-label-id">
+                <span v-if="r.uri">
+                  <a
+                    :href="r.uri"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="node-label-id">
+                    {{ r.label }}
+                  </a>
+                </span>
+                <span v-else>
                   {{ r.label }}
-                </a>
+                </span>
               </span>
             </div>
 
-            <div v-if="!expandedCard && node.synonyms" class="col-12 node-synonyms">
+            <div v-if="node.synonyms" class="col-12 node-synonyms">
               <b>Synonyms</b><br><br>
               <ul>
                 <li v-for="(s, index) in synonyms" :key="index" class="synonym">
@@ -124,6 +131,7 @@
                 </li>
               </ul>
             </div>
+
           </div>
 
 
@@ -345,7 +353,7 @@ export default {
       superclasses: null,
       subclasses: null,
       synonyms: null,
-      references: null,
+      references: [],
       inheritance: null,
       modifiers: null,
       contentScript: '',
@@ -557,22 +565,7 @@ export default {
       this.reactomeId = null;
 
       const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
-      let neighborhoodPromise;
-
-      // The neighbors view looks for subClassOf relationships
-      // so only include types that will have those relationships
-      const filterInNeighborhood = [
-        'disease',
-        'phenotype',
-        'function',
-        'anatomy',
-      ];
-
-      if (filterInNeighborhood.includes(this.nodeType)) {
-        neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
-      } else {
-        neighborhoodPromise = Promise.resolve([]);
-      }
+      const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
 
       const [node, neighborhood] = await Promise.all(
         [
@@ -596,16 +589,6 @@ export default {
       }
       else {
         this.synonyms = [];
-      }
-
-      if (this.node.xrefs) {
-        this.references = this.node.xrefs.map(s => ({
-          label: s,
-          uri: s
-        }));
-      }
-      else {
-        this.references = [];
       }
 
       if (!this.node.label) {
@@ -683,13 +666,14 @@ export default {
       // the info provided by getNeighborhood()
       //
       const nodeLabelMap = neighborhood.nodeLabelMap;
-      /** const equivalentClasses = neighborhood.equivalentClasses;
-      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));**/
+      /* const equivalentClasses = neighborhood.equivalentClasses;
+      //this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
+      //  id: c,
+      //  label: nodeLabelMap[c]
+      })); */
       const superclasses = neighborhood.superclasses;
       const subclasses = neighborhood.subclasses;
+      const xrefs = neighborhood.xrefs;
       this.superclasses = us.map(us.uniq(superclasses), c => ({
         id: c,
         label: nodeLabelMap[c]
@@ -701,14 +685,22 @@ export default {
 
       if (this.subclasses.length > 0) {
         this.isGroup = true;
-        console.log("isGroup");
       }
 
+      this.references = xrefs.map(s => ({
+        label: s,
+        uri: null
+      }));
+
       if (this.node.inheritance) {
-        this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
+        this.inheritance = us.uniq(
+          this.node.inheritance.map(i => i.label)
+        ).join(', ');
       }
       if (this.node.clinical_modifiers) {
-        this.modifiers = this.node.clinical_modifiers.map(m => m.label).join(', ');
+        this.modifiers = us.uniq(
+          this.node.clinical_modifiers.map(m => m.label)
+        ).join(', ');
       }
 
       this.nodeCategory = this.node.categories

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import us from 'underscore';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
 import getSourceInfo from './Sources'
 
@@ -133,6 +134,7 @@ export async function getNode(nodeId, nodeType) {
 
       bioentityResponseData.type = nodeType;
       // TODO rename uri to iri downstream
+      // are we even using this anymore?
       bioentityResponseData.uri = bioentityResponseData.iri;
       return bioentityResponseData;
     });
@@ -148,7 +150,7 @@ function canUseSuperclassNode(nodeId, nodeType, superId) {
     result = nodeId !== 'MONDO:0000001'; // superId !== 'OBI:1110055' && superId !== 'BFO:0000016';
   }
   else if (nodeType === 'anatomy') {
-    result = nodeId !== 'OBO:CARO_0000000';
+    result = nodeId !== 'UBERON:0001062';
   }
   else if (nodeType === 'phenotype') {
     result = nodeId !== 'UPHENO:0001001';
@@ -166,22 +168,26 @@ const neighborhoodTypes = [
   'disease',
   'phenotype',
   'anatomy',
+  'function'
 ];
+
 
 export async function getNeighborhood(nodeId, nodeType) {
   // const graphUrl = `${biolink}graph/node/${nodeId}`;
   const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
   const nodeLabelMap = {};
+  const xrefMap = {};
   const equivalentClasses = [];
   const superclasses = [];
   const subclasses = [];
+  let xrefs = [];
+  const xrefProp = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
 
-  const params = {
-    fetch_objects: false,
-    get_association_counts: false,
-    exclude_automatic_assertions: true,
-    rows: 100
-  };
+  let params = {};
+
+  if (!neighborhoodTypes.includes(nodeType)) {
+    params.relationship_type = 'equivalentClass'
+  }
 
   const graphResponse = await axios.get(graphUrl, { params });
   const graphResponseData = graphResponse.data;
@@ -192,8 +198,21 @@ export async function getNeighborhood(nodeId, nodeType) {
   if (graphResponseData.nodes) {
     graphResponseData.nodes.forEach((node) => {
       nodeLabelMap[node.id] = node.lbl;
+      if (xrefProp in node.meta) {
+        xrefMap[node.id] = node.meta[xrefProp];
+        console.log(xrefMap[node.id]);
+      } else {
+        xrefMap[node.id] = [];
+      }
     });
   }
+
+  xrefs = xrefMap[nodeId];
+
+  if (nodeType !== 'disease') {
+    xrefs = xrefs.concat([nodeId]);
+  }
+
   if (graphResponseData.edges) {
     graphResponseData.edges.forEach((edge) => {
       // subClassOf|part of closure
@@ -214,12 +233,14 @@ export async function getNeighborhood(nodeId, nodeType) {
       }
       else if (edge.pred === 'equivalentClass') {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
-
         if (edge.sub === nodeId) {
           // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
+          equivalentClasses.push(edge.obj);
+          xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
         }
         else {
           equivalentClasses.push(edge.sub);
+          xrefs = xrefs.concat([edge.sub], xrefMap[edge.sub]);
         }
       }
       // else {
@@ -227,17 +248,15 @@ export async function getNeighborhood(nodeId, nodeType) {
       //   console.log(JSON.stringify(edge, null, 2));
       // }
     });
-  }
-  if (neighborhoodTypes.indexOf(nodeType) === -1) {
-    superclasses.length = 0;
-    subclasses.length = 0;
+    xrefs = us.uniq(xrefs);
   }
 
   return {
     nodeLabelMap,
     equivalentClasses,
     superclasses,
-    subclasses
+    subclasses,
+    xrefs
   };
 }
 
