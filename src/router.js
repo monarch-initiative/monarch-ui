@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Node from './views/Node.vue';
+import { getBasicNode } from './api/BioLink';
+import { reduceCategoryList } from './lib/CategoryMap';
 
 Vue.use(Router);
 
@@ -128,16 +130,22 @@ const router = new Router({
     {
       path: '/*',
       name: 'RouteError',
-      // route level code-splitting
-      // this generates a separate chunk (analytics.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "routeerror" */ './views/RouteError.vue'),
-    },
-    {
-      path: '/resolve/:id',
-      name: 'RouteResolver',
+
+      // Attempt to resolve identifiers to the correct route
+      // eg /MONDO:0007947 -> /disease/MONDO:0007947
       beforeEnter: (to, from, next) => {
-        // ...
+        const nodeId = to.params.pathMatch;
+        getBasicNode(nodeId)
+          .then( (node) => {
+            const reducedType = reduceCategoryList(node.category);
+            if (reducedType === null) {
+              next();
+            } else {
+              router.push(`${reducedType}/${nodeId}`)
+            }
+          })
+          .catch(() => next());
       }
     }
   ],

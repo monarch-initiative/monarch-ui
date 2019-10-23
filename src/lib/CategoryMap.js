@@ -31,7 +31,7 @@ export function reduceCategoryList(categoryList) {
   }, {});
 
   const firstKey = Object.keys(categoryObj)[0];
-  let result;
+  let result = false;
 
   // Gene variant category mixups
   if (firstKey) {

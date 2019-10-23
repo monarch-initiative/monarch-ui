@@ -105,8 +105,8 @@
           <div v-if="!expandedCard" class="row node-content-section">
 
             <div v-if="references.length" class="col-12">
-              <span v-if="nodeType === 'disease'"><b>Mappings:&nbsp;</b></span>
-              <span v-else><b>External Resources:&nbsp;</b></span>
+              <span v-if="nodeType === 'disease'"><b>Mappings:</b>&nbsp;</span>
+              <span v-else><b>External Resources:</b>&nbsp;</span>
               <span v-for="(r, index) in references" :key="index" class="synonym">
                 <span v-if="r.uri">
                   <a

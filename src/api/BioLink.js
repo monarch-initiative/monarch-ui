@@ -142,6 +142,29 @@ export async function getNode(nodeId, nodeType) {
   return nodeSummary;
 }
 
+/**
+ Get basic node info when node type is unknown
+ */
+export async function getBasicNode(nodeId) {
+  const bioentityUrl = `${biolink}bioentity/${nodeId}`;
+
+  return new Promise((resolve, reject) => {
+    axios.get(bioentityUrl)
+      .then((resp) => {
+        const responseData = resp.data;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        }
+        else {
+          resolve(responseData);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
 
 function canUseSuperclassNode(nodeId, nodeType, superId) {
   let result = true;
@@ -200,7 +223,6 @@ export async function getNeighborhood(nodeId, nodeType) {
       nodeLabelMap[node.id] = node.lbl;
       if (xrefProp in node.meta) {
         xrefMap[node.id] = node.meta[xrefProp];
-        console.log(xrefMap[node.id]);
       } else {
         xrefMap[node.id] = [];
       }
@@ -210,6 +232,9 @@ export async function getNeighborhood(nodeId, nodeType) {
   xrefs = xrefMap[nodeId];
 
   if (nodeType !== 'disease') {
+    // Unless we're on a disease page (Mondo), the IDs
+    // themselves represent an external source, eg
+    // HGNC:123 should link to HGNC
     xrefs = xrefs.concat([nodeId]);
   }
 
