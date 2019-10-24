@@ -177,7 +177,7 @@
               <router-link :to="support.url">{{ support.label }}</router-link>
             </div>
             <div>
-              <b-collapse :id="'collapse-pubs' + evidence.id">
+              <b-collapse :id="'collapse-pubs' + evidence.id + data.item.rowNum">
                 <div
                   v-for="(support, index) in data.item.publications.slice(2)"
                   :key="index"
@@ -187,7 +187,7 @@
                 </div>
               </b-collapse>
               <b-button
-                v-b-toggle="'collapse-pubs' + evidence.id"
+                v-b-toggle="'collapse-pubs' + evidence.id + data.item.rowNum"
                 size="sm"
                 class="btn btn-xs px-1 py-0 m-0 pub-btn"
                 variant="primary"
@@ -320,6 +320,7 @@ export default {
     },
 
     processEvidence(evidenceTable) {
+      let rowNum = 0;
       evidenceTable.forEach((evi) => {
         // Clean subject and object records and add local url
         evi.subject.label = evi.subject.label || evi.subject.id;
@@ -355,8 +356,17 @@ export default {
             icon: '../img/sources/' + icon
           }
         });
-
+        evi.rowNum = ++rowNum;
       });
+      // Sorting by has phenotype seems to help the flow of statements,
+      // but more testing needed, ideally these statements would be
+      // grouped together o coupled with a graph view to disambiguate
+      evidenceTable =
+        evidenceTable.sort((a, b) =>
+          (a.relation.label !== 'has phenotype'
+            && b.relation.label === 'has phenotype') ? 1 : -1
+        );
+
       return evidenceTable;
     }
   }

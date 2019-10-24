@@ -136,7 +136,14 @@ const router = new Router({
       // Attempt to resolve identifiers to the correct route
       // eg /MONDO:0007947 -> /disease/MONDO:0007947
       beforeEnter: (to, from, next) => {
-        const nodeId = to.params.pathMatch;
+        let nodeId = to.params.pathMatch;
+        if (nodeId.startsWith('MONARCH')) {
+          // Curie map converts
+          // https://monarchinitiative.org/MONARCH:1234
+          // to :MONARCH:1234, we use these IRIs for case pages
+          // TODO fix this in the UDP ingest
+          nodeId = ':' + nodeId;
+        }
         getBasicNode(nodeId)
           .then( (node) => {
             const reducedType = reduceCategoryList(node.category);

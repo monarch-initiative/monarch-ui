@@ -125,7 +125,7 @@ export default function sourceToImage(source) {
       label = 'Reactome';
     }
     else if (source.match(/udp/)) {
-      image = 'partner-udp.png';
+      image = 'source-udp.png';
     }
     else if (source.match(/string/)) {
       image = 'source-string.png';

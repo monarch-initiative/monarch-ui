@@ -38,7 +38,7 @@ export function getCaseDescription() {
       the case description does not include identifiable information.
       Features of the participant’s medical condition are presented, along with genes of potential
       interest. In addition, we provide similarity scores to diseases, other cases, and non-human models
-      based on <a id="internal-link" href="#compare">phenotype profile comparisons computed by OwlSim</a>.
+      based on phenotype profile comparisons computed by OwlSim.
       If you are a researcher studying a listed gene or clinical feature, or if you have a
       family member with a similar illness, please consider contacting the UDP. Contacting
       the UDP will allow a discussion about options for collaboration and/or study participation.

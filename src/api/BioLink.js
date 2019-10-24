@@ -381,7 +381,7 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   params.append('boost_q', 'category:variant^-35');
   params.append('boost_q', 'category:publication^-10');
   params.append('prefix', '-OMIA');
-  params.append('min_match', '67%');
+  params.append('min_match', '50%');
 
   if (prefixes && prefixes.length) {
     prefixes.forEach((elem) => {

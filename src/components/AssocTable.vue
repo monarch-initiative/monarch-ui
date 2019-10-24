@@ -345,13 +345,7 @@ export default {
           relation.id = 'RO:Unknown';
         }
         relation.label = relation.label.replace(/_/g, ' ');
-        if (relation.id === 'RO:0002200') {
-          if (nodeType !== 'phenotype' && cardType !== 'genotype') {
-            relation.id = 'RO:0002201';
-            relation.label = 'phenotype of';
-          }
-        }
-        else if (relation.id === 'RO:0003301') {
+        if (relation.id === 'RO:0003301') {
           if (nodeType === 'model') {
             relation.id = 'RO:0002615';
             relation.label = 'has model';
@@ -506,12 +500,19 @@ export default {
           ) {
             modifiedCardType = 'gene'
           }
-
           let objectLink = `/${modifiedCardType}/${objectElem.id}`;
+
+          if (modifiedCardType === 'model') {
+            // Models are an index level type (not in our db)
+            // see if the resolver can better type this node
+            objectLink = `/${objectElem.id}`;
+          }
+
           if ((objectElem.id.startsWith('BNODE'))
               && (modifiedCardType !== 'publication')) {
             objectLink = null;
           }
+
           const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
 
           this.fixupRelation(elem, this.nodeType, this.cardType);
