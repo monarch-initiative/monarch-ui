@@ -40,6 +40,9 @@
         <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
             <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
+            <span v-if="originalId" class="node-label-id">
+              (Redirected from {{ originalId }})
+            </span>
           </h4>
           <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
             <a
@@ -64,13 +67,6 @@
              -->
         </div>
         <div v-if="node" class="container-fluid node-container">
-
-          <div v-if="nodeDebug" class="row node-content-section">
-            <div class="col-12">
-              <pre>{{ nodeDebug }}</pre>
-            </div>
-          </div>
-
           <div v-if="!expandedCard" class="row node-content-section">
             <div v-if="node.description" class="col-12">
               <div class="node-description">
@@ -104,7 +100,7 @@
 
           <div v-if="!expandedCard" class="row node-content-section">
             <div class="col-12">
-              <b>References:</b>&nbsp;
+              <b>Mappings:</b>&nbsp;
               <span v-for="(r, index) in references" :key="index" class="synonym">
                 <a
                   :href="r.uri"
@@ -123,15 +119,6 @@
                   {{ s }}
                 </li>
               </ul>
-            </div>
-
-            <div v-if="equivalentClasses && equivalentClasses.length > 0" class="col-12">
-              <b>Equivalent IDs:</b>&nbsp;
-              <span v-for="(r, index) in equivalentClasses" :key="index">
-                <span>
-                  {{ r.id }}&nbsp;
-                </span>
-              </span>
             </div>
           </div>
 
@@ -349,7 +336,6 @@ export default {
       labels,
       nodeId: null,
       nodeType: null,
-      nodeDebug: null,
       nodeIcon: null,
       nodeCategory: null,
       availableCards: availableCardTypes,
@@ -358,6 +344,8 @@ export default {
       hasGeneExac: false,
       entrezResult: null,
       reactomeId: null,
+      isRedirected: false,
+      originalId: null,
 
       counts: {
         disease: 0,
@@ -405,8 +393,9 @@ export default {
 
     $route(to, _from) {
       // Only fetchData if the path is different.
-      if (to.path !== this.path) {
+      if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
+        this.originalId = null
       }
       else {
         const strippedHash = to.hash.slice(1);
@@ -414,6 +403,8 @@ export default {
           this.expandCard(strippedHash);
         }
       }
+      // Reset to enforce making this explicit each time
+      this.isRedirected = false
     },
   },
   created() {
@@ -422,6 +413,14 @@ export default {
 
   updated() {
     // console.log('updated', this.nodeId);
+    if(this.$refs.titleBar){
+      if (this.$refs.titleBar.scrollHeight > 60) {
+        this.$refs.titleBar.style.fontSize = '1.1rem';
+      }
+      else {
+        this.$refs.titleBar.style.fontSize = '';
+      }
+    }
   },
 
   destroyed() {
@@ -501,6 +500,16 @@ export default {
           neighborhoodPromise
         ]
       );
+
+      // Redirect if biolink is returning a different ID than the
+      // one we provided
+      if (this.nodeId !== node.id) {
+        this.isRedirected = true;
+        this.originalId = this.$route.params.id;
+        this.nodeId = node.id;
+        this.$router.push(node.id);
+      }
+
       this.node = node;
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
@@ -518,11 +527,6 @@ export default {
       else {
         this.references = [];
       }
-      // We'll insert our node's id/uri as the first reference.
-      this.references.unshift({
-        label: this.node.id,
-        uri: this.node.uri
-      });
 
       if (!this.node.label) {
         this.node.label = this.node.id;
@@ -561,7 +565,7 @@ export default {
       //
 
       if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
-        const geneInfo = await MyGene.getGeneDescription(this.nodeId);
+        const geneInfo = await MyGene.getGeneDescription(this.node.id);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
           if (node.description) {
@@ -578,8 +582,8 @@ export default {
       }
 
       const reactomePrefix = 'REACT:';
-      if (this.nodeType === 'pathway' && this.nodeId.indexOf(reactomePrefix) === 0) {
-        this.reactomeId = this.nodeId.slice(reactomePrefix.length);
+      if (this.nodeType === 'pathway' && this.node.id.indexOf(reactomePrefix) === 0) {
+        this.reactomeId = this.node.id.slice(reactomePrefix.length);
       }
 
       //
@@ -599,7 +603,11 @@ export default {
       // the info provided by getNeighborhood()
       //
       const nodeLabelMap = neighborhood.nodeLabelMap;
-      const equivalentClasses = neighborhood.equivalentClasses;
+      /** const equivalentClasses = neighborhood.equivalentClasses;
+      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
+        id: c,
+        label: nodeLabelMap[c]
+      }));**/
       const superclasses = neighborhood.superclasses;
       const subclasses = neighborhood.subclasses;
       this.superclasses = us.map(us.uniq(superclasses), c => ({
@@ -610,10 +618,7 @@ export default {
         id: c,
         label: nodeLabelMap[c]
       }));
-      this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
-        id: c,
-        label: nodeLabelMap[c]
-      }));
+
 
       if (this.node.inheritance) {
         this.inheritance = this.node.inheritance.map(i => i.label).join(', ');
@@ -640,18 +645,10 @@ export default {
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
         const cardType = hash.split('?')[0].slice(1);
-        this.$nextTick((_) => {
+        this.$nextTick(() => {
           this.expandCard(cardType);
         });
       }
-      this.$nextTick((_) => {
-        if (this.$refs.titleBar.scrollHeight > 100) {
-          this.$refs.titleBar.style.fontSize = '1.2rem';
-        }
-        else {
-          this.$refs.titleBar.style.fontSize = '';
-        }
-      });
     }
   }
 };
@@ -739,7 +736,7 @@ div.container-cards {
   color: white;
   position: fixed;
   height: $title-bar-max-height;
-  overflow-y: auto;
+  overflow-y: hidden;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
@@ -767,8 +764,8 @@ div.container-cards {
     font-size: inherit;
 
     & .node-label-id {
-      font-size: 1rem;
-      color: #cce34c;
+      font-size: .8rem;
+      color: #a9a9a9a1;
     }
   }
 }

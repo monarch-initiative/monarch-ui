@@ -7,6 +7,7 @@
       :node-label="nodeLabel"
       :subclasses="subclasses"
       :superclasses="superclasses"
+      @toggleNeighborhood="toggleNeighborhood()"
     />
 
     <div>
@@ -115,24 +116,17 @@ export default {
     neighborhoodDisabled() {
       return (!this.superclasses || this.superclasses.length === 0) && (!this.subclasses || this.subclasses.length === 0);
     },
-    debugServerURL() {
-      const debugHash = (this.$route.hash.length > 1)
-        ? (this.$route.hash + 's')
-        : '';
-      const result = biolinkService.debugServerName() + this.$route.path + debugHash;
-      return result;
-    },
+    facetsDisabled() {
+      return false; // this.nodeType === 'publication';
+    }
   },
   created() {
-    // console.log('created', this.nodeId);
   },
 
   updated() {
-    // console.log('updated', this.nodeId);
   },
 
   destroyed() {
-    // console.log('destroyed', this.nodeId);
   },
 
   mounted() {
@@ -262,17 +256,6 @@ $collapsed-sidebar-width: 50px;
     }
 
     &.list-group-item-node {
-      .debug-link-to-alpha {
-        padding: 0;
-        height: 0;
-        width: 100%;
-        border: 2px solid $monarch-bg-color;
-
-        &:hover {
-          border-color: darkslateblue !important;
-        }
-      }
-
       > a {
         text-transform: uppercase;
         vertical-align: bottom;

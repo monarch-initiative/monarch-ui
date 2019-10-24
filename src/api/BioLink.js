@@ -34,7 +34,7 @@ const servers = {
     'search_url': 'https://solr.monarchinitiative.org/solr/search/',
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
+    'biolink_url': 'https://api.monarchinitiative.org/api/'
   },
 
   production: {
@@ -578,13 +578,12 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   const params = new URLSearchParams();
   params.append('start', start);
   params.append('rows', rows);
-  params.append('fetch_objects', false);
-  params.append('exclude_automatic_assertions', false);
-  params.append('exclude_automatic_assertions', false);
-  params.append('use_compact_associations', true);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
+  params.append('boost_q', 'category:variant^-35');
   params.append('prefix', '-OMIA');
+  params.append('min_match', '67%');
+
 
   let categoriesLocal = categories;
   if (!categoriesLocal || categoriesLocal.length === 0) {
@@ -616,13 +615,15 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   params.append('start', 0);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
+  params.append('boost_q', 'category:variant^-35');
+  params.append('prefix', '-OMIA');
+  params.append('min_match', '67%');
 
   if (prefixes && prefixes.length) {
     prefixes.forEach((elem) => {
       params.append('prefix', elem);
     });
   }
-  params.append('prefix', '-OMIA');
 
   if (!category || category === 'all') {
     category = categoriesAll;
@@ -635,8 +636,13 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
     params.append('category', elem);
   });
 
-  if (category.indexOf('gene') >= 0) {
-    params.append('boost_fx', 'pow(edges,0.334)');
+  if (category.length === 1) {
+    if (category[0] === 'gene') {
+      params.append('boost_fx', 'pow(edges,0.334)');
+    }
+    if (category[0] === 'variant' || category[0] === 'genotype') {
+      params.append('minimal_tokenizer', true);
+    }
   }
 
   const returnedPromise = new Promise((resolve, reject) => {
@@ -779,11 +785,4 @@ export async function annotateText(queryText, longestOnly) {
         reject(err);
       });
   });
-}
-
-
-export function debugServerName() {
-  return (serverConfiguration.app_base.length > 0)
-    ? serverConfiguration.app_base
-    : 'https://beta.monarchinitiative.org';
 }
