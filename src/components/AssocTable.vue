@@ -259,7 +259,6 @@ export default {
   },
   methods: {
     toggleTaxonFilter(shouldApply) {
-      console.log(shouldApply);
       if(this.isFacetsShowing && shouldApply){
         this.$refs.tableRef.refresh();
       }

@@ -44,17 +44,7 @@
               (Redirected from {{ originalId }})
             </span>
           </h4>
-          <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
-            <a
-              :href="node.taxon.uri"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="node-label-id">
-              <em>{{ node.taxon.label }}</em>
-            </a>
-          </span>
           &nbsp;
-
           <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
