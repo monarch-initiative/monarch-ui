@@ -152,9 +152,10 @@
 <script>
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
+import { processPublications } from '@/api/Utils';
 import sourceToImage from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
-import EvidenceViewer from '@/components/EvidenceViewer.vue'
+import EvidenceViewer from '@/components/EvidenceViewer.vue';
 
 
 function isFrequencyOnsetType(nodeType, cardType) {
@@ -427,20 +428,12 @@ export default {
         const evidence = us.pick(
           elem, ['id', 'provided_by', 'publications', 'evidence_types']);
 
-        // Make sure pubs have labels and add href
-        // Default should be empty array need to fix in ontobio code (golr_query)
-        if (evidence.publications !== null) {
-          evidence.publications = evidence.publications.map((pub) => {
-            return {
-              id: pub.id,
-              label: pub.label ? pub.label : pub.id,
-              url: this.pubHref(pub.id)
-            }
-          });
-        }
-        else {
-          evidence.publications = [];
-        }
+        evidence.publications = processPublications(evidence.publications);
+
+        // remove _?slim
+        evidence.provided_by = us.uniq(
+          evidence.provided_by.map(db => db.replace(/_?slim/, ""))
+        );
 
         // Provide icon and label for database (provided_by)
         evidence.provided_by = evidence.provided_by.map((db) => {
@@ -626,11 +619,6 @@ export default {
         .toUpperCase() + val.slice(1);
     },
 
-    pubHref(pubId) {
-      return `/publication/${pubId}`;
-      // const identifier = curie.split(/[:]+/).pop();
-      // return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
-    },
     eviHref(ecoId) {
       const curie = ecoId || '';
       const identifier = curie.split(/[:]+/).pop();

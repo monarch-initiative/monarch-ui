@@ -1,7 +1,7 @@
 import axios from 'axios';
 import us from 'underscore';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
-import getSourceInfo from './Sources'
+import getSourceInfo from './Sources';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -228,8 +228,9 @@ export async function getNeighborhood(nodeId, nodeType) {
       }
     });
   }
-
-  xrefs = xrefMap[nodeId];
+  xrefs = xrefMap[nodeId].map(elem =>
+    elem.startsWith("Orphanet") ? elem.replace("Orphanet", "ORPHA") : elem
+  );
 
   if (nodeType !== 'disease') {
     // Unless we're on a disease page (Mondo), the IDs
@@ -259,7 +260,6 @@ export async function getNeighborhood(nodeId, nodeType) {
       else if (edge.pred === 'equivalentClass') {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
         if (edge.sub === nodeId) {
-          // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
           equivalentClasses.push(edge.obj);
           xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
         }
@@ -498,6 +498,7 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
 }
 
 
+// TODO figure out if we still need this (see AnalyzePhenotypes.vue)
 export async function getNodeLabelByCurie(curie) {
   const baseUrl = `${biolink}bioentity/${curie}`;
   const params = {

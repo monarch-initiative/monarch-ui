@@ -95,7 +95,7 @@
     <div class="statements">Supporting Statements</div>
 
     <div v-if="evidenceError" class="border p-2 m-2">
-      <h3>Error fetching evidence</h3>
+      Error fetching evidence
       <!-- <div class="col-xs-12"> {{ evidenceError }} </div> -->
     </div>
 
@@ -120,7 +120,14 @@
         class="table-sm"
       >
         <template v-slot:subject="data">
+          <template v-if="data.item.subject.url">
+            <router-link
+              :to="data.item.subject.url"
+              v-html="$sanitizeText(data.item.subject.label)"/>
+          </template>
+          <template v-else>
             {{ data.item.subject.label }}
+          </template>
         </template>
 
         <template v-slot:relation="data">
@@ -128,15 +135,35 @@
         </template>
 
         <template v-slot:object="data">
+          <template v-if="data.item.object.url">
+            <router-link
+              :to="data.item.object.url"
+              v-html="$sanitizeText(data.item.object.label)"/>
+          </template>
+          <template v-else>
             {{ data.item.object.label }}
+          </template>
         </template>
       </b-table>
+      <div
+        v-if="totalStatements > rowsPerPage">
+        <b-pagination
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="totalStatements"
+          class="pag-width my-1"
+          align="center"
+          size="md"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
+import { processPublications } from '@/api/Utils';
 import sourceToImage from '../lib/sources';
 
 export default {
@@ -149,6 +176,7 @@ export default {
     return {
       currentPage: 1,
       rowsPerPage: 10,
+      totalStatements: 0,
       noProviderPaging: true,
       evidenceFetched: false,
       evidenceError: false,
@@ -199,7 +227,7 @@ export default {
         that.evidenceError = false;
         that.evidenceFetched = true;
       }
-      that.rows =  that.evidenceCache[that.evidence.id];
+      that.processEvidence(that.evidenceCache[that.evidence.id]);
     },
 
     rowsProvider(ctx, callback) {
@@ -208,6 +236,29 @@ export default {
       }).catch((error) => {
         callback([]);
       });
+    },
+
+    processEvidence(evidenceTable) {
+      evidenceTable.forEach((evi) => {
+        // Clean subject and object records
+        evi.subject.label = evi.subject.label || evi.subject.id;
+        evi.subject.url =
+          evi.subject.id.startsWith("BNODE") ? null : `/${evi.subject.id}`;
+
+        evi.object.label = evi.object.label || evi.object.id;
+        evi.object.url =
+          evi.object.id.startsWith("BNODE") ? null : `/${evi.object.id}`;
+
+        evi.publications = processPublications(evi.publications);
+
+        // remove _?slim
+        evi.provided_by = us.uniq(
+          evi.provided_by.map(db => db.replace(/_?slim/, ""))
+        );
+      });
+
+      this.totalStatements = evidenceTable.length;
+      this.rows = evidenceTable;
     }
   }
 }

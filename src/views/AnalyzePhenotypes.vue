@@ -433,6 +433,7 @@ export default {
       this.selectedGene = item;
     },
 
+    // TODO figure out why this needed?
     async fetchLabel(curie, curieType) {
       const that = this;
       try {

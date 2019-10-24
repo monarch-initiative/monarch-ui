@@ -142,7 +142,7 @@ const router = new Router({
             if (reducedType === null) {
               next();
             } else {
-              router.push(`${reducedType}/${nodeId}`)
+              router.push(`/${reducedType}/${nodeId}`)
             }
           })
           .catch(() => next());
