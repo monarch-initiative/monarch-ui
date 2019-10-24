@@ -131,7 +131,11 @@
         </template>
 
         <template v-slot:row-details="row">
-          <EvidenceViewer :evidence="row.item.evidence" :evidenceCache="evidenceCache"/>
+          <EvidenceViewer
+            :evidence="row.item.evidence"
+            :evidenceCache="evidenceCache"
+            :nodeId="nodeId"
+          />
         </template>
       </b-table>
       <div
@@ -152,7 +156,7 @@
 <script>
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
-import { processPublications } from '@/api/Utils';
+import { processPublications } from '@/lib/Utils';
 import sourceToImage from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
 import EvidenceViewer from '@/components/EvidenceViewer.vue';
@@ -504,7 +508,8 @@ export default {
           }
 
           let objectLink = `/${modifiedCardType}/${objectElem.id}`;
-          if (objectElem.id.indexOf(':.well-known') === 0) {
+          if ((objectElem.id.startsWith('BNODE'))
+              && (modifiedCardType !== 'publication')) {
             objectLink = null;
           }
           const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
@@ -687,7 +692,6 @@ export default {
     min-width: 200px;
     // word-break: break-all;
   }
-
 
   .main-font {
     color: #404040;

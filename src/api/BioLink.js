@@ -205,6 +205,7 @@ export async function getNeighborhood(nodeId, nodeType) {
   const subclasses = [];
   let xrefs = [];
   const xrefProp = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
+  const internalId = new RegExp(/MONDO|:?MONARCH/);
 
   let params = {};
 
@@ -232,8 +233,8 @@ export async function getNeighborhood(nodeId, nodeType) {
     elem.startsWith("Orphanet") ? elem.replace("Orphanet", "ORPHA") : elem
   );
 
-  if (nodeType !== 'disease') {
-    // Unless we're on a disease page (Mondo), the IDs
+  if (!internalId.test(nodeId)) {
+    // Unless we own the Id (Mondo/Monarch), the IDs
     // themselves represent an external source, eg
     // HGNC:123 should link to HGNC
     xrefs = xrefs.concat([nodeId]);
@@ -296,6 +297,7 @@ const categoriesAll = [
   'anatomy',
   'substance',
   'individual',
+  'case',
   'publication',
   'model',
   'anatomical entity',

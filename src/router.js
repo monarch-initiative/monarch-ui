@@ -10,6 +10,7 @@ Vue.use(Router);
 const availableCardTypes = [
   'anatomy',
   'cellline',
+  'case',
   'disease',
   'function',
   'gene',

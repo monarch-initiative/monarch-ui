@@ -76,7 +76,7 @@
               <div class="node-description">
                 <b>Description</b><br>
                 <div class="description">
-                  {{ node.description }}
+                  <div v-html="node.description"></div>
                 </div>
               </div>
             </div>
@@ -188,6 +188,7 @@ import us from 'underscore';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
+import { getCaseDescription } from "@/lib/Utils";
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -218,6 +219,7 @@ const availableCardTypes = [
   'causal-gene',
   'noncausal-gene',
   'genotype',
+  'case',
   'homolog',
   'interaction',
   'publication',
@@ -240,6 +242,7 @@ const icons = {
   'causal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
   'noncausal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
+  case: require('../assets/img/monarch-ui-icon_DISEASE.png'),
   homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
   interaction: require('../assets/img/monarch-ui-icon_INTERACTIONS.png'),
   publication: require('../assets/img/monarch-ui-icon_PUBLICATION.png'),
@@ -262,6 +265,7 @@ const labels = {
   'causal-gene': 'Gene (causal)',
   'noncausal-gene': 'Gene (noncausal)',
   genotype: 'Genotype',
+  case: 'Case',
   homolog: 'Homolog',
   interaction: 'Interaction',
   publication: 'Publication',
@@ -384,7 +388,8 @@ export default {
         pathway: 0,
         publication: 0,
         cellline: 0,
-        genotype: 0
+        genotype: 0,
+        case: 0
       },
 
       relationshipsColumns: [
@@ -642,6 +647,8 @@ export default {
             this.synonyms.unshift(hit.name);
           }
         }
+      } else if (this.nodeType === 'case') {
+        node.description = getCaseDescription();
       }
 
       const reactomePrefix = 'REACT:';

@@ -110,6 +110,18 @@
 
     <div v-show="evidenceFetched && !evidenceError">
 
+      <div
+        v-if="totalStatements > rowsPerPage">
+        <b-pagination
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="totalStatements"
+          class="pag-width my-1"
+          align="left"
+          size="md"
+        />
+      </div>
+
       <b-table
         :items="rowsProvider"
         :fields="fields"
@@ -144,18 +156,72 @@
             {{ data.item.object.label }}
           </template>
         </template>
+
+        <template v-slot:publications="data">
+
+          <template v-if="data.item.publications.length < 3">
+            <div
+              v-for="(support, index) in data.item.publications"
+              :key="index"
+              class="row"
+            >
+              <router-link :to="support.url">{{ support.label }}</router-link>
+            </div>
+          </template>
+          <template v-else>
+            <div
+              v-for="(support, index) in data.item.publications.slice(0,2)"
+              :key="index"
+              class="row"
+            >
+              <router-link :to="support.url">{{ support.label }}</router-link>
+            </div>
+            <div>
+              <b-collapse :id="'collapse-pubs' + evidence.id">
+                <div
+                  v-for="(support, index) in data.item.publications.slice(2)"
+                  :key="index"
+                  class="row final-row"
+                >
+                  <router-link :to="support.url">{{ support.label }}</router-link>
+                </div>
+              </b-collapse>
+              <b-button
+                v-b-toggle="'collapse-pubs' + evidence.id"
+                size="sm"
+                class="btn btn-xs px-1 py-0 m-0 pub-btn"
+                variant="primary"
+              >
+                <span class="when-closed">more...</span>
+                <span class="when-opened">less...</span>
+              </b-button>
+            </div>
+          </template>
+        </template>
+
+        <template v-slot:sources="data">
+
+          <div
+            v-for="(support, index) in data.item.provided_by"
+            :key="index"
+            class="row final-row"
+          >
+            <a
+              :href="support.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ support.label }}&nbsp;
+              <img
+                v-if="support.icon"
+                :src="support.icon"
+                class="source-icon">
+            </a>
+          </div>
+        </template>
+
       </b-table>
-      <div
-        v-if="totalStatements > rowsPerPage">
-        <b-pagination
-          v-model="currentPage"
-          :per-page="rowsPerPage"
-          :total-rows="totalStatements"
-          class="pag-width my-1"
-          align="center"
-          size="md"
-        />
-      </div>
+
     </div>
   </div>
 </template>
@@ -163,19 +229,20 @@
 <script>
 import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
-import { processPublications } from '@/api/Utils';
-import sourceToImage from '../lib/sources';
+import { processPublications } from '@/lib/Utils';
+import sourceToImage from '@/lib/sources';
 
 export default {
   components: {},
   props: [
     'evidence',
-    'evidenceCache'
+    'evidenceCache',
+    'nodeId'
   ],
   data () {
     return {
       currentPage: 1,
-      rowsPerPage: 10,
+      rowsPerPage: 5,
       totalStatements: 0,
       noProviderPaging: true,
       evidenceFetched: false,
@@ -196,7 +263,17 @@ export default {
           key: 'object',
           label: 'Object',
           class: 'assoc-object',
-        }
+        },
+        {
+          key: 'publications',
+          label: 'Publications',
+          class: 'publications',
+        },
+        {
+          key: 'sources',
+          label: 'Sources',
+          class: 'sources',
+        },
       ]
     }
   },
@@ -215,7 +292,9 @@ export default {
             throw new Error('getEvidence() returned no data');
           }
           that.evidenceFetched = true;
-          that.evidenceCache[that.evidence.id] = associationsResponse.data.associations;
+          that.evidenceCache[that.evidence.id] =
+            that.processEvidence(associationsResponse.data.associations);
+
           // Sends data back to the parent component AssocTable
           that.$emit('evidenceCache', that.evidenceCache);
 
@@ -224,10 +303,12 @@ export default {
           console.log('BioLink Error', err);
         }
       } else {
+        // console.log("getting evidence from cache");
         that.evidenceError = false;
         that.evidenceFetched = true;
       }
-      that.processEvidence(that.evidenceCache[that.evidence.id]);
+      that.rows = that.evidenceCache[that.evidence.id];
+      that.totalStatements = that.rows.length;
     },
 
     rowsProvider(ctx, callback) {
@@ -240,25 +321,43 @@ export default {
 
     processEvidence(evidenceTable) {
       evidenceTable.forEach((evi) => {
-        // Clean subject and object records
+        // Clean subject and object records and add local url
         evi.subject.label = evi.subject.label || evi.subject.id;
-        evi.subject.url =
-          evi.subject.id.startsWith("BNODE") ? null : `/${evi.subject.id}`;
-
+        if ((evi.subject.id.startsWith("BNODE"))
+            || (evi.subject.id === this.nodeId)) {
+          evi.subject.url = null
+        }
+        else {
+          evi.subject.url = `/${evi.subject.id}`;
+        }
+        // DRY this out
         evi.object.label = evi.object.label || evi.object.id;
-        evi.object.url =
-          evi.object.id.startsWith("BNODE") ? null : `/${evi.object.id}`;
+        if ((evi.object.id.startsWith("BNODE"))
+          || (evi.object.id === this.nodeId)) {
+          evi.object.url = null
+        }
+        else {
+          evi.object.url = `/${evi.object.id}`;
+        }
 
         evi.publications = processPublications(evi.publications);
 
+        // DRY this out
         // remove _?slim
         evi.provided_by = us.uniq(
           evi.provided_by.map(db => db.replace(/_?slim/, ""))
         );
-      });
 
-      this.totalStatements = evidenceTable.length;
-      this.rows = evidenceTable;
+        evi.provided_by = evi.provided_by.map((db) => {
+          const [icon, srcLabel] = sourceToImage(db);
+          return {
+            label: srcLabel,
+            icon: '../img/sources/' + icon
+          }
+        });
+
+      });
+      return evidenceTable;
     }
   }
 }
@@ -270,7 +369,6 @@ export default {
 .evidence-section {
     //max-height: 200px;
     //overflow-y: auto;
-
   div {
     font-size: 0.9rem;
   }
@@ -295,6 +393,10 @@ export default {
     display: none;
   }
 
+  .final-row {
+    margin-right: 0 !important;
+  }
+
   .statements {
     font-weight: bold;
     padding-top: 10px;
@@ -303,6 +405,10 @@ export default {
 
   .evidence-ajax-msg > span {
     vertical-align: middle;
+  }
+
+  .pub-btn {
+    font-size: 0.8rem;
   }
 }
 
