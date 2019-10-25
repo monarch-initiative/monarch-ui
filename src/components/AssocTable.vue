@@ -508,8 +508,8 @@ export default {
             objectLink = `/${objectElem.id}`;
           }
 
-          if ((objectElem.id.startsWith('BNODE'))
-              && (modifiedCardType !== 'publication')) {
+          if (objectElem.id.startsWith('BNODE')
+              && modifiedCardType !== 'publication') {
             objectLink = null;
           }
 

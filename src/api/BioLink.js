@@ -205,7 +205,7 @@ export async function getNeighborhood(nodeId, nodeType) {
   const subclasses = [];
   let xrefs = [];
   const xrefProp = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
-  const internalId = new RegExp(/MONDO|:?MONARCH/);
+  const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
   let params = {};
 

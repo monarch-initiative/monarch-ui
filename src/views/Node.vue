@@ -188,7 +188,6 @@ import us from 'underscore';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
-import { getCaseDescription } from "@/lib/Utils";
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -632,7 +631,7 @@ export default {
       // call from the BioLink server.
       //
 
-      if ((this.nodeType === 'gene' || this.nodeType === 'variant')) {
+      if (this.nodeType === 'gene' || this.nodeType === 'variant') {
         const geneInfo = await MyGene.getGeneDescription(this.node.id);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
@@ -648,7 +647,7 @@ export default {
           }
         }
       } else if (this.nodeType === 'case') {
-        node.description = getCaseDescription();
+        node.description = this.getCaseDescription();
       }
 
       const reactomePrefix = 'REACT:';
@@ -661,9 +660,11 @@ export default {
       // a nice URL
       //
       const ncbiTaxonPrefix = 'NCBITaxon:';
-      if (this.node.taxon &&
-          this.node.taxon.id &&
-          this.node.taxon.id.indexOf(ncbiTaxonPrefix) === 0) {
+      if (
+        this.node.taxon
+        && this.node.taxon.id
+        && this.node.taxon.id.indexOf(ncbiTaxonPrefix) === 0
+      ) {
         const taxonNumber = this.node.taxon.id.slice(ncbiTaxonPrefix.length);
         this.node.taxon.uri = `https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=info&id=${taxonNumber}`;
       }
@@ -732,6 +733,40 @@ export default {
           this.expandCard(cardType);
         });
       }
+    },
+    getCaseDescription() {
+      return `
+    <div class="text">
+      The NIH Undiagnosed Disease Program (UDP) was started in 2008.
+      The program’s goals include making diagnosis and conducting research for individuals
+      and families with illnesses that remain undiagnosed despite an extensive medical
+      workup. In 2013, the program expanded to the Undiagnosed Diseases Network (UDN).
+      The UDN performs similar work, but now includes a number of clinical and research
+      sites across the United States. Persons interested in learning more about the UDN,
+      are invited to visit the UDN website:<br>
+      <a href="https://undiagnosed.hms.harvard.edu/">
+        https://undiagnosed.hms.harvard.edu/
+      </a>
+    </div>
+
+    <div class="text" style="padding-top:10px">
+      This case includes information from a participant in the Undiagnosed Diseases Program
+      (UDP) at the National Institutes of Health. For protection of participant privacy,
+      the case description does not include identifiable information.
+      Features of the participant’s medical condition are presented, along with genes of potential
+      interest. In addition, we provide similarity scores to diseases, other cases, and non-human models
+      based on phenotype profile comparisons computed by OwlSim.
+      If you are a researcher studying a listed gene or clinical feature, or if you have a
+      family member with a similar illness, please consider contacting the UDP. Contacting
+      the UDP will allow a discussion about options for collaboration and/or study participation.
+      Inquiries should be sent to David Adams, MD, PhD at david.adams[at]nih.gov.
+      Some UDN families and individuals have elected to post more extensive information on the web.
+      Those pages can be viewed at the following website:<br>
+      <a href="https://undiagnosed.hms.harvard.edu/updates/participant-pages/">
+        https://undiagnosed.hms.harvard.edu/updates/participant-pages/
+      </a>
+    </div>
+       `;
     }
   }
 };

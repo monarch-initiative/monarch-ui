@@ -204,18 +204,30 @@
           <div
             v-for="(support, index) in data.item.provided_by"
             :key="index"
+            class="row"
+          >
+            {{ support.label }}&nbsp;
+
+            <img
+              v-if="support.icon"
+              :src="support.icon"
+              class="source-icon">
+          </div>
+        </template>
+
+        <template v-slot:references="data">
+          <div
+            v-for="(support, index) in data.item.references"
+            :key="index"
             class="row final-row"
           >
             <a
-              :href="support.url"
+              :href="support[0]"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ support.label }}&nbsp;
-              <img
-                v-if="support.icon"
-                :src="support.icon"
-                class="source-icon">
+              {{ support[1]}}
+              <i class="fa fa-external-link" aria-hidden="true"></i>
             </a>
           </div>
         </template>
@@ -229,7 +241,7 @@
 <script>
 import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
-import { processPublications } from '@/lib/Utils';
+import { processPublications, getXrefUrl } from '@/lib/Utils';
 import sourceToImage from '@/lib/sources';
 
 export default {
@@ -252,17 +264,17 @@ export default {
         {
           key: 'subject',
           label: 'Subject',
-          class: 'assoc-subject',
+          class: 'subject',
         },
         {
           key: 'relation',
           label: 'Relation',
-          class: 'relation-column-width',
+          class: 'relation',
         },
         {
           key: 'object',
           label: 'Object',
-          class: 'assoc-object',
+          class: 'object',
         },
         {
           key: 'publications',
@@ -273,6 +285,11 @@ export default {
           key: 'sources',
           label: 'Sources',
           class: 'sources',
+        },
+        {
+          key: 'references',
+          label: 'References',
+          class: 'references',
         },
       ]
     }
@@ -324,8 +341,7 @@ export default {
       evidenceTable.forEach((evi) => {
         // Clean subject and object records and add local url
         evi.subject.label = evi.subject.label || evi.subject.id;
-        if ((evi.subject.id.startsWith("BNODE"))
-            || (evi.subject.id === this.nodeId)) {
+        if (evi.subject.id.startsWith("BNODE") || evi.subject.id === this.nodeId) {
           evi.subject.url = null
         }
         else {
@@ -333,8 +349,7 @@ export default {
         }
         // DRY this out
         evi.object.label = evi.object.label || evi.object.id;
-        if ((evi.object.id.startsWith("BNODE"))
-          || (evi.object.id === this.nodeId)) {
+        if (evi.object.id.startsWith("BNODE") || evi.object.id === this.nodeId) {
           evi.object.url = null
         }
         else {
@@ -349,22 +364,54 @@ export default {
           evi.provided_by.map(db => db.replace(/_?slim/, ""))
         );
 
+        const subjects = [evi.subject.id].concat(evi.subject_eq);
+        const objects = [evi.object.id].concat(evi.object_eq);
+
+        evi.references = [];
+
+        evi.provided_by.forEach((db) => {
+          const dbName = db
+            .split("/")
+            .pop()
+            .replace("#", "")
+            .split(".")[0]
+            .toLowerCase();
+
+          for (const subject of subjects) {
+            const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
+            if (subjectUrl !== null) {
+              evi.references.push([subjectUrl, subject]);
+              break;
+            }
+          }
+
+          for (const object of objects) {
+            const objectUrl = getXrefUrl(dbName, object, evi.object.label);
+            if (objectUrl !== null) {
+              evi.references.push([objectUrl, object]);
+              break;
+            }
+          }
+        });
+
         evi.provided_by = evi.provided_by.map((db) => {
           const [icon, srcLabel] = sourceToImage(db);
+
           return {
             label: srcLabel,
             icon: '../img/sources/' + icon
           }
         });
+
         evi.rowNum = ++rowNum;
       });
       // Sorting by has phenotype seems to help the flow of statements,
       // but more testing needed, ideally these statements would be
       // grouped together o coupled with a graph view to disambiguate
       evidenceTable =
-        evidenceTable.sort((a, b) =>
-          (a.relation.label !== 'has phenotype'
-            && b.relation.label === 'has phenotype') ? 1 : -1
+        evidenceTable.sort((a, b) => (
+          a.relation.label !== 'has phenotype'
+          && b.relation.label === 'has phenotype') ? 1 : -1
         );
 
       return evidenceTable;
@@ -401,6 +448,14 @@ export default {
   .collapsed > .when-opened,
   :not(.collapsed) > .when-closed {
     display: none;
+  }
+
+  .relation {
+    font-size: 0.8rem;
+  }
+
+  .publications {
+    font-size: 0.8rem;
   }
 
   .final-row {
