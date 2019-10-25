@@ -693,6 +693,8 @@ export default {
 
       if (this.subclasses.length > 0) {
         this.isGroup = true;
+      } else {
+        this.isGroup = false;
       }
 
       this.references = xrefs.map(s => ({

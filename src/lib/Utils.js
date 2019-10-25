@@ -36,6 +36,11 @@ export function getXrefUrl(source, curie, label) {
     url = xrefs[source][prefix];
     url = url.replace("[reference]", reference);
     url = url.replace("[label]", label);
+
+    // OMIM:1234.123 -> OMIM:1234#123
+    if (prefix === 'OMIM') {
+      url = url.replace(".", "#");
+    }
   }
   return url;
 }

@@ -575,11 +575,17 @@ export async function annotateText(queryText, longestOnly) {
   });
 }
 
-export async function getEvidence(evidenceId) {
+export async function getEvidence(evidenceId, nodeType) {
   const biolinkUrl = `${biolink}evidence/graph/${evidenceId}/table`;
 
+  let params = {};
+
+  if (nodeType === 'publication') {
+    params.is_publication = true;
+  }
+
   return new Promise((resolve, reject) => {
-    axios.get(biolinkUrl)
+    axios.get(biolinkUrl, { params })
       .then((resp) => {
         const responseData = resp;
         if (typeof responseData !== 'object') {

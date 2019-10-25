@@ -49,6 +49,7 @@ export default function sourceToImage(source) {
     }
     else if (source.match(/hpo/)) {
       image = 'source-hpo.png';
+      label = 'HPO';
     }
     else if (source.match(/impc/)) {
       image = 'source-impc.png';
@@ -58,6 +59,7 @@ export default function sourceToImage(source) {
     }
     else if (source.match(/mgi/)) {
       image = 'source-mgi.png';
+      label = '';
     }
     else if (source.match(/mpd/)) {
       image = 'source-mpd.jpg';
@@ -68,6 +70,7 @@ export default function sourceToImage(source) {
     }
     else if (source.match(/omia/)) {
       image = 'source-omia.png';
+      label = '';
     }
     else if (source.match(/o?mim/)) {
       image = 'source-omim.png';

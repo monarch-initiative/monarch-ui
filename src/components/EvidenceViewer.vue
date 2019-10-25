@@ -82,7 +82,8 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ support.label }}&nbsp;
+              {{ support.label }}
+              <span v-if="support.label">&nbsp;</span>
               <img
                 v-if="support.icon"
                 :src="support.icon"
@@ -206,8 +207,8 @@
             :key="index"
             class="row"
           >
-            {{ support.label }}&nbsp;
-
+            {{ support.label }}
+            <span v-if="support.label">&nbsp;</span>
             <img
               v-if="support.icon"
               :src="support.icon"
@@ -241,7 +242,7 @@
 <script>
 import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
-import { processPublications, getXrefUrl } from '@/lib/Utils';
+import { getXrefUrl } from '@/lib/Utils';
 import sourceToImage from '@/lib/sources';
 
 export default {
@@ -249,7 +250,8 @@ export default {
   props: [
     'evidence',
     'evidenceCache',
-    'nodeId'
+    'nodeId',
+    'nodeType'
   ],
   data () {
     return {
@@ -302,7 +304,7 @@ export default {
       if (!(that.evidence.id in that.evidenceCache) && !that.evidenceFetched) {
         that.evidenceError = false;
         try {
-          const associationsResponse = await getEvidence(that.evidence.id);
+          const associationsResponse = await getEvidence(that.evidence.id, this.nodeType);
 
           if (!associationsResponse.data
             || !associationsResponse.data.associations) {
@@ -356,7 +358,15 @@ export default {
           evi.object.url = `/${evi.object.id}`;
         }
 
-        evi.publications = processPublications(evi.publications);
+        evi.publications = evi.publications
+          .filter(pub => !pub.id.startsWith('MONDO'))
+          .map((pub) => {
+            return {
+              id: pub.id,
+              label: pub.id,
+              url: `/publication/${pub.id}`
+            }
+          });
 
         // DRY this out
         // remove _?slim
@@ -377,17 +387,23 @@ export default {
             .split(".")[0]
             .toLowerCase();
 
-          for (const subject of subjects) {
+          for (let subject of subjects) {
             const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
             if (subjectUrl !== null) {
+              if (dbName === 'impc' && subject.startsWith("MGI")) {
+                subject = subject.replace("MGI:", "IMPC:");
+              }
               evi.references.push([subjectUrl, subject]);
               break;
             }
           }
 
-          for (const object of objects) {
+          for (let object of objects) {
             const objectUrl = getXrefUrl(dbName, object, evi.object.label);
             if (objectUrl !== null) {
+              if (dbName === 'impc' && object.startsWith("MGI")) {
+                object = object.replace("MGI:", "IMPC:");
+              }
               evi.references.push([objectUrl, object]);
               break;
             }

@@ -135,6 +135,7 @@
             :evidence="row.item.evidence"
             :evidenceCache="evidenceCache"
             :nodeId="nodeId"
+            :nodeType="nodeType"
           />
         </template>
       </b-table>
@@ -327,78 +328,68 @@ export default {
     fixupRelation(elem, nodeType, cardType) {
       const relation = elem.relation;
 
-      if (!relation) {
+      /*if (!relation) {
         console.log('fixupRelation NO RELATION');
         console.log(JSON.stringify(elem, null, 2));
         elem.relation = {
           label: 'Unknown',
           id: 'RO:Unknown',
         };
+      }*/
+      //else {
+      let inverse = false;
+      if (!relation.label && relation.id) {
+        relation.label = relation.id;
+      } else if (!relation.label) {
+        relation.label = '';
+        relation.id = '';
       }
-      else {
-        let inverse = false;
-        if (!relation.label && relation.id) {
-          relation.label = relation.id;
+      relation.label = relation.label.replace(/_/g, ' ');
+      if (relation.id === 'RO:0003301') {
+        if (nodeType === 'model') {
+          relation.id = 'RO:0002615';
+          relation.label = 'has model';
         }
-        else if (!relation.label) {
-          relation.label = 'Unknown';
-          relation.id = 'RO:Unknown';
+      } else if (relation.id === 'RO:0002615') {
+        if (nodeType !== 'model') {
+          relation.id = 'RO:0003301';
+          relation.label = 'is model of';
         }
-        relation.label = relation.label.replace(/_/g, ' ');
-        if (relation.id === 'RO:0003301') {
-          if (nodeType === 'model') {
-            relation.id = 'RO:0002615';
-            relation.label = 'has model';
-          }
+      } else if (relation.id === 'RO:0002206') {
+        if (nodeType === 'gene' && cardType === 'anatomy') {
+          relation.id = 'RO:0002292';
+          relation.label = 'expresses';
         }
-        else if (relation.id === 'RO:0002615') {
-          if (nodeType !== 'model') {
-            relation.id = 'RO:0003301';
-            relation.label = 'is model of';
-          }
+      } else if (relation.id === 'RO:0002607') {
+        if (nodeType === 'gene' && cardType === 'disease') {
+          inverse = true;
         }
-        else if (relation.id === 'RO:0002206') {
-          if (nodeType === 'gene' && cardType === 'anatomy') {
-            relation.id = 'RO:0002292';
-            relation.label = 'expresses';
-          }
+      } else if (relation.id === 'RO:0003303') {
+        if (cardType === 'disease' || cardType === 'phenotype') {
+          inverse = true;
         }
-        else if (relation.id === 'RO:0002607') {
-          if (nodeType === 'gene' && cardType === 'disease') {
-            inverse = true;
-          }
+      } else if (relation.id === 'RO:0003304') {
+        if (cardType === 'disease' || cardType === 'phenotype') {
+          inverse = true;
         }
-        else if (relation.id === 'RO:0003303') {
-          if (cardType === 'disease' || cardType === 'phenotype') {
-            inverse = true;
-          }
+      } else if (relation.id === 'GENO:0000841') {
+        if (nodeType === 'gene' && cardType === 'disease') {
+          inverse = true;
         }
-        else if (relation.id === 'RO:0003304') {
-          if (cardType === 'disease' || cardType === 'phenotype') {
-            inverse = true;
-          }
+      } else if (relation.id === 'GENO:0000408') {
+        if (nodeType === 'variant' && cardType === 'gene') {
+          relation.id = 'GENO:0000413';
+          relation.label = 'has allele';
         }
-        else if (relation.id === 'GENO:0000841') {
-          if (nodeType === 'gene' && cardType === 'disease') {
-            inverse = true;
-          }
+      } else if (relation.id === 'RO:0002331') {
+        if (nodeType === 'gene' && cardType === 'pathway') {
+          inverse = true;
         }
-        else if (relation.id === 'GENO:0000408') {
-          if (nodeType === 'variant' && cardType === 'gene') {
-            relation.id = 'GENO:0000413';
-            relation.label = 'has allele';
-          }
+      } else if (relation.id === 'GENO:0000639') {
+        if (nodeType === 'variant' && cardType === 'gene') {
+          inverse = true;
         }
-        else if (relation.id === 'RO:0002331') {
-          if (nodeType === 'gene' && cardType === 'pathway') {
-            inverse = true;
-          }
-        }
-        else if (relation.id === 'GENO:0000639') {
-          if (nodeType === 'variant' && cardType === 'gene') {
-            inverse = true;
-          }
-        }
+        //}
         relation.inverse = inverse;
         // if (inverse) {
         //   relation.label = `&Larr;&nbsp;${relation.label}&nbsp;&Larr;`;
