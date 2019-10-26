@@ -132,8 +132,8 @@ export default
     "OMIMPS": "http://www.omim.org/phenotypicSeries/[reference]"
   },
   "orphanet": {
-    "ORPHA": "http://www.orpha.net/ORDO/Orphanet_[reference]",
-    "Orphanet": "http://www.orpha.net/ORDO/Orphanet_[reference]"
+    "ORPHA": "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=[reference]"
+    "Orphanet": "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=[reference]"
   },
   "pato": {
     "PATO": "http://purl.obolibrary.org/obo/PATO_[reference]"
