@@ -1,7 +1,7 @@
 <template>
 
   <nav id="neighborhood" :class="{ active: isVisible }">
-    <i v-on:click="closeNeighborhood()" class="close fa fa-times" aria-hidden="true"></i>
+    <i class="close fa fa-times" aria-hidden="true" @click="closeNeighborhood()"/>
     <div class="neighborhood">
       <div
         v-for="c in superclasses"
@@ -74,7 +74,7 @@ export default {
       return c.label || c.id;
     },
     closeNeighborhood() {
-      console.log("trying to close");
+      console.log('trying to close');
       this.$emit('toggleNeighborhood');
     }
   },

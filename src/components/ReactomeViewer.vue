@@ -62,8 +62,7 @@ export default {
         this.buildDiagram();
       }
       this.loadDiagram();
-    }
-    else {
+    } else {
       const scriptTag = document.createElement('script');
       scriptTag.src = reactomeLibraryURL;
       scriptTag.id = reactomeScriptId;
@@ -84,8 +83,7 @@ export default {
       if (wrapper) {
         this.width = wrapper.clientWidth;
         this.height = window.innerHeight - 150;
-      }
-      else {
+      } else {
         console.log('fit() no wrapper', reactomeWrapperId, this.diagram);
         this.width = 50;
         this.height = 50;

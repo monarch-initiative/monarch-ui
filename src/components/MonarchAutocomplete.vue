@@ -246,8 +246,7 @@ export default {
           value: elem,
         });
       });
-    }
-    else {
+    } else {
       this.options = [
         {
           text: 'All',
@@ -307,8 +306,7 @@ export default {
         });
         this.open = true;
         this.loading = false;
-      }
-      catch (e) {
+      } catch (e) {
         console.log('nodeResponse ERROR', e, this);
       }
     },
@@ -317,12 +315,10 @@ export default {
       if (currentData) {
         if (!this.definedCategories) {
           this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-        }
-        else {
+        } else {
           this.$emit('interface', currentData);
         }
-      }
-      else {
+      } else {
         this.showMore();
       }
       this.value = '';
@@ -337,8 +333,7 @@ export default {
     toggleSuggestions(event) {
       if (this.open) {
         this.open = false;
-      }
-      else if (this.suggestions.length > 0 && event.target.nodeName === 'INPUT') {
+      } else if (this.suggestions.length > 0 && event.target.nodeName === 'INPUT') {
         this.open = true;
       }
     },
@@ -366,8 +361,7 @@ export default {
       const currentData = this.suggestions[index];
       if (!this.definedCategories) {
         this.$router.push({ path: `/${currentData.category}/${currentData.curie}` });
-      }
-      else {
+      } else {
         this.$emit('interface', this.suggestions[index]);
       }
       this.value = '';
@@ -395,8 +389,7 @@ export default {
       this.value = searchString;
       if (category) {
         this.category = category;
-      }
-      else {
+      } else {
         this.fetchData();
       }
     }

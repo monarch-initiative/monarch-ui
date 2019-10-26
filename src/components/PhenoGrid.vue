@@ -41,8 +41,7 @@ export default {
   updated() {
     if (this.pgVersion === this.index) {
       this.launchPhenogrid();
-    }
-    else {
+    } else {
       this.pgVersion = this.index;
     }
   },

@@ -1,6 +1,12 @@
 <template>
   <div class="container-fluid evidence-section py-0">
-    <div class="summary">Summary</div>
+    <div class="summary">
+      Summary ({{
+        evidence.evidence_types.length
+          + evidence.publications.length
+          + evidence.provided_by.length
+      }})
+    </div>
 
     <template v-if="evidence.evidence_types.length">
       <div>
@@ -13,7 +19,7 @@
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
           <i class="fa fa-fw fa-flask text-info"/>
-          Evidence Codes ({{evidence.evidence_types.length}})
+          Evidence Codes ({{ evidence.evidence_types.length }})
         </b-button>
         <b-collapse :id="'collapse-1' + evidence.id">
           <div
@@ -44,7 +50,7 @@
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
           <i class="fa fa-fw fa-book text-info"/>
-          Publications ({{evidence.publications.length}})
+          Publications ({{ evidence.publications.length }})
         </b-button>
         <b-collapse :id="'collapse-2' + evidence.id">
           <div
@@ -69,7 +75,7 @@
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
           <i class="fa fa-fw fa-database text-info"/>
-          Sources ({{evidence.provided_by.length}})
+          Sources ({{ evidence.provided_by.length }})
         </b-button>
         <b-collapse :id="'collapse-3' + evidence.id">
           <div
@@ -93,7 +99,6 @@
         </b-collapse>
       </div>
     </template>
-    <div class="statements">Supporting Statements</div>
 
     <div v-if="evidenceError" class="border p-2 m-2">
       Error fetching evidence
@@ -101,6 +106,7 @@
     </div>
 
     <div v-show="!evidenceFetched && !evidenceError" class="evidence-ajax-msg">
+
       <b-spinner
         class="loading-spinner"
         type="grow"
@@ -111,8 +117,10 @@
 
     <div v-show="evidenceFetched && !evidenceError">
 
-      <div
-        v-if="totalStatements > rowsPerPage">
+      <div class="statements">Supporting Statements ({{ totalStatements }})</div>
+
+      <div v-if="totalStatements > rowsPerPage">
+
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
@@ -122,6 +130,7 @@
           size="md"
         />
       </div>
+
 
       <b-table
         :items="rowsProvider"
@@ -144,7 +153,7 @@
         </template>
 
         <template v-slot:relation="data">
-            {{ data.item.relation.label }}
+          {{ data.item.relation.label }}
         </template>
 
         <template v-slot:object="data">
@@ -227,8 +236,8 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ support[1]}}
-              <i class="fa fa-external-link" aria-hidden="true"></i>
+              {{ support[1] }}
+              <i class="fa fa-external-link" aria-hidden="true"/>
             </a>
           </div>
         </template>
@@ -247,13 +256,26 @@ import sourceToImage from '@/lib/sources';
 
 export default {
   components: {},
-  props: [
-    'evidence',
-    'evidenceCache',
-    'nodeId',
-    'nodeType'
-  ],
-  data () {
+  props: {
+    evidence: {
+      type: Object,
+      required: true,
+    },
+    evidenceCache: {
+      type: Object,
+      required: true,
+    },
+    nodeId: {
+      type: String,
+      required: true,
+    },
+    nodeType: {
+      type: String,
+      required: false,
+      default: ''
+    },
+  },
+  data() {
     return {
       currentPage: 1,
       rowsPerPage: 5,
@@ -294,7 +316,7 @@ export default {
           class: 'references',
         },
       ]
-    }
+    };
   },
   methods: {
 
@@ -343,35 +365,31 @@ export default {
       evidenceTable.forEach((evi) => {
         // Clean subject and object records and add local url
         evi.subject.label = evi.subject.label || evi.subject.id;
-        if (evi.subject.id.startsWith("BNODE") || evi.subject.id === this.nodeId) {
-          evi.subject.url = null
-        }
-        else {
+        if (evi.subject.id.startsWith('BNODE') || evi.subject.id === this.nodeId) {
+          evi.subject.url = null;
+        } else {
           evi.subject.url = `/${evi.subject.id}`;
         }
         // DRY this out
         evi.object.label = evi.object.label || evi.object.id;
-        if (evi.object.id.startsWith("BNODE") || evi.object.id === this.nodeId) {
-          evi.object.url = null
-        }
-        else {
+        if (evi.object.id.startsWith('BNODE') || evi.object.id === this.nodeId) {
+          evi.object.url = null;
+        } else {
           evi.object.url = `/${evi.object.id}`;
         }
 
         evi.publications = evi.publications
           .filter(pub => !pub.id.startsWith('MONDO'))
-          .map((pub) => {
-            return {
-              id: pub.id,
-              label: pub.id,
-              url: `/publication/${pub.id}`
-            }
-          });
+          .map(pub => ({
+            id: pub.id,
+            label: pub.id,
+            url: `/publication/${pub.id}`
+          }));
 
         // DRY this out
         // remove _?slim
         evi.provided_by = us.uniq(
-          evi.provided_by.map(db => db.replace(/_?slim/, ""))
+          evi.provided_by.map(db => db.replace(/_?slim/, ''))
         );
 
         const subjects = [evi.subject.id].concat(evi.subject_eq);
@@ -381,33 +399,32 @@ export default {
 
         evi.provided_by.forEach((db) => {
           const dbName = db
-            .split("/")
+            .split('/')
             .pop()
-            .replace("#", "")
-            .split(".")[0]
+            .replace('#', '')
+            .split('.')[0]
             .toLowerCase();
 
-          for (let subject of subjects) {
+          subjects.forEach((subject) => {
             const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
             if (subjectUrl !== null) {
-              if (dbName === 'impc' && subject.startsWith("MGI")) {
-                subject = subject.replace("MGI:", "IMPC:");
+              if (dbName === 'impc' && subject.startsWith('MGI')) {
+                subject = subject.replace('MGI:', 'IMPC:');
               }
               evi.references.push([subjectUrl, subject]);
-              break;
             }
-          }
+          });
 
-          for (let object of objects) {
+          subjects.forEach((object) => {
             const objectUrl = getXrefUrl(dbName, object, evi.object.label);
             if (objectUrl !== null) {
-              if (dbName === 'impc' && object.startsWith("MGI")) {
-                object = object.replace("MGI:", "IMPC:");
+              if (dbName === 'impc' && object.startsWith('MGI')) {
+                object = object.replace('MGI:', 'IMPC:');
               }
               evi.references.push([objectUrl, object]);
-              break;
             }
-          }
+          });
+
         });
 
         evi.provided_by = evi.provided_by.map((db) => {
@@ -416,7 +433,7 @@ export default {
           return {
             label: srcLabel,
             icon: '../img/sources/' + icon
-          }
+          };
         });
 
         evi.rowNum = ++rowNum;
@@ -426,14 +443,13 @@ export default {
       // grouped together o coupled with a graph view to disambiguate
       evidenceTable =
         evidenceTable.sort((a, b) => (
-          a.relation.label !== 'has phenotype'
-          && b.relation.label === 'has phenotype') ? 1 : -1
-        );
+          (a.relation.label !== 'has phenotype'
+            && b.relation.label === 'has phenotype') ? 1 : -1));
 
       return evidenceTable;
     }
   }
-}
+};
 
 </script>
 

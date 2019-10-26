@@ -38,8 +38,7 @@ export function reduceCategoryList(categoryList) {
     result = categoryObj.gene
       || categoryObj.variant
       || categoryObj[firstKey];
-  }
-  else if (categoryList.filter(value => modelCats.includes(value)).length > 0) {
+  } else if (categoryList.filter(value => modelCats.includes(value)).length > 0) {
     // Get the intersection of categoryList and modelCats
     result = 'model';
   } else {

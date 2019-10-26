@@ -9,8 +9,7 @@ export default async function getNewsItems() {
   try {
     const newsParsed = yaml.safeLoad(newsResponse.data, 'utf8');
     newsItems = newsParsed.news.items;
-  }
-  catch (e) {
+  } catch (e) {
     console.log('getNewsItems yaml.safeLoad ERROR', e);
   }
 

@@ -295,8 +295,7 @@ export default {
           };
           this.searchResults.push(resultPacket);
         });
-      }
-      catch (e) {
+      } catch (e) {
         console.log('Search ERROR', e, this);
       }
     }

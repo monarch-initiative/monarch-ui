@@ -1,4 +1,4 @@
-import xrefs from "@/lib/conf/xrefs";
+import xrefs from '@/lib/conf/xrefs';
 
 /**
  * Processes a list of publications and returns a list
@@ -10,13 +10,11 @@ import xrefs from "@/lib/conf/xrefs";
 export function processPublications(publications) {
   return publications
     .filter(pub => !pub.id.startsWith('MONDO'))
-    .map((pub) => {
-      return {
-        id: pub.id,
-        label: pub.label || pub.id,
-        url: `/publication/${pub.id}`
-      }
-    });
+    .map(pub => ({
+      id: pub.id,
+      label: pub.label || pub.id,
+      url: `/publication/${pub.id}`
+    }));
 }
 
 /**
@@ -31,16 +29,15 @@ export function processPublications(publications) {
  */
 export function getXrefUrl(source, curie, label) {
   let url = null;
-  const [prefix, reference] = curie.split(":");
+  let [prefix, reference] = curie.split(':');
+  // OMIM:1234.123 -> OMIM:1234#123
+  if (prefix === 'OMIM') {
+    reference = reference.replace('.', '#');
+  }
   if (source in xrefs && prefix in xrefs[source]) {
     url = xrefs[source][prefix];
-    url = url.replace("[reference]", reference);
-    url = url.replace("[label]", label);
-
-    // OMIM:1234.123 -> OMIM:1234#123
-    if (prefix === 'OMIM') {
-      url = url.replace(".", "#");
-    }
+    url = url.replace('[reference]', reference);
+    url = url.replace('[label]', label);
   }
   return url;
 }

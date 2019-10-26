@@ -76,7 +76,7 @@
               <div class="node-description">
                 <b>Description</b><br>
                 <div class="description">
-                  <div v-html="node.description"></div>
+                  <div v-html="node.description"/>
                 </div>
               </div>
             </div>
@@ -432,8 +432,7 @@ export default {
         this.fetchData();
         this.originalId = null;
         this.isRedirected = false;
-      }
-      else {
+      } else {
         const strippedHash = to.hash.slice(1);
         if (strippedHash !== this.cardType) {
           this.expandCard(strippedHash);
@@ -447,11 +446,10 @@ export default {
 
   updated() {
     // console.log('updated', this.nodeId);
-    if(this.$refs.titleBar){
+    if (this.$refs.titleBar) {
       if (this.$refs.titleBar.scrollHeight > 60) {
         this.$refs.titleBar.style.fontSize = '1.1rem';
-      }
-      else {
+      } else {
         this.$refs.titleBar.style.fontSize = '';
       }
     }
@@ -489,8 +487,7 @@ export default {
     buildFacets() {
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
-      }
-      else {
+      } else {
         const associationCountsByCardType = this.node.association_counts;
 
         const taxonTotals = {};
@@ -519,8 +516,7 @@ export default {
       const nonEmptyCards = [];
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
-      }
-      else {
+      } else {
         const associationCountsByCardType = this.node.association_counts;
         // console.log(JSON.stringify(Object.keys(associationCountsByCardType), null, 2));
 
@@ -590,8 +586,7 @@ export default {
       this.node = node;
       if (this.node.synonyms) {
         this.synonyms = this.node.synonyms.map(s => s.val);
-      }
-      else {
+      } else {
         this.synonyms = [];
       }
 
@@ -604,8 +599,7 @@ export default {
 
         if (!entrezResult) {
           console.log('Entrez.getPublication null for ', this.nodeId);
-        }
-        else {
+        } else {
           this.entrezResult = entrezResult;
           const entrezTitle = htmlDecode(entrezResult.title);
           this.node.label = entrezTitle;

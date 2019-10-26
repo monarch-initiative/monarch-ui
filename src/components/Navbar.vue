@@ -54,7 +54,7 @@
           <b-dropdown-item to="/about/monarch-web-services">
             Monarch Web Services
           </b-dropdown-item>
-          
+
           <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
             Data Downloads
           </b-dropdown-item>
@@ -161,7 +161,7 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto" v-if="$route.path !== '/'">
+      <b-navbar-nav v-if="$route.path !== '/'" class="ml-auto">
         <div class="nav-ac nav-search">
           <monarch-autocomplete :full-width-search="false"/>
         </div>
@@ -169,10 +169,11 @@
     </b-collapse>
 
     <b-navbar-toggle target="nav_collapse"/>
-    <div v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-         title="Monarch UI BETA"
-         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
-         class="beta">
+    <div
+      v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
+      v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
+      title="Monarch UI BETA"
+      class="beta">
       BETA
     </div>
   </b-navbar>
@@ -182,6 +183,7 @@
 <script>
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import * as biolinkService from '@/api/BioLink';
+
 export default {
   name: 'MonarchNavbar',
   components: {

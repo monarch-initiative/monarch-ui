@@ -176,8 +176,7 @@ export default {
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-      }
-      else if (this.isFacetsShowing) {
+      } else if (this.isFacetsShowing) {
         this.toggleFacets();
       }
     }

@@ -127,7 +127,7 @@ const router = new Router({
       path: '/glossary',
       name: 'glossary',
       component: require('@/views/glossary.md').default,
-    },  
+    },
     {
       path: '/*',
       name: 'RouteError',
@@ -145,12 +145,12 @@ const router = new Router({
           nodeId = ':' + nodeId;
         }
         getBasicNode(nodeId)
-          .then( (node) => {
+          .then((node) => {
             const reducedType = reduceCategoryList(node.category);
             if (reducedType === null) {
               next();
             } else {
-              router.push(`/${reducedType}/${nodeId}`)
+              router.push(`/${reducedType}/${nodeId}`);
             }
           })
           .catch(() => next());
@@ -164,8 +164,7 @@ const router = new Router({
 
     if (savedPosition) {
       result = savedPosition;
-    }
-    else if (to.hash) {
+    } else if (to.hash) {
       result = {
         selector: to.hash
         // , offset: { x: 0, y: 10 }
@@ -189,8 +188,7 @@ router.beforeEach((to, from, next) => {
         query: from.query
       });
     next(toWithQuery);
-  }
-  else {
+  } else {
     next();
   }
 });

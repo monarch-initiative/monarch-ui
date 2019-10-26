@@ -28,7 +28,7 @@
         responsive="true"
         class="table-sm"
       >
-        <template v-if="hasTaxon" v-slot:taxon="data">
+        <template v-slot:taxon="data" v-if="hasTaxon">
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
@@ -63,7 +63,7 @@
           </small>
         </template>
 
-        <template v-if="isGroup" v-slot:assocSubject="data">
+        <template v-slot:assocSubject="data" v-if="isGroup">
           <template v-if="data.item.subjectLink">
             <strong>
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
@@ -78,7 +78,7 @@
           </template>
         </template>
 
-        <template v-if="hasFrequencyOnset" v-slot:frequency="data">
+        <template v-slot:frequency="data" v-if="hasFrequencyOnset">
           <a
             v-if="data.item.frequency"
             :href="data.item.frequency.url"
@@ -91,7 +91,7 @@
           </a>
         </template>
 
-        <template v-if="hasFrequencyOnset" v-slot:onset="data">
+        <template v-slot:onset="data" v-if="hasFrequencyOnset">
           <a
             v-if="data.item.onset"
             :href="data.item.onset.url"
@@ -133,9 +133,9 @@
         <template v-slot:row-details="row">
           <EvidenceViewer
             :evidence="row.item.evidence"
-            :evidenceCache="evidenceCache"
-            :nodeId="nodeId"
-            :nodeType="nodeType"
+            :evidence-cache="evidenceCache"
+            :node-id="nodeId"
+            :node-type="nodeType"
           />
         </template>
       </b-table>
@@ -279,8 +279,7 @@ export default {
       if (that.dataFetchedPage === that.currentPage
            && that.dataFetchedRowsPerPage === that.rowsPerPage) {
         console.log('####fetchData inhibited due to cached values.');
-      }
-      else {
+      } else {
         this.dataFetched = false;
         this.dataError = false;
         try {
@@ -317,8 +316,7 @@ export default {
           // });
           // that.currentPage = 1;
           that.populateRows();
-        }
-        catch (e) {
+        } catch (e) {
           that.dataError = e;
           console.log('BioLink Error', e);
         }
@@ -328,15 +326,15 @@ export default {
     fixupRelation(elem, nodeType, cardType) {
       const relation = elem.relation;
 
-      /*if (!relation) {
+      /* if (!relation) {
         console.log('fixupRelation NO RELATION');
         console.log(JSON.stringify(elem, null, 2));
         elem.relation = {
           label: 'Unknown',
           id: 'RO:Unknown',
         };
-      }*/
-      //else {
+      }else { */
+
       let inverse = false;
       if (!relation.label && relation.id) {
         relation.label = relation.id;
@@ -389,7 +387,7 @@ export default {
         if (nodeType === 'variant' && cardType === 'gene') {
           inverse = true;
         }
-        //}
+        // }
         relation.inverse = inverse;
         // if (inverse) {
         //   relation.label = `&Larr;&nbsp;${relation.label}&nbsp;&Larr;`;
@@ -415,13 +413,14 @@ export default {
         // const subjectTaxon = this.parseTaxon(subjectElem);
 
         const evidence = us.pick(
-          elem, ['id', 'provided_by', 'publications', 'evidence_types']);
+          elem, ['id', 'provided_by', 'publications', 'evidence_types']
+        );
 
         evidence.publications = processPublications(evidence.publications);
 
         // remove _?slim
         evidence.provided_by = us.uniq(
-          evidence.provided_by.map(db => db.replace(/_?slim/, ""))
+          evidence.provided_by.map(db => db.replace(/_?slim/, ''))
         );
 
         // Provide icon and label for database (provided_by)
@@ -430,17 +429,15 @@ export default {
           return {
             label: srcLabel,
             icon: '../img/sources/' + icon
-          }
+          };
         });
 
         // add href for ECO code
-        evidence.evidence_types = evidence.evidence_types.map((eco) => {
-          return {
-            id: eco.id,
-            label: eco.label,
-            url: this.eviHref(eco.id)
-          }
-        });
+        evidence.evidence_types = evidence.evidence_types.map(eco => ({
+          id: eco.id,
+          label: eco.label,
+          url: this.eviHref(eco.id)
+        }));
 
         const supportIcons = [];
 
@@ -467,29 +464,28 @@ export default {
 
         if (objectTaxon.id && this.allFacets().includes(objectTaxon.id) && !this.trueFacets().includes(objectTaxon.id)) {
           // console.log('skipping', objectTaxon.id, elem);
-        }
-        else {
+        } else {
           let modifiedCardType = this.cardType;
           if (
             modifiedCardType === 'interaction'
-            || modifiedCardType  === 'ortholog-phenotype'
-            || modifiedCardType  === 'ortholog-disease'
+            || modifiedCardType === 'ortholog-phenotype'
+            || modifiedCardType === 'ortholog-disease'
           ) {
-            modifiedCardType  = 'gene';
+            modifiedCardType = 'gene';
             objectTaxon = this.parseTaxon(subjectElem);
-          } else if(modifiedCardType === 'homolog') {
-            modifiedCardType  = 'gene';
+          } else if (modifiedCardType === 'homolog') {
+            modifiedCardType = 'gene';
             objectTaxon = this.parseTaxon(objectElem);
-          } else if(
+          } else if (
             modifiedCardType === 'causal-disease'
             || modifiedCardType === 'noncausal-disease'
           ) {
-            modifiedCardType = 'disease'
-          } else if(
+            modifiedCardType = 'disease';
+          } else if (
             modifiedCardType === 'causal-gene'
             || modifiedCardType === 'noncausal-gene'
           ) {
-            modifiedCardType = 'gene'
+            modifiedCardType = 'gene';
           }
           let objectLink = `/${modifiedCardType}/${objectElem.id}`;
 

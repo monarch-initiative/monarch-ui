@@ -1,3 +1,5 @@
+/* eslint quotes: 0 */ // This is really a json file
+
 export default
 {
   "animalqtldb": {
@@ -458,4 +460,4 @@ export default
     "WD_Prop": "https://www.wikidata.org/wiki/Property:[reference]",
     "WD_Entity": "https://www.wikidata.org/wiki/[reference]"
   }
-}
+};

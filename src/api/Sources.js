@@ -1,3 +1,5 @@
+/* eslint quotes: 0 */ // This is really a json file
+
 export default function getSourceInfo() {
   return [
     {

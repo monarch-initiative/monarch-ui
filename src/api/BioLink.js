@@ -94,7 +94,7 @@ export async function getNodeSummary(nodeId, nodeType) {
 /*
   Return our envrionment
  */
-export function getCurrentServerEnvironment(){
+export function getCurrentServerEnvironment() {
   return apiServer;
 }
 
@@ -120,7 +120,7 @@ export async function getNode(nodeId, nodeType) {
     rows: 1
   };
 
-  const nodeSummary = axios.get(bioentityUrl, {params})
+  const nodeSummary = axios.get(bioentityUrl, { params })
     .then((bioentityResp) => {
       const bioentityResponseData = bioentityResp.data;
 
@@ -154,8 +154,7 @@ export async function getBasicNode(nodeId) {
         const responseData = resp.data;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -171,17 +170,13 @@ function canUseSuperclassNode(nodeId, nodeType, superId) {
 
   if (nodeType === 'disease') {
     result = nodeId !== 'MONDO:0000001'; // superId !== 'OBI:1110055' && superId !== 'BFO:0000016';
-  }
-  else if (nodeType === 'anatomy') {
+  } else if (nodeType === 'anatomy') {
     result = nodeId !== 'UBERON:0001062';
-  }
-  else if (nodeType === 'phenotype') {
+  } else if (nodeType === 'phenotype') {
     result = nodeId !== 'UPHENO:0001001';
-  }
-  else if (nodeType === 'function') {
+  } else if (nodeType === 'function') {
     result = nodeId !== 'GO:0003674';
-  }
-  else if (nodeType === 'pathway') {
+  } else if (nodeType === 'pathway') {
     result = nodeId !== 'GO:0008150';
   }
   return result;
@@ -204,13 +199,13 @@ export async function getNeighborhood(nodeId, nodeType) {
   const superclasses = [];
   const subclasses = [];
   let xrefs = [];
-  const xrefProp = "http://www.geneontology.org/formats/oboInOwl#hasDbXref";
+  const xrefProp = 'http://www.geneontology.org/formats/oboInOwl#hasDbXref';
   const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
-  let params = {};
+  const params = {};
 
   if (!neighborhoodTypes.includes(nodeType)) {
-    params.relationship_type = 'equivalentClass'
+    params.relationship_type = 'equivalentClass';
   }
 
   const graphResponse = await axios.get(graphUrl, { params });
@@ -229,9 +224,8 @@ export async function getNeighborhood(nodeId, nodeType) {
       }
     });
   }
-  xrefs = xrefMap[nodeId].map(elem =>
-    elem.startsWith("Orphanet") ? elem.replace("Orphanet", "ORPHA") : elem
-  );
+  xrefs = xrefMap[nodeId].map(elem => (
+    elem.startsWith('Orphanet') ? elem.replace('Orphanet', 'ORPHA') : elem));
 
   if (!internalId.test(nodeId)) {
     // Unless we own the Id (Mondo/Monarch), the IDs
@@ -249,22 +243,18 @@ export async function getNeighborhood(nodeId, nodeType) {
           if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
             superclasses.push(edge.obj);
           }
-        }
-        else if (edge.obj === nodeId) {
+        } else if (edge.obj === nodeId) {
           // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
           subclasses.push(edge.sub);
-        }
-        else {
+        } else {
           // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
         }
-      }
-      else if (edge.pred === 'equivalentClass') {
+      } else if (edge.pred === 'equivalentClass') {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
         if (edge.sub === nodeId) {
           equivalentClasses.push(edge.obj);
           xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
-        }
-        else {
+        } else {
           equivalentClasses.push(edge.sub);
           xrefs = xrefs.concat([edge.sub], xrefMap[edge.sub]);
         }
@@ -315,7 +305,7 @@ function pruneUnusableCategories(data) {
 
 
 export async function getSources() {
-  /*const url = `${biolink}metadata/datasets`;
+  /* const url = `${biolink}metadata/datasets`;
   const params = new URLSearchParams();
 
   const bioentityResp = await axios.get(url, { params });
@@ -330,7 +320,7 @@ export async function getSources() {
     bioentityResp.data[i].monarchDataReleaseDate = '2019-02-22';
   }
 
-  const data = bioentityResp.data;*/
+  const data = bioentityResp.data; */
 
   return getSourceInfo();
 }
@@ -382,6 +372,7 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   params.append('boost_q', 'category:publication^-10');
   params.append('prefix', '-OMIA');
   params.append('min_match', '50%');
+  params.append('boost_fx', 'pow(edges,0.1)');
 
   if (prefixes && prefixes.length) {
     prefixes.forEach((elem) => {
@@ -391,8 +382,7 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
 
   if (!category || category === 'all') {
     category = categoriesAll;
-  }
-  else {
+  } else {
     category = [category];
   }
 
@@ -415,8 +405,7 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
         const responseData = resp.data;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -431,20 +420,15 @@ function getBiolinkAnnotation(cardType) {
   let result = `${cardType}s`;
   if (cardType === 'anatomy') {
     result = 'expression/anatomy';
-  }
-  else if (cardType === 'ortholog-phenotype') {
+  } else if (cardType === 'ortholog-phenotype') {
     result = 'ortholog/phenotypes';
-  }
-  else if (cardType === 'ortholog-disease') {
+  } else if (cardType === 'ortholog-disease') {
     result = 'ortholog/diseases';
-  }
-  else if (cardType === 'causal-disease' || cardType === 'noncausal-disease') {
+  } else if (cardType === 'causal-disease' || cardType === 'noncausal-disease') {
     result = 'diseases';
-  }
-  else if (cardType === 'causal-gene' || cardType === 'noncausal-gene') {
+  } else if (cardType === 'causal-gene' || cardType === 'noncausal-gene') {
     result = 'genes';
-  }
-  else if (cardType === 'function') {
+  } else if (cardType === 'function') {
     result = cardType;
   }
 
@@ -514,8 +498,7 @@ export async function getNodeLabelByCurie(curie) {
         const responseData = resp;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -541,8 +524,7 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
         const responseData = resp;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -564,8 +546,7 @@ export async function annotateText(queryText, longestOnly) {
       const responseData = resp;
       if (typeof responseData !== 'object') {
         reject(responseData);
-      }
-      else {
+      } else {
         resolve(responseData);
       }
     })
@@ -578,7 +559,7 @@ export async function annotateText(queryText, longestOnly) {
 export async function getEvidence(evidenceId, nodeType) {
   const biolinkUrl = `${biolink}evidence/graph/${evidenceId}/table`;
 
-  let params = {};
+  const params = {};
 
   if (nodeType === 'publication') {
     params.is_publication = true;
