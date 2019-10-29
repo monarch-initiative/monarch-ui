@@ -364,19 +364,19 @@ export default {
       let rowNum = 0;
       evidenceTable.forEach((evi) => {
         // Clean subject and object records and add local url
-        evi.subject.label = evi.subject.label || evi.subject.id;
-        if (evi.subject.id.startsWith('BNODE') || evi.subject.id === this.nodeId) {
-          evi.subject.url = null;
-        } else {
-          evi.subject.url = `/${evi.subject.id}`;
-        }
-        // DRY this out
-        evi.object.label = evi.object.label || evi.object.id;
-        if (evi.object.id.startsWith('BNODE') || evi.object.id === this.nodeId) {
-          evi.object.url = null;
-        } else {
-          evi.object.url = `/${evi.object.id}`;
-        }
+
+        [evi.subject, evi.object].forEach((node) => {
+          node.label = node.label || node.id;
+          if (
+            node.id.startsWith('BNODE')  // blank node
+            || node.id.startsWith('MONARCH')  // monarch association (likely)
+            || node.id === this.nodeId
+          ) {
+            node.url = null;
+          } else {
+            node.url = `/${node.id}`;
+          }
+        });
 
         evi.publications = evi.publications
           .filter(pub => !pub.id.startsWith('MONDO'))
@@ -386,7 +386,6 @@ export default {
             url: `/publication/${pub.id}`
           }));
 
-        // DRY this out
         // remove _?slim
         evi.provided_by = us.uniq(
           evi.provided_by.map(db => db.replace(/_?slim/, ''))
@@ -408,6 +407,7 @@ export default {
           subjects.forEach((subject) => {
             const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
             if (subjectUrl !== null) {
+              // This won't scale, figure out a better way
               if (dbName === 'impc' && subject.startsWith('MGI')) {
                 subject = subject.replace('MGI:', 'IMPC:');
               }
@@ -415,7 +415,7 @@ export default {
             }
           });
 
-          subjects.forEach((object) => {
+          objects.forEach((object) => {
             const objectUrl = getXrefUrl(dbName, object, evi.object.label);
             if (objectUrl !== null) {
               if (dbName === 'impc' && object.startsWith('MGI')) {
@@ -438,6 +438,13 @@ export default {
 
         evi.rowNum = ++rowNum;
       });
+
+      evidenceTable =
+        evidenceTable.sort((a, b) => (
+          (b.provided_by.map(db => db.label).join().includes('OMIM')
+            || b.provided_by.map(db => db.label).join().includes('Orphanet'))
+            ? 1 : -1));
+
       // Sorting by has phenotype seems to help the flow of statements,
       // but more testing needed, ideally these statements would be
       // grouped together o coupled with a graph view to disambiguate
@@ -448,6 +455,7 @@ export default {
 
       return evidenceTable;
     }
+
   }
 };
 

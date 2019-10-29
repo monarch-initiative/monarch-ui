@@ -132,7 +132,7 @@ export default
     "OMIMPS": "http://www.omim.org/phenotypicSeries/[reference]"
   },
   "orphanet": {
-    "ORPHA": "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=[reference]"
+    "ORPHA": "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=[reference]",
     "Orphanet": "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=[reference]"
   },
   "pato": {

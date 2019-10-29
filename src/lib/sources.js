@@ -12,6 +12,7 @@ export default function sourceToImage(source) {
     label = source.split(/[/]+/)
       .pop()
       .split(/[.]+/)[0]
+      .replace('#', '')
       .toUpperCase();
     if (image.match(/biogrid/i)) {
       image = 'source-biogrid.png';

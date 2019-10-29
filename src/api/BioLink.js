@@ -204,7 +204,9 @@ export async function getNeighborhood(nodeId, nodeType) {
 
   const params = {};
 
-  if (!neighborhoodTypes.includes(nodeType)) {
+  if (neighborhoodTypes.includes(nodeType)) {
+    params.graph = 'ontology';
+  } else {
     params.relationship_type = 'equivalentClass';
   }
 
