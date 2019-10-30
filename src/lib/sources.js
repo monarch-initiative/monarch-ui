@@ -19,7 +19,6 @@ export default function sourceToLabel(source) {
       label = 'ClinVar';
     } else if (source.match(/coriell/)) {
       label = 'Coriell';
-    } else if (source.match(/ctd/i)) {
     } else if (source.match(/decipher/i)) {
       label = 'Decipher';
     } else if (source.match(/ensembl/)) {
@@ -38,7 +37,6 @@ export default function sourceToLabel(source) {
       label = 'Panther';
     } else if (source.match(/pharmgkb/i)) {
       label = 'PharmGKB';
-    } else if (source.match(/pubmed|ncbi|pmid|entrez/i)) {
     } else if (source.match(/uniprot/)) {
       label = 'UniProt';
     } else if (source.match(/vega/i)) {

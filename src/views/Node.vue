@@ -117,7 +117,6 @@
                     {{ r.label }}
                     <i class="fa fa-external-link" aria-hidden="true"/>
                   </a>
-
                 </span>
                 <span v-else>
                   {{ r.label }}
@@ -565,6 +564,7 @@ export default {
       this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
+      this.references = [];
       this.modifiers = null;
       this.reactomeId = null;
 
@@ -689,40 +689,41 @@ export default {
         label: nodeLabelMap[c]
       }));
 
-      if (this.subclasses.length > 0) {
-        this.isGroup = true;
-      } else {
-        this.isGroup = false;
-      }
+      this.isGroup = this.subclasses.length > 0;
 
-      let seen_cache = new Set([]);
-      let url_cache = new Set([]);
+      // To get xref link outs, we use the xref map in
+      // lib/conf/xref.js, additional prefixes are added
+      // by looking at the is_defined_by field in solr
+
+      const seenCache = new Set([]);
+      const urlCache = new Set([]);
       xrefs.forEach((reference) => {
-        let has_ref = false;
+        let hasRef = false;
         Object.keys(xrefMap).forEach((source) => {
-          let url = getXrefUrl(source, reference, this.node.label);
+          const url = getXrefUrl(source, reference, this.node.label.split(' ')[0]);
           if (url) {
-            has_ref = true;
-            if (seen_cache.has(reference)) {
+            hasRef = true;
+            if (seenCache.has(reference)) {
               source = source.toUpperCase();
-              reference = `${reference} (${source})`
+              reference = `${reference} (${source})`;
             } else {
-              seen_cache.add(reference);
+              seenCache.add(reference);
             }
 
-            if (!url_cache.has(url))
+            if (!urlCache.has(url)) {
               this.references.push({
                 label: reference,
                 uri: url
               });
-              url_cache.add(url)
+              urlCache.add(url);
+            }
           }
         });
-        if (!has_ref) {
+        if (!hasRef) {
           this.references.push({
             label: reference,
             uri: null
-          })
+          });
         }
       });
 
@@ -733,7 +734,7 @@ export default {
         this.references.push({
           label: 'Varsome',
           uri: `https://varsome.com/gene/${this.nodeId}`
-        })
+        });
       }
 
       if (this.node.inheritance) {

@@ -10,11 +10,20 @@ import xrefs from '@/lib/conf/xrefs';
 export function processPublications(publications) {
   return publications
     .filter(pub => !pub.id.startsWith('MONDO'))
-    .map(pub => ({
-      id: pub.id,
-      label: pub.label || pub.id,
-      url: `/publication/${pub.id}`
-    }));
+    .map((pub) => {
+      let url = '';
+      if (pub.id.startsWith('PMID')) {
+        const reference = pub.id.split(':')[1];
+        url = `http://www.ncbi.nlm.nih.gov/pubmed/${reference}`;
+      } else {
+        url = `/publication/${pub.id}`;
+      }
+      return {
+        id: pub.id,
+        label: pub.label || pub.id,
+        url
+      };
+    });
 }
 
 /**

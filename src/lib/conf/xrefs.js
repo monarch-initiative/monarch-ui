@@ -16,9 +16,6 @@ export default
   "bfo": {
     "BFO": "http://purl.obolibrary.org/obo/BFO_[reference]"
   },
-  "cohd": {
-    "COHD": "http://purl.obolibrary.org/obo/COHD_[reference]"
-  },
   "cito": {
     "cito": "http://purl.org/spar/cito/[reference]"
   },
@@ -54,6 +51,10 @@ export default
   },
   "efo": {
     "EFO": "http://www.ebi.ac.uk/efo/EFO_[reference]"
+  },
+  "ensembl": {
+    "ENSEMBL": "http://ensembl.org/id/[reference]",
+    "EnsemblGenome": "http://www.ensemblgenomes.org/id/[reference]"
   },
   "envo": {
     "ENVO": "http://purl.obolibrary.org/obo/ENVO_[reference]"
@@ -337,10 +338,6 @@ export default
   },
   "ecogene": {
     "EcoGene": "http://ecogene.org/gene/[reference]"
-  },
-  "ensembl": {
-    "ENSEMBL": "http://ensembl.org/id/[reference]",
-    "EnsemblGenome": "http://www.ensemblgenomes.org/id/[reference]"
   },
   "flybase": {
     "FlyBase": "http://flybase.org/reports/[reference]"

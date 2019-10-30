@@ -58,7 +58,20 @@
             :key="index"
             class="row"
           >
-            <router-link :to="pub.url">{{ pub.label }}</router-link>
+            <span v-if="pub.id.startsWith('PMID')">
+              <a
+                :href="pub.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ pub.label }}
+                <i class="fa fa-external-link" aria-hidden="true"/>
+              </a>
+            </span>
+            <span v-else>
+              <router-link :to="pub.url">{{ pub.label }}</router-link>
+            </span>
+
           </div>
         </b-collapse>
       </div>
@@ -154,29 +167,68 @@
 
           <template v-if="data.item.publications.length < 3">
             <div
-              v-for="(support, index) in data.item.publications"
+              v-for="(pub, index) in data.item.publications"
               :key="index"
               class="row"
             >
-              <router-link :to="support.url">{{ support.label }}</router-link>
+              <span v-if="pub.id.startsWith('PMID')">
+                <a
+                  :href="pub.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ pub.label }}
+                  <i class="fa fa-external-link" aria-hidden="true"/>
+                </a>
+              </span>
+              <span v-else>
+                <router-link :to="pub.url">{{ pub.label }}</router-link>
+              </span>
             </div>
           </template>
           <template v-else>
             <div
-              v-for="(support, index) in data.item.publications.slice(0,2)"
+              v-for="(pub, index) in data.item.publications.slice(0,2)"
               :key="index"
               class="row"
             >
-              <router-link :to="support.url">{{ support.label }}</router-link>
+
+              <span v-if="pub.id.startsWith('PMID')">
+                <a
+                  :href="pub.url"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {{ pub.label }}
+                  <i class="fa fa-external-link" aria-hidden="true"/>
+                </a>
+              </span>
+              <span v-else>
+                <router-link :to="pub.url">{{ pub.label }}</router-link>
+              </span>
             </div>
             <div>
               <b-collapse :id="'collapse-pubs' + evidence.id + data.item.rowNum">
                 <div
-                  v-for="(support, index) in data.item.publications.slice(2)"
+                  v-for="(pub, index) in data.item.publications.slice(2)"
                   :key="index"
                   class="row final-row"
                 >
-                  <router-link :to="support.url">{{ support.label }}</router-link>
+
+                  <span v-if="pub.id.startsWith('PMID')">
+                    <a
+                      :href="pub.url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {{ pub.label }}
+                      <i class="fa fa-external-link" aria-hidden="true"/>
+                    </a>
+                  </span>
+
+                  <span v-else>
+                    <router-link :to="pub.url">{{ pub.label }}</router-link>
+                  </span>
                 </div>
               </b-collapse>
               <b-button
@@ -346,8 +398,8 @@ export default {
         [evi.subject, evi.object].forEach((node) => {
           node.label = node.label || node.id;
           if (
-            node.id.startsWith('BNODE')  // blank node
-            || node.id.startsWith('MONARCH')  // monarch association (likely)
+            node.id.startsWith('BNODE') // blank node
+            || node.id.startsWith('MONARCH') // monarch association (likely)
             || node.id === this.nodeId
           ) {
             node.url = null;
@@ -358,11 +410,20 @@ export default {
 
         evi.publications = evi.publications
           .filter(pub => !pub.id.startsWith('MONDO'))
-          .map(pub => ({
-            id: pub.id,
-            label: pub.id,
-            url: `/publication/${pub.id}`
-          }));
+          .map((pub) => {
+            let url = '';
+            if (pub.id.startsWith('PMID')) {
+              const reference = pub.id.split(':')[1];
+              url = `http://www.ncbi.nlm.nih.gov/pubmed/${reference}`;
+            } else {
+              url = `/publication/${pub.id}`;
+            }
+            return {
+              id: pub.id,
+              label: pub.id,
+              url
+            };
+          });
 
         // remove _?slim
         evi.provided_by = us.uniq(

@@ -469,7 +469,7 @@ export default {
           } else if (modifiedCardType === 'ortholog-disease') {
             modifiedCardType = 'disease';
             objectTaxon = this.parseTaxon(subjectElem);
-          }else if (modifiedCardType === 'homolog') {
+          } else if (modifiedCardType === 'homolog') {
             modifiedCardType = 'gene';
             objectTaxon = this.parseTaxon(objectElem);
           } else if (
