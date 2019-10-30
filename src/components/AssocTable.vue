@@ -158,7 +158,7 @@
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
 import { processPublications } from '@/lib/Utils';
-import sourceToImage from '../lib/sources';
+import sourceToLabel from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
 import EvidenceViewer from '@/components/EvidenceViewer.vue';
 
@@ -424,13 +424,7 @@ export default {
         );
 
         // Provide icon and label for database (provided_by)
-        evidence.provided_by = evidence.provided_by.map((db) => {
-          const [icon, srcLabel] = sourceToImage(db);
-          return {
-            label: srcLabel,
-            icon: '../img/sources/' + icon
-          };
-        });
+        evidence.provided_by = evidence.provided_by.map(db => sourceToLabel(db));
 
         // add href for ECO code
         evidence.evidence_types = evidence.evidence_types.map(eco => ({
@@ -466,14 +460,16 @@ export default {
           // console.log('skipping', objectTaxon.id, elem);
         } else {
           let modifiedCardType = this.cardType;
-          if (
-            modifiedCardType === 'interaction'
-            || modifiedCardType === 'ortholog-phenotype'
-            || modifiedCardType === 'ortholog-disease'
-          ) {
+          if (modifiedCardType === 'interaction') {
             modifiedCardType = 'gene';
             objectTaxon = this.parseTaxon(subjectElem);
-          } else if (modifiedCardType === 'homolog') {
+          } else if (modifiedCardType === 'ortholog-phenotype') {
+            modifiedCardType = 'phenotype';
+            objectTaxon = this.parseTaxon(subjectElem);
+          } else if (modifiedCardType === 'ortholog-disease') {
+            modifiedCardType = 'disease';
+            objectTaxon = this.parseTaxon(subjectElem);
+          }else if (modifiedCardType === 'homolog') {
             modifiedCardType = 'gene';
             objectTaxon = this.parseTaxon(objectElem);
           } else if (

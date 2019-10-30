@@ -115,7 +115,9 @@
                     rel="noopener noreferrer"
                     class="node-label-id">
                     {{ r.label }}
+                    <i class="fa fa-external-link" aria-hidden="true"/>
                   </a>
+
                 </span>
                 <span v-else>
                   {{ r.label }}
@@ -188,6 +190,8 @@ import us from 'underscore';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
+import xrefMap from '@/lib/conf/xrefs';
+import { getXrefUrl } from '@/lib/Utils';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -691,10 +695,46 @@ export default {
         this.isGroup = false;
       }
 
-      this.references = xrefs.map(s => ({
-        label: s,
-        uri: null
-      }));
+      let seen_cache = new Set([]);
+      let url_cache = new Set([]);
+      xrefs.forEach((reference) => {
+        let has_ref = false;
+        Object.keys(xrefMap).forEach((source) => {
+          let url = getXrefUrl(source, reference, this.node.label);
+          if (url) {
+            has_ref = true;
+            if (seen_cache.has(reference)) {
+              source = source.toUpperCase();
+              reference = `${reference} (${source})`
+            } else {
+              seen_cache.add(reference);
+            }
+
+            if (!url_cache.has(url))
+              this.references.push({
+                label: reference,
+                uri: url
+              });
+              url_cache.add(url)
+          }
+        });
+        if (!has_ref) {
+          this.references.push({
+            label: reference,
+            uri: null
+          })
+        }
+      });
+
+      // We have a deal with VarSome for mutual linking, this should
+      // be in some configuration file or directly in our database
+      // eg https://varsome.com/gene/HGNC:1100
+      if (this.nodeId.startsWith('HGNC')) {
+        this.references.push({
+          label: 'Varsome',
+          uri: `https://varsome.com/gene/${this.nodeId}`
+        })
+      }
 
       if (this.node.inheritance) {
         this.inheritance = us.uniq(

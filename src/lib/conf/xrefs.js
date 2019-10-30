@@ -90,14 +90,6 @@ export default
   "iao": {
     "IAO": "http://purl.obolibrary.org/obo/IAO_[reference]"
   },
-  "impc": {
-    "IMPC": "http://www.mousephenotype.org/data/genes/[reference]",
-    "MGI": "https://www.mousephenotype.org/data/genes/MGI:[reference]",
-    "MP": "https://www.mousephenotype.org/data/phenotypes/MP:[reference]",
-    "IMPRESS-procedure": "https://www.mousephenotype.org/impress/procedures/[reference]",
-    "IMPRESS-protocol": "https://www.mousephenotype.org/impress/protocol/[reference]",
-    "IMPRESS-parameter": "https://www.mousephenotype.org/impress/parameterontologies/[reference]"
-  },
   "kegg": {
     "KEGG-ds": "http://purl.obolibrary.org/KEGG-ds_[reference]",
     "KEGG-ko": "http://www.kegg.jp/dbget-bin/www_bget?ko:[reference]",
@@ -364,8 +356,16 @@ export default
   },
   "mgi": {
     "MGI": "http://www.informatics.jax.org/accession/MGI:[reference]",
-    "MP": "http://www.informatics.jax.org/vocab/mp_ontology/MP:[reference",
+    "MP": "http://www.informatics.jax.org/vocab/mp_ontology/MP:[reference]",
     "J": "http://www.informatics.jax.org/reference/J:[reference]"
+  },
+  "impc": {
+    "IMPC": "http://www.mousephenotype.org/data/genes/[reference]",
+    "MGI": "https://www.mousephenotype.org/data/genes/MGI:[reference]",
+    "MP": "https://www.mousephenotype.org/data/phenotypes/MP:[reference]",
+    "IMPRESS-procedure": "https://www.mousephenotype.org/impress/procedures/[reference]",
+    "IMPRESS-protocol": "https://www.mousephenotype.org/impress/protocol/[reference]",
+    "IMPRESS-parameter": "https://www.mousephenotype.org/impress/parameterontologies/[reference]"
   },
   "mirbase": {
     "miRBase": "http://www.mirbase.org/cgi-bin/mirna_entry.pl?acc=[reference]"

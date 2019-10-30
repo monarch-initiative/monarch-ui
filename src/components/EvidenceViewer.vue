@@ -54,11 +54,11 @@
         </b-button>
         <b-collapse :id="'collapse-2' + evidence.id">
           <div
-            v-for="(support, index) in evidence.publications"
+            v-for="(pub, index) in evidence.publications"
             :key="index"
             class="row"
           >
-            <router-link :to="support.url">{{ support.label }}</router-link>
+            <router-link :to="pub.url">{{ pub.label }}</router-link>
           </div>
         </b-collapse>
       </div>
@@ -78,24 +78,7 @@
           Sources ({{ evidence.provided_by.length }})
         </b-button>
         <b-collapse :id="'collapse-3' + evidence.id">
-          <div
-            v-for="(support, index) in evidence.provided_by"
-            :key="index"
-            class="row"
-          >
-            <a
-              :href="support.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ support.label }}
-              <span v-if="support.label">&nbsp;</span>
-              <img
-                v-if="support.icon"
-                :src="support.icon"
-                class="source-icon">
-            </a>
-          </div>
+          <strong>{{ evidence.provided_by.join(', ') }}</strong>
         </b-collapse>
       </div>
     </template>
@@ -212,31 +195,26 @@
         <template v-slot:sources="data">
 
           <div
-            v-for="(support, index) in data.item.provided_by"
+            v-for="(source, index) in data.item.provided_by"
             :key="index"
             class="row"
           >
-            {{ support.label }}
-            <span v-if="support.label">&nbsp;</span>
-            <img
-              v-if="support.icon"
-              :src="support.icon"
-              class="source-icon">
+            {{ source }}
           </div>
         </template>
 
         <template v-slot:references="data">
           <div
-            v-for="(support, index) in data.item.references"
+            v-for="(reference, index) in data.item.references"
             :key="index"
             class="row final-row"
           >
             <a
-              :href="support[0]"
+              :href="reference.url"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ support[1] }}
+              {{ reference.label }}
               <i class="fa fa-external-link" aria-hidden="true"/>
             </a>
           </div>
@@ -252,7 +230,7 @@
 import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
 import { getXrefUrl } from '@/lib/Utils';
-import sourceToImage from '@/lib/sources';
+import sourceToLabel from '@/lib/sources';
 
 export default {
   components: {},
@@ -406,43 +384,46 @@ export default {
 
           subjects.forEach((subject) => {
             const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
+            let subjectLabel = subject;
             if (subjectUrl !== null) {
               // This won't scale, figure out a better way
               if (dbName === 'impc' && subject.startsWith('MGI')) {
-                subject = subject.replace('MGI:', 'IMPC:');
+                subjectLabel = subject.replace('MGI:', 'IMPC:');
               }
-              evi.references.push([subjectUrl, subject]);
+
+              evi.references.push({
+                url: subjectUrl,
+                label: subjectLabel
+              });
             }
           });
 
           objects.forEach((object) => {
             const objectUrl = getXrefUrl(dbName, object, evi.object.label);
+            let objectLabel = object;
             if (objectUrl !== null) {
               if (dbName === 'impc' && object.startsWith('MGI')) {
-                object = object.replace('MGI:', 'IMPC:');
+                objectLabel = object.replace('MGI:', 'IMPC:');
               }
-              evi.references.push([objectUrl, object]);
+
+              evi.references.push({
+                url: objectUrl,
+                label: objectLabel
+              });
             }
           });
 
         });
 
-        evi.provided_by = evi.provided_by.map((db) => {
-          const [icon, srcLabel] = sourceToImage(db);
-
-          return {
-            label: srcLabel,
-            icon: '../img/sources/' + icon
-          };
-        });
+        evi.provided_by = evi.provided_by.map(db => sourceToLabel(db));
 
         evi.rowNum = ++rowNum;
       });
 
       evidenceTable =
         evidenceTable.sort((a, b) => (
-          (b.provided_by.map(db => db.label).join().includes('OMIM')
-            || b.provided_by.map(db => db.label).join().includes('Orphanet'))
+          (b.provided_by.join().includes('OMIM')
+            || b.provided_by.join().includes('Orphanet'))
             ? 1 : -1));
 
       // Sorting by has phenotype seems to help the flow of statements,
