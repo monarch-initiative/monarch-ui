@@ -133,7 +133,7 @@ div.vue-markdown-plain {
     code {
       background-color: unset;
       border-radius: unset;
-      color: unsete;
+      color: unset;
       font-size: unset;
       margin: unset;
       padding: unset;

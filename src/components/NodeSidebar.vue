@@ -14,6 +14,7 @@
       <ul v-if="nodeType" class="list-group">
         <li class="list-group-item title">
           {{ $parent.labels[nodeType] }}
+          <span v-if="isGroup"> Group</span>
         </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
@@ -129,6 +130,11 @@ export default {
       required: false,
       default: false,
     },
+    isGroup: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
   },
 
   data() {
@@ -170,8 +176,7 @@ export default {
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-      }
-      else if (this.isFacetsShowing) {
+      } else if (this.isFacetsShowing) {
         this.toggleFacets();
       }
     }

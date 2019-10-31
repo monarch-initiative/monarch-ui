@@ -2,12 +2,15 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Node from './views/Node.vue';
+import { getBasicNode } from './api/BioLink';
+import { reduceCategoryList } from './lib/CategoryMap';
 
 Vue.use(Router);
 
 const availableCardTypes = [
   'anatomy',
   'cellline',
+  'case',
   'disease',
   'function',
   'gene',
@@ -124,15 +127,35 @@ const router = new Router({
       path: '/glossary',
       name: 'glossary',
       component: require('@/views/glossary.md').default,
-    },  
+    },
     {
       path: '/*',
       name: 'RouteError',
-      // route level code-splitting
-      // this generates a separate chunk (analytics.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "routeerror" */ './views/RouteError.vue'),
-    },
+
+      // Attempt to resolve identifiers to the correct route
+      // eg /MONDO:0007947 -> /disease/MONDO:0007947
+      beforeEnter: (to, from, next) => {
+        let nodeId = to.params.pathMatch;
+        if (nodeId.startsWith('MONARCH')) {
+          // Curie map converts
+          // https://monarchinitiative.org/MONARCH:1234
+          // to :MONARCH:1234, we use these IRIs for case pages
+          // TODO fix this in the UDP ingest
+          nodeId = ':' + nodeId;
+        }
+        getBasicNode(nodeId)
+          .then((node) => {
+            const reducedType = reduceCategoryList(node.category);
+            if (reducedType === null) {
+              next();
+            } else {
+              router.push(`/${reducedType}/${nodeId}`);
+            }
+          })
+          .catch(() => next());
+      }
+    }
   ],
 
   // https://router.vuejs.org/guide/advanced/scroll-behavior.html
@@ -141,8 +164,7 @@ const router = new Router({
 
     if (savedPosition) {
       result = savedPosition;
-    }
-    else if (to.hash) {
+    } else if (to.hash) {
       result = {
         selector: to.hash
         // , offset: { x: 0, y: 10 }
@@ -166,8 +188,7 @@ router.beforeEach((to, from, next) => {
         query: from.query
       });
     next(toWithQuery);
-  }
-  else {
+  } else {
     next();
   }
 });

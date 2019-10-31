@@ -27,11 +27,9 @@ function applyLinkHandlersFunction(parser) {
         // console.log('intrapage', href);
         targetType = '_self';
         relType = '';
-      }
-      else if (href.match(/^https?:\/\//)) {
+      } else if (href.match(/^https?:\/\//)) {
         // console.log('external', href);
-      }
-      else {
+      } else {
         inRouterLink = true;
         targetType = '_self';
         relType = '';
@@ -48,16 +46,14 @@ to="${href}">
     const targetIndex = tokens[idx].attrIndex('target');
     if (targetIndex < 0) {
       tokens[idx].attrPush(['target', targetType]); // add new attribute
-    }
-    else {
+    } else {
       tokens[idx].attrs[targetIndex][1] = targetType; // replace value of existing attr
     }
 
     const relIndex = tokens[idx].attrIndex('rel');
     if (relIndex < 0) {
       tokens[idx].attrPush(['rel', relType]); // add new attribute
-    }
-    else {
+    } else {
       tokens[idx].attrs[relIndex][1] = relType; // replace value of existing attr
     }
 
