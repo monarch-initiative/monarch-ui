@@ -171,7 +171,7 @@
               :key="index"
               class="row"
             >
-              <span v-if="pub.id.startsWith('PMID')">
+              <span v-if="pub.id.startsWith('PMID')" class="nowrap">
                 <a
                   :href="pub.url"
                   target="_blank"
@@ -181,7 +181,7 @@
                   <i class="fa fa-external-link" aria-hidden="true"/>
                 </a>
               </span>
-              <span v-else>
+              <span v-else class="nowrap">
                 <router-link :to="pub.url">{{ pub.label }}</router-link>
               </span>
             </div>
@@ -193,7 +193,7 @@
               class="row"
             >
 
-              <span v-if="pub.id.startsWith('PMID')">
+              <span v-if="pub.id.startsWith('PMID')" class="nowrap">
                 <a
                   :href="pub.url"
                   target="_blank"
@@ -203,7 +203,7 @@
                   <i class="fa fa-external-link" aria-hidden="true"/>
                 </a>
               </span>
-              <span v-else>
+              <span v-else class="nowrap">
                 <router-link :to="pub.url">{{ pub.label }}</router-link>
               </span>
             </div>
@@ -215,7 +215,7 @@
                   class="row final-row"
                 >
 
-                  <span v-if="pub.id.startsWith('PMID')">
+                  <span v-if="pub.id.startsWith('PMID')" class="nowrap">
                     <a
                       :href="pub.url"
                       target="_blank"
@@ -226,7 +226,7 @@
                     </a>
                   </span>
 
-                  <span v-else>
+                  <span v-else class="nowrap">
                     <router-link :to="pub.url">{{ pub.label }}</router-link>
                   </span>
                 </div>
@@ -261,7 +261,7 @@
             :key="index"
             class="row final-row"
           >
-            <span class="reference-link">
+            <span class="nowrap">
               <a
                 :href="reference.url"
                 target="_blank"
@@ -564,7 +564,7 @@ export default {
     font-size: 0.8rem;
   }
 
-  .reference-link {
+  .nowrap {
     white-space: nowrap;
   }
 }
