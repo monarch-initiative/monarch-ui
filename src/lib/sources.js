@@ -6,13 +6,9 @@ export default function sourceToLabel(source) {
   let label = '';
 
   if (source !== null && source !== '') {
-    source = source.toLowerCase();
-    // default label is uppercase
-    label = source.split(/[/]+/)
-      .pop()
-      .split(/[.]+/)[0]
-      .replace('#', '')
-      .toUpperCase();
+    // default label is all uppercase
+    label = source.toUpperCase();
+
     if (source.match(/biogrid/i)) {
       label = 'BioGRID';
     } else if (source.match(/clinvar/i)) {

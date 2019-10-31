@@ -1,4 +1,5 @@
 import xrefs from '@/lib/conf/xrefs';
+import us from 'underscore';
 
 /**
  * Processes a list of publications and returns a list
@@ -24,6 +25,22 @@ export function processPublications(publications) {
         url
       };
     });
+}
+
+/**
+ * Processes a list of source IRIs and returns
+ * a label, eg
+ * 'https://archive.monarchinitiative.org/#orphanet' -> 'orphanet'
+ *
+ */
+export function processSources(sources) {
+  sources = us.uniq(sources.map(db => db.replace(/_?slim/, '')));
+  return sources.map(db => db
+    .split('/')
+    .pop()
+    .replace('#', '')
+    .split('.')[0]
+    .toLowerCase());
 }
 
 /**

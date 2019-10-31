@@ -109,18 +109,21 @@
               <span v-else><b>External Resources:</b>&nbsp;</span>
               <span v-for="(r, index) in references" :key="index" class="synonym">
                 <span v-if="r.uri">
-                  <a
-                    :href="r.uri"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="node-label-id">
-                    {{ r.label }}
-                    <i class="fa fa-external-link" aria-hidden="true"/>
-                  </a>
+                  <span class="reference-external">
+                    <a
+                      :href="r.uri"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="node-label-id">
+                      {{ r.label }}
+                      <i class="fa fa-external-link" aria-hidden="true"/>
+                    </a>
+                  </span>
                 </span>
                 <span v-else>
                   {{ r.label }}
                 </span>
+                &nbsp;
               </span>
             </div>
 
@@ -189,8 +192,7 @@ import us from 'underscore';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
-import xrefMap from '@/lib/conf/xrefs';
-import { getXrefUrl } from '@/lib/Utils';
+import { getXrefUrl, processSources } from '@/lib/Utils';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -695,24 +697,36 @@ export default {
       // lib/conf/xref.js, additional prefixes are added
       // by looking at the is_defined_by field in solr
 
+      let sources = Object.keys(this.node.association_counts.sources);
+      sources = processSources(sources);
+      // Add the curie prefix for the node we're on
+      sources = new Set([this.nodeId.split(':')[0].toLowerCase()].concat(sources));
+      // IMPC only has gene and phenotype pages
+      if (
+        sources.has('impc')
+        && this.nodeType !== 'phenotype'
+        && this.nodeType !== 'gene'
+      ) {
+        sources.delete('impc');
+      }
+
       const seenCache = new Set([]);
       const urlCache = new Set([]);
-      xrefs.forEach((reference) => {
+      xrefs.forEach((xref) => {
         let hasRef = false;
-        Object.keys(xrefMap).forEach((source) => {
-          const url = getXrefUrl(source, reference, this.node.label.split(' ')[0]);
+        sources.forEach((source) => {
+          const url = getXrefUrl(source, xref, this.node.label.split(' ')[0]);
           if (url) {
             hasRef = true;
-            if (seenCache.has(reference)) {
-              source = source.toUpperCase();
-              reference = `${reference} (${source})`;
+            if (seenCache.has(xref)) {
+              const xrefId = xref.split(':')[1];
+              xref = `${source.toUpperCase()}:${xrefId}`;
             } else {
-              seenCache.add(reference);
+              seenCache.add(xref);
             }
-
             if (!urlCache.has(url)) {
               this.references.push({
-                label: reference,
+                label: xref,
                 uri: url
               });
               urlCache.add(url);
@@ -721,7 +735,7 @@ export default {
         });
         if (!hasRef) {
           this.references.push({
-            label: reference,
+            label: xref,
             uri: null
           });
         }
@@ -752,9 +766,6 @@ export default {
         ? this.node.categories[0].toLowerCase()
         : this.nodeType;
       this.nodeIcon = this.icons[this.nodeCategory];
-      this.phenotypeIcon = this.icons.phenotype;
-      this.geneIcon = this.icons.gene;
-      this.modelIcon = this.icons.model;
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
       this.buildFacets();
@@ -947,6 +958,10 @@ div.publication-abstract {
   .title-bar {
     padding-left: ($collapsed-sidebar-width + 5);
   }
+}
+
+.reference-external {
+  white-space: nowrap;
 }
 
 </style>

@@ -157,7 +157,7 @@
 <script>
 import us from 'underscore';
 import * as BL from '@/api/BioLink';
-import { processPublications } from '@/lib/Utils';
+import { processPublications, processSources } from '@/lib/Utils';
 import sourceToLabel from '../lib/sources';
 import { isTaxonCardType } from '../lib/TaxonMap';
 import EvidenceViewer from '@/components/EvidenceViewer.vue';
@@ -418,10 +418,7 @@ export default {
 
         evidence.publications = processPublications(evidence.publications);
 
-        // remove _?slim
-        evidence.provided_by = us.uniq(
-          evidence.provided_by.map(db => db.replace(/_?slim/, ''))
-        );
+        evidence.provided_by = processSources(evidence.provided_by);
 
         // Provide icon and label for database (provided_by)
         evidence.provided_by = evidence.provided_by.map(db => sourceToLabel(db));

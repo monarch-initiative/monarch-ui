@@ -261,14 +261,16 @@
             :key="index"
             class="row final-row"
           >
-            <a
-              :href="reference.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {{ reference.label }}
-              <i class="fa fa-external-link" aria-hidden="true"/>
-            </a>
+            <span class="reference-link">
+              <a
+                :href="reference.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ reference.label }}
+                <i class="fa fa-external-link" aria-hidden="true"/>
+              </a>
+            </span>
           </div>
         </template>
 
@@ -279,9 +281,8 @@
 </template>
 
 <script>
-import us from 'underscore';
 import { getEvidence } from '@/api/BioLink';
-import { getXrefUrl } from '@/lib/Utils';
+import { getXrefUrl, processSources } from '@/lib/Utils';
 import sourceToLabel from '@/lib/sources';
 
 export default {
@@ -425,10 +426,7 @@ export default {
             };
           });
 
-        // remove _?slim
-        evi.provided_by = us.uniq(
-          evi.provided_by.map(db => db.replace(/_?slim/, ''))
-        );
+        evi.provided_by = processSources(evi.provided_by);
 
         const subjects = [evi.subject.id].concat(evi.subject_eq);
         const objects = [evi.object.id].concat(evi.object_eq);
@@ -436,41 +434,49 @@ export default {
         evi.references = [];
 
         evi.provided_by.forEach((db) => {
-          const dbName = db
-            .split('/')
-            .pop()
-            .replace('#', '')
-            .split('.')[0]
-            .toLowerCase();
 
           subjects.forEach((subject) => {
-            const subjectUrl = getXrefUrl(dbName, subject, evi.subject.label);
-            let subjectLabel = subject;
+            const subjectUrl = getXrefUrl(db, subject, evi.subject.label);
             if (subjectUrl !== null) {
-              // This won't scale, figure out a better way
-              if (dbName === 'impc' && subject.startsWith('MGI')) {
-                subjectLabel = subject.replace('MGI:', 'IMPC:');
+              // IMPC only has pages for genes and phenotypes
+              if (
+                db === 'impc'
+                && subject.startsWith('MGI')
+                && evi.relation.id === 'RO:0002200'
+              ) {
+                evi.references.push({
+                  url: subjectUrl,
+                  label: subject.replace('MGI:', 'IMPC:')
+                });
               }
-
-              evi.references.push({
-                url: subjectUrl,
-                label: subjectLabel
-              });
+              if (db !== 'impc') {
+                evi.references.push({
+                  url: subjectUrl,
+                  label: subject
+                });
+              }
             }
           });
 
           objects.forEach((object) => {
-            const objectUrl = getXrefUrl(dbName, object, evi.object.label);
-            let objectLabel = object;
+            const objectUrl = getXrefUrl(db, object, evi.object.label);
             if (objectUrl !== null) {
-              if (dbName === 'impc' && object.startsWith('MGI')) {
-                objectLabel = object.replace('MGI:', 'IMPC:');
+              if (
+                db === 'impc'
+                && object.startsWith('MGI')
+                && evi.relation.id === 'GENO:0000408'
+              ) {
+                evi.references.push({
+                  url: objectUrl,
+                  label: object.replace('MGI:', 'IMPC:')
+                });
               }
-
-              evi.references.push({
-                url: objectUrl,
-                label: objectLabel
-              });
+              if (db !== 'impc') {
+                evi.references.push({
+                  url: objectUrl,
+                  label: object
+                });
+              }
             }
           });
 
@@ -556,6 +562,10 @@ export default {
 
   .pub-btn {
     font-size: 0.8rem;
+  }
+
+  .reference-link {
+    white-space: nowrap;
   }
 }
 
