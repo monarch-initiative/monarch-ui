@@ -714,7 +714,8 @@ export default {
       const urlCache = new Set([]);
       xrefs.forEach((xref) => {
         let hasRef = false;
-        sources.forEach((source) => {
+        const xrefPrefix = xref.split(':')[0].toLowerCase();
+        Array.from(sources).concat([xrefPrefix]).forEach((source) => {
           const url = getXrefUrl(source, xref, this.node.label.split(' ')[0]);
           if (url) {
             hasRef = true;
