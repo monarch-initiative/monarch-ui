@@ -1,15 +1,16 @@
 import axios from 'axios';
+import us from 'underscore';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
+import getSourceInfo from './Sources';
 
-// TIP: Example of a domain-specific (as opposed to a generic loadJSON)
+// Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
 // correspond to the set of needed services for the Monarch UI application, and may
 // not necessarily be the same set of functions needed by a generic client
 // of Monarch's services/data. In other words, we can add convenience/aggregation
 // services here that may not make sense for general-purpose use. Our goal
-// with this BioLink API module is to isolate the UI from the service layer, and only secondarily,
-// to create a general-purpose service layer, which is more what BioLink promises
-// to be.
+// with this BioLink API module is to isolate the UI from the service layer,
+// and only secondarily, to create a general-purpose service layer.
 //
 
 const servers = {
@@ -23,7 +24,6 @@ const servers = {
     'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
     'analytics_id': '',
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
-    // 'biolink_url': 'https://api.monarchinitiative.org/api/',
   },
 
   production: {
@@ -35,7 +35,6 @@ const servers = {
     'search_url': 'https://solr.monarchinitiative.org/solr/search/',
     'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
     'analytics_id': '',
-    // 'biolink_url': 'https://api.monarchinitiative.org/api/',
     'biolink_url': 'https://api.monarchinitiative.org/api/',
   },
 
@@ -69,7 +68,7 @@ const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
 
 /**
-  Lighter-weight BL node info. Used by LocalNav.vue
+ Lighter-weight BL node info. Used by LocalNav.vue
  */
 
 export async function getNodeSummary(nodeId, nodeType) {
@@ -95,13 +94,13 @@ export async function getNodeSummary(nodeId, nodeType) {
 /*
   Return our envrionment
  */
-export function getCurrentServerEnvironment(){
+export function getCurrentServerEnvironment() {
   return apiServer;
 }
 
 
 /**
-  Get node info to support Node.vue
+ Get node info to support Node.vue
  */
 
 export async function getNode(nodeId, nodeType) {
@@ -111,9 +110,6 @@ export async function getNode(nodeId, nodeType) {
   if (nodeType === 'function') {
     bioentityUrl = `${biolink}bioentity/${nodeId}`;
   }
-  // else if (nodeType === 'variant') {
-  //   bioentityUrl = `${biolink}bioentity/gene/${nodeId}`;
-  // }
 
   const params = {
     fetch_objects: false,
@@ -124,52 +120,48 @@ export async function getNode(nodeId, nodeType) {
     rows: 1
   };
 
-  //
-  // There should be no need for a separate API call to get the uri field.
-  // the /bioentity/ endpoints should return uri when appropriate.
-  // Until then, we parallelize a call to identifier/prefixes/expand to get a uri,
-  // which is really stupid.
-  // Once BL's bioentity/ endpoint returns uri, we can delete this hack.
-  //
+  const nodeSummary = axios.get(bioentityUrl, { params })
+    .then((bioentityResp) => {
+      const bioentityResponseData = bioentityResp.data;
 
-  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
-
-  //
-  // Temporary hack until BL gets taxon-faceted association counts built in.
-  //
-  const useAssociationTypeKey = false;
-  const subjectKey = useAssociationTypeKey ? 'association_type' : 'subject_category';
-  const objectKey = useAssociationTypeKey ? 'association_type' : 'object_category';
-
-  const nodeSummary = axios.all(
-    [
-      axios.get(bioentityUrl, { params }),
-      axios.get(getIdentifierUrl),
-      // axios.get(golrUrl1, {}),
-      // axios.get(golrUrl2, {}),
-    ]
-  ).then(
-    axios.spread(
-      function response(bioentityResp, getIdentifierResp) {
-        const bioentityResponseData = bioentityResp.data;
-
-        if (!bioentityResponseData.xrefs) {
-          bioentityResponseData.xrefs = [
-          ];
-        }
-
-        if (!bioentityResponseData.description) {
-          bioentityResponseData.description = '';
-        }
-
-        bioentityResponseData.type = nodeType;
-        bioentityResponseData.uri = getIdentifierResp.data;
-        return bioentityResponseData;
+      if (!bioentityResponseData.xrefs) {
+        bioentityResponseData.xrefs = [];
       }
-    )
-  );
+
+      if (!bioentityResponseData.description) {
+        bioentityResponseData.description = '';
+      }
+
+      bioentityResponseData.type = nodeType;
+      // TODO rename uri to iri downstream
+      // are we even using this anymore?
+      bioentityResponseData.uri = bioentityResponseData.iri;
+      return bioentityResponseData;
+    });
 
   return nodeSummary;
+}
+
+/**
+ Get basic node info when node type is unknown
+ */
+export async function getBasicNode(nodeId) {
+  const bioentityUrl = `${biolink}bioentity/${nodeId}`;
+
+  return new Promise((resolve, reject) => {
+    axios.get(bioentityUrl)
+      .then((resp) => {
+        const responseData = resp.data;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        } else {
+          resolve(responseData);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }
 
 
@@ -178,17 +170,13 @@ function canUseSuperclassNode(nodeId, nodeType, superId) {
 
   if (nodeType === 'disease') {
     result = nodeId !== 'MONDO:0000001'; // superId !== 'OBI:1110055' && superId !== 'BFO:0000016';
-  }
-  else if (nodeType === 'anatomy') {
-    result = nodeId !== 'OBO:CARO_0000000';
-  }
-  else if (nodeType === 'phenotype') {
+  } else if (nodeType === 'anatomy') {
+    result = nodeId !== 'UBERON:0001062';
+  } else if (nodeType === 'phenotype') {
     result = nodeId !== 'UPHENO:0001001';
-  }
-  else if (nodeType === 'function') {
+  } else if (nodeType === 'function') {
     result = nodeId !== 'GO:0003674';
-  }
-  else if (nodeType === 'pathway') {
+  } else if (nodeType === 'pathway') {
     result = nodeId !== 'GO:0008150';
   }
   return result;
@@ -198,22 +186,29 @@ const neighborhoodTypes = [
   'disease',
   'phenotype',
   'anatomy',
+  'function'
 ];
+
 
 export async function getNeighborhood(nodeId, nodeType) {
   // const graphUrl = `${biolink}graph/node/${nodeId}`;
   const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
   const nodeLabelMap = {};
+  const xrefMap = {};
   const equivalentClasses = [];
   const superclasses = [];
   const subclasses = [];
+  let xrefs = [];
+  const xrefProp = 'http://www.geneontology.org/formats/oboInOwl#hasDbXref';
+  const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
-  const params = {
-    fetch_objects: false,
-    get_association_counts: false,
-    exclude_automatic_assertions: true,
-    rows: 100
-  };
+  const params = {};
+
+  if (neighborhoodTypes.includes(nodeType)) {
+    params.graph = 'ontology';
+  } else {
+    params.relationship_type = 'equivalentClass';
+  }
 
   const graphResponse = await axios.get(graphUrl, { params });
   const graphResponseData = graphResponse.data;
@@ -224,33 +219,46 @@ export async function getNeighborhood(nodeId, nodeType) {
   if (graphResponseData.nodes) {
     graphResponseData.nodes.forEach((node) => {
       nodeLabelMap[node.id] = node.lbl;
+      if (xrefProp in node.meta) {
+        xrefMap[node.id] = node.meta[xrefProp];
+      } else {
+        xrefMap[node.id] = [];
+      }
     });
   }
+  xrefs = xrefMap[nodeId].map(elem => (
+    elem.startsWith('Orphanet') ? elem.replace('Orphanet', 'ORPHA') : elem));
+
+  if (!internalId.test(nodeId)) {
+    // Unless we own the Id (Mondo/Monarch), the IDs
+    // themselves represent an external source, eg
+    // HGNC:123 should link to HGNC
+    xrefs = xrefs.concat([nodeId]);
+  }
+
   if (graphResponseData.edges) {
     graphResponseData.edges.forEach((edge) => {
-      if (edge.pred === 'subClassOf') {
+      // subClassOf|part of closure
+      if (edge.pred === 'subClassOf' || edge.pred === 'BFO:0000050') {
         if (edge.sub === nodeId) {
           // console.log('Superclass Edge', edge.sub, edge.pred, edge.obj);
           if (canUseSuperclassNode(nodeId, nodeType, edge.obj)) {
             superclasses.push(edge.obj);
           }
-        }
-        else if (edge.obj === nodeId) {
+        } else if (edge.obj === nodeId) {
           // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
           subclasses.push(edge.sub);
-        }
-        else {
+        } else {
           // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
         }
-      }
-      else if (edge.pred === 'equivalentClass') {
+      } else if (edge.pred === 'equivalentClass') {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
-
         if (edge.sub === nodeId) {
-          // console.log('Skip duplicate equiv class', nodeId, edge.sub, edge.obj);
-        }
-        else {
+          equivalentClasses.push(edge.obj);
+          xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
+        } else {
           equivalentClasses.push(edge.sub);
+          xrefs = xrefs.concat([edge.sub], xrefMap[edge.sub]);
         }
       }
       // else {
@@ -258,17 +266,15 @@ export async function getNeighborhood(nodeId, nodeType) {
       //   console.log(JSON.stringify(edge, null, 2));
       // }
     });
-  }
-  if (neighborhoodTypes.indexOf(nodeType) === -1) {
-    superclasses.length = 0;
-    subclasses.length = 0;
+    xrefs = us.uniq(xrefs);
   }
 
   return {
     nodeLabelMap,
     equivalentClasses,
     superclasses,
-    subclasses
+    subclasses,
+    xrefs
   };
 }
 
@@ -283,6 +289,7 @@ const categoriesAll = [
   'anatomy',
   'substance',
   'individual',
+  'case',
   'publication',
   'model',
   'anatomical entity',
@@ -300,7 +307,7 @@ function pruneUnusableCategories(data) {
 
 
 export async function getSources() {
-  const url = `${biolink}metadata/datasets`;
+  /* const url = `${biolink}metadata/datasets`;
   const params = new URLSearchParams();
 
   const bioentityResp = await axios.get(url, { params });
@@ -315,9 +322,9 @@ export async function getSources() {
     bioentityResp.data[i].monarchDataReleaseDate = '2019-02-22';
   }
 
-  const data = bioentityResp.data;
+  const data = bioentityResp.data; */
 
-  return data;
+  return getSourceInfo();
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
@@ -325,13 +332,13 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   const params = new URLSearchParams();
   params.append('start', start);
   params.append('rows', rows);
-  params.append('fetch_objects', false);
-  params.append('exclude_automatic_assertions', false);
-  params.append('exclude_automatic_assertions', false);
-  params.append('use_compact_associations', true);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
+  params.append('boost_q', 'category:variant^-35');
+  params.append('boost_q', 'category:publication^-10');
   params.append('prefix', '-OMIA');
+  params.append('min_match', '67%');
+
 
   let categoriesLocal = categories;
   if (!categoriesLocal || categoriesLocal.length === 0) {
@@ -363,18 +370,21 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   params.append('start', 0);
   params.append('highlight_class', 'hilite');
   params.append('boost_q', 'category:genotype^-10');
+  params.append('boost_q', 'category:variant^-35');
+  params.append('boost_q', 'category:publication^-10');
+  params.append('prefix', '-OMIA');
+  params.append('min_match', '50%');
+  params.append('boost_fx', 'pow(edges,0.1)');
 
   if (prefixes && prefixes.length) {
     prefixes.forEach((elem) => {
       params.append('prefix', elem);
     });
   }
-  params.append('prefix', '-OMIA');
 
   if (!category || category === 'all') {
     category = categoriesAll;
-  }
-  else {
+  } else {
     category = [category];
   }
 
@@ -382,18 +392,22 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
     params.append('category', elem);
   });
 
-  if (category.indexOf('gene') >= 0) {
-    params.append('boost_fx', 'pow(edges,0.334)');
+  if (category.length === 1) {
+    if (category[0] === 'gene') {
+      params.append('boost_fx', 'pow(edges,0.334)');
+    }
+    if (category[0] === 'variant' || category[0] === 'genotype') {
+      params.append('minimal_tokenizer', true);
+    }
   }
 
-  const returnedPromise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     axios.get(urlExtension, { params })
       .then((resp) => {
         const responseData = resp.data;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -401,8 +415,6 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
         reject(err);
       });
   });
-
-  return returnedPromise;
 }
 
 
@@ -410,14 +422,15 @@ function getBiolinkAnnotation(cardType) {
   let result = `${cardType}s`;
   if (cardType === 'anatomy') {
     result = 'expression/anatomy';
-  }
-  else if (cardType === 'ortholog-phenotype') {
+  } else if (cardType === 'ortholog-phenotype') {
     result = 'ortholog/phenotypes';
-  }
-  else if (cardType === 'ortholog-disease') {
+  } else if (cardType === 'ortholog-disease') {
     result = 'ortholog/diseases';
-  }
-  else if (cardType === 'function') {
+  } else if (cardType === 'causal-disease' || cardType === 'noncausal-disease') {
+    result = 'diseases';
+  } else if (cardType === 'causal-gene' || cardType === 'noncausal-gene') {
+    result = 'genes';
+  } else if (cardType === 'function') {
     result = cardType;
   }
 
@@ -429,8 +442,20 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
   const baseUrl = `${biolink}bioentity/`;
   const biolinkMappedCardType = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
-  const url = `${baseUrl}${urlExtension}`;
+  let url = `${baseUrl}${urlExtension}`;
   const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
+
+  // Use monarch solr until amigo-ontobio connection is ready
+  if (cardType === 'function') {
+    url = `${biolink}association/type/gene_function`;
+    params.subject = nodeId;
+  }
+
+  if (cardType.startsWith('causal')) {
+    params.association_type = 'causal';
+  } else if (cardType.startsWith('noncausal')) {
+    params.association_type = 'non_causal';
+  }
 
   if (useTaxonRestriction) {
     // console.log('getNodeAssociations', nodeType, nodeId, cardType);
@@ -461,6 +486,7 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
 }
 
 
+// TODO figure out if we still need this (see AnalyzePhenotypes.vue)
 export async function getNodeLabelByCurie(curie) {
   const baseUrl = `${biolink}bioentity/${curie}`;
   const params = {
@@ -468,14 +494,13 @@ export async function getNodeLabelByCurie(curie) {
     rows: 100
   };
 
-  const returnedPromise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     axios.get(baseUrl, { params })
       .then((resp) => {
         const responseData = resp;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -483,11 +508,11 @@ export async function getNodeLabelByCurie(curie) {
         reject(err);
       });
   });
-  return returnedPromise;
 }
 
 
 export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
+  // WARNING this is about to be deprecated, replace with biolink compare
   const baseUrl = 'https://monarchinitiative.org/analyze/phenotypes.json?';
   const params = new URLSearchParams();
   const phenoCuries = phenotypesList.map(elem => elem.curie);
@@ -495,14 +520,13 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
   params.append('gene_items', geneList);
   params.append('target_species', species);
   params.append('mode', mode);
-  const returnedPromise = new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     axios.get(baseUrl, { params })
       .then((resp) => {
         const responseData = resp;
         if (typeof responseData !== 'object') {
           reject(responseData);
-        }
-        else {
+        } else {
           resolve(responseData);
         }
       })
@@ -510,7 +534,6 @@ export function comparePhenotypes(phenotypesList, geneList, species = 'all', mod
         reject(err);
       });
   });
-  return returnedPromise;
 }
 
 export async function annotateText(queryText, longestOnly) {
@@ -525,8 +548,7 @@ export async function annotateText(queryText, longestOnly) {
       const responseData = resp;
       if (typeof responseData !== 'object') {
         reject(responseData);
-      }
-      else {
+      } else {
         resolve(responseData);
       }
     })
@@ -536,9 +558,27 @@ export async function annotateText(queryText, longestOnly) {
   });
 }
 
+export async function getEvidence(evidenceId, nodeType) {
+  const biolinkUrl = `${biolink}evidence/graph/${evidenceId}/table`;
 
-export function debugServerName() {
-  return (serverConfiguration.app_base.length > 0)
-    ? serverConfiguration.app_base
-    : 'https://beta.monarchinitiative.org';
+  const params = {};
+
+  if (nodeType === 'publication') {
+    params.is_publication = true;
+  }
+
+  return new Promise((resolve, reject) => {
+    axios.get(biolinkUrl, { params })
+      .then((resp) => {
+        const responseData = resp;
+        if (typeof responseData !== 'object') {
+          reject(responseData);
+        } else {
+          resolve(responseData);
+        }
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
 }

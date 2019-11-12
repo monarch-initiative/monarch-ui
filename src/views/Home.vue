@@ -27,15 +27,6 @@
     .spacer {
       height: 50px;
     }
-
-    // //
-    // // Horizontal borders for debugging home page layout
-    // //
-    // > div:not(.row),
-    // > .row > div {
-    //   border-top:2px solid orange;
-    //   border-bottom:2px solid orange;
-    // }
   }
 </style>
 

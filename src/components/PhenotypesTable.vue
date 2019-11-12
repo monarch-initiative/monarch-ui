@@ -156,8 +156,7 @@ export default {
         const searchResponse = await BL.comparePhenotypes(this.phenotypes, this.genes);
         this.preItems = searchResponse;
         this.dataFetched = true;
-      }
-      catch (e) {
+      } catch (e) {
         that.dataError = e;
         console.log('BioLink Error', e);
       }

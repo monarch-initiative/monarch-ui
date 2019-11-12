@@ -91,8 +91,7 @@ export default {
         this.familyData = searchResponse;
         await this.sortRelationships();
         this.dataFetched = true;
-      }
-      catch (e) {
+      } catch (e) {
         that.dataError = e;
         console.log('BioLink Error', e);
       }

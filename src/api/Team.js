@@ -23,8 +23,7 @@ export default async function getTeam() {
       });
     });
     team = teamParsed;
-  }
-  catch (e) {
+  } catch (e) {
     console.log('getTeam yaml.safeLoad ERROR', e);
   }
 

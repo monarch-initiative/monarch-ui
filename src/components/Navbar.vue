@@ -10,7 +10,7 @@
     <b-navbar-brand to="/">
       <img
         class="branding-logo"
-        src="../assets/img/monarch-logo-white.png"
+        src="../assets/img/monarch-logo-white.svg"
         alt="Monarch Initiative logo"
         title="Monarch Initiative front page">
     </b-navbar-brand>
@@ -19,10 +19,10 @@
       is-nav="">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Tools">
-          <b-dropdown-item
+          <!--<b-dropdown-item
             to="/analyze/phenotypes">
             Phenotype Profile Search
-          </b-dropdown-item>
+          </b-dropdown-item>-->
 
           <b-dropdown-item to="/tools/text-annotate">
             Text Annotator
@@ -41,22 +41,18 @@
             Our Team
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://medium.com/@MonarchInit" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item to="/about/disclaimer">
             Disclaimer
           </b-dropdown-item>
 
           <b-dropdown-divider/>
 
-          <b-dropdown-item to="/sources">
+          <b-dropdown-item to="/about/data-sources">
             Data Sources
           </b-dropdown-item>
 
           <b-dropdown-item to="/about/monarch-web-services">
             Monarch Web Services
-          </b-dropdown-item>
-
-          <b-dropdown-item to="/sources">
-            Releases
           </b-dropdown-item>
 
           <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
@@ -88,7 +84,7 @@
             Contact Us
           </b-dropdown-item>
 
-          <b-dropdown-item to="/help/citing">
+          <b-dropdown-item to="/help/cite">
             Cite Monarch
           </b-dropdown-item>
 
@@ -165,7 +161,7 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto" v-if="$route.path !== '/'">
+      <b-navbar-nav v-if="$route.path !== '/'" class="ml-auto">
         <div class="nav-ac nav-search">
           <monarch-autocomplete :full-width-search="false"/>
         </div>
@@ -173,10 +169,11 @@
     </b-collapse>
 
     <b-navbar-toggle target="nav_collapse"/>
-    <div v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-         title="Monarch UI BETA"
-         v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
-         class="beta">
+    <div
+      v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
+      v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
+      title="Monarch UI BETA"
+      class="beta">
       BETA
     </div>
   </b-navbar>
@@ -186,6 +183,7 @@
 <script>
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import * as biolinkService from '@/api/BioLink';
+
 export default {
   name: 'MonarchNavbar',
   components: {
@@ -215,7 +213,7 @@ nav#monarchng-navbar.navbar .navbar-brand {
 }
 
 nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
-  height: 28px;
+  height: 30px;
   width: auto;
   margin: 15px 0 0 0;
   padding: 0;

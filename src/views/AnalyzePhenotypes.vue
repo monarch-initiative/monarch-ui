@@ -423,6 +423,7 @@ export default {
       this.selectedGene = item;
     },
 
+    // TODO figure out why this needed?
     async fetchLabel(curie, curieType) {
       const that = this;
       try {
@@ -432,15 +433,13 @@ export default {
           if (searchResponse.status === 500) {
             this.showGeneAlert = false;
           }
-        }
-        else if (curieType === 'gene') {
+        } else if (curieType === 'gene') {
           this.convertGenes(searchResponse);
           if (searchResponse.status === 500) {
             this.showGeneAlert = true;
           }
         }
-      }
-      catch (e) {
+      } catch (e) {
         that.dataError = e;
         console.log('BioLink Error', e);
       }
@@ -462,8 +461,7 @@ export default {
         if (searchResponse.status === 500) {
           this.showGeneAlert = false;
         }
-      }
-      catch (e) {
+      } catch (e) {
         that.dataError = e;
         console.log('BioLink Error', e);
       }
@@ -506,8 +504,7 @@ export default {
       this.showPhenogrid = true;
       if (this.selectedGroups) {
         this.xAxis = this.selectedGroups;
-      }
-      else {
+      } else {
         this.xAxis = this.genes.map((elem) => {
           this.mode = 'compare';
           return elem.curie;
@@ -533,8 +530,7 @@ export default {
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
           await this.fetchLabel(elemTrimmed, 'phenotype');
-        }
-        else {
+        } else {
           this.rejectedPhenotypeCuries.push(elemTrimmed);
           this.showPhenotypeAlert = true;
         }
@@ -548,8 +544,7 @@ export default {
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
           this.fetchLabel(elemTrimmed, 'gene');
-        }
-        else {
+        } else {
           this.rejectedGeneCuries.push(elemTrimmed);
           this.showGeneAlert = true;
         }

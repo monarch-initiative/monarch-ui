@@ -13,32 +13,25 @@ export async function getGeneDescription(geneId) {
 
   if (geneId.match(/^NCBIGene/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, '$1');
-  }
-  else if (geneId.match(/^OMIM/)) {
+  } else if (geneId.match(/^OMIM/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'mim:$1');
     speciesParam = 9606;
-  }
-  else if (geneId.match(/^MGI/)) {
+  } else if (geneId.match(/^MGI/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
     speciesParam = 10090;
-  }
-  else if (geneId.match(/^FlyBase/)) {
+  } else if (geneId.match(/^FlyBase/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'flybase:$1');
     speciesParam = 7227;
-  }
-  else if (geneId.match(/^Wormbase/)) {
+  } else if (geneId.match(/^Wormbase/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'wormbase:$1');
     speciesParam = 6239;
-  }
-  else if (geneId.match(/^ZFIN/)) {
+  } else if (geneId.match(/^ZFIN/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'zfin:$1');
     speciesParam = 7955;
-  }
-  else if (geneId.match(/^RGD/)) {
+  } else if (geneId.match(/^RGD/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'rgd:$1');
     speciesParam = 10116;
-  }
-  else {
+  } else {
     formattedId = geneId;
   }
 
@@ -65,8 +58,7 @@ export async function getGeneDescription(geneId) {
       if (!hit.genomic_pos) {
         console.log('getGeneDescription MyGene response missing hit.genomic_pos. Clearing hits', result);
         result.hits = [];
-      }
-      else {
+      } else {
         let locationObj = hit.genomic_pos;
         if (Array.isArray(locationObj)) {
           console.log('getGeneDescription multiple genomic_pos found. Merging regions', locationObj);
@@ -77,8 +69,7 @@ export async function getGeneDescription(geneId) {
           if (minStart > maxEnd) {
             console.log('getGeneDescription minStart > maxEnd', geneId, minStart, maxEnd);
             result.hits = [];
-          }
-          else {
+          } else {
             let error = false;
             locationObj.forEach((l) => {
               // console.log(l.chr, l.start, l.end, l.strand, l.ensemblgene);
@@ -99,8 +90,7 @@ export async function getGeneDescription(geneId) {
 
             if (error) {
               result.hits = [];
-            }
-            else {
+            } else {
               newLocation.start = minStart;
               newLocation.end = maxEnd;
 
@@ -111,8 +101,7 @@ export async function getGeneDescription(geneId) {
               hit.genomic_pos = locationObj;
             }
           }
-        }
-        else {
+        } else {
           // console.log('getGeneDescription single genomic_pos found. Using it', locationObj);
         }
         let taxid = hit.taxid;
@@ -124,8 +113,7 @@ export async function getGeneDescription(geneId) {
         // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
         if (!isAGRApolloTaxon(taxid)) {
           console.log(`Species ${taxid} not available from Apollo.  Not showing genome features.`);
-        }
-        else {
+        } else {
           const thisSpecies = idToLabel(`NCBITaxon:${taxid}`);
           const defaultTrackName = 'All Genes'; // this is the generic track name
           const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
@@ -140,16 +128,14 @@ export async function getGeneDescription(geneId) {
 
             result.trackResponse = trackResponse.data;
             result.externalURL = externalUrl;
-          }
-          catch (e) {
+          } catch (e) {
             console.log(`Error from Apollo at ${trackDataWithHighlightURL}`);
             console.log(JSON.stringify(e, null, 2));
           }
         }
       }
     }
-  }
-  catch (e) {
+  } catch (e) {
     console.log('MyGene.getGeneDescription error', e.message);
   }
 

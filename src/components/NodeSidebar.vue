@@ -7,12 +7,14 @@
       :node-label="nodeLabel"
       :subclasses="subclasses"
       :superclasses="superclasses"
+      @toggleNeighborhood="toggleNeighborhood()"
     />
 
     <div>
       <ul v-if="nodeType" class="list-group">
         <li class="list-group-item title">
           {{ $parent.labels[nodeType] }}
+          <span v-if="isGroup"> Group</span>
         </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
@@ -128,6 +130,11 @@ export default {
       required: false,
       default: false,
     },
+    isGroup: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
   },
 
   data() {
@@ -140,25 +147,15 @@ export default {
     },
     facetsDisabled() {
       return false; // this.nodeType === 'publication';
-    },
-    debugServerURL() {
-      const debugHash = (this.$route.hash.length > 1)
-        ? (this.$route.hash + 's')
-        : '';
-      const result = biolinkService.debugServerName() + this.$route.path + debugHash;
-      return result;
-    },
+    }
   },
   created() {
-    // console.log('created', this.nodeId);
   },
 
   updated() {
-    // console.log('updated', this.nodeId);
   },
 
   destroyed() {
-    // console.log('destroyed', this.nodeId);
   },
 
   mounted() {
@@ -179,8 +176,7 @@ export default {
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-      }
-      else if (this.isFacetsShowing) {
+      } else if (this.isFacetsShowing) {
         this.toggleFacets();
       }
     }
@@ -296,17 +292,6 @@ $collapsed-sidebar-width: 50px;
     }
 
     &.list-group-item-node {
-      .debug-link-to-alpha {
-        padding: 0;
-        height: 0;
-        width: 100%;
-        border: 2px solid $monarch-bg-color;
-
-        &:hover {
-          border-color: darkslateblue !important;
-        }
-      }
-
       > a {
         text-transform: uppercase;
         vertical-align: bottom;

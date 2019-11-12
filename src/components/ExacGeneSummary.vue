@@ -98,8 +98,7 @@ export default {
       let returnValue = '';
       if (value < 1) {
         returnValue = value.toPrecision(2);
-      }
-      else {
+      } else {
         returnValue = Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
       }
       return returnValue;

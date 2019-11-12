@@ -136,8 +136,7 @@ export default {
       handler(val) {
         if (!this.$v.$invalid) {
           this.validForm = true;
-        }
-        else {
+        } else {
           this.validForm = false;
         }
       },
@@ -159,8 +158,7 @@ export default {
                 const popover = componentref.buildPopover('Annotation', annotation.getAttribute('data-sciGraph'));
                 popover.setAttribute('style', 'left:' + left + 'px !important;');
                 annotation.appendChild(popover);
-              }
-              else {
+              } else {
                 const popover = annotation.children[0];
                 popover.classList.remove('hide-popover');
                 popover.classList.add('show-popover');
@@ -188,8 +186,7 @@ export default {
   mounted() {
     if (!this.$v.$invalid) {
       this.validForm = true;
-    }
-    else {
+    } else {
       this.validForm = false;
     }
   },
@@ -216,12 +213,10 @@ export default {
       this.showSpinner = false;
       if (at.status !== 200) {
         this.errorAnnotating = true;
-      }
-      else {
+      } else {
         // Call some endpoint and wait for a response. If, then return then
         this.annotatedText = at.data;
       }
-
     },
 
     buildPopover(title, data) {
@@ -260,196 +255,206 @@ export default {
           phenotypes.push(phenotype);
         }
       });
-      this.phenotypes = phenotypes.join(',');
+      this.phenotypes = [...new Set(phenotypes)].join(',');
     }
   }
 };
 </script>
 <style lang="scss">
-    @import "~@/style/variables";
-    .stepper-box {
-        box-shadow: none !important;
-        min-height: 200px;
+  @import "~@/style/variables";
 
-        .content {
-            overflow: hidden;
-            margin: 5rem 0 3.5rem 0;
-            min-height: 200px;
+  .stepper-box {
+    box-shadow: none !important;
+    min-height: 200px;
 
-            .sciCrunchAnnotation{
-                text-decoration: underline;;
-                font-weight: bold;
-                color: #39a5dc;
-                cursor: pointer;
-            }
-            .popover {
-                max-width: 450px !important;
-                top: unset !important;
+    .content {
+      overflow: hidden;
+      margin: 5rem 0 3.5rem 0;
+      min-height: 200px;
 
-                .annotation {
-                    font-weight: bold;
-                }
-                .ontology-id {
-                    font-size: 12px;
-                    color: gray;
-                    margin-right: 5px;
-                }
-            }
+      .sciCrunchAnnotation {
+        text-decoration: underline;;
+        font-weight: bold;
+        color: #39a5dc;
+        cursor: pointer;
+      }
 
-            .show-popover {
-                display: block;
-            }
+      .popover {
+        max-width: 450px !important;
+        top: unset !important;
 
-            .hide-popover {
-                display: none;
-            }
-
-            .step1 {
-                text-align: justify;
-            }
-
-            .hidden {
-                display: none;
-            }
-
-            .spinner {
-                text-align: center;
-                margin-top: 50px;
-                .spinner-grow {
-                    animation: spinner-grow .80s linear infinite;
-                    color: $monarch-bg-color;
-                }
-            }
-            .error{
-                text-align: center;
-            }
-        }
-        .bottom {
-            position: relative;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            padding: 2rem;
-            border-top: 1px solid #cccccc;
-            justify-content: space-between;
-            &.only-submit {
-                justify-content: flex-end;
-            }
-
-            .stepper-button {
-                &.back {
-
-                }
-                background-color: $monarch-bg-color;
-                &.deactivated {
-                    background-color: #cccccc !important;
-                    cursor: not-allowed !important;
-                }
-            }
-        }
-        .top {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            position: relative;
-            -webkit-box-pack: center;
-            -ms-flex-pack: center;
-            justify-content: center;
-
-            .divider-line {
-                border-bottom: 1px solid #cccccc;
-                height: 2px;
-                position: absolute;
-                width: 40%;
-            }
-
-            .steps-wrapper {
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
-                align-items: center;
-                -webkit-box-pack: justify;
-                -ms-flex-pack: justify;
-                justify-content: space-between;
-                position: relative;
-                width: 95%;
-                left: 0;
-                padding: 2% 4%;
-
-                .step {
-                    position: relative;
-                    display: -webkit-box;
-                    display: -ms-flexbox;
-                    display: flex;
-                    -webkit-box-orient: vertical;
-                    -webkit-box-direction: normal;
-                    -ms-flex-direction: column;
-                    flex-direction: column;
-                    -webkit-box-align: center;
-                    -ms-flex-align: center;
-                    align-items: center;
-                    text-align: center;
-                    width: 50%;
-
-                    &.deactivated {
-                        .icon i {
-                            background-color: #bbbbbb !important;
-                        }
-
-                        .step-title {
-                            opacity: .35;
-                        }
-                    }
-
-                    .icon {
-                        margin-bottom: 1rem;
-                        padding: 0 1rem;
-                        background-color: white;
-
-                        i {
-                            background-color: $monarch-bg-color;
-                            color: #fff;
-                            border-radius: 100rem;
-                            padding: 1rem;
-                            font-weight: normal;
-                            font-style: normal;
-                            font-size: 28px;
-                            line-height: 1;
-                            letter-spacing: normal;
-                            text-transform: none;
-                            display: inline-block;
-                            white-space: nowrap;
-                            word-wrap: normal;
-                            direction: ltr;
-                            height: 60px;
-                            width: 60px;
-                        }
-                    }
-
-                    .step-title {
-                        position: absolute;
-                        top: 90%;
-                        width: 100%;
-
-                        .step-subtitle {
-                            font-weight: lighter;
-                            margin: 0;
-                            color: #555555;
-                        }
-                    }
-                }
-            }
+        .annotation {
+          font-weight: bold;
         }
 
+        .ontology-id {
+          font-size: 12px;
+          color: gray;
+          margin-right: 5px;
+        }
+      }
+
+      .show-popover {
+        display: block;
+      }
+
+      .hide-popover {
+        display: none;
+      }
+
+      .step1 {
+        text-align: justify;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .spinner {
+        text-align: center;
+        margin-top: 50px;
+
+        .spinner-grow {
+          animation: spinner-grow .80s linear infinite;
+          color: $monarch-bg-color;
+        }
+      }
+
+      .error {
+        text-align: center;
+      }
     }
+
+    .bottom {
+      position: relative;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      padding: 2rem;
+      border-top: 1px solid #cccccc;
+      justify-content: space-between;
+
+      &.only-submit {
+        justify-content: flex-end;
+      }
+
+      .stepper-button {
+        &.back {
+
+        }
+
+        background-color: $monarch-bg-color;
+
+        &.deactivated {
+          background-color: #cccccc !important;
+          cursor: not-allowed !important;
+        }
+      }
+    }
+
+    .top {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      position: relative;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+
+      .divider-line {
+        border-bottom: 1px solid #cccccc;
+        height: 2px;
+        position: absolute;
+        width: 40%;
+      }
+
+      .steps-wrapper {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        position: relative;
+        width: 95%;
+        left: 0;
+        padding: 2% 4%;
+
+        .step {
+          position: relative;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: column;
+          flex-direction: column;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+          text-align: center;
+          width: 50%;
+
+          &.deactivated {
+            .icon i {
+              background-color: #bbbbbb !important;
+            }
+
+            .step-title {
+              opacity: .35;
+            }
+          }
+
+          .icon {
+            margin-bottom: 1rem;
+            padding: 0 1rem;
+            background-color: white;
+
+            i {
+              background-color: $monarch-bg-color;
+              color: #fff;
+              border-radius: 100rem;
+              padding: 1rem;
+              font-weight: normal;
+              font-style: normal;
+              font-size: 28px;
+              line-height: 1;
+              letter-spacing: normal;
+              text-transform: none;
+              display: inline-block;
+              white-space: nowrap;
+              word-wrap: normal;
+              direction: ltr;
+              height: 60px;
+              width: 60px;
+            }
+          }
+
+          .step-title {
+            position: absolute;
+            top: 90%;
+            width: 100%;
+
+            .step-subtitle {
+              font-weight: lighter;
+              margin: 0;
+              color: #555555;
+            }
+          }
+        }
+      }
+    }
+
+  }
 </style>

@@ -6,9 +6,7 @@
     -->
     <div v-if="compact" class="row footer compact">
       <div class="col-lg-4 version">
-        <router-link to="/about/monarch">
-          <i>The Monarch Initiative {{ version }}</i>
-        </router-link>
+        <i>The Monarch Initiative 2019</i>
       </div>
       <div class="col-4 report">
         <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">
@@ -19,9 +17,7 @@
         <i class="fa fa-creative-commons fa-fw"/>
         CC-BY 3.0, except where noted.
       </div>
-
     </div>
-
     <div
       v-else
       class="row footer">
@@ -33,7 +29,6 @@
             alt="Monarch logo">
         </div>
       </div>
-
       <div class="socials col-8 col-lg-10">
         <div class="icons">
           <a href="mailto:info@monarchinitiative.org">
