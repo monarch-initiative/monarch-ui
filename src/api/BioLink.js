@@ -384,10 +384,10 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
 
   if (!category || category === 'all') {
     category = categoriesAll;
-  } else {
+  } else if(!Array.isArray(category)) {
     category = [category];
   }
-
+  
   category.forEach((elem) => {
     params.append('category', elem);
   });
@@ -458,9 +458,6 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
   }
 
   if (useTaxonRestriction) {
-    // console.log('getNodeAssociations', nodeType, nodeId, cardType);
-    // console.log(JSON.stringify(params, null, 2));
-    // console.log(JSON.stringify(taxons, null, 2));
     params.start = 0;
     params.rows = 10000;
   }

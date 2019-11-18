@@ -240,12 +240,20 @@ export default {
   },
   mounted() {
     if (this.definedCategories) {
+      if(this.definedCategories.length > 1){
+        this.options.push({text: "All", value: "all-subset"})
+      }
       this.definedCategories.forEach((elem) => {
         this.options.push({
           text: this.firstCap(elem),
           value: elem,
         });
       });
+      if(this.definedCategories.length == 1 ){
+        this.category = this.options[0].value;
+      } else {
+        this.category = "all-subset";
+      }
     } else {
       this.options = [
         {
@@ -290,7 +298,12 @@ export default {
     ),
     async fetchData() {
       try {
-        const searchResponse = await biolink.getSearchTermSuggestions(this.value, this.category, this.allowedPrefixes);
+        let searchResponse; 
+        if(this.category == 'all-subset'){
+          searchResponse = await biolink.getSearchTermSuggestions(this.value, this.definedCategories, this.allowedPrefixes);
+        } else {
+          searchResponse = await biolink.getSearchTermSuggestions(this.value, this.category, this.allowedPrefixes);
+        }
         this.suggestions = [];
         this.current = -1;
         searchResponse.docs.forEach((elem) => {
