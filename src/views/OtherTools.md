@@ -32,7 +32,8 @@
                 and, optionally, a set of genome variant calls from a VCF file. For each candidate 
                 disease, the likelihood ratio for each phenotype and genotype input by the user is
                 calculated. A ranked list of candidate diseases is output, along with posterior
-                probabilities and likelihood ratios for each phenotype and genotype. 
+                probabilities and likelihood ratios for each phenotype and genotype, as well as a
+                post-test probability for each candidate disease.
             </p>
     </div>
     <div class="card">
