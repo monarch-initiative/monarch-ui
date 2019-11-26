@@ -14,7 +14,7 @@
                 quality, inheritance pattern, and model organism phenotype data. Predicted pathogenicity data is extracted
                 from the dbNSFP resource. Cross-species phenotype comparisons are
                 powered by the <a href="http://owlsim.org">OWLSim algorithm</a> and use human, mouse, 
-                and fish phenotypes. Exomiser is available for download <a "href=https://github.com/exomiser/Exomiser"> 
+                and fish phenotypes. Exomiser is available for download <a href="https://github.com/exomiser/Exomiser"> 
                 here</a>. A paper describing 
                 Exomiser is available <a href="http://genome.cshlp.org/content/24/2/340.long">here</a>.
         </p>
