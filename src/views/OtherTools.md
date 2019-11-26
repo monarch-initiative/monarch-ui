@@ -9,13 +9,12 @@
                 from whole-exome sequencing data starting from a VCF file (version 4) and a set 
                 of phenotypes encoded using the <a href="https://hpo.jax.org/app/">Human Phenotype 
                 Ontology</a>. The functional annotation of variants is based on Jannovar and uses UCSC
-                KnownGene or RefSeq transcript definitions and hg19 or hg38 genomic coordinates.<br>
-                Variants are prioritized according to user-defined criteria on variant
-                frequency, pathogenicity, quality, inheritance pattern, and model
-                organism phenotype data. Predicted pathogenicity data is extracted
+                KnownGene or RefSeq transcript definitions and hg19 or hg38 genomic coordinates. Variants 
+                are prioritized according to user-defined criteria on variant frequency, pathogenicity, 
+                quality, inheritance pattern, and model organism phenotype data. Predicted pathogenicity data is extracted
                 from the dbNSFP resource. Cross-species phenotype comparisons are
                 powered by the <a href="http://owlsim.org">OWLSim algorithm</a> and use human, mouse, 
-                and fish phenotypes.<br> Exomiser is available from the Sanger Institute. A paper describing 
+                and fish phenotypes. Exomiser is available from the Sanger Institute. A paper describing 
                 Exomiser is available <a href="http://genome.cshlp.org/content/24/2/340.long">here</a>.
         </p>
     </div>
