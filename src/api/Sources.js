@@ -1,7 +1,7 @@
 /* eslint quotes: 0 */ // This is really a json file
 
 export default function getSourceInfo() {
-  return { sources: [
+  return [
     {
       sourceDisplayName: "Mouse Genome Informatics",
       sourceDescription: "MGI is the international database resource for the laboratory mouse, providing integrated genetic, genomic, and biological data to facilitate the study of human health and disease.",
@@ -256,5 +256,5 @@ export default function getSourceInfo() {
       monarchUsage: "Monarch stores gene to phenotype associations and gene function data",
       vocabulary: "APO, RO"
     }
-  ]}
+  ]
 }

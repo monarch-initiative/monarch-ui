@@ -48,7 +48,6 @@ export default {
   },
   async mounted() {
     this.sources = await biolinkService.getSources();
-    this.sources = this.sources.sources;
   }
 };
 </script>
