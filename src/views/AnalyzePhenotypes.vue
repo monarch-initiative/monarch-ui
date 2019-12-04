@@ -13,40 +13,57 @@
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
-          <h4 class="center-text">1. Create A Profile of Phenotypes</h4>
-          <h6 class="center-text">Add your phenotypes by using the search box to get an individual phenotype or a collection of phenotypes by disease or gene. </h6>
-          <monarch-autocomplete
-            :home-search="false"
-            :allowed-prefixes="acceptedPrefixes"
-            :defined-categories="searchPhenoCategories"
-            :dynamic-placeholder="phenoSearchPH"
-            @interface="handlePhenotypes"
-          />
-          <b-form-textarea
-            id="textarea1"
-            v-model="phenoCurieList"
-            :rows="3"
-            :max-rows="6"
-            placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
-            class="my-2"
-          />
-          <div
-            v-if="phenoCurieList"
-            class="btn btn-outline-info"
-            @click="getPhenotypesFromEntityList"
-          >
-            Submit Phenotype List
+          <h4 class="center-text">1. Create A Profile of Phenotypes
+            <b-button class="comparison-category-edit" v-if="currentSubStep !== 1" variant="outline-info" v-on:click="currentSubStep = 1; phenotypes = []">
+              <i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Selection
+            </b-button>
+          </h4>
+          <div class="center-text" v-if="currentSubStep === 1">
+            <h6 class="center-text">How would like to continue?</h6>
+            <b-form-group>
+              <b-button-group>
+                <b-button variant="outline-info" v-on:click="currentSubStep = 2">Search & Build</b-button>
+                <b-button variant="outline-info" v-on:click="currentSubStep = 3">I have a phenotype list</b-button>
+              </b-button-group>
+            </b-form-group>
           </div>
-          <b-alert
-            :show="showPhenotypeAlert"
-            variant="danger"
-            class="my-2"
-            dismissible
-            @dismissed="showPhenotypeAlert=false"
-          >
-            Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
-            HP:0000002)
-          </b-alert>
+          <div v-if="currentSubStep === 2">
+            <monarch-autocomplete
+                    :home-search="false"
+                    :allowed-prefixes="acceptedPrefixes"
+                    :defined-categories="searchPhenoCategories"
+                    :dynamic-placeholder="phenoSearchPH"
+                    @interface="handlePhenotypes"
+            />
+            <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
+          </div>
+          <div v-if="currentSubStep === 3">
+            <b-form-textarea
+                    id="textarea1"
+                    v-model="phenoCurieList"
+                    :rows="3"
+                    :max-rows="6"
+                    placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+                    class="my-2"
+            ></b-form-textarea>
+            <div
+                    v-if="phenoCurieList"
+                    class="btn btn-outline-info submit"
+                    @click="getPhenotypesFromEntityList"
+            >
+              Confirm Phenotype List
+            </div>
+            <b-alert
+                    :show="showPhenotypeAlert"
+                    variant="danger"
+                    class="my-2"
+                    dismissible
+                    @dismissed="showPhenotypeAlert=false"
+            >
+              Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
+              HP:0000002)
+            </b-alert>
+          </div>
         </div>
         <div class="flex-container" v-if="phenotypes.length && !this.showPhenogrid">
           <b-button variant="light"
@@ -82,13 +99,14 @@
         </div>
         <div class="step-1-btn-group">
           <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="currentStep = 2; showCollapse = false" variant="outline-primary" class="confirm-profile">Confirm Profile</b-button>
-          <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="phenotypes = []" variant="outline-primary" class="reset-profile">Reset Profile</b-button>
-          <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1; showCollapse = true" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
+          <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="phenotypes = []; currentSubStep = 1;" variant="outline-primary" class="reset-profile">Reset Profile</b-button>
+          <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
         </div>
       </div>
       <!-- end of step 1 -->
       <div class="col-1"/>
     </div>
+
     <!-- Step 2 Comparison Profile -->
     <div v-if="(currentStep === 2 || currentStep === 3) && !showPhenogrid" class="row py-2">
       <div class="col-1"/>
@@ -97,7 +115,7 @@
           <h5>What would you like to compare your profile with?</h5>
           <b-form-group>
             <b-button-group>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'all'">All</b-button>
+              <b-button variant="outline-info" v-on:click="comparisonCategory = 'all'">Everything</b-button>
               <b-button variant="outline-info" v-on:click="comparisonCategory = 'disease'">Disease(s)</b-button>
               <b-button variant="outline-info" v-on:click="comparisonCategory = 'gene'">Gene(s)</b-button>
               <b-button variant="outline-info" v-on:click="comparisonCategory = 'phenotypes'">Phenotype(s)</b-button>
@@ -113,19 +131,22 @@
             <b-form-group class="center-text">
               <b-button-group>
                 <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'gene-group'">Taxon Grouped Genes</b-button>
-                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'custom'">Custom</b-button>
+                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'custom-build'">Search & Build</b-button>
+                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'custom-list'; genes = []">I have gene a list</b-button>
               </b-button-group>
             </b-form-group>
             <div v-if="geneComparisonCategory === 'gene-group'">
               <b-form-select v-model="selectedGeneGroup" :options="targetGeneGroups"></b-form-select>
             </div>
-            <div v-if="geneComparisonCategory === 'custom'">
+            <div v-if="geneComparisonCategory === 'custom-build'">
               <monarch-autocomplete
                       :home-search="false"
                       :defined-categories="searchCompCategories"
                       :dynamic-placeholder="placeholderComparisonText"
                       @interface="handleGenes"
               />
+            </div>
+            <div v-if="geneComparisonCategory === 'custom-list'">
               <b-form-textarea
                       id="textarea2"
                       v-if="comparisonCategory === 'gene'"
@@ -135,7 +156,7 @@
                       placeholder="Enter a comma separated list of prefixed gene ids from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)"
                       class="my-2"
               ></b-form-textarea>
-              <div v-if="geneCurieList" class="btn btn-outline-info" @click="getGenesFromList">
+              <div v-if="geneCurieList" class="btn btn-outline-info submit" @click="getGenesFromList">
                 Confirm Gene List
               </div>
               <b-alert
@@ -147,8 +168,10 @@
               >
                 Error: {{ rejectedGeneCuries }} <br> Gene curie format incorrect should be one of NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)
               </b-alert>
-              <div v-if="genes.length > 0">
+            </div>
+            <div v-if="genes.length > 0">
                 <p class="current-profile">Current Gene Comparisons</p>
+                <div class="flex-container">
                 <div
                         v-for="(gene, index) in genes"
                         :key="index"
@@ -167,10 +190,17 @@
                     </button>
                   </div>
                 </div>
+                </div>
               </div>
-            </div>
           </div>
           <div v-if="comparisonCategory === 'disease'">
+            <b-form-group class="center-text">
+                <b-button-group>
+                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-all'">All Homo Sapien Diseases</b-button>
+                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-specific'">Specific Disease(s)</b-button>
+                </b-button-group>
+            </b-form-group>
+            <div v-if="diseaseComparisonCategory == 'disease-specific'">
             <monarch-autocomplete
                     :home-search="false"
                     :defined-categories="searchCompCategories"
@@ -179,6 +209,7 @@
             />
             <div v-if="diseases.length > 0">
               <p class="current-profile">Current Disease Comparisons</p>
+              <div class="flex-container">
               <div
                       v-for="(disease, index) in diseases"
                       :key="index"
@@ -197,42 +228,55 @@
                   </button>
                 </div>
               </div>
+              </div>
+            </div>
             </div>
           </div>
           <div v-if="comparisonCategory === 'phenotypes'">
-            <monarch-autocomplete
-              :home-search="false"
-              :allowed-prefixes="acceptedPrefixes"
-              :defined-categories="searchPhenoCategories"
-              :dynamic-placeholder="phenoSearchPH"
-              @interface="handlePhenotypes"
-            />
-          <b-form-textarea
-            id="textarea1"
-            v-model="phenoCurieList"
-            :rows="3"
-            :max-rows="6"
-            placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
-            class="my-2"
-          />
-          <div
-            v-if="phenoCurieList"
-            class="btn btn-outline-info"
-            @click="getPhenotypesFromEntityList"
-          >
-            Submit Phenotype List
+              <b-form-group class="center-text">
+                <b-button-group>
+                  <b-button variant="outline-info" v-on:click="phenotypeComparisonCategory = 'phenotypes-build'">Search & Build</b-button>
+                  <b-button variant="outline-info" v-on:click="phenotypeComparisonCategory = 'phenotypes-list'">I have a phenotype list</b-button>
+                </b-button-group>
+            </b-form-group>
+            <div v-if="phenotypeComparisonCategory == 'phenotypes-build'">
+              <monarch-autocomplete
+                :home-search="false"
+                :allowed-prefixes="acceptedPrefixes"
+                :defined-categories="searchPhenoCategories"
+                :dynamic-placeholder="phenoSearchPH"
+                @interface="handlePhenotypes"
+              />
+              *Non-phenotype entities will automatically be mapped to their associated phenotypes.
+            </div>
+            <div v-if="phenotypeComparisonCategory == 'phenotypes-list'">
+              <b-form-textarea
+                id="textarea1"
+                v-model="phenoComparisonCurieList"
+                :rows="3"
+                :max-rows="6"
+                placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+                class="my-2"
+              />
+              <div
+                v-if="phenoComparisonCurieList"
+                class="btn btn-outline-info submit"
+                @click="getPhenotypesFromEntityList"
+              >
+                Confirm Phenotype List
+              </div>
+              <b-alert
+                :show="showPhenotypeAlert"
+                variant="danger"
+                class="my-2"
+                dismissible
+                @dismissed="showPhenotypeAlert=false"
+              >
+                Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
+                HP:0000002)
+              </b-alert>
           </div>
-          <b-alert
-            :show="showPhenotypeAlert"
-            variant="danger"
-            class="my-2"
-            dismissible
-            @dismissed="showPhenotypeAlert=false"
-          >
-            Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
-            HP:0000002)
-          </b-alert>
-          <div class="flex-container">
+          <div class="flex-container" v-if="phenotypeComparison.length > 0">
             <b-button variant="light"
                     :class="showComparisonCollapse ? 'collapsed' : null"
                     :aria-expanded="showComparisonCollapse ? 'true' : 'false'"
@@ -264,9 +308,9 @@
                 </div>
           </b-collapse>
           </div>
-          </div>
+        </div>
           <div v-if="determineFinished()" class="run-analysis">
-            <button class="btn btn-outline-success" @click="generatePhenogridData()">
+            <button class="btn btn-outline-success" @click="runPhenogridAnalysis()">
               Run Similarity Analysis
             </button>
           </div>
@@ -324,15 +368,11 @@ export default {
   },
   data() {
     return {
-      phenotypeModal: false,
-      selectedPhenotype: {},
-      geneModal: false,
-      selectedGene: {},
       acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
       phenoSearchPH: 'Search by phenotype, disease or gene...',
       placeholderComparisonText: '',
       searchPhenoCategories: ['phenotype', 'disease', 'gene'],
-      searchCompCategories: ['gene'],
+      searchCompCategories: [],
       targetGeneGroups: [
         { value: null, text: "Select by taxon"},
         { value: 'human', text: 'Homo Sapien (genes)' },
@@ -342,10 +382,12 @@ export default {
         { value: 'nematode', text: 'Nematode (genes)'}
       ],
       selectedGeneGroup: null,
-      mode: 'search',
       currentStep: 1,
+      currentSubStep: 1,
       comparisonCategory: '',
       geneComparisonCategory: '',
+      diseaseComparisonCategory: '',
+      phenotypeComparisonCategory: '',
       showCollapse: false,
       showComparisonCollapse: false,
       showPhenogrid: false,
@@ -354,6 +396,7 @@ export default {
       rejectedGeneCuries: [],
       showPhenotypeAlert: false,
       phenoCurieList: '',
+      phenoComparisonCurieList: '',
       geneCurieList: '',
       messages: [],
       phenotypes: [],
@@ -361,6 +404,7 @@ export default {
       genes: [],
       diseases: [],
       selectedGroups: [],
+      mode: 'search',
       yAxis: [],
       xAxis: [],
       geneCurieType: 'NCBIGene',
@@ -440,16 +484,6 @@ export default {
       }
     }
   },
-  created() {
-    if (this.$route.params.phenotypes) {
-      this.phenoCurieList = this.$route.params.phenotypes;
-    }
-
-  },
-  async mounted() {
-    // await this.applyExampleData();
-  },
-
   methods: {
     determineFinished() {
       // all
@@ -459,23 +493,17 @@ export default {
               && this.selectedGeneGroup != null){
         // Selected gene groups and selected a group
         return true;
-      } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'custom' && this.genes.length > 0){
-        return true;
-      } else if(this.comparisonCategory === 'disease' && this.diseases.length > 0){
-        return true; 
-      } else if(this.comparisonCategory == 'phenotypes' && this.phenotypeComparison.length > 0){
-        return true;
       }
+      return (this.geneCustomPathValid() || this.diseasePathValid() || this.phenotypePathValid());
     },
-
-    generateDataForAnalysis() {
-
-    },
+    // Resetting step2 comparison profile
     clearComparisonCategory(){
       this.comparisonCategory = '';
       this.genes = [];
       this.rejectedGeneCuries = [];
       this.diseases = [];
+      this.geneComparisonCategory = '';
+      this.diseaseComparisonCategory = '';
     },
     async fetchLabel(curie, curieType) {
       const that = this;
@@ -520,6 +548,8 @@ export default {
     popDisease(ind) {
       this.diseases.splice(ind,1);
     },
+    // Creates a list of phenotypes and stores them in phenotypes after a call using autocomplete
+    // or in phenotypeComparison if we are on step 2
     handlePhenotypes(payload) {
       if (payload.curie.includes('MONDO')) {
         this.fetchPhenotypes(payload.curie, 'disease');
@@ -531,27 +561,43 @@ export default {
       }
       this.phenotypes.push(payload);
     },
+    // Creates a list of genes returned from autocomplete
     handleGenes(payload) {
       this.genes.push(payload);
     },
+    // Creates a list of diseases returned from autocomplete
     handleDisease(payload) {
       if (payload.curie.includes('MONDO')) {
         this.diseases.push(payload);
       }
     },
-    generatePhenogridData() {
+    phenotypePathValid(){ 
+      return this.comparisonCategory === 'phenotypes' && (this.phenotypeComparisonCategory === 'phenotypes-build' || this.phenotypeComparisonCategory === 'phenotypes-list') && this.phenotypeComparison.length > 0;
+    },
+    diseasePathValid() {
+      return this.comparisonCategory === 'disease' && this.diseaseComparisonCategory == 'disease-specific' && this.diseases.length > 0 || this.comparisonCategory == 'disease' && this.diseaseComparisonCategory == 'disease-all';
+    },
+    geneCustomPathValid(){
+      return this.comparisonCategory === 'gene' && (this.geneComparisonCategory === 'custom-build' || this.geneComparisonCategory === 'custom-list') && this.genes.length > 0;
+    },
+    // Run Analysis to generate phenogrid and phenotable
+    // conditions must be met for a workflow of this tool
+    runPhenogridAnalysis() {
+      this.xAxis = [];
+      this.yAxis = [];
+      this.pgIndex = 0;
       if(this.comparisonCategory === 'all'){
         return true;
       } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
               && this.selectedGeneGroup != null){
         // Selected gene groups and selected a group
         return true;
-      } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'custom' && this.genes.length > 0){
+      } else if(this.geneCustomPathValid()){
         this.mode = "compare";
         this.genes.map((elem) => this.xAxis.push(elem.curie));
-      } else if(this.comparisonCategory === 'disease' && this.diseases.length > 0){
+      } else if(this.diseasePathValid()){
         return true; 
-      } else if(this.comparisonCategory === 'phenotypes' && this.phenotypeComparison.length > 0 ){
+      } else if(this.phenotypePathValid()){
         this.mode = "compare";
         this.phenotypeComparison.map((elem) => this.xAxis.push(elem.curie));
       }
@@ -559,13 +605,21 @@ export default {
         id: elem.curie,
         term: elem.match
       }));
+
+      this.selectedGroups = [this.groupOptions[0]];
       this.pgIndex += 1;
       this.showPhenogrid = true;
     },
     getPhenotypesFromEntityList() {
       this.rejectedPhenotypeCuries = [];
       this.phenotypes = [];
-      this.phenoCurieList.split(',').forEach(async (elem) => {
+      let curieList = [];
+      if(this.comparisonCategory == 'phenotypes'){
+        curieList = this.phenoComparisonCurieList;
+      } else {
+        curieList = this.phenoCurieList;
+      }
+      curieList.split(',').forEach(async (elem) => {
         const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
@@ -598,7 +652,6 @@ export default {
       if(exists.length === 0){
         this.genes.push(gene);
       }
-
     },
     convertPhenotypes(elem) {
       const phenoData = elem.data;
@@ -606,203 +659,6 @@ export default {
         curie: phenoData.id,
         match: phenoData.label
       });
-    },
-
-    async applyExampleData() {
-      const phenogridExampleData = [
-        {
-          'id': 'HP:0000174',
-          'term': 'Abnormality of the palate'
-        },
-        {
-          'id': 'HP:0000194',
-          'term': 'Open mouth'
-        },
-        {
-          'id': 'HP:0000218',
-          'term': 'High palate'
-        },
-        {
-          'id': 'HP:0000238',
-          'term': 'Hydrocephalus'
-        },
-        {
-          'id': 'HP:0000244',
-          'term': 'Brachyturricephaly'
-        },
-        {
-          'id': 'HP:0000272',
-          'term': 'Malar flattening'
-        },
-        {
-          'id': 'HP:0000303',
-          'term': 'Mandibular prognathia'
-        },
-        {
-          'id': 'HP:0000316',
-          'term': 'Hypertelorism'
-        },
-        {
-          'id': 'HP:0000322',
-          'term': 'Short philtrum'
-        },
-        {
-          'id': 'HP:0000324',
-          'term': 'Facial asymmetry'
-        },
-        {
-          'id': 'HP:0000327',
-          'term': 'Hypoplasia of the maxilla'
-        },
-        {
-          'id': 'HP:0000348',
-          'term': 'High forehead'
-        },
-        {
-          'id': 'HP:0000431',
-          'term': 'Wide nasal bridge'
-        },
-        {
-          'id': 'HP:0000452',
-          'term': 'Choanal stenosis'
-        },
-        {
-          'id': 'HP:0000453',
-          'term': 'Choanal atresia'
-        },
-        {
-          'id': 'HP:0000470',
-          'term': 'Short neck'
-        },
-        {
-          'id': 'HP:0000486',
-          'term': 'Strabismus'
-        },
-        {
-          'id': 'HP:0000494',
-          'term': 'Downslanted palpebral fissures'
-        },
-        {
-          'id': 'HP:0000508',
-          'term': 'Ptosis'
-        },
-        {
-          'id': 'HP:0000586',
-          'term': 'Shallow orbits'
-        },
-        {
-          'id': 'HP:0000678',
-          'term': 'Dental crowding'
-        },
-        {
-          'id': 'HP:0001156',
-          'term': 'Brachydactyly syndrome'
-        },
-        {
-          'id': 'HP:0001249',
-          'term': 'Intellectual disability'
-        },
-        {
-          'id': 'HP:0002308',
-          'term': 'Arnold-Chiari malformation'
-        },
-        {
-          'id': 'HP:0002676',
-          'term': 'Cloverleaf skull'
-        },
-        {
-          'id': 'HP:0002780',
-          'term': 'Bronchomalacia'
-        },
-        {
-          'id': 'HP:0003041',
-          'term': 'Humeroradial synostosis'
-        },
-        {
-          'id': 'HP:0003070',
-          'term': 'Elbow ankylosis'
-        },
-        {
-          'id': 'HP:0003196',
-          'term': 'Short nose'
-        },
-        {
-          'id': 'HP:0003272',
-          'term': 'Abnormality of the hip bone'
-        },
-        {
-          'id': 'HP:0003307',
-          'term': 'Hyperlordosis'
-        },
-        {
-          'id': 'HP:0003795',
-          'term': 'Short middle phalanx of toe'
-        },
-        {
-          'id': 'HP:0004209',
-          'term': 'Clinodactyly of the 5th finger'
-        },
-        {
-          'id': 'HP:0004322',
-          'term': 'Short stature'
-        },
-        {
-          'id': 'HP:0004440',
-          'term': 'Coronal craniosynostosis'
-        },
-        {
-          'id': 'HP:0005048',
-          'term': 'Synostosis of carpal bones'
-        },
-        {
-          'id': 'HP:0005280',
-          'term': 'Depressed nasal bridge'
-        },
-        {
-          'id': 'HP:0005347',
-          'term': 'Cartilaginous trachea'
-        },
-        {
-          'id': 'HP:0006101',
-          'term': 'Finger syndactyly'
-        },
-        {
-          'id': 'HP:0006110',
-          'term': 'Shortening of all middle phalanges of the fingers'
-        },
-        {
-          'id': 'HP:0009602',
-          'term': 'Abnormality of thumb phalanx'
-        },
-        {
-          'id': 'HP:0009773',
-          'term': 'Symphalangism affecting the phalanges of the hand'
-        },
-        {
-          'id': 'HP:0010055',
-          'term': 'Broad hallux'
-        },
-        {
-          'id': 'HP:0010669',
-          'term': 'Hypoplasia of the zygomatic bone'
-          // Monarch says this EquivalentTo HP:0000272: 'Malar flattening'
-        },
-        {
-          'id': 'HP:0011304',
-          'term': 'Broad thumb'
-        }
-      ];
-
-      this.phenoCurieList = phenogridExampleData.map(function getId(s) {
-        return s.id;
-      }).join(',');
-
-      this.geneCurieList = 'NCBIGene:3845,HGNC:2176';
-
-      this.selectedGroups = [this.groupOptions[0].value, this.groupOptions[1].value, this.groupOptions[2].value];
-
-      //await this.generatePGDataFromPhenotypeList();
-      //await this.generatePGDataFromGeneList();
     },
   }
 };
@@ -930,5 +786,9 @@ export default {
 
   .edit-comparison {
     align-self: flex-end;
+  }
+
+  .submit {
+    cursor: pointer;
   }
 </style>

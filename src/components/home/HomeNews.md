@@ -23,7 +23,7 @@
 <div></div>
       <a
         class="twitter-timeline"
-        href="https://twitter.com/TheDoctorBud/lists/monarchinitiative1?ref_src=twsrc%5Etfw"
+        href="https://twitter.com/MonarchInit"
         data-preview=""
         data-chrome="noheader nofooter"
         data-height="350">
