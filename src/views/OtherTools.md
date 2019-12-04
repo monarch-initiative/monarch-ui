@@ -25,7 +25,7 @@
                 <a href="https://lirical.readthedocs.io/en/latest/">LIRICAL</a>
                 is Java software that provides prioritization of candidate diseases using a likelihood 
                 ratio statistical framework. LIRICAL takes as input a set of phenotypic abnormalities
-                encoded using the <a href="https://hpo.jax.org/app/">Human Phenotype Ontology</a>. 
+                encoded using the <a href="https://hpo.jax.org/app/">Human Phenotype Ontology</a> 
                 and, optionally, a set of genome variant calls from a VCF file. For each candidate 
                 disease, the likelihood ratio for each phenotype and genotype input by the user is
                 calculated. A ranked list of candidate diseases is output, along with posterior
