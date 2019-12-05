@@ -44,7 +44,7 @@
           phenotypic profile of the individual being investigated. PhenIX requires
           a VCF file mapped to hg19/Gchr37, as well as a list of HPO terms representing
           the phenotype observed in the patient. PhenIX is available <a href="http://compbio.charite.de/PhenIX/">here</a>
-          from Peter Robinson's group at Charité.
+          from Peter Robinson's group at Charité/Jackson Laboratories.
         </p>
     </div>
     <div class="card">
