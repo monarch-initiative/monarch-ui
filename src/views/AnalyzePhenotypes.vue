@@ -100,7 +100,7 @@
         <div class="step-1-btn-group">
           <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="currentStep = 2; showCollapse = false" variant="outline-primary" class="confirm-profile">Confirm Profile</b-button>
           <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="phenotypes = []; currentSubStep = 1;" variant="outline-primary" class="reset-profile">Reset Profile</b-button>
-          <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
+          <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1; clearComparisonCategory" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
         </div>
       </div>
       <!-- end of step 1 -->
@@ -504,6 +504,8 @@ export default {
       this.diseases = [];
       this.geneComparisonCategory = '';
       this.diseaseComparisonCategory = '';
+      this.phenotypeComparison = [];
+      this.phenotypeComparisonCategory = '';
     },
     async fetchLabel(curie, curieType) {
       const that = this;
@@ -524,15 +526,23 @@ export default {
       const that = this;
       try {
         const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
-        const index = this.phenotypes.map(e => e.curie).indexOf(curie);
-        this.popPhenotype(index);
+        //const index = this.phenotypes.map(e => e.curie).indexOf(curie);
+        //this.popPhenotype(index);
+        const phenotypeComparisonRef = this.phenotypeComparison;
+        const phenotypeRef = this.phenotypes;
+        const categoryRef = this.comparisonCategory;
         searchResponse.data.associations.forEach((elem) => {
-          this.convertPhenotypes({
-            data: {
-              id: elem.object.id,
-              label: elem.object.label,
-            }
-          });
+          if(categoryRef == "phenotypes"){
+            phenotypeComparisonRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          } else {
+            phenotypeRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          }
         });
       } catch (e) {
         that.dataError = e;
@@ -557,9 +567,9 @@ export default {
         this.fetchPhenotypes(payload.curie, 'gene');
       } else if(this.comparisonCategory == "phenotypes"){
         this.phenotypeComparison.push(payload);
-        return;
+      } else {
+        this.phenotypes.push(payload);
       }
-      this.phenotypes.push(payload);
     },
     // Creates a list of genes returned from autocomplete
     handleGenes(payload) {
@@ -587,26 +597,44 @@ export default {
       this.yAxis = [];
       this.pgIndex = 0;
       if(this.comparisonCategory === 'all'){
+        // Search
+        this.mode = "search";
         return true;
       } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
               && this.selectedGeneGroup != null){
         // Selected gene groups and selected a group
+        this.mode = "search";
         return true;
       } else if(this.geneCustomPathValid()){
-        this.mode = "compare";
-        this.genes.map((elem) => this.xAxis.push(elem.curie));
+        if(this.geneComparisonCategory == 'gene-group'){
+          this.mode = "search";
+          return true;
+        } else {
+          // A list of genes
+          this.mode = "compare";
+          this.genes.map((elem) => this.xAxis.push([elem.curie]));
+        }
+
       } else if(this.diseasePathValid()){
-        return true; 
+        if(this.diseaseComparisonCategory == 'disease-all'){
+          this.mode = "search";
+          return true;
+        } else {
+          // a list of diseases
+          this.mode = "compare";
+          this.diseases.map((elem) => this.xAxis.push([elem.curie]));
+        }
       } else if(this.phenotypePathValid()){
+        /// A list of phenotypes
         this.mode = "compare";
-        this.phenotypeComparison.map((elem) => this.xAxis.push(elem.curie));
+        this.phenotypeComparison.map((elem) => this.xAxis.push([elem.curie]));
       }
+      
       this.phenotypes.forEach(elem => this.yAxis.push({
         id: elem.curie,
         term: elem.match
       }));
 
-      this.selectedGroups = [this.groupOptions[0]];
       this.pgIndex += 1;
       this.showPhenogrid = true;
     },
