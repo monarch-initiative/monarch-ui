@@ -256,5 +256,5 @@ export default function getSourceInfo() {
       monarchUsage: "Monarch stores gene to phenotype associations and gene function data",
       vocabulary: "APO, RO"
     }
-  ]
+  ];
 }
