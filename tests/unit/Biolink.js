@@ -2,7 +2,7 @@ import {expect} from "chai";
 import * as biolinkService from "@/api/BioLink";
 
 describe("getSources", () => {
-    it("returns MGI data", async() => {
+    it("returns array with objects for each source", async() => {
         const sourcesData = await biolinkService.getSources();
         expect(sourcesData).to.not.be.empty;
         expect(sourcesData).to.be.a("array");
