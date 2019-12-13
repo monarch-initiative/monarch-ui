@@ -5,8 +5,8 @@ export default function getStaticSourceData() {
     {
       sourceDisplayName: "Mouse Genome Informatics",
       sourceDescription: "MGI is the international database resource for the laboratory mouse, providing integrated genetic, genomic, and biological data to facilitate the study of human health and disease.",
-      // sourceVersion: "-",
-      // monarchReleaseDate: "Unknown",
+      sourceVersion: "-",
+      monarchReleaseDate: "Feburary 23, 2019",
       monarchUsage: "We list genotype-phenotype associations and asserted disease-models. We use MGI identifiers as " +
         "the main hook into mouse data. Additionally, we utilize the Mouse Phenotype Ontology (MP) in our " +
         "cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI.",
