@@ -1,7 +1,7 @@
 import axios from 'axios';
 import us from 'underscore';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
-import getSourceInfo from './Sources';
+import getStaticSourceData from './StaticSourceData';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -64,7 +64,7 @@ const apiServer = (new URLSearchParams(document.location.search.substring(1))).g
 console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
-const biolink = serverConfiguration.biolink_url;
+export const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
 
 /**
@@ -307,24 +307,43 @@ function pruneUnusableCategories(data) {
 
 
 export async function getSources() {
-  /* const url = `${biolink}metadata/datasets`;
-  const params = new URLSearchParams();
+  // Dataset metadata pulled from scigraph follow this schema:
+  // https://www.w3.org/TR/2015/NOTE-hcls-dataset-20150514/Figure1.png
+  
+  // We still need static data for some things, e.g. source display name, text descriptions of each source, usage,
+  // since these aren't in Scigraph
+  const staticSourceData = getStaticSourceData();
 
-  const bioentityResp = await axios.get(url, { params });
-
-  // remove this after we get this stuff from the API
-  for (let i = 0; i < bioentityResp.data.length; i++) {
-    let sourceDisplayName = bioentityResp.data[i].id.split(/[:.]+/)[1];
-    sourceDisplayName = sourceDisplayName.charAt(0).toUpperCase() + sourceDisplayName.slice(1);
-    bioentityResp.data[i].sourceDisplayName = sourceDisplayName;
-    bioentityResp.data[i].ttlUrl = 'https://data.monarchinitiative.org/ttl/' + bioentityResp.data[i].id.split(':')[1];
-    bioentityResp.data[i].sourceVersion = bioentityResp.data[i].meta.version[0];
-    bioentityResp.data[i].monarchDataReleaseDate = '2019-02-22';
+  var dynamicSourceData = "";
+  try {
+    const url = `${biolink}metadata/datasets`;
+    const params = new URLSearchParams();
+    dynamicSourceData = await axios.get(url, { params })
+  } catch(error) {
+    console.log("Error calling biolink-api dataset metadata endpoint " + url + ": " + error);
   }
 
-  const data = bioentityResp.data; */
+  // Iterate through staticSourceData and set various things using dynamicSourceData. We retrieve things
+  // using distributionId, since all metadata for the source should be findable using this ID, per the HCLS schema.
+  // We assume if an item (e.g. monarchReleaseDate) is populated in staticSourceData for a given source, it is meant to
+  // override the value retrieved from biolink-api, and we leave it as is.
+  for (let i = 0; i < staticSourceData.length; i++) {
+    if (! 'distributionId' in staticSourceData[0]){
+      console.log("can't find distributionID for source to look up dynamic source data, skipping\n");
+      continue;
+    }
 
-  return getSourceInfo();
+    // retrieve ingest date
+
+    // retrieve downloadURL (usually, but not necessarily, the same as the distribution IRI)
+
+    // retrieve logo URL
+
+    // retrieve dcterm:sources items (i.e. stuff we ingested from source and transformed to produce TTL) along
+    // with any version data available for each item
+
+  }
+  return staticSourceData;
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
