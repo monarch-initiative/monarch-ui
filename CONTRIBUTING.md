@@ -1,4 +1,4 @@
-## Contributing to the monarch-ui
+## Contributing to the monarch-ui 
 
 Thanks for helping make this project better. The [README QuickStart](./README.md#quickstart) provides easy instructions for someone who wants to *evaluate* the monarch-ui by quickly building and testing it.
 
