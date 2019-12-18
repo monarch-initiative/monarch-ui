@@ -213,26 +213,26 @@ function htmlDecode(input) {
 
 
 const availableCardTypes = [
-  'anatomy',
-  'cellline',
-  'disease',
-  'causal-disease',
-  'noncausal-disease',
-  'function',
+  'phenotype',
   'gene',
   'causal-gene',
   'noncausal-gene',
-  'genotype',
+  'variant',
+  'model',
+  'disease',
+  'causal-disease',
+  'noncausal-disease',
+  'pathway',
+  'cellline',
+  'anatomy',
+  'publication',
   'case',
+  'function',
+  'genotype',
   'homolog',
   'interaction',
-  'publication',
-  'model',
   'ortholog-phenotype',
   'ortholog-disease',
-  'pathway',
-  'phenotype',
-  'variant'
 ];
 
 const icons = {
@@ -547,6 +547,7 @@ export default {
           }
         });
       }
+      // Sort non empty cards.
       this.nonEmptyCards = nonEmptyCards;
     },
 
