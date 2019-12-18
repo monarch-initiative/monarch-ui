@@ -176,7 +176,7 @@
       class="beta">
       BETA
     </div>
-    <div class="production">
+    <div v-if="getEnvironment() != 'production'" class="production">
         <b-navbar-nav>
            <b-nav-item href="https://monarchinitiative.org/" target="_blank">
             Main Site
