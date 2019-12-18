@@ -3,7 +3,7 @@
     <div class="row">
       <div class="offset-2 col-8 text-center">
         <h2 class="page-title">Phenotype Profile Search</h2>
-        <p>This Phenotype Profile Search enables you search our database using the OwlSim Semantic Similarity analysis
+        <p>This Phenotype Profile Search enables you search our database using our BioLink analysis
           engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
           their overlap.</p>
       </div>
@@ -13,9 +13,9 @@
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
-          <h4 class="center-text">1. Create A Profile of Phenotypes
+          <h4 class="center-text">Create A Profile of Phenotypes
             <b-button class="comparison-category-edit" v-if="currentSubStep !== 1" variant="outline-info" v-on:click="currentSubStep = 1; phenotypes = []">
-              <i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Selection
+              <i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Input
             </b-button>
           </h4>
           <div class="center-text" v-if="currentSubStep === 1">
@@ -116,16 +116,16 @@
           <b-form-group>
             <b-button-group>
               <b-button variant="outline-info" v-on:click="comparisonCategory = 'all'">Everything</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'disease'">Disease(s)</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'gene'">Gene(s)</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'phenotypes'">Phenotype(s)</b-button>
+              <b-button variant="outline-info" v-on:click="comparisonCategory = 'disease'">Disease Profile</b-button>
+              <b-button variant="outline-info" v-on:click="comparisonCategory = 'gene'">Gene Profile</b-button>
+              <b-button variant="outline-info" v-on:click="comparisonCategory = 'phenotypes'">Phenotype Profile</b-button>
             </b-button-group>
           </b-form-group>
         </div>
         <div v-if="comparisonCategory">
           <h4 class="center-text">
-            2. Select your {{comparisonCategory}} profile for comparison
-            <b-button class="comparison-category-edit" variant="outline-info" v-on:click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Category </b-button>
+            Select your {{comparisonCategory}} profile for comparison
+            <b-button class="comparison-category-edit" variant="outline-info" v-on:click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Profile </b-button>
           </h4>
           <div v-if="comparisonCategory === 'gene'">
             <b-form-group class="center-text">
@@ -196,7 +196,7 @@
           <div v-if="comparisonCategory === 'disease'">
             <b-form-group class="center-text">
                 <b-button-group>
-                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-all'">All Homo Sapien Diseases</b-button>
+                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-all'">All Human Diseases</b-button>
                   <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-specific'">Specific Disease(s)</b-button>
                 </b-button-group>
             </b-form-group>
@@ -375,11 +375,10 @@ export default {
       searchCompCategories: [],
       targetGeneGroups: [
         { value: null, text: "Select by taxon"},
-        { value: 'human', text: 'Homo Sapien (genes)' },
         { value: 'mouse', text: 'Mouse (genes)' },
         { value: 'zebrafish', text: 'Zebrafish (genes)' },
         { value: 'ff', text: 'Fruit fly (genes)' },
-        { value: 'nematode', text: 'Nematode (genes)'}
+        { value: 'worm', text: 'Nematode (genes)'}
       ],
       selectedGeneGroup: null,
       currentStep: 1,
@@ -422,43 +421,33 @@ export default {
           value: 'HGNC'
         }
       ],
-      groupOptions: [
-        {
-          text: 'Homo sapiens',
-          value: {
+      groupOptions: {
+          "human":  {
+            text: 'Homo sapiens',
             groupId: '9606',
             groupName: 'Homo sapiens'
-          }
-        },
-        {
-          text: 'Mus musculus (genes)',
-          value: {
+          },
+          "mouse": {
+            text: 'Mus musculus (genes)',
             groupId: '10090',
             groupName: 'Mus musculus'
-          }
-        },
-        {
-          text: 'Danio rerio (genes)',
-          value: {
+          },
+          "zebrafish":  {
+            text: 'Danio rerio (genes)',
             groupId: '7955',
             groupName: 'Danio rerio'
-          }
-        },
-        {
-          text: 'Drosophila melanogaster (genes)',
-          value: {
+          },
+          "ff": {
+            text: 'Drosophila melanogaster (genes)',
             groupId: '7227',
             groupName: 'Drosophila melanogaster'
-          }
-        },
-        {
-          text: 'Caenorhabditis elegans (genes)',
-          value: {
+          },
+          "worm":  {
+            text: 'Caenorhabditis elegans (genes)',
             groupId: '6239',
             groupName: 'Caenorhabditis elegans'
-          }
-        },
-      ]
+          },
+        }
     };
   },
   computed: {
@@ -474,7 +463,7 @@ export default {
   },
   watch: {
     comparisonCategory(category) {
-      // Category Switching
+      // Depending on second category, we change text.
       if(category === 'disease') {
         this.placeholderComparisonText = 'Search a disease to compare to your profile.';
         this.searchCompCategories = ['disease'];
@@ -506,48 +495,6 @@ export default {
       this.diseaseComparisonCategory = '';
       this.phenotypeComparison = [];
       this.phenotypeComparisonCategory = '';
-    },
-    async fetchLabel(curie, curieType) {
-      const that = this;
-      try {
-        const searchResponse = await biolinkService.getNodeLabelByCurie(curie);
-        if (curieType === 'phenotype') {
-          this.convertPhenotypes(searchResponse);
-        } else if (curieType === 'gene') {
-          this.convertGenes(searchResponse);
-        }
-      } catch (e) {
-        that.dataError = e;
-        this.rejectedGeneCuries.push(curie);
-        console.log('BioLink Error', e);
-      }
-    },
-    async fetchPhenotypes(curie, nodeIdentifier) {
-      const that = this;
-      try {
-        const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
-        //const index = this.phenotypes.map(e => e.curie).indexOf(curie);
-        //this.popPhenotype(index);
-        const phenotypeComparisonRef = this.phenotypeComparison;
-        const phenotypeRef = this.phenotypes;
-        const categoryRef = this.comparisonCategory;
-        searchResponse.data.associations.forEach((elem) => {
-          if(categoryRef == "phenotypes"){
-            phenotypeComparisonRef.push({
-              curie: elem.object.id,
-              match: elem.object.label
-            });
-          } else {
-            phenotypeRef.push({
-              curie: elem.object.id,
-              match: elem.object.label
-            });
-          }
-        });
-      } catch (e) {
-        that.dataError = e;
-        console.log('BioLink Error', e);
-      }
     },
     popPhenotype(ind) {
       this.phenotypes.splice(ind, 1);
@@ -596,29 +543,26 @@ export default {
       this.xAxis = [];
       this.yAxis = [];
       this.pgIndex = 0;
-      if(this.comparisonCategory === 'all'){
+      if(this.comparisonCategory === 'all' && this.phenotypes.length){
         // Search
         this.mode = "search";
-        return true;
+        Object.keys(this.groupOptions).forEach(key => {
+          this.xAxis.push(this.groupOptions[key]);
+        });
       } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
               && this.selectedGeneGroup != null){
         // Selected gene groups and selected a group
         this.mode = "search";
-        return true;
+        const taxon = this.groupOptions[this.selectedGeneGroup];
+        this.xAxis.push(taxon);
       } else if(this.geneCustomPathValid()){
-        if(this.geneComparisonCategory == 'gene-group'){
-          this.mode = "search";
-          return true;
-        } else {
           // A list of genes
           this.mode = "compare";
           this.genes.map((elem) => this.xAxis.push([elem.curie]));
-        }
-
       } else if(this.diseasePathValid()){
         if(this.diseaseComparisonCategory == 'disease-all'){
           this.mode = "search";
-          return true;
+          this.xAxis.push(this.groupOptions["human"]);
         } else {
           // a list of diseases
           this.mode = "compare";
@@ -640,11 +584,12 @@ export default {
     },
     getPhenotypesFromEntityList() {
       this.rejectedPhenotypeCuries = [];
-      this.phenotypes = [];
       let curieList = [];
       if(this.comparisonCategory == 'phenotypes'){
+        this.phenotypeComparison = [];
         curieList = this.phenoComparisonCurieList;
       } else {
+        this.phenotypes = [];
         curieList = this.phenoCurieList;
       }
       curieList.split(',').forEach(async (elem) => {
@@ -682,11 +627,57 @@ export default {
       }
     },
     convertPhenotypes(elem) {
-      const phenoData = elem.data;
-      this.phenotypes.push({
-        curie: phenoData.id,
-        match: phenoData.label
-      });
+      if(this.comparisonCategory == 'phenotypes'){
+         this.phenotypeComparison.push({
+          curie: elem.data.id,
+          match: elem.data.label
+        });
+      } else {
+         this.phenotypes.push({
+          curie: elem.data.id,
+          match: elem.data.label
+        });
+      }
+    },
+        async fetchLabel(curie, curieType) {
+      const that = this;
+      try {
+        const searchResponse = await biolinkService.getNodeLabelByCurie(curie);
+        if (curieType === 'phenotype') {
+          this.convertPhenotypes(searchResponse);
+        } else if (curieType === 'gene') {
+          this.convertGenes(searchResponse);
+        }
+      } catch (e) {
+        that.dataError = e;
+        this.rejectedGeneCuries.push(curie);
+        console.log('BioLink Error', e);
+      }
+    },
+    async fetchPhenotypes(curie, nodeIdentifier) {
+      const that = this;
+      try {
+        const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
+        const phenotypeComparisonRef = this.phenotypeComparison;
+        const phenotypeRef = this.phenotypes;
+        const categoryRef = this.comparisonCategory;
+        searchResponse.data.associations.forEach((elem) => {
+          if(categoryRef == "phenotypes"){
+            phenotypeComparisonRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          } else {
+            phenotypeRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          }
+        });
+      } catch (e) {
+        that.dataError = e;
+        console.log('BioLink Error', e);
+      }
     },
   }
 };

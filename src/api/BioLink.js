@@ -98,7 +98,6 @@ export function getCurrentServerEnvironment() {
   return apiServer;
 }
 
-
 /**
  Get node info to support Node.vue
  */
@@ -164,7 +163,6 @@ export async function getBasicNode(nodeId) {
   });
 }
 
-
 function canUseSuperclassNode(nodeId, nodeType, superId) {
   let result = true;
 
@@ -188,7 +186,6 @@ const neighborhoodTypes = [
   'anatomy',
   'function'
 ];
-
 
 export async function getNeighborhood(nodeId, nodeType) {
   // const graphUrl = `${biolink}graph/node/${nodeId}`;
@@ -417,7 +414,6 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
   });
 }
 
-
 function getBiolinkAnnotation(cardType) {
   let result = `${cardType}s`;
   if (cardType === 'anatomy') {
@@ -436,7 +432,6 @@ function getBiolinkAnnotation(cardType) {
 
   return result;
 }
-
 
 export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, params) {
   const baseUrl = `${biolink}bioentity/`;
@@ -481,7 +476,6 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
 
   return response;
 }
-
 
 // TODO figure out if we still need this (see AnalyzePhenotypes.vue)
 export async function getNodeLabelByCurie(curie) {
