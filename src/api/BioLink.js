@@ -2,6 +2,7 @@ import axios from 'axios';
 import us from 'underscore';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
 import getStaticSourceData from './StaticSourceData';
+import * as bbopgraph from 'bbop-graph';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -12,6 +13,11 @@ import getStaticSourceData from './StaticSourceData';
 // with this BioLink API module is to isolate the UI from the service layer,
 // and only secondarily, to create a general-purpose service layer.
 //
+
+const metadata_keys = { // constants used to retrieve items from BBOP graph json emitted by biolink
+  // subjects with this predicate are considered version level IRIs, objects are summary level IRIs:
+  'summary_version_predicate': 'dcterms:isVersionOf',
+}
 
 const servers = {
   development: {
@@ -66,6 +72,8 @@ console.log('apiServer', window.location.hostname, apiServer);
 const serverConfiguration = servers[apiServer];
 export const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
+
+export const summary_version_predicate = metadata_keys.summary_version_predicate;
 
 /**
  Lighter-weight BL node info. Used by LocalNav.vue
@@ -309,41 +317,56 @@ function pruneUnusableCategories(data) {
 export async function getSources() {
   // Dataset metadata pulled from scigraph follow this schema:
   // https://www.w3.org/TR/2015/NOTE-hcls-dataset-20150514/Figure1.png
-  
-  // We still need static data for some things, e.g. source display name, text descriptions of each source, usage,
-  // since these aren't in Scigraph
-  const staticSourceData = getStaticSourceData();
+  // and are emitted by Biolink-API as BBOP graph json
+  // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
-  var dynamicSourceData = "";
+  // get dynamic data and put in BBOP graph
+  var graph = new bbopgraph.graph();
   try {
     const url = `${biolink}metadata/datasets`;
     const params = new URLSearchParams();
-    dynamicSourceData = await axios.get(url, { params })
+    var dynamicSourceData = await axios.get(url, { params });
+    graph.load_base_json(dynamicSourceData.data)
   } catch(error) {
     console.log("Error calling biolink-api dataset metadata endpoint " + url + ": " + error);
   }
 
-  // Iterate through staticSourceData and set various things using dynamicSourceData. We retrieve things
-  // using distributionId, since all metadata for the source should be findable using this ID, per the HCLS schema.
-  // We assume if an item (e.g. monarchReleaseDate) is populated in staticSourceData for a given source, it is meant to
-  // override the value retrieved from biolink-api, and we leave it as is.
-  for (let i = 0; i < staticSourceData.length; i++) {
-    if (! 'distributionId' in staticSourceData[0]){
-      console.log("can't find distributionID for source to look up dynamic source data, skipping\n");
-      continue;
-    }
+  // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
+  // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
+  var sourceData = us.chain(graph.all_edges())
+      .filter(function(edge){
+        return edge.hasOwnProperty("_predicate_id") && edge._predicate_id == summary_version_predicate;})
+      .map(function (edge) { return {"_version_iri": edge._subject_id, "_summary_iri": edge._object_id}})
+      .map(function(datum){
+        return {
+          "_summary_iri": datum._summary_iri,
+          "_version_iri": datum._version_iri,
+          "sourceDisplayName": datum._version_iri,
+          "sourceDescription": "Unknown",
+          "monarchUsage": "Unknown",
+          "monarchReleaseDate": "Unknown",
+          "sourceFiles": [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
+          "rdfDownloadUrl": "Unknown",
+        }})
+      .value()
 
-    // retrieve ingest date
+  // populate
 
-    // retrieve downloadURL (usually, but not necessarily, the same as the distribution IRI)
+  // We still need static data for some things, e.g. source display name, text descriptions of each source,
+  // and usage, since these aren't in Scigraph (and possibly shouldn't be)
+  const staticSourceData = getStaticSourceData();
+  // convert to object with key = summary level IRI
+  var staticSourceDataHash = us.map(staticSourceData,
+      function(item){ return {"_summary_iri": item.summaryIRI, "data": item}})
 
-    // retrieve logo URL
+  // merge any/all info for this source from static data (including sources not present in dynamic data (CTD and ClinVar)
+  // sourceData = us.map(sourceData, function(item){
+  //   if (staticSourceDataHash.hasOwnProperty(item._summary_iri)){
+  //     var bar = 10;
+  //   }
+  // })
 
-    // retrieve dcterm:sources items (i.e. stuff we ingested from source and transformed to produce TTL) along
-    // with any version data available for each item
-
-  }
-  return staticSourceData;
+  return sourceData;
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {

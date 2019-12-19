@@ -11,7 +11,6 @@ export default function getStaticSourceData() {
         "the main hook into mouse data. Additionally, we utilize the Mouse Phenotype Ontology (MP) in our " +
         "cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI.",
       vocabulary: "ECO, MA, MP, SO",
-      distributionId: "MonarchArchive:201910/rdf/mgi.ttl"
     },
     {
       sourceDisplayName: "Zebrafish Information Network",
