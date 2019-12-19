@@ -170,11 +170,18 @@
 
     <b-navbar-toggle target="nav_collapse"/>
     <div
-      v-b-popover.hover.v-danger.bottomleft="'The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-      v-if="this.$route.path !== '/' && getEnvironment() === 'development' || getEnvironment() === 'beta'"
+      v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
+      v-if="getEnvironment() === 'development' || getEnvironment() === 'beta'"
       title="Monarch UI BETA"
       class="beta">
       BETA
+    </div>
+    <div v-if="getEnvironment() != 'production'" class="production">
+        <b-navbar-nav>
+           <b-nav-item href="https://monarchinitiative.org/" target="_blank">
+            Main Site
+          </b-nav-item>
+        </b-navbar-nav>
     </div>
   </b-navbar>
 
@@ -267,4 +274,9 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
   cursor: default;
   font-weight: bolder;
 }
+
+.production {
+  margin-left: 5px;
+}
+
 </style>
