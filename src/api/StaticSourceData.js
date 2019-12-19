@@ -23,6 +23,13 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#zfin"
     },
     {
+      sourceDisplayName: "Zebrafish Information Network (Slim)",
+      sourceDescription: "See 'Zebrafish Information Network'",
+      monarchUsage: "Zfin model only containing Gene to phenotype associations using this file: https://zfin.org/downloads/phenoGeneCleanData_fish.txt",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#zfinslim"
+    },
+    {
       sourceDisplayName: "WormBase database of nematode biology",
       sourceDescription: "WormBase is an international consortium dedicated to providing the research community with accurate, current, accessible information concerning the genetics, genomics and biology of C. elegans and related nematodes.",
       monarchUsage: "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic). We list the variant-phenotype associations. Some data is pulled from WormBase directly, other data is routed via WormMine.",
@@ -225,10 +232,104 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch stores gene to phenotype associations and gene function data",
       vocabulary: "APO, RO",
       summaryIRI: "MonarchArchive:#sgd"
+    },
+    {
+      sourceDisplayName: "Elements of Morphology",
+      sourceDescription: "Elements of Morphology is a resource from NHGRI that has definitions of" +
+          " morphological abnormalities, together with image depictions.",
+      monarchUsage: "We pull those relationships, as well as our local mapping of equivalences" +
+          " between EOM and HP terminologies.",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#eom"
+    },
+    {
+      sourceDisplayName: "Mouse Genome Informatics (MGI Slim)",
+      sourceDescription: "See 'Mouse Genome Informatics'",
+      monarchUsage: "Slim MGI model only containing Gene to phenotype associations. This uses mousemine: " +
+          "http://www.mousemine.org/mousemine/begin.do",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#mgi_slim"
+    },
+    {
+      sourceDisplayName: "Monarch Initiative",
+      sourceDescription: "This is the parser for data curated by the" +
+          " Monarch Initiative https://monarchinitiative.org)." +
+          " Data is currently maintained in a private repository, soon to be released.",
+      monarchUsage: "",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#monarch"
+    },
+    {
+      sourceDisplayName: "Monochrom",
+      sourceDescription: "Ingested data represents major " +
+          "structural pieces of chromosomes which are often universally referenced, " +
+          "using physical properties/observations that remain constant over different " +
+          "genome builds (such as banding patterns and arms). The idea is to create a " +
+          "scaffold upon which we can hang build-specific chromosomal coordinates, " +
+          "and reason across them.",
+      monarchUsage: "We leverage the GENO ontology and modeling patterns to build " +
+          "an ontology of chromosomes for any species.We currently compute bands for " +
+          "human, mouse, zebrafish, and rat but will be expanding in the future as needed.",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#monochrom"
+    },
+    {
+      sourceDisplayName: "MyChem",
+      sourceDescription: "Chemical and drug annotation data, aggregated from many popular data resources.",
+      monarchUsage: "",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#mychem"
+    },
+    {
+      sourceDisplayName: "NCBI Genes",
+      sourceDescription: "Detailed gene information",
+      monarchUsage: "We ingest gene information (gene names, symbols, ids, equivalent ids), gene history " +
+          "(alt ids), and gene2pubmed publication references about each gene.",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#ncbigene"
+    },
+    {
+      sourceDisplayName: "UCSC Bands",
+      sourceDescription: "UCSC definitions of cytogenic bands",
+      monarchUsage: "We create nested " +
+          "structures to enable overlap and containment queries. We use " +
+          "Monochrom.py to create the OWL-classes of the chromosomal parts. " +
+          "Here, we simply worry about the instance-level values for particular genome" +
+          "builds.",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#ucscbands"
+    },
+    {
+      sourceDisplayName: "WormBase",
+      sourceDescription: "Model organism database with rich data for C. elegans.",
+      monarchUsage: "We ingest the following information about " +
+          "genes, " +
+          "sequence alterations (includes SNPs/del/ins/indel and " +
+          "large chromosomal rearrangements), " +
+          "RNAi as expression-affecting reagents, " +
+          "genotypes and their components, " +
+          "strains, " +
+          "publications (and their mapping to PMIDs, if available), " +
+          "allele-to-phenotype associations (including variants by RNAi), " +
+          "and genetic positional information for genes and sequence alterations",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#wormbase"
+    },
+    {
+      sourceDisplayName: "Online Mendelian Inheritance in Animals (OMIA)",
+      sourceDescription: "",
+      monarchUsage: "We ingest information about inherited disorders, other (single-locus) traits and genes in >200 " +
+          "animal species (other than human and mouse and rats). This includes information about genes, animal " +
+          "taxonomy, and breeds as instances of those taxa (breeds are akin to 'strains' in other taxa), animal " +
+          "diseases, along with species-specific subtypes of those diseases publications (and their mapping to PMIDs, " +
+          "if available) gene-to-phenotype associations (via an anonymous variant-locus breed-to-phenotype associations."
+      ,
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#omia"
     }
   ];
 
-  // convert to hash map for easier lookup
+  // convert to hash map for easier lookup when merging with dynamic data
   var staticSourceDataHashMap = staticSourceData.reduce(function(map, obj) {
     map[obj.summaryIRI] = obj;
     return map;
