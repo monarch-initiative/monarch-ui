@@ -18,6 +18,9 @@
             <h6><i>How do we use it?</i></h6>
             {{ source.monarchUsage }}
           </div>
+          <div>
+            <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
+          </div>
           <div class="versions">
             <div class="source-version"/>
             <div class="monarch-version">

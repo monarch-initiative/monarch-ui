@@ -320,20 +320,20 @@ export async function getSources() {
   // and are emitted by Biolink-API as BBOP graph json
   // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
-  // get dynamic data and put in BBOP graph
-  var graph = new bbopgraph.graph();
+  // get dynamic data from biolink-api and put in BBOP graph
+  var dynamicSourceDataGraph = new bbopgraph.graph();
   try {
     const url = `${biolink}metadata/datasets`;
     const params = new URLSearchParams();
     var dynamicSourceData = await axios.get(url, { params });
-    graph.load_base_json(dynamicSourceData.data)
+    dynamicSourceDataGraph.load_base_json(dynamicSourceData.data)
   } catch(error) {
     console.log("Error calling biolink-api dataset metadata endpoint " + url + ": " + error);
   }
 
   // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
   // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
-  var sourceData = us.chain(graph.all_edges())
+  var sourceData = us.chain(dynamicSourceDataGraph.all_edges())
       .filter(function(edge){
         return edge.hasOwnProperty("_predicate_id") && edge._predicate_id == summary_version_predicate;})
       .map(function (edge) { return {"_version_iri": edge._subject_id, "_summary_iri": edge._object_id}})
@@ -345,15 +345,17 @@ export async function getSources() {
           "sourceDescription": "Unknown",
           "monarchUsage": "Unknown",
           "vocabulary": "Unknown",
-          // to parse from BBOP tree:
+          // to be extracted from BBOP tree:
           "monarchReleaseDate": "Unknown",
           "rdfDownloadUrl": "Unknown", // URL for transform of source data, in RDF (in ttl, nt, or both)
           "sourceFiles": [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
         }})
       .value()
 
-  // parse monarchReleaseDate
-  // parse rdfDownloadUrl
+  // put things from dynamic data into sourceData
+  _populateMonarchRelease(sourceData, dynamicSourceDataGraph);
+  _populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
+
   // parse sourceFiles
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
@@ -370,6 +372,39 @@ export async function getSources() {
   })
 
   return sourceData;
+}
+
+function _populateMonarchRelease(sourceData, graph){
+  for(var i=0; i<sourceData.length; i++){
+      sourceData[i].monarchReleaseDate =
+          graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
+  }
+  return sourceData;
+}
+
+function _populateRdfDownloadUrl(sourceData, graph){
+  for(var i=0; i<sourceData.length; i++){
+    const distribution_iri = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
+    const edges = graph.get_edges_by_subject(distribution_iri);
+    const downloadURL = us.chain(edges)
+        .filter(function(edge){return edge["_predicate_id"] == "dcterms:downloadURL"})
+        .pluck("_object_id")
+        .first()
+        .value()
+    downloadURL = downloadURL.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
+    sourceData[i].rdfDownloadUrl = downloadURL
+  }
+  return sourceData;
+}
+
+function _versionIRI2distributionIRI(version_iri, graph){
+  const edges = graph.get_edges_by_subject(version_iri);
+  const distribution_iri = us.chain(edges)
+      .filter(function(edge){return edge["_predicate_id"] == "dcat:Distribution"})
+      .pluck("_object_id")
+      .first()
+      .value()
+  return distribution_iri;
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
