@@ -23,7 +23,7 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#zfin"
     },
     {
-      sourceDisplayName: "Zebrafish Information Network (Slim)",
+      sourceDisplayName: "Zebrafish Information Network (ZFIN Slim)",
       sourceDescription: "See 'Zebrafish Information Network'",
       monarchUsage: "Zfin model only containing Gene to phenotype associations using this file: https://zfin.org/downloads/phenoGeneCleanData_fish.txt",
       vocabulary: "",
