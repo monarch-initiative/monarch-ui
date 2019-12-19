@@ -344,27 +344,30 @@ export async function getSources() {
           "sourceDisplayName": datum._version_iri,
           "sourceDescription": "Unknown",
           "monarchUsage": "Unknown",
+          "vocabulary": "Unknown",
+          // to parse from BBOP tree:
           "monarchReleaseDate": "Unknown",
+          "rdfDownloadUrl": "Unknown", // URL for transform of source data, in RDF (in ttl, nt, or both)
           "sourceFiles": [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
-          "rdfDownloadUrl": "Unknown",
         }})
       .value()
 
-  // populate
+  // parse monarchReleaseDate
+  // parse rdfDownloadUrl
+  // parse sourceFiles
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
-  // and usage, since these aren't in Scigraph (and possibly shouldn't be)
+  // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
+  // item from dynamic data, to allow us to override stuff from db using static data
   const staticSourceData = getStaticSourceData();
-  // convert to object with key = summary level IRI
-  var staticSourceDataHash = us.map(staticSourceData,
-      function(item){ return {"_summary_iri": item.summaryIRI, "data": item}})
-
-  // merge any/all info for this source from static data (including sources not present in dynamic data (CTD and ClinVar)
-  // sourceData = us.map(sourceData, function(item){
-  //   if (staticSourceDataHash.hasOwnProperty(item._summary_iri)){
-  //     var bar = 10;
-  //   }
-  // })
+  sourceData = us.map(sourceData, function(sourceDatum){
+    if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)){
+      const staticDatum = staticSourceData[sourceDatum._summary_iri]
+      return Object.assign({}, sourceDatum, staticDatum)
+    } else {
+      return sourceDatum;
+    }
+  })
 
   return sourceData;
 }
