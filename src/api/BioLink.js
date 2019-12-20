@@ -356,21 +356,24 @@ export async function getSources() {
   _populateMonarchRelease(sourceData, dynamicSourceDataGraph);
   _populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
 
-  // parse sourceFiles
-
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
   // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
   // item from dynamic data, to allow us to override stuff from db using static data
   const staticSourceData = getStaticSourceData();
-  sourceData = us.map(sourceData, function(sourceDatum){
-    if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)){
+  sourceData = _mergedStaticData(sourceData, staticSourceData);
+
+  return sourceData;
+}
+
+function _mergedStaticData(sourceData, staticSourceData) {
+  sourceData = us.map(sourceData, function (sourceDatum) {
+    if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)) {
       const staticDatum = staticSourceData[sourceDatum._summary_iri]
       return Object.assign({}, sourceDatum, staticDatum)
     } else {
       return sourceDatum;
     }
   })
-
   return sourceData;
 }
 
@@ -379,32 +382,29 @@ function _populateMonarchRelease(sourceData, graph){
       sourceData[i].monarchReleaseDate =
           graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
   }
-  return sourceData;
 }
 
 function _populateRdfDownloadUrl(sourceData, graph){
   for(var i=0; i<sourceData.length; i++){
     const distribution_iri = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
-    const edges = graph.get_edges_by_subject(distribution_iri);
-    const downloadURL = us.chain(edges)
-        .filter(function(edge){return edge["_predicate_id"] == "dcterms:downloadURL"})
-        .pluck("_object_id")
-        .first()
-        .value()
-    downloadURL = downloadURL.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
-    sourceData[i].rdfDownloadUrl = downloadURL
+    const downloadUrl = _subjectPredicate2Object(distribution_iri, "dcterms:downloadURL", graph);
+    sourceData[i].rdfDownloadUrl = downloadUrl.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
   }
-  return sourceData;
 }
 
 function _versionIRI2distributionIRI(version_iri, graph){
-  const edges = graph.get_edges_by_subject(version_iri);
-  const distribution_iri = us.chain(edges)
-      .filter(function(edge){return edge["_predicate_id"] == "dcat:Distribution"})
+  const distribution_iri = _subjectPredicate2Object(version_iri, "dcat:Distribution", graph);
+  return distribution_iri;
+}
+
+function _subjectPredicate2Object(subject_iri, predicate, graph) {
+  const edges = graph.get_edges_by_subject(subject_iri);
+  const object_iri = us.chain(edges)
+      .filter(function(edge){return edge["_predicate_id"] == predicate})
       .pluck("_object_id")
       .first()
       .value()
-  return distribution_iri;
+  return object_iri;
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
