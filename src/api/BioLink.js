@@ -329,19 +329,19 @@ export async function getSources() {
     const dynamicSourceData = await axios.get(url, { params });
     dynamicSourceDataGraph.load_base_json(dynamicSourceData.data);
   } catch (error) {
-    console.log('Error calling biolink-api dataset metadata endpoint ' + url + ': ' + error);
+    console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
   }
 
   // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
   // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
   let sourceData = us.chain(dynamicSourceDataGraph.all_edges())
-    .filter(function (edge) {
+    .filter(function fn(edge) {
       return edge._predicate_id === summaryVersionPredicate;
     })
-    .map(function (edge) {
+    .map(function fn(edge) {
       return { '_version_iri': edge._subject_id, '_summary_iri': edge._object_id };
     })
-    .map(function (datum) {
+    .map(function fn(datum) {
       return {
         '_summary_iri': datum._summary_iri,
         '_version_iri': datum._version_iri,

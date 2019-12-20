@@ -329,7 +329,7 @@ export default function getStaticSourceData() {
   ];
 
   // convert to hash map for easier lookup when merging with dynamic data
-  const staticSourceDataHashMap = staticSourceData.reduce(function (map, obj) {
+  const staticSourceDataHashMap = staticSourceData.reduce(function fn(map, obj) {
     map[obj.summaryIRI] = obj;
     return map;
   }, {});
