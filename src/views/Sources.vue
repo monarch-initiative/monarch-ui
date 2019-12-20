@@ -24,7 +24,7 @@
           <div>
             <img :src="source.logoUrl + '?raw=true'" >
           </div>
-          <div v-for="file in source.sourceFiles">
+          <div v-for="file in source.sourceFiles" :key="file">
             {{ file.fileUrl }} retrieved on {{ file.retrievedOn }}
           </div>
           <div class="versions">
