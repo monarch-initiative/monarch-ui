@@ -3,6 +3,23 @@
 
 import us from 'underscore';
 
+export function populateSourceTemplate(datum) {
+  const template = {
+    '_summary_iri': datum._summary_iri,
+    '_version_iri': datum._version_iri,
+    'sourceDisplayName': datum._version_iri,
+    'sourceDescription': 'Unknown',
+    'monarchUsage': 'Unknown',
+    'vocabulary': 'Unknown',
+    // to be extracted from BBOP tree:
+    'ingestDate': 'Unknown',
+    'rdfDownloadUrl': '', // URL for transform of source data, in RDF (in ttl, nt, or both)
+    'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
+    'logoUrl': ''
+  };
+  return template;
+}
+
 export function _subjectPredicate2Objects(subjectIRI, predicate, graph) {
   const edges = graph.get_edges_by_subject(subjectIRI);
   const objectIRI = us.chain(edges)
@@ -25,14 +42,16 @@ export function _versionIRI2distributionIRI(versionIRI, graph) {
 }
 
 export function mergeStaticData(sourceData, staticSourceData) {
+  // iterate through sourceData and attach data from staticSourceData
   sourceData = us.map(sourceData, function fn(sourceDatum) {
     if (Object.prototype.hasOwnProperty.call(sourceDatum, '_summary_iri')) {
       const staticDatum = staticSourceData[sourceDatum._summary_iri];
       return Object.assign({}, sourceDatum, staticDatum);
     }
     return sourceDatum;
-
   });
+
+  // iterate through
   return sourceData;
 }
 
