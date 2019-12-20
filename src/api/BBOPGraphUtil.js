@@ -3,9 +3,30 @@
 
 import us from 'underscore';
 
+export function _versionIRI2distributionIRI(versionIRI, graph) {
+  return _subjectPredicate2Object(versionIRI, 'dcat:Distribution', graph);
+}
+
+export function _subjectPredicate2Objects(subjectIRI, predicate, graph) {
+  const edges = graph.get_edges_by_subject(subjectIRI);
+  const object_iri = us.chain(edges)
+    .filter(function (edge) {
+      return edge._predicate_id == predicate;
+    })
+    .pluck('_object_id')
+    .value();
+  return object_iri;
+}
+
+export function _subjectPredicate2Object(subjectIRI, predicate, graph) {
+  return us.chain(_subjectPredicate2Objects(subjectIRI, predicate, graph))
+    .first()
+    .value();
+}
+
 export function mergeStaticData(sourceData, staticSourceData) {
   sourceData = us.map(sourceData, function (sourceDatum) {
-    if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)) {
+    if (Object.prototype.hasOwnProperty.call(sourceDatum, '_summary_iri')) {
       const staticDatum = staticSourceData[sourceDatum._summary_iri];
       return Object.assign({}, sourceDatum, staticDatum);
     }
@@ -44,25 +65,4 @@ export function populateRdfDownloadUrl(sourceData, graph) {
     const downloadUrls = _subjectPredicate2Object(distribution_iri, 'dcterms:downloadURL', graph);
     sourceData[i].rdfDownloadUrl = downloadUrls.replace('MonarchArchive:', 'https://archive.monarchinitiative.org/');
   }
-}
-
-export function _versionIRI2distributionIRI(version_iri, graph) {
-  return _subjectPredicate2Object(version_iri, 'dcat:Distribution', graph);
-}
-
-export function _subjectPredicate2Objects(subject_iri, predicate, graph) {
-  const edges = graph.get_edges_by_subject(subject_iri);
-  const object_iri = us.chain(edges)
-    .filter(function (edge) {
-      return edge._predicate_id == predicate;
-    })
-    .pluck('_object_id')
-    .value();
-  return object_iri;
-}
-
-export function _subjectPredicate2Object(subject_iri, predicate, graph) {
-  return us.chain(_subjectPredicate2Objects(subject_iri, predicate, graph))
-    .first()
-    .value();
 }
