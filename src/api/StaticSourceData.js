@@ -1,7 +1,7 @@
 /* eslint quotes: 0 */ // This is really a json file
 
 export default function getStaticSourceData() {
-  var staticSourceData = [
+  const staticSourceData = [
     {
       sourceDisplayName: "Mouse Genome Informatics",
       sourceDescription: "MGI is the international database resource for the laboratory mouse, providing integrated genetic, genomic, and biological data to facilitate the study of human health and disease.",
@@ -322,18 +322,17 @@ export default function getStaticSourceData() {
           "animal species (other than human and mouse and rats). This includes information about genes, animal " +
           "taxonomy, and breeds as instances of those taxa (breeds are akin to 'strains' in other taxa), animal " +
           "diseases, along with species-specific subtypes of those diseases publications (and their mapping to PMIDs, " +
-          "if available) gene-to-phenotype associations (via an anonymous variant-locus breed-to-phenotype associations."
-      ,
+          "if available) gene-to-phenotype associations (via an anonymous variant-locus breed-to-phenotype associations.",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#omia"
     }
   ];
 
   // convert to hash map for easier lookup when merging with dynamic data
-  var staticSourceDataHashMap = staticSourceData.reduce(function(map, obj) {
+  const staticSourceDataHashMap = staticSourceData.reduce(function (map, obj) {
     map[obj.summaryIRI] = obj;
     return map;
   }, {});
   return staticSourceDataHashMap;
 
-};
+}

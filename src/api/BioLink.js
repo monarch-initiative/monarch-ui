@@ -1,8 +1,8 @@
 import axios from 'axios';
 import us from 'underscore';
+import * as bbopgraph from 'bbop-graph';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
 import getStaticSourceData from './StaticSourceData';
-import * as bbopgraph from 'bbop-graph';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -14,10 +14,10 @@ import * as bbopgraph from 'bbop-graph';
 // and only secondarily, to create a general-purpose service layer.
 //
 
-const metadata_keys = { // constants used to retrieve items from BBOP graph json emitted by biolink
+const metadataKeys = { // constants used to retrieve items from BBOP graph json emitted by biolink
   // subjects with this predicate are considered version level IRIs, objects are summary level IRIs:
-  'summary_version_predicate': 'dcterms:isVersionOf',
-}
+  'summaryVersionPredicate': 'dcterms:isVersionOf',
+};
 
 const servers = {
   development: {
@@ -73,7 +73,7 @@ const serverConfiguration = servers[apiServer];
 export const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
 
-export const summary_version_predicate = metadata_keys.summary_version_predicate;
+export const summaryVersionPredicate = metadataKeys.summaryVersionPredicate;
 
 /**
  Lighter-weight BL node info. Used by LocalNav.vue
@@ -321,36 +321,40 @@ export async function getSources() {
   // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
   // get dynamic data from biolink-api and put in BBOP graph
-  var dynamicSourceDataGraph = new bbopgraph.graph();
+  const dynamicSourceDataGraph = new bbopgraph.graph();
   try {
     const url = `${biolink}metadata/datasets`;
     const params = new URLSearchParams();
-    var dynamicSourceData = await axios.get(url, { params });
-    dynamicSourceDataGraph.load_base_json(dynamicSourceData.data)
-  } catch(error) {
-    console.log("Error calling biolink-api dataset metadata endpoint " + url + ": " + error);
+    const dynamicSourceData = await axios.get(url, { params });
+    dynamicSourceDataGraph.load_base_json(dynamicSourceData.data);
+  } catch (error) {
+    console.log('Error calling biolink-api dataset metadata endpoint ' + url + ': ' + error);
   }
 
   // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
   // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
-  var sourceData = us.chain(dynamicSourceDataGraph.all_edges())
-      .filter(function(edge){
-        return edge.hasOwnProperty("_predicate_id") && edge._predicate_id == summary_version_predicate;})
-      .map(function (edge) { return {"_version_iri": edge._subject_id, "_summary_iri": edge._object_id}})
-      .map(function(datum){
-        return {
-          "_summary_iri": datum._summary_iri,
-          "_version_iri": datum._version_iri,
-          "sourceDisplayName": datum._version_iri,
-          "sourceDescription": "Unknown",
-          "monarchUsage": "Unknown",
-          "vocabulary": "Unknown",
-          // to be extracted from BBOP tree:
-          "ingestDate": "Unknown",
-          "rdfDownloadUrl": "Unknown", // URL for transform of source data, in RDF (in ttl, nt, or both)
-          "sourceFiles": [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
-        }})
-      .value()
+  let sourceData = us.chain(dynamicSourceDataGraph.all_edges())
+    .filter(function (edge) {
+      return edge._predicate_id === summaryVersionPredicate;
+    })
+    .map(function (edge) {
+      return { '_version_iri': edge._subject_id, '_summary_iri': edge._object_id };
+    })
+    .map(function (datum) {
+      return {
+        '_summary_iri': datum._summary_iri,
+        '_version_iri': datum._version_iri,
+        'sourceDisplayName': datum._version_iri,
+        'sourceDescription': 'Unknown',
+        'monarchUsage': 'Unknown',
+        'vocabulary': 'Unknown',
+        // to be extracted from BBOP tree:
+        'ingestDate': 'Unknown',
+        'rdfDownloadUrl': 'Unknown', // URL for transform of source data, in RDF (in ttl, nt, or both)
+        'sourceFiles': [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
+      };
+    })
+    .value();
 
   // put things from dynamic data into sourceData
   _populateIngestDate(sourceData, dynamicSourceDataGraph);
@@ -369,63 +373,65 @@ export async function getSources() {
 function _mergedStaticData(sourceData, staticSourceData) {
   sourceData = us.map(sourceData, function (sourceDatum) {
     if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)) {
-      const staticDatum = staticSourceData[sourceDatum._summary_iri]
-      return Object.assign({}, sourceDatum, staticDatum)
-    } else {
-      return sourceDatum;
+      const staticDatum = staticSourceData[sourceDatum._summary_iri];
+      return Object.assign({}, sourceDatum, staticDatum);
     }
-  })
+    return sourceDatum;
+
+  });
   return sourceData;
 }
 
-function _populateSourceFiles(sourceData, graph){
-  for(var i=0; i<sourceData.length; i++){
-    const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, "dcterms:source", graph);
+function _populateSourceFiles(sourceData, graph) {
+  for (let i = 0; i < sourceData.length; i++) {
+    const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, 'dcterms:source', graph);
     sourceData[i].sourceFiles = us.chain(sources)
-        .map(function(source){
-          const node = graph.get_node(source);
-          var retVal = "Unknown";
-          if (node._metadata.hasOwnProperty('http://purl.org/pav/retrievedOn')){
-            retVal = node._metadata['http://purl.org/pav/retrievedOn'][0]
-          }
-          return {'fileUrl': source, 'retrievedOn': retVal}
-        })
-        .value()
+      .map(function (source) {
+        const node = graph.get_node(source);
+        let retVal = 'Unknown';
+        if (node._metadata.hasOwnProperty('http://purl.org/pav/retrievedOn')) {
+          retVal = node._metadata['http://purl.org/pav/retrievedOn'][0];
+        }
+        return { 'fileUrl': source, 'retrievedOn': retVal };
+      })
+      .value();
   }
 }
 
-function _populateIngestDate(sourceData, graph){
-  for(var i=0; i<sourceData.length; i++){
-      sourceData[i].ingestDate =
+function _populateIngestDate(sourceData, graph) {
+  for (let i = 0; i < sourceData.length; i++) {
+    sourceData[i].ingestDate =
           graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
   }
 }
 
-function _populateRdfDownloadUrl(sourceData, graph){
-  for(var i=0; i<sourceData.length; i++){
+function _populateRdfDownloadUrl(sourceData, graph) {
+  for (let i = 0; i < sourceData.length; i++) {
     const distribution_iri = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
-    const downloadUrls = _subjectPredicate2Object(distribution_iri, "dcterms:downloadURL", graph);
-    sourceData[i].rdfDownloadUrl = downloadUrls.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
+    const downloadUrls = _subjectPredicate2Object(distribution_iri, 'dcterms:downloadURL', graph);
+    sourceData[i].rdfDownloadUrl = downloadUrls.replace('MonarchArchive:', 'https://archive.monarchinitiative.org/');
   }
 }
 
-function _versionIRI2distributionIRI(version_iri, graph){
-  return _subjectPredicate2Object(version_iri, "dcat:Distribution", graph);
+function _versionIRI2distributionIRI(version_iri, graph) {
+  return _subjectPredicate2Object(version_iri, 'dcat:Distribution', graph);
 }
 
 function _subjectPredicate2Objects(subject_iri, predicate, graph) {
   const edges = graph.get_edges_by_subject(subject_iri);
   const object_iri = us.chain(edges)
-      .filter(function(edge){return edge["_predicate_id"] == predicate})
-      .pluck("_object_id")
-      .value()
+    .filter(function (edge) {
+      return edge._predicate_id == predicate;
+    })
+    .pluck('_object_id')
+    .value();
   return object_iri;
 }
 
 function _subjectPredicate2Object(subject_iri, predicate, graph) {
   return us.chain(_subjectPredicate2Objects(subject_iri, predicate, graph))
-      .first()
-      .value()
+    .first()
+    .value();
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
