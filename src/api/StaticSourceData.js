@@ -107,18 +107,11 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#kegg"
     },
     {
-      sourceDisplayName: "MyGene",
-      sourceDescription: "MyGene.info provides a simple-to-use REST web services to query/retrieve gene annotation data.",
-      monarchUsage: "We use mygene.info's REST-services to fetch and display curated RefSeq gene descriptions.",
-      vocabulary: "",
-      summaryIRI: "MonarchArchive:#mygene"
-    },
-    {
       sourceDisplayName: "National Center for Biotechnology Information",
       sourceDescription: "Gene integrates information from a wide range of species, and includes nomenclature, Reference Sequences (RefSeqs), maps, pathways, variations, phenotypes, and links to genome-, phenotype-, and locus-specific resources worldwide. Taxon lists the taxinomic organization of organisms. Pub2Gene serves links between genes and pubmed identifiers where they are mentioned.",
       monarchUsage: "We use NCBIGene ids and symbols as the primary identifier and label for human genes in our system and NCBITaxon identifiers and scientific name for species-specific labeling. For any given gene, we also list the annotated pmids from Pub2Gene.",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#ncbi"
+      summaryIRI: "MonarchArchive:#ncbigene"
     },
     {
       sourceDisplayName: "BioGRID",
@@ -155,13 +148,6 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch processes gene-process/function/subcellular/location associations.",
       vocabulary: "RO",
       summaryIRI: "MonarchArchive:#go"
-    },
-    {
-      sourceDisplayName: "Gene Reviews",
-      sourceDescription: "GeneReviews, an international point-of-care resource for busy clinicians, provides clinically relevant and medically actionable information for inherited conditions in a standardized journal-style format, covering diagnosis, management, and genetic counseling for patients and their families.",
-      monarchUsage: "Monarch processes the GeneReviews mappings to OMIM, plus inspect the GeneReviews (html) books to pull the clinical descriptions in order to populate the definitions of the terms in the ontology. We define the GeneReviews items as classes that are either grouping classes over OMIM disease ids (gene ids are filtered out), or are made as subclasses of DOID:4 (generic disease).",
-      vocabulary: "",
-      summaryIRI: "MonarchArchive:#genereviews"
     },
     {
       sourceDisplayName: "HUGO Gene Nomenclature Committee",
@@ -260,14 +246,6 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#mychem"
     },
     {
-      sourceDisplayName: "NCBI Genes",
-      sourceDescription: "Detailed gene information",
-      monarchUsage: "We ingest gene information (gene names, symbols, ids, equivalent ids), gene history " +
-          "(alt ids), and gene2pubmed publication references about each gene.",
-      vocabulary: "",
-      summaryIRI: "MonarchArchive:#ncbigene"
-    },
-    {
       sourceDisplayName: "UCSC Bands",
       sourceDescription: "UCSC definitions of cytogenic bands",
       monarchUsage: "We create nested " +
@@ -288,7 +266,7 @@ export default function getStaticSourceData() {
 
     // For ClinVar and UDP, override rdfDownloadUrl, sourceFiles, logoUrl, ingestDate for now. For ClinVar, this is
     // because we aren't writing proper HCLS metadata yet, and for UDP this is because this ingest hasn't been run in
-    // a long time.
+    // a long time. Genereviews is not currently loaded in Scigraph, so I'm putting it here too.
     {
       sourceDisplayName: "ClinVar",
       sourceDescription: "ClinVar archives and aggregates information about relationships among variation and human health. ClinVar collects reports of variants found in patient samples, assertions made regarding their clinical significance, information about the submitter, and other supporting data.",
@@ -319,6 +297,13 @@ export default function getStaticSourceData() {
       logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-udp.png',
       summaryIRI: "MonarchArchive:#udp"
     },
+    {
+      sourceDisplayName: "Gene Reviews",
+      sourceDescription: "GeneReviews, an international point-of-care resource for busy clinicians, provides clinically relevant and medically actionable information for inherited conditions in a standardized journal-style format, covering diagnosis, management, and genetic counseling for patients and their families.",
+      monarchUsage: "Monarch processes the GeneReviews mappings to OMIM, plus inspect the GeneReviews (html) books to pull the clinical descriptions in order to populate the definitions of the terms in the ontology. We define the GeneReviews items as classes that are either grouping classes over OMIM disease ids (gene ids are filtered out), or are made as subclasses of DOID:4 (generic disease).",
+      vocabulary: "",
+      summaryIRI: "MonarchArchive:#genereviews"
+    }
   ];
 
   // convert to hash map for easier lookup when merging with dynamic data

@@ -42,7 +42,9 @@ export function _versionIRI2distributionIRI(versionIRI, graph) {
 
 export function mergeStaticData(sourceData, staticSourceData) {
   // iterate through sourceData and attach data from staticSourceData
+  const dynamicSummaryIRIs = [];
   sourceData = us.map(sourceData, function fn(sourceDatum) {
+    dynamicSummaryIRIs.push(sourceDatum._summary_iri);
     if (Object.prototype.hasOwnProperty.call(sourceDatum, '_summary_iri')) {
       const staticDatum = staticSourceData[sourceDatum._summary_iri];
       return Object.assign({}, sourceDatum, staticDatum);
@@ -50,7 +52,14 @@ export function mergeStaticData(sourceData, staticSourceData) {
     return sourceDatum;
   });
 
-  // iterate through
+  // iterate through staticSourceData and populate sources that aren't in dynamic data from biolink-api (e.g. ClinVar)
+  us.each(staticSourceData, function fn(staticDatum){
+    if(! dynamicSummaryIRIs.includes(staticDatum.summaryIRI)){
+      var newSourceEntry = populateSourceTemplate({'_summary_iri': staticDatum.summaryIRI} );
+      Object.assign(newSourceEntry, staticDatum)
+      sourceData.push(newSourceEntry);
+    }
+  });
   return sourceData;
 }
 
