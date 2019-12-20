@@ -24,7 +24,7 @@
           <div class="versions">
             <div class="source-version"/>
             <div class="monarch-version">
-              Monarch Ingestion: {{ source.monarchReleaseDate }}
+              Monarch Ingest Date: {{ source.ingestDate }}
             </div>
           </div>
         </div>

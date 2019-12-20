@@ -346,14 +346,14 @@ export async function getSources() {
           "monarchUsage": "Unknown",
           "vocabulary": "Unknown",
           // to be extracted from BBOP tree:
-          "monarchReleaseDate": "Unknown",
+          "ingestDate": "Unknown",
           "rdfDownloadUrl": "Unknown", // URL for transform of source data, in RDF (in ttl, nt, or both)
           "sourceFiles": [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
         }})
       .value()
 
   // put things from dynamic data into sourceData
-  _populateMonarchRelease(sourceData, dynamicSourceDataGraph);
+  _populateIngestDate(sourceData, dynamicSourceDataGraph);
   _populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
   _populateSourceFiles(sourceData, dynamicSourceDataGraph);
 
@@ -391,12 +391,13 @@ function _populateSourceFiles(sourceData, graph){
           return {'fileUrl': source, 'retrievedOn': retVal}
         })
         .value()
+    var foor = 1;
   }
 }
 
-function _populateMonarchRelease(sourceData, graph){
+function _populateIngestDate(sourceData, graph){
   for(var i=0; i<sourceData.length; i++){
-      sourceData[i].monarchReleaseDate =
+      sourceData[i].ingestDate =
           graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
   }
 }
