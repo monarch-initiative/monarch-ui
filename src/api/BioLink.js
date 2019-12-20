@@ -386,7 +386,6 @@ function _populateSourceFiles(sourceData, graph){
           return {'fileUrl': source, 'retrievedOn': graph.get_node(source)._metadata['http://purl.org/pav/retrievedOn'][0]}
         })
         .value()
-    var foo = 1;
   }
 }
 
