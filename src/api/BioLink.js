@@ -352,7 +352,7 @@ export async function getSources() {
         // to be extracted from BBOP tree:
         'ingestDate': 'Unknown',
         'rdfDownloadUrl': 'Unknown', // URL for transform of source data, in RDF (in ttl, nt, or both)
-        'sourceFiles': [], // [ [file_URL_1, [downloadDate_1],  [file_URL_2, [downloadDate_2], ... ]
+        'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
       };
     })
     .value();

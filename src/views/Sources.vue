@@ -21,6 +21,9 @@
           <div>
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
+          <div v-for="file in source.sourceFiles">
+            {{file.fileUrl}} retrieved on {{file.retrievedOn}}
+          </div>
           <div class="versions">
             <div class="source-version"/>
             <div class="monarch-version">
