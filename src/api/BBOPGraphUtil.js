@@ -4,7 +4,7 @@
 import us from 'underscore';
 
 export function populateSourceTemplate(datum) {
-  const template = {
+  return {
     '_summary_iri': datum._summary_iri,
     '_version_iri': datum._version_iri,
     'sourceDisplayName': datum._version_iri,
@@ -17,7 +17,6 @@ export function populateSourceTemplate(datum) {
     'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
     'logoUrl': ''
   };
-  return template;
 }
 
 export function _subjectPredicate2Objects(subjectIRI, predicate, graph) {
