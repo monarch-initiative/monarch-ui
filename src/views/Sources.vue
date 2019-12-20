@@ -22,10 +22,10 @@
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
           <div>
-            <img v-bind:src="source.logoUrl + '?raw=true'" />
+            <img :src="source.logoUrl + '?raw=true'" >
           </div>
           <div v-for="file in source.sourceFiles">
-            {{file.fileUrl}} retrieved on {{file.retrievedOn}}
+            {{ file.fileUrl }} retrieved on {{ file.retrievedOn }}
           </div>
           <div class="versions">
             <div class="source-version"/>
