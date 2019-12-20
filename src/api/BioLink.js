@@ -378,6 +378,18 @@ function _mergedStaticData(sourceData, staticSourceData) {
   return sourceData;
 }
 
+function _populateSourceFiles(sourceData, graph){
+  for(var i=0; i<sourceData.length; i++){
+    const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, "dcterms:source", graph);
+    sourceData[i].sourceFiles = us.chain(sources)
+        .map(function(source){
+          return {'fileUrl': source, 'retrievedOn': graph.get_node(source)._metadata['http://purl.org/pav/retrievedOn'][0]}
+        })
+        .value()
+    var foo = 1;
+  }
+}
+
 function _populateMonarchRelease(sourceData, graph){
   for(var i=0; i<sourceData.length; i++){
       sourceData[i].monarchReleaseDate =
