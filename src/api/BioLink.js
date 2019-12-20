@@ -358,15 +358,15 @@ export async function getSources() {
     .value();
 
   // put things from dynamic data into sourceData
-  bbopgraphUtil._populateIngestDate(sourceData, dynamicSourceDataGraph);
-  bbopgraphUtil._populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
-  bbopgraphUtil._populateSourceFiles(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateIngestDate(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateSourceFiles(sourceData, dynamicSourceDataGraph);
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
   // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
   // item from dynamic data, to allow us to override stuff from db using static data
   const staticSourceData = getStaticSourceData();
-  sourceData = bbopgraphUtil._mergedStaticData(sourceData, staticSourceData);
+  sourceData = bbopgraphUtil.mergeStaticData(sourceData, staticSourceData);
 
   return sourceData;
 }

@@ -3,7 +3,7 @@
 
 import us from 'underscore';
 
-export function _mergedStaticData(sourceData, staticSourceData) {
+export function mergeStaticData(sourceData, staticSourceData) {
   sourceData = us.map(sourceData, function (sourceDatum) {
     if (staticSourceData.hasOwnProperty(sourceDatum._summary_iri)) {
       const staticDatum = staticSourceData[sourceDatum._summary_iri];
@@ -15,7 +15,7 @@ export function _mergedStaticData(sourceData, staticSourceData) {
   return sourceData;
 }
 
-export function _populateSourceFiles(sourceData, graph) {
+export function populateSourceFiles(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, 'dcterms:source', graph);
     sourceData[i].sourceFiles = us.chain(sources)
@@ -31,14 +31,14 @@ export function _populateSourceFiles(sourceData, graph) {
   }
 }
 
-export function _populateIngestDate(sourceData, graph) {
+export function populateIngestDate(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     sourceData[i].ingestDate =
             graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
   }
 }
 
-export function _populateRdfDownloadUrl(sourceData, graph) {
+export function populateRdfDownloadUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const distribution_iri = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
     const downloadUrls = _subjectPredicate2Object(distribution_iri, 'dcterms:downloadURL', graph);
