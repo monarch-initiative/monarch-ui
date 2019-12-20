@@ -391,7 +391,6 @@ function _populateSourceFiles(sourceData, graph){
           return {'fileUrl': source, 'retrievedOn': retVal}
         })
         .value()
-    var foor = 1;
   }
 }
 
