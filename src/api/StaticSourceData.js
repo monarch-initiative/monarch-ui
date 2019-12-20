@@ -58,20 +58,6 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#mpd"
     },
     {
-      sourceDisplayName: "Online Mendelian Inheritance in Animals",
-      sourceDescription: "Online Mendelian Inheritance in Animals (OMIA) is a catalogue/compendium of inherited disorders, other (single-locus) traits, and genes in 215 (non-model) animal species.",
-      monarchUsage: "gene-disease association",
-      vocabulary: "OMIA, OMIM",
-      summaryIRI: "MonarchArchive:#omim"
-    },
-    {
-      sourceDisplayName: "ClinVar",
-      sourceDescription: "ClinVar archives and aggregates information about relationships among variation and human health. ClinVar collects reports of variants found in patient samples, assertions made regarding their clinical significance, information about the submitter, and other supporting data.",
-      monarchUsage: "disease-gene association, variant-disease association, variant definitions",
-      vocabulary: "UMLS",
-      summaryIRI: "MonarchArchive:#clinvar"
-    },
-    {
       sourceDisplayName: "Online Mendelian Inheritance in Man",
       sourceDescription: "OMIM is a comprehensive, authoritative compendium of human genes and genetic phenotypes with full-text, referenced overviews that contains information on all known mendelian disorders and over 12,000 genes. OMIM focuses on the relationship between phenotype and genotype.",
       monarchUsage: "We use curated disease-gene, disease-locus, and variant-disease associations, together with their annotated references. Most OMIM diseases are further curated by the HPO group. Most OMIM diseases are integrated into the Disease Ontology.",
@@ -199,13 +185,6 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#reactome"
     },
     {
-      sourceDisplayName: "Undiagnosed Diseases Program (UDP)",
-      sourceDescription: "The National Institutes of Health (NIH) Undiagnosed Diseases Program (UDP) is part of the Undiagnosed Disease Network (UDN), an NIH Common Fund initiative that focuses on the most puzzling medical cases referred to the NIH Clinical Center in Bethesda, Maryland.",
-      monarchUsage: "Monarch stores phenotypes for each case and variants of interest",
-      vocabulary: "RO",
-      summaryIRI: "MonarchArchive:#udp"
-    },
-    {
       sourceDisplayName: "Gene expression data in animals",
       sourceDescription: "Bgee is a database to retrieve and compare gene expression patterns in multiple animal species",
       monarchUsage: "Monarch stores the top 20 ranked tissues where a gene is over expressed based on differential expression measures across evidence lines",
@@ -316,23 +295,21 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#wormbase"
     },
     {
-      sourceDisplayName: "Online Mendelian Inheritance in Animals (OMIA)",
-      sourceDescription: "",
-      monarchUsage: "We ingest information about inherited disorders, other (single-locus) traits and genes in >200 " +
-          "animal species (other than human and mouse and rats). This includes information about genes, animal " +
-          "taxonomy, and breeds as instances of those taxa (breeds are akin to 'strains' in other taxa), animal " +
-          "diseases, along with species-specific subtypes of those diseases publications (and their mapping to PMIDs, " +
-          "if available) gene-to-phenotype associations (via an anonymous variant-locus breed-to-phenotype associations.",
-      vocabulary: "",
+      sourceDisplayName: "Online Mendelian Inheritance in Animals",
+      sourceDescription: "Online Mendelian Inheritance in Animals (OMIA) is a catalogue/compendium of inherited disorders, other (single-locus) traits, and genes in 215 (non-model) animal species.",
+      monarchUsage: "gene-disease association",
+      vocabulary: "OMIA, OMIM",
       summaryIRI: "MonarchArchive:#omia"
     },
+
+    // For ClinVar and UDP, override rdfDownloadUrl, sourceFiles, logoUrl, ingestDate for now. For ClinVar, this is
+    // because we aren't writing proper HCLS metadata yet, and for UDP this is because this ingest hasn't been run in
+    // a long time.
     {
       sourceDisplayName: "ClinVar",
-      sourceDescription: "ClinVar aggregates information about genomic variation and its relationship to human health.",
-      monarchUsage: "We use the clinvar curated gene to disease mappings to discern the functional consequence of " +
-          "a variant on a gene in cases where this is ambiguous. For example, some variants are located in two " +
-          "genes overlapping on different strands, and may only have a functional consequence on one gene.",
-      vocabulary: "",
+      sourceDescription: "ClinVar archives and aggregates information about relationships among variation and human health. ClinVar collects reports of variants found in patient samples, assertions made regarding their clinical significance, information about the submitter, and other supporting data.",
+      monarchUsage: "disease-gene association, variant-disease association, variant definitions",
+      vocabulary: "UMLS",
       ingestDate: 'Unknown',
       rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/clinvar.nt',
       sourceFiles: [
@@ -350,17 +327,14 @@ export default function getStaticSourceData() {
     },
     {
       sourceDisplayName: "Undiagnosed Diseases Program (UDP)",
-      sourceDescription: "The National Institutes of Health (NIH) Undiagnosed Diseases Program (UDP) " +
-          "is part of the Undiagnosed Disease Network (UDN), " +
-          "an NIH Common Fund initiative that focuses on the most puzzling medical cases " +
-          "referred to the NIH Clinical Center in Bethesda, Maryland.",
-      monarchUsage: "",
-      vocabulary: "",
+      sourceDescription: "The National Institutes of Health (NIH) Undiagnosed Diseases Program (UDP) is part of the Undiagnosed Disease Network (UDN), an NIH Common Fund initiative that focuses on the most puzzling medical cases referred to the NIH Clinical Center in Bethesda, Maryland.",
+      monarchUsage: "Monarch stores phenotypes for each case and variants of interest",
+      vocabulary: "RO",
       ingestDate: 'Unknown',
       rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/udp.ttl',
       logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-udp.png',
       summaryIRI: "MonarchArchive:#udp"
-    }
+    },
   ];
 
   // convert to hash map for easier lookup when merging with dynamic data
