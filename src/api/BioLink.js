@@ -385,7 +385,7 @@ function _populateSourceFiles(sourceData, graph){
         .map(function(source){
           const node = graph.get_node(source);
           var retVal = "Unknown";
-          if (node['_metadata'].hasOwnProperty('_metadata')){
+          if (node._metadata.hasOwnProperty('http://purl.org/pav/retrievedOn')){
             retVal = node._metadata['http://purl.org/pav/retrievedOn'][0]
           }
           return {'fileUrl': source, 'retrievedOn': retVal}
