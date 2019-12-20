@@ -341,21 +341,7 @@ export async function getSources() {
     .map(function fn(edge) {
       return { '_version_iri': edge._subject_id, '_summary_iri': edge._object_id };
     })
-    .map(function fn(datum) {
-      return {
-        '_summary_iri': datum._summary_iri,
-        '_version_iri': datum._version_iri,
-        'sourceDisplayName': datum._version_iri,
-        'sourceDescription': 'Unknown',
-        'monarchUsage': 'Unknown',
-        'vocabulary': 'Unknown',
-        // to be extracted from BBOP tree:
-        'ingestDate': 'Unknown',
-        'rdfDownloadUrl': '', // URL for transform of source data, in RDF (in ttl, nt, or both)
-        'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
-        'logoUrl': ''
-      };
-    })
+    .map(bbopgraphUtil.populateSourceTemplate)
     .value();
 
   // put things from dynamic data into sourceData
