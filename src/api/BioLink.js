@@ -355,6 +355,7 @@ export async function getSources() {
   // put things from dynamic data into sourceData
   _populateMonarchRelease(sourceData, dynamicSourceDataGraph);
   _populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
+  _populateSourceFiles(sourceData, dynamicSourceDataGraph);
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
   // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
@@ -387,24 +388,28 @@ function _populateMonarchRelease(sourceData, graph){
 function _populateRdfDownloadUrl(sourceData, graph){
   for(var i=0; i<sourceData.length; i++){
     const distribution_iri = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
-    const downloadUrl = _subjectPredicate2Object(distribution_iri, "dcterms:downloadURL", graph);
-    sourceData[i].rdfDownloadUrl = downloadUrl.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
+    const downloadUrls = _subjectPredicate2Object(distribution_iri, "dcterms:downloadURL", graph);
+    sourceData[i].rdfDownloadUrl = downloadUrls.replace("MonarchArchive:", "https://archive.monarchinitiative.org/");
   }
 }
 
 function _versionIRI2distributionIRI(version_iri, graph){
-  const distribution_iri = _subjectPredicate2Object(version_iri, "dcat:Distribution", graph);
-  return distribution_iri;
+  return _subjectPredicate2Object(version_iri, "dcat:Distribution", graph);
 }
 
-function _subjectPredicate2Object(subject_iri, predicate, graph) {
+function _subjectPredicate2Objects(subject_iri, predicate, graph) {
   const edges = graph.get_edges_by_subject(subject_iri);
   const object_iri = us.chain(edges)
       .filter(function(edge){return edge["_predicate_id"] == predicate})
       .pluck("_object_id")
-      .first()
       .value()
   return object_iri;
+}
+
+function _subjectPredicate2Object(subject_iri, predicate, graph) {
+  return us.chain(_subjectPredicate2Objects(subject_iri, predicate, graph))
+      .first()
+      .value()
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
