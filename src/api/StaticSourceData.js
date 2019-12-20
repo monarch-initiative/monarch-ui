@@ -325,6 +325,41 @@ export default function getStaticSourceData() {
           "if available) gene-to-phenotype associations (via an anonymous variant-locus breed-to-phenotype associations.",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#omia"
+    },
+    {
+      sourceDisplayName: "ClinVar",
+      sourceDescription: "ClinVar aggregates information about genomic variation and its relationship to human health.",
+      monarchUsage: "We use the clinvar curated gene to disease mappings to discern the functional consequence of " +
+          "a variant on a gene in cases where this is ambiguous. For example, some variants are located in two " +
+          "genes overlapping on different strands, and may only have a functional consequence on one gene.",
+      vocabulary: "",
+      ingestDate: 'Unknown',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/clinvar.nt',
+      sourceFiles: [
+        {
+          'fileUrl': "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz",
+          'retrievedOn': "Unknown"
+        },
+        {
+          'fileUrl': "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/gene_condition_source_id",
+          'retrievedOn': "Unknown"
+        }
+      ],
+      logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-clinvar.png',
+      summaryIRI: "MonarchArchive:#clinvar"
+    },
+    {
+      sourceDisplayName: "Undiagnosed Diseases Program (UDP)",
+      sourceDescription: "The National Institutes of Health (NIH) Undiagnosed Diseases Program (UDP) " +
+          "is part of the Undiagnosed Disease Network (UDN), " +
+          "an NIH Common Fund initiative that focuses on the most puzzling medical cases " +
+          "referred to the NIH Clinical Center in Bethesda, Maryland.",
+      monarchUsage: "",
+      vocabulary: "",
+      ingestDate: 'Unknown',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/udp.ttl',
+      logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-udp.png',
+      summaryIRI: "MonarchArchive:#udp"
     }
   ];
 
