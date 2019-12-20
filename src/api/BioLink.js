@@ -351,8 +351,9 @@ export async function getSources() {
         'vocabulary': 'Unknown',
         // to be extracted from BBOP tree:
         'ingestDate': 'Unknown',
-        'rdfDownloadUrl': 'Unknown', // URL for transform of source data, in RDF (in ttl, nt, or both)
+        'rdfDownloadUrl': '', // URL for transform of source data, in RDF (in ttl, nt, or both)
         'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
+        'logoUrl': ''
       };
     })
     .value();
@@ -361,6 +362,7 @@ export async function getSources() {
   bbopgraphUtil.populateIngestDate(sourceData, dynamicSourceDataGraph);
   bbopgraphUtil.populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
   bbopgraphUtil.populateSourceFiles(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateLogoUrl(sourceData, dynamicSourceDataGraph);
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
   // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
