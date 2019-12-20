@@ -383,7 +383,12 @@ function _populateSourceFiles(sourceData, graph){
     const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, "dcterms:source", graph);
     sourceData[i].sourceFiles = us.chain(sources)
         .map(function(source){
-          return {'fileUrl': source, 'retrievedOn': graph.get_node(source)._metadata['http://purl.org/pav/retrievedOn'][0]}
+          const node = graph.get_node(source);
+          var retVal = "Unknown";
+          if (node['_metadata'].hasOwnProperty('_metadata')){
+            retVal = node._metadata['http://purl.org/pav/retrievedOn'][0]
+          }
+          return {'fileUrl': source, 'retrievedOn': retVal}
         })
         .value()
   }
