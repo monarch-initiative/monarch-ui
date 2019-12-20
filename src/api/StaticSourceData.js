@@ -34,7 +34,7 @@ export default function getStaticSourceData() {
       sourceDescription: "WormBase is an international consortium dedicated to providing the research community with accurate, current, accessible information concerning the genetics, genomics and biology of C. elegans and related nematodes.",
       monarchUsage: "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic). We list the variant-phenotype associations. Some data is pulled from WormBase directly, other data is routed via WormMine.",
       vocabulary: "WBbt, WBls, WBPhenotype",
-      summaryIRI: "MonarchArchive:#"
+      summaryIRI: "MonarchArchive:#wormbase"
     },
     {
       sourceDisplayName: "FlyBase",
@@ -277,22 +277,6 @@ export default function getStaticSourceData() {
           "builds.",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#ucscbands"
-    },
-    {
-      sourceDisplayName: "WormBase",
-      sourceDescription: "Model organism database with rich data for C. elegans.",
-      monarchUsage: "We ingest the following information about " +
-          "genes, " +
-          "sequence alterations (includes SNPs/del/ins/indel and " +
-          "large chromosomal rearrangements), " +
-          "RNAi as expression-affecting reagents, " +
-          "genotypes and their components, " +
-          "strains, " +
-          "publications (and their mapping to PMIDs, if available), " +
-          "allele-to-phenotype associations (including variants by RNAi), " +
-          "and genetic positional information for genes and sequence alterations",
-      vocabulary: "",
-      summaryIRI: "MonarchArchive:#wormbase"
     },
     {
       sourceDisplayName: "Online Mendelian Inheritance in Animals",
