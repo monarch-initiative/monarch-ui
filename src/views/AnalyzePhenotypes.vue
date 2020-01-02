@@ -504,6 +504,7 @@ export default {
       this.diseaseComparisonCategory = '';
       this.phenotypeComparison = [];
       this.phenotypeComparisonCategory = '';
+      this.selectedGeneGroup = null;
     },
     popPhenotype(ind) {
       this.phenotypes.splice(ind, 1);
