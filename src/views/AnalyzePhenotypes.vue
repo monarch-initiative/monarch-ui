@@ -3,7 +3,8 @@
     <div class="row">
       <div class="offset-2 col-8 text-center">
         <h2 class="page-title">Phenotype Profile Search</h2>
-        <p>This Phenotype Profile Search enables you search our database using our BioLink analysis
+        <p>This Phenotype Profile Search enables you search our database using our 
+          <a href="https://github.com/biolink/biolink-api" target="_blank">BioLink analysis</a>
           engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
           their overlap.</p>
       </div>
@@ -449,6 +450,14 @@ export default {
           },
         }
     };
+  },
+  created() {
+    if (this.$route.params.phenotypes) {
+      this.phenoCurieList = this.$route.params.phenotypes;
+      if(this.phenoCurieList.length > 0){
+        this.currentSubStep = 3;
+      }
+    }
   },
   computed: {
     showComparableList() {
