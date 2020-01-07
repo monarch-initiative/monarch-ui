@@ -8,6 +8,9 @@
         class="row source-wrapper"
       >
         <div class="offset-1 col-10 source">
+          <div>
+            <img :src="source.logoUrl + '?raw=true'" >
+          </div>
           <div class="displayName">
             <h5>{{ source.sourceDisplayName }}</h5>
           </div>
@@ -21,8 +24,8 @@
           <div>
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
-          <div>
-            <img :src="source.logoUrl + '?raw=true'" >
+          <div v-if="source.sourceFiles">
+            <h6><i>Ingested files:</i></h6>
           </div>
           <div v-for="file in source.sourceFiles" :key="file">
             {{ file.fileUrl }} retrieved on {{ file.retrievedOn }}
