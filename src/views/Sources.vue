@@ -24,11 +24,11 @@
           <div>
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
-          <div v-if="source.sourceFiles">
+          <div v-if="source.sourceFiles.length > 0">
             <h6><i>Ingested files:</i></h6>
           </div>
           <div v-for="file in source.sourceFiles" :key="file">
-            {{ file.fileUrl }} retrieved on {{ file.retrievedOn }}
+            <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
           </div>
           <div class="versions">
             <div class="source-version"/>
