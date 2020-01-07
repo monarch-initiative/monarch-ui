@@ -284,7 +284,7 @@ export default function getStaticSourceData() {
           'retrievedOn': "Unknown"
         }
       ],
-      logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-clinvar.png',
+      logoUrl: '/img/sources/source-clinvar.png',
       summaryIRI: "MonarchArchive:#clinvar"
     },
     {
@@ -294,7 +294,7 @@ export default function getStaticSourceData() {
       vocabulary: "RO",
       ingestDate: 'Unknown',
       rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/udp.ttl',
-      logoUrl: 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/source-udp.png',
+      logoUrl: '/img/sources/source-udp.png',
       summaryIRI: "MonarchArchive:#udp"
     },
     {

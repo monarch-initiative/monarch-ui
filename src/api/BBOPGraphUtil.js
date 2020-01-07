@@ -98,7 +98,7 @@ export function populateLogoUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const logoUrl = _subjectPredicate2Object(sourceData[i]._summary_iri, 'schemaorg:logo', graph);
     sourceData[i].logoUrl = logoUrl.replace(
-      'MonarchLogoRepo:', 'https://github.com/monarch-initiative/monarch-ui/blob/master/public/img/sources/'
+      'MonarchLogoRepo:', '/img/sources/'
     );
   }
 }
