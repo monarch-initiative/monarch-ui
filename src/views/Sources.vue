@@ -9,7 +9,7 @@
       >
         <div class="offset-1 col-10 source">
           <div>
-            <img :src="source.logoUrl + '?raw=true'" >
+            <img :src="source.logoUrl" >
           </div>
           <div class="displayName">
             <h5>{{ source.sourceDisplayName }}</h5>
