@@ -3,6 +3,23 @@
 
 import us from 'underscore';
 
+const predicates = { // predicates used to retrieve items from BBOP graph json emitted by biolink
+  'distribution': 'dcat:Distribution',
+  'source': 'dcterms:source',
+  'retrievedOn': 'http://purl.org/pav/retrievedOn',
+  'created': 'http://purl.org/dc/terms/created',
+  'downloadUrl': 'dcterms:downloadURL',
+  'logo': 'schemaorg:logo',
+};
+
+const curiePrefixURLs = { // various curie prefixes that need to be fixed/expanded to URLs
+  'MonarchArchive': 'https://archive.monarchinitiative.org/',
+  'MonarchLogoRepo': '/img/sources/',
+  'CoriellCollection': 'https://catalog.coriell.org/1/',
+  'OBO': 'http://purl.obolibrary.org/obo/',
+  'ZFIN': 'http://zfin.org/',
+}
+
 export function populateSourceTemplate(datum) {
   return {
     '_summary_iri': datum._summary_iri,
@@ -37,7 +54,7 @@ export function _subjectPredicate2Object(subjectIRI, predicate, graph) {
 }
 
 export function _versionIRI2distributionIRI(versionIRI, graph) {
-  return _subjectPredicate2Object(versionIRI, 'dcat:Distribution', graph);
+  return _subjectPredicate2Object(versionIRI, predicates.distribution, graph);
 }
 
 export function mergeStaticData(sourceData, staticSourceData) {
@@ -65,15 +82,21 @@ export function mergeStaticData(sourceData, staticSourceData) {
 
 export function populateSourceFiles(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
-    const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, 'dcterms:source', graph);
+    const sources = _subjectPredicate2Objects(sourceData[i]._version_iri, predicates.source, graph);
     sourceData[i].sourceFiles = us.chain(sources)
       .map(function fn(source) {
         const node = graph.get_node(source);
         let retVal = 'Unknown';
-        if (Object.prototype.hasOwnProperty.call(node._metadata, 'http://purl.org/pav/retrievedOn')) {
-          retVal = node._metadata['http://purl.org/pav/retrievedOn'][0];
+        if (Object.prototype.hasOwnProperty.call(node._metadata, predicates.retrievedOn)) {
+          retVal = node._metadata[predicates.retrievedOn][0];
         }
         return { 'fileUrl': source, 'retrievedOn': retVal };
+      })
+      .map(function fixCuriePrefixes(source) {
+        us.each(curiePrefixURLs, function (value, key) {
+          source['fileUrl'] = source['fileUrl'].replace(key + ":", value);
+        });
+        return source;
       })
       .value();
   }
@@ -81,24 +104,21 @@ export function populateSourceFiles(sourceData, graph) {
 
 export function populateIngestDate(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
-    sourceData[i].ingestDate =
-            graph.get_node(sourceData[i]._version_iri)._metadata['http://purl.org/dc/terms/created'][0];
+    sourceData[i].ingestDate = graph.get_node(sourceData[i]._version_iri)._metadata[predicates.created][0];
   }
 }
 
 export function populateRdfDownloadUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const distributionIRI = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
-    const downloadUrl = _subjectPredicate2Object(distributionIRI, 'dcterms:downloadURL', graph);
-    sourceData[i].rdfDownloadUrl = downloadUrl.replace('MonarchArchive:', 'https://archive.monarchinitiative.org/');
+    const downloadUrl = _subjectPredicate2Object(distributionIRI, predicates.downloadUrl, graph);
+    sourceData[i].rdfDownloadUrl = downloadUrl.replace("MonarchArchive:", curiePrefixURLs.MonarchArchive);
   }
 }
 
 export function populateLogoUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
-    const logoUrl = _subjectPredicate2Object(sourceData[i]._summary_iri, 'schemaorg:logo', graph);
-    sourceData[i].logoUrl = logoUrl.replace(
-      'MonarchLogoRepo:', '/img/sources/'
-    );
+    const logoUrl = _subjectPredicate2Object(sourceData[i]._summary_iri, predicates.logo, graph);
+    sourceData[i].logoUrl = logoUrl.replace('MonarchLogoRepo:', curiePrefixURLs.MonarchLogoRepo);
   }
 }

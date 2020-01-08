@@ -21,10 +21,10 @@
             <h6><i>How do we use it?</i></h6>
             {{ source.monarchUsage }}
           </div>
-          <div>
+          <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
-          <div v-if="source.sourceFiles.length > 0">
+          <div v-if="source.sourceFiles.length > 0" class="source-files">
             <h6><i>Ingested files:</i></h6>
           </div>
           <div v-for="file in source.sourceFiles" :key="file">
@@ -73,7 +73,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage {
+  .source-usage,.source-rdf-download,.source-files {
       margin-top: 15px;
   }
 
