@@ -89,8 +89,8 @@ export function populateIngestDate(sourceData, graph) {
 export function populateRdfDownloadUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const distributionIRI = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
-    const downloadUrls = _subjectPredicate2Object(distributionIRI, 'dcterms:downloadURL', graph);
-    sourceData[i].rdfDownloadUrl = downloadUrls.replace('MonarchArchive:', 'https://archive.monarchinitiative.org/');
+    const downloadUrl = _subjectPredicate2Object(distributionIRI, 'dcterms:downloadURL', graph);
+    sourceData[i].rdfDownloadUrl = downloadUrl.replace('MonarchArchive:', 'https://archive.monarchinitiative.org/');
   }
 }
 
