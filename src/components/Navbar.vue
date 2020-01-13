@@ -177,11 +177,11 @@
       BETA
     </div>
     <div v-if="getEnvironment() != 'production'" class="production">
-        <b-navbar-nav>
-           <b-nav-item href="https://monarchinitiative.org/" target="_blank">
-            Main Site
-          </b-nav-item>
-        </b-navbar-nav>
+      <b-navbar-nav>
+        <b-nav-item href="https://monarchinitiative.org/" target="_blank">
+          Main Site
+        </b-nav-item>
+      </b-navbar-nav>
     </div>
   </b-navbar>
 
