@@ -272,8 +272,6 @@ export default function getStaticSourceData() {
       sourceDescription: "ClinVar archives and aggregates information about relationships among variation and human health. ClinVar collects reports of variants found in patient samples, assertions made regarding their clinical significance, information about the submitter, and other supporting data.",
       monarchUsage: "disease-gene association, variant-disease association, variant definitions",
       vocabulary: "UMLS",
-      ingestDate: 'Unknown',
-      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/clinvar.nt',
       sourceFiles: [
         {
           'fileUrl': "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz",
@@ -285,24 +283,34 @@ export default function getStaticSourceData() {
         }
       ],
       logoUrl: '/img/sources/source-clinvar.png',
-      summaryIRI: "MonarchArchive:#clinvar"
+      summaryIRI: "MonarchArchive:#clinvar",
+
+      // this will need updating periodically:
+      ingestDate: '2019-11-12',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/clinvar.nt'
     },
     {
       sourceDisplayName: "Undiagnosed Diseases Program (UDP)",
       sourceDescription: "The National Institutes of Health (NIH) Undiagnosed Diseases Program (UDP) is part of the Undiagnosed Disease Network (UDN), an NIH Common Fund initiative that focuses on the most puzzling medical cases referred to the NIH Clinical Center in Bethesda, Maryland.",
       monarchUsage: "Monarch stores phenotypes for each case and variants of interest",
       vocabulary: "RO",
-      ingestDate: 'Unknown',
-      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/udp.ttl',
       logoUrl: '/img/sources/source-udp.png',
-      summaryIRI: "MonarchArchive:#udp"
+      summaryIRI: "MonarchArchive:#udp",
+
+      // this will need updating periodically:
+      ingestDate: '2019-03-16',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/udp.ttl',
     },
     {
       sourceDisplayName: "Gene Reviews",
       sourceDescription: "GeneReviews, an international point-of-care resource for busy clinicians, provides clinically relevant and medically actionable information for inherited conditions in a standardized journal-style format, covering diagnosis, management, and genetic counseling for patients and their families.",
       monarchUsage: "Monarch processes the GeneReviews mappings to OMIM, plus inspect the GeneReviews (html) books to pull the clinical descriptions in order to populate the definitions of the terms in the ontology. We define the GeneReviews items as classes that are either grouping classes over OMIM disease ids (gene ids are filtered out), or are made as subclasses of DOID:4 (generic disease).",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#genereviews"
+      summaryIRI: "MonarchArchive:#genereviews",
+
+      // this will need updating periodically:
+      ingestDate: '2019-11-12',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201910/rdf/genereviews.ttl',
     }
   ];
 
