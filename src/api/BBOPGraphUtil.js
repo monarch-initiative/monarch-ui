@@ -72,7 +72,7 @@ export function mergeStaticData(sourceData, staticSourceData) {
   // iterate through staticSourceData and populate sources that aren't in dynamic data from biolink-api (e.g. ClinVar)
   us.each(staticSourceData, function fn(staticDatum) {
     if (!dynamicSummaryIRIs.includes(staticDatum.summaryIRI)) {
-      var newSourceEntry = populateSourceTemplate({ '_summary_iri': staticDatum.summaryIRI });
+      const newSourceEntry = populateSourceTemplate({ '_summary_iri': staticDatum.summaryIRI });
       Object.assign(newSourceEntry, staticDatum);
       sourceData.push(newSourceEntry);
     }
@@ -93,7 +93,7 @@ export function populateSourceFiles(sourceData, graph) {
         return { 'fileUrl': source, 'retrievedOn': retVal };
       })
       .map(function fixCuriePrefixes(source) {
-        us.each(curiePrefixURLs, function (value, key) {
+        us.each(curiePrefixURLs, function fix(value, key) {
           source.fileUrl = source.fileUrl.replace(key + ':', value);
         });
         return source;
@@ -112,7 +112,7 @@ export function populateRdfDownloadUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const distributionIRI = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
     const downloadUrl = _subjectPredicate2Object(distributionIRI, predicates.downloadUrl, graph);
-    sourceData[i].rdfDownloadUrl = downloadUrl.replace("MonarchArchive:", curiePrefixURLs.MonarchArchive);
+    sourceData[i].rdfDownloadUrl = downloadUrl.replace('MonarchArchive:', curiePrefixURLs.MonarchArchive);
   }
 }
 
