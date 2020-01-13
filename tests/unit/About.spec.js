@@ -44,7 +44,7 @@ institutions:
 describe('AboutMonarch.md', () => {
   it('renders "Our philosophy"', () => {
     const wrapper = shallowMountWithRouting(AboutMonarch);
-    expect(wrapper.text()).to.include('Our philosophy');
+    expect(wrapper.text()).to.include('Monarch\'s Vision');
   });
 });
 
