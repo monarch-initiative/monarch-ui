@@ -18,7 +18,7 @@ const curiePrefixURLs = { // various curie prefixes that need to be fixed/expand
   'CoriellCollection': 'https://catalog.coriell.org/1/',
   'OBO': 'http://purl.obolibrary.org/obo/',
   'ZFIN': 'http://zfin.org/',
-}
+};
 
 export function populateSourceTemplate(datum) {
   return {
@@ -70,10 +70,10 @@ export function mergeStaticData(sourceData, staticSourceData) {
   });
 
   // iterate through staticSourceData and populate sources that aren't in dynamic data from biolink-api (e.g. ClinVar)
-  us.each(staticSourceData, function fn(staticDatum){
-    if(! dynamicSummaryIRIs.includes(staticDatum.summaryIRI)){
-      var newSourceEntry = populateSourceTemplate({'_summary_iri': staticDatum.summaryIRI} );
-      Object.assign(newSourceEntry, staticDatum)
+  us.each(staticSourceData, function fn(staticDatum) {
+    if (!dynamicSummaryIRIs.includes(staticDatum.summaryIRI)) {
+      var newSourceEntry = populateSourceTemplate({ '_summary_iri': staticDatum.summaryIRI });
+      Object.assign(newSourceEntry, staticDatum);
       sourceData.push(newSourceEntry);
     }
   });
@@ -94,7 +94,7 @@ export function populateSourceFiles(sourceData, graph) {
       })
       .map(function fixCuriePrefixes(source) {
         us.each(curiePrefixURLs, function (value, key) {
-          source['fileUrl'] = source['fileUrl'].replace(key + ":", value);
+          source.fileUrl = source.fileUrl.replace(key + ':', value);
         });
         return source;
       })
