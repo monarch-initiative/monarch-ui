@@ -299,7 +299,7 @@ export default function getStaticSourceData() {
 
       // this will need updating periodically:
       ingestDate: '2019-03-16',
-      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201911/rdf/udp.ttl',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201911/rdf/udp.ttl'
     }
   ];
 
