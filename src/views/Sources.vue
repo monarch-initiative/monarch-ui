@@ -8,6 +8,9 @@
         class="row source-wrapper"
       >
         <div class="offset-1 col-10 source">
+          <div>
+            <img :src="source.logoUrl" >
+          </div>
           <div class="displayName">
             <h5>{{ source.sourceDisplayName }}</h5>
           </div>
@@ -18,10 +21,19 @@
             <h6><i>How do we use it?</i></h6>
             {{ source.monarchUsage }}
           </div>
+          <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
+            <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
+          </div>
+          <div v-if="source.sourceFiles.length > 0" class="source-files">
+            <h6><i>Ingested files:</i></h6>
+          </div>
+          <div v-for="file in source.sourceFiles" :key="file">
+            <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
+          </div>
           <div class="versions">
             <div class="source-version"/>
             <div class="monarch-version">
-              Monarch Ingestion: {{ source.monarchReleaseDate }}
+              Monarch Ingest Date: {{ source.ingestDate }}
             </div>
           </div>
         </div>
@@ -61,7 +73,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage {
+  .source-usage,.source-rdf-download,.source-files {
       margin-top: 15px;
   }
 

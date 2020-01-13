@@ -1,7 +1,9 @@
 import axios from 'axios';
 import us from 'underscore';
+import * as bbopgraph from 'bbop-graph';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
-import getSourceInfo from './Sources';
+import getStaticSourceData from './StaticSourceData';
+import * as bbopgraphUtil from './BBOPGraphUtil';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -12,6 +14,11 @@ import getSourceInfo from './Sources';
 // with this BioLink API module is to isolate the UI from the service layer,
 // and only secondarily, to create a general-purpose service layer.
 //
+
+const metadataKeys = { // constants used to retrieve items from BBOP graph json emitted by biolink
+  // subjects with this predicate are considered version level IRIs, objects are summary level IRIs:
+  'summaryVersionPredicate': 'dcterms:isVersionOf',
+};
 
 const servers = {
   development: {
@@ -64,8 +71,10 @@ const apiServer = (new URLSearchParams(document.location.search.substring(1))).g
 console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
-const biolink = serverConfiguration.biolink_url;
+export const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
+
+export const summaryVersionPredicate = metadataKeys.summaryVersionPredicate;
 
 /**
  Lighter-weight BL node info. Used by LocalNav.vue
@@ -307,24 +316,47 @@ function pruneUnusableCategories(data) {
 
 
 export async function getSources() {
-  /* const url = `${biolink}metadata/datasets`;
-  const params = new URLSearchParams();
+  // Dataset metadata pulled from scigraph follow this schema:
+  // https://www.w3.org/TR/2015/NOTE-hcls-dataset-20150514/Figure1.png
+  // and are emitted by Biolink-API as BBOP graph json
+  // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
-  const bioentityResp = await axios.get(url, { params });
-
-  // remove this after we get this stuff from the API
-  for (let i = 0; i < bioentityResp.data.length; i++) {
-    let sourceDisplayName = bioentityResp.data[i].id.split(/[:.]+/)[1];
-    sourceDisplayName = sourceDisplayName.charAt(0).toUpperCase() + sourceDisplayName.slice(1);
-    bioentityResp.data[i].sourceDisplayName = sourceDisplayName;
-    bioentityResp.data[i].ttlUrl = 'https://data.monarchinitiative.org/ttl/' + bioentityResp.data[i].id.split(':')[1];
-    bioentityResp.data[i].sourceVersion = bioentityResp.data[i].meta.version[0];
-    bioentityResp.data[i].monarchDataReleaseDate = '2019-02-22';
+  // get dynamic data from biolink-api and put in BBOP graph
+  const dynamicSourceDataGraph = new bbopgraph.graph();
+  try {
+    const url = `${biolink}metadata/datasets`;
+    const params = new URLSearchParams();
+    const dynamicSourceData = await axios.get(url, { params });
+    dynamicSourceDataGraph.load_base_json(dynamicSourceData.data);
+  } catch (error) {
+    console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
   }
 
-  const data = bioentityResp.data; */
+  // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
+  // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
+  let sourceData = us.chain(dynamicSourceDataGraph.all_edges())
+    .filter(function fn(edge) {
+      return edge._predicate_id === summaryVersionPredicate;
+    })
+    .map(function fn(edge) {
+      return { '_version_iri': edge._subject_id, '_summary_iri': edge._object_id };
+    })
+    .map(bbopgraphUtil.populateSourceTemplate)
+    .value();
 
-  return getSourceInfo();
+  // put things from dynamic data into sourceData
+  bbopgraphUtil.populateIngestDate(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateSourceFiles(sourceData, dynamicSourceDataGraph);
+  bbopgraphUtil.populateLogoUrl(sourceData, dynamicSourceDataGraph);
+
+  // We still need static data for some things, e.g. source display name, text descriptions of each source,
+  // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
+  // item from dynamic data, to allow us to override stuff from db using static data
+  const staticSourceData = getStaticSourceData();
+  sourceData = bbopgraphUtil.mergeStaticData(sourceData, staticSourceData);
+
+  return sourceData;
 }
 
 export async function getSearchResults(query, start, rows, categories, taxa) {
