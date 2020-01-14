@@ -1,303 +1,365 @@
 <template>
   <div class="container-fluid monarch-view">
     <div class="row">
-      <div class="col-2"/>
-      <div class="col-8">
-        <h1>Phenotype Profile Search</h1>
+      <div class="offset-2 col-8 text-center">
+        <h2 class="page-title">Phenotype Profile Search</h2>
+        <p>This Phenotype Profile Search enables you search our database using our
+          <a href="https://github.com/biolink/biolink-api" target="_blank">BioLink analysis</a>
+          engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
+          their overlap.</p>
       </div>
-      <div class="col-2"/>
     </div>
-    <div class="row">
+    <div v-if="!showPhenogrid" class="row">
       <div class="col-1"/>
-      <div class="col-10 card card-body">
-        <h4>Create A Profile of Phenotypes</h4>
-        <monarch-autocomplete
-          :home-search="false"
-          :allowed-prefixes="acceptedPrefixes"
-          :defined-categories="searchPhenoCategories"
-          :dynamic-placeholder="phenoSearchPH"
-          @interface="handlePhenotypes"
-        />
-        <b-form-textarea
-          id="textarea1"
-          v-model="phenoCurieList"
-          :rows="3"
-          :max-rows="6"
-          placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
-          class="my-2"
-        />
-
-        <div
-          v-if="phenoCurieList"
-          class="btn btn-outline-info"
-          @click="generatePGDataFromPhenotypeList"
-        >
-          Submit Phenotype List
+      <!-- Step 1 of Phenotype profile search -->
+      <div class="col-10 card card-body step-1">
+        <div v-if="currentStep === 1">
+          <h4 class="center-text">Create A Profile of Phenotypes
+            <b-button
+              v-if="currentSubStep !== 1"
+              class="comparison-category-edit"
+              variant="outline-info"
+              @click="currentSubStep = 1; phenotypes = []">
+              <i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Input
+            </b-button>
+          </h4>
+          <div v-if="currentSubStep === 1" class="center-text">
+            <h6 class="center-text">How would like to continue?</h6>
+            <b-form-group>
+              <b-button-group>
+                <b-button variant="outline-info" @click="currentSubStep = 2">Search & Build</b-button>
+                <b-button variant="outline-info" @click="currentSubStep = 3">I have a phenotype list</b-button>
+              </b-button-group>
+            </b-form-group>
+          </div>
+          <div v-if="currentSubStep === 2">
+            <monarch-autocomplete
+              :home-search="false"
+              :allowed-prefixes="acceptedPrefixes"
+              :defined-categories="searchPhenoCategories"
+              :dynamic-placeholder="phenoSearchPH"
+              @interface="handlePhenotypes"
+            />
+            <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
+          </div>
+          <div v-if="currentSubStep === 3">
+            <b-form-textarea
+              id="textarea1"
+              v-model="phenoCurieList"
+              :rows="3"
+              :max-rows="6"
+              placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+              class="my-2"
+            />
+            <div
+              v-if="phenoCurieList"
+              class="btn btn-outline-info submit"
+              @click="getPhenotypesFromEntityList"
+            >
+              Confirm Phenotype List
+            </div>
+            <b-alert
+              :show="showPhenotypeAlert"
+              variant="danger"
+              class="my-2"
+              dismissible
+              @dismissed="showPhenotypeAlert=false"
+            >
+              Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
+              HP:0000002)
+            </b-alert>
+          </div>
         </div>
-        <b-alert
-          :show="showPhenotypeAlert"
-          variant="danger"
-          class="my-2"
-          dismissible
-          @dismissed="showPhenotypeAlert=false"
-        >
-          Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype curies from the Human Phenotype Ontology (e.g.
-          HP:0000002)
-        </b-alert>
-      </div>
-      <div class="col-1"/>
-    </div>
-    <!--results below here-->
-    <div
-      v-if="phenotypes.length"
-      class="row my-2"
-    >
-      <div class="col-1"/>
-      <div class="col-10 card">
-        <div class="p-3">
-          <h4>Phenotype Profile</h4>
-          <div class="flex-container">
-
+        <div v-if="phenotypes.length && !showPhenogrid" class="flex-container">
+          <b-button
+            :class="showCollapse ? 'collapsed' : null"
+            :aria-expanded="showCollapse ? 'true' : 'false'"
+            variant="light"
+            aria-controls="collapse-4"
+            class="m-1 current-phenotype-profile"
+            @click="showCollapse = !showCollapse">
+            Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
+            <i v-if="showCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
+            <i v-if="!showCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
+          </b-button>
+          <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
             <div
               v-for="(phenotype, index) in phenotypes"
               :key="index"
-              class="m-1"
+              class="m-1 group-badge-phenotypes"
             >
-              <div
-                class="btn-group"
-                role="group"
-              >
-                <button
-                  v-b-modal.phenotypeModal
-                  class="btn btn-sm btn-info"
-                  @click="displayPhenotypeModal(phenotype)"
-                >
+              <div class="btn-group" role="group">
+                <button class="btn btn-sm btn-info more-info">
                   <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
                 </button>
                 <button
                   type="button"
-                  class="btn btn-sm btn-info"
+                  class="btn btn-sm btn-info pop-phenotype"
                   @click="popPhenotype(index)"
                 >
                   <strong>x</strong>
                 </button>
               </div>
             </div>
-          </div>
+          </b-collapse>
+        </div>
+        <div class="step-1-btn-group">
+          <b-button
+            v-if="currentStep === 1 && phenotypes.length"
+            variant="outline-primary"
+            class="confirm-profile"
+            @click="currentStep = 2; showCollapse = false">Confirm Profile</b-button>
+          <b-button
+            v-if="currentStep === 1 && phenotypes.length"
+            variant="outline-primary"
+            class="reset-profile"
+            @click="phenotypes = []; currentSubStep = 1;">Reset Profile</b-button>
+          <b-button
+            v-if="currentStep === 2 && phenotypes.length"
+            variant="outline-dark"
+            class="edit-profile"
+            @click="currentStep = 1; clearComparisonCategory">Edit Profile</b-button>
         </div>
       </div>
+      <!-- end of step 1 -->
       <div class="col-1"/>
     </div>
-    <div class="row py-2">
+
+    <!-- Step 2 Comparison Profile -->
+    <div v-if="(currentStep === 2 || currentStep === 3) && !showPhenogrid" class="row py-2">
       <div class="col-1"/>
       <div class="col-10 card card-body">
-        <h4>Create A Profile of comparables</h4>
-        <monarch-autocomplete
-          :home-search="false"
-          :defined-categories="searchCompCategories"
-          :dynamic-placeholder="geneSearchPH"
-          @interface="handleGenes"
-        />
-        <div class="p-2">
+        <div v-if="currentStep === 2 && !comparisonCategory" class="comparison-category-select">
+          <h5>What would you like to compare your profile with?</h5>
           <b-form-group>
-
-            <b-form-checkbox-group
-              id="btnradios1"
-              v-model="selectedGroups"
-              :options="groupOptions"
-              buttons
-              button-variant="outline-info"
-              size="sm"
-              name="selectedGroups"
-            />
-
+            <b-button-group>
+              <b-button variant="outline-info" @click="comparisonCategory = 'all'">Everything</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'disease'">Disease Profile</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'gene'">Gene Profile</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'phenotypes'">Phenotype Profile</b-button>
+            </b-button-group>
           </b-form-group>
         </div>
-        <b-form-textarea
-          id="textarea2"
-          v-model="geneCurieList"
-          :rows="3"
-          :max-rows="6"
-          placeholder="Enter a comma separated list of prefixed gene ids from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)"
-          class="my-2"
-        />
-        <div
-          v-if="geneCurieList"
-          class="btn btn-outline-info"
-          @click="generatePGDataFromGeneList"
-        >
-          Submit Gene List
-        </div>
-        <b-alert
-          :show="showGeneAlert"
-          variant="danger"
-          class="my-2"
-          dismissible
-          @dismissed="showGeneAlert=false"
-        >
-          Error: '{{ rejectedGeneCuries }}' Please enter gene curies from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)
-        </b-alert>
-      </div>
-      <div class="col-1"/>
-    </div>
-    <!--results below here-->
-    <div
-      v-if="selectedGroups.length > 0"
-      class="row"
-    >
-      <div class="col-1"/>
-      <div class="col-10 card">
-        <div class="p-3">
-          <h4>Taxon Groups</h4>
-          <div
-            v-for="group in selectedGroups"
-            :key="group.groupId"
-            class="btn-group"
-            role="group"
-          >
-            <div
-              class="badge badge-info group-badge p-2"
-            >
-              {{ group.groupName }}
-              (NCBITaxon:{{ group.groupId }})
+        <div v-if="comparisonCategory">
+          <h4 class="center-text">
+            Select your {{ comparisonCategory }} profile for comparison
+            <b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Profile </b-button>
+          </h4>
+          <div v-if="comparisonCategory === 'gene'">
+            <b-form-group class="center-text">
+              <b-button-group>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'gene-group'">Taxon Grouped Genes</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-build'">Search & Build</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-list'; genes = []">I have gene a list</b-button>
+              </b-button-group>
+            </b-form-group>
+            <div v-if="geneComparisonCategory === 'gene-group'">
+              <b-form-select v-model="selectedGeneGroup" :options="targetGeneGroups"/>
             </div>
-            <button
-              type="button"
-              class="btn btn-sm btn-info"
-              @click="popGroup()"
-            >
-              <strong>x</strong>
+            <div v-if="geneComparisonCategory === 'custom-build'">
+              <monarch-autocomplete
+                :home-search="false"
+                :defined-categories="searchCompCategories"
+                :dynamic-placeholder="placeholderComparisonText"
+                @interface="handleGenes"
+              />
+            </div>
+            <div v-if="geneComparisonCategory === 'custom-list'">
+              <b-form-textarea
+                v-if="comparisonCategory === 'gene'"
+                id="textarea2"
+                v-model="geneCurieList"
+                :rows="3"
+                :max-rows="6"
+                placeholder="Enter a comma separated list of prefixed gene ids from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)"
+                class="my-2"
+              />
+              <div v-if="geneCurieList" class="btn btn-outline-info submit" @click="getGenesFromList">
+                Confirm Gene List
+              </div>
+              <b-alert
+                :show="rejectedGeneCuries.length > 0"
+                variant="danger"
+                class="my-2"
+                dismissible
+                @dismissed="rejectedGeneCuries.length == 0"
+              >
+                Error: {{ rejectedGeneCuries }} <br> Gene curie format incorrect should be one of NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)
+              </b-alert>
+            </div>
+            <div v-if="genes.length > 0">
+              <p class="current-profile">Current Gene Comparisons</p>
+              <div class="flex-container">
+                <div
+                  v-for="(gene, index) in genes"
+                  :key="index"
+                  class="m-1 group-badge-phenotypes"
+                >
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-info more-info">
+                      <strong>{{ gene.match }}</strong> | {{ gene.curie }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-info pop-phenotype"
+                      @click="popGene(index)"
+                    >
+                      <strong>x</strong>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="comparisonCategory === 'disease'">
+            <b-form-group class="center-text">
+              <b-button-group>
+                <b-button variant="outline-info" @click="diseaseComparisonCategory = 'disease-all'">All Human Diseases</b-button>
+                <b-button variant="outline-info" @click="diseaseComparisonCategory = 'disease-specific'">Specific Disease(s)</b-button>
+              </b-button-group>
+            </b-form-group>
+            <div v-if="diseaseComparisonCategory == 'disease-specific'">
+              <monarch-autocomplete
+                :home-search="false"
+                :defined-categories="searchCompCategories"
+                :dynamic-placeholder="placeholderComparisonText"
+                @interface="handleDisease"
+              />
+              <div v-if="diseases.length > 0">
+                <p class="current-profile">Current Disease Comparisons</p>
+                <div class="flex-container">
+                  <div
+                    v-for="(disease, index) in diseases"
+                    :key="index"
+                    class="m-1 group-badge-phenotypes"
+                  >
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-info more-info">
+                        <strong>{{ disease.match }}</strong> | {{ disease.curie }}
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-info pop-phenotype"
+                        @click="popDisease(index)"
+                      >
+                        <strong>x</strong>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-if="comparisonCategory === 'phenotypes'">
+            <b-form-group class="center-text">
+              <b-button-group>
+                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-build'">Search & Build</b-button>
+                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-list'">I have a phenotype list</b-button>
+              </b-button-group>
+            </b-form-group>
+            <div v-if="phenotypeComparisonCategory == 'phenotypes-build'">
+              <monarch-autocomplete
+                :home-search="false"
+                :allowed-prefixes="acceptedPrefixes"
+                :defined-categories="searchPhenoCategories"
+                :dynamic-placeholder="phenoSearchPH"
+                @interface="handlePhenotypes"
+              />
+              *Non-phenotype entities will automatically be mapped to their associated phenotypes.
+            </div>
+            <div v-if="phenotypeComparisonCategory == 'phenotypes-list'">
+              <b-form-textarea
+                id="textarea1"
+                v-model="phenoComparisonCurieList"
+                :rows="3"
+                :max-rows="6"
+                placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+                class="my-2"
+              />
+              <div
+                v-if="phenoComparisonCurieList"
+                class="btn btn-outline-info submit"
+                @click="getPhenotypesFromEntityList"
+              >
+                Confirm Phenotype List
+              </div>
+              <b-alert
+                :show="showPhenotypeAlert"
+                variant="danger"
+                class="my-2"
+                dismissible
+                @dismissed="showPhenotypeAlert=false"
+              >
+                Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
+                HP:0000002)
+              </b-alert>
+            </div>
+            <div v-if="phenotypeComparison.length > 0" class="flex-container">
+              <b-button
+                :class="showComparisonCollapse ? 'collapsed' : null"
+                :aria-expanded="showComparisonCollapse ? 'true' : 'false'"
+                variant="light"
+                aria-controls="collapse-4"
+                class="m-1 current-phenotype-profile"
+                @click="showComparisonCollapse = !showComparisonCollapse">
+                Comparison Phenotype Profile ( {{ phenotypeComparison.length }} phenotypes )
+                <i v-if="showComparisonCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
+                <i v-if="!showComparisonCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
+              </b-button>
+              <b-collapse id="collapse-phenotypes" v-model="showComparisonCollapse" class="flex-container">
+                <div
+                  v-for="(phenotype, index) in phenotypeComparison"
+                  :key="index"
+                  class="m-1 group-badge-phenotypes"
+                >
+                  <div class="btn-group" role="group">
+                    <button class="btn btn-sm btn-info more-info">
+                      <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-info pop-phenotype"
+                      @click="popPhenotype(index)"
+                    >
+                      <strong>x</strong>
+                    </button>
+                  </div>
+                </div>
+              </b-collapse>
+            </div>
+          </div>
+          <div v-if="determineFinished()" class="run-analysis">
+            <button class="btn btn-outline-success" @click="runPhenogridAnalysis()">
+              Run Similarity Analysis
             </button>
           </div>
+        </div>
+      </div>
+      <!-- End of Step 2 Comparison Profile -->
+      <div class="col-1"/>
+    </div>
+    <!--results below here based on path chosen-->
+    <div v-if="showPhenogrid" class="results">
+      <div class="row">
+        <div class="col-1"/>
+        <div class="col-10 card">
+          <p class="current-profile">Similarity Results</p>
+          <b-button variant="outline-dark" class="edit-profile" @click="currentStep = 1; showCollapse = true; showPhenogrid = false;">Back</b-button>
+          <pheno-grid
+            :x-axis="xAxis"
+            :y-axis="yAxis"
+            :index="pgIndex"
+            :mode="mode"
+          />
+        </div>
+        <div class="col-1"/>
+        <div class="col-1"/>
+        <div class="col-10 card card-body">
+          <phenotypes-table :phenotypes="phenotypes"/>
         </div>
         <div class="col-1"/>
       </div>
     </div>
-    <div
-      v-if="genes.length"
-      class="row my-2"
-    >
-      <div class="col-1"/>
-      <div class="col-10 card">
-        <div class="p-3">
-          <h4>Gene Profile</h4>
-          <div class="flex-container">
-            <div
-              v-for="(gene, index) in genes"
-              :key="gene.curie"
-              class="m-1"
-            >
-              <div
-                class="btn-group"
-                role="group"
-              >
-                <button
-                  v-b-modal.geneModal
-                  class="btn btn-sm btn-info"
-                  @click="displayGeneModal(gene)"
-                >
-                  <strong>{{ gene.match }} </strong>({{ gene.curie }})
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-sm btn-info"
-                  @click="popGene(index)"
-                >
-                  <strong>x</strong>
-                </button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-1"/>
-    </div>
-    <div
-      v-if="phenotypes.length"
-      class="row"
-    >
-      <div class="col-1"/>
-      <div class="col-10 card p-0 my-5">
-        <div
-          class="btn btn-outline-success"
-          @click="generatePhenogridData()"
-        >
-          Run Similarity Analysis
-        </div>
-      </div>
-      <div class="col-1"/>
-    </div>
-    <div class="row">
-      <div class="col-1"/>
-      <div
-        v-if="showPhenogrid"
-        class="col-10 card"
-      >
-        <pheno-grid
-          :x-axis="xAxis"
-          :y-axis="yAxis"
-          :index="pgIndex"
-          :mode="mode"
-        />
-      </div>
-      <div class="col-1"/>
-    </div>
-    <div
-      v-if="showPhenogrid"
-      class="row my-3">
-      <div class="col-1"/>
-      <div class="col-10 card card-body">
-        <phenotypes-table :phenotypes="phenotypes"/>
-      </div>
-      <div class="col-1"/>
-    </div>
-
-
-    <b-modal
-      id="phenotypeModal"
-      v-model="phenotypeModal"
-      lazy
-      size="xl"
-      title="selectedPhenotype.label"
-    >
-      <div
-        slot="modal-title"
-        class="w-100"
-      >
-        <strong>{{ selectedPhenotype.match }}</strong> | {{ selectedPhenotype.curie }}
-      </div>
-      <div
-        v-if="phenotypeModal">
-        <local-nav
-          :anchor-id="selectedPhenotype.curie"
-          @interface="handleReplacePhenotype"
-        />
-      </div>
-    </b-modal>
-
-    <b-modal
-      id="geneModal"
-      v-model="geneModal"
-      lazy
-      size="xl"
-      title="selectedGene.label"
-    >
-      <div
-        slot="modal-title"
-        class="w-100"
-      >
-        {{ selectedGene.match }} | {{ selectedGene.curie }}
-      </div>
-      <div
-        v-if="geneModal">
-        <local-nav
-          :anchor-id="selectedGene.curie"
-          :anchor-type="'gene'"
-          @interface="handleReplaceGene"
-        />
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -305,7 +367,7 @@
 import Vue from 'vue';
 import VueFormWizard from 'vue-form-wizard';
 import 'vue-form-wizard/dist/vue-form-wizard.min.css';
-import * as BL from '@/api/BioLink';
+import * as biolinkService from '@/api/BioLink';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import PhenoGrid from '@/components/PhenoGrid.vue';
 import LocalNav from '@/components/LocalNav.vue';
@@ -325,28 +387,42 @@ export default {
   },
   data() {
     return {
-      phenotypeModal: false,
-      selectedPhenotype: {},
-      geneModal: false,
-      selectedGene: {},
       acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
-      phenoSearchPH: 'search for phenotypes or disease',
-      geneSearchPH: 'search for genes',
-      searchPhenoCategories: ['Phenotype', 'disease'],
-      searchCompCategories: ['gene'],
-      mode: 'search',
+      phenoSearchPH: 'Search by phenotype, disease or gene...',
+      placeholderComparisonText: '',
+      searchPhenoCategories: ['phenotype', 'disease', 'gene'],
+      searchCompCategories: [],
+      targetGeneGroups: [
+        { value: null, text: 'Select by taxon' },
+        { value: 'mouse', text: 'Mouse (genes)' },
+        { value: 'zebrafish', text: 'Zebrafish (genes)' },
+        { value: 'ff', text: 'Fruit fly (genes)' },
+        { value: 'worm', text: 'Nematode (genes)' }
+      ],
+      selectedGeneGroup: null,
+      currentStep: 1,
+      currentSubStep: 1,
+      comparisonCategory: '',
+      geneComparisonCategory: '',
+      diseaseComparisonCategory: '',
+      phenotypeComparisonCategory: '',
+      showCollapse: false,
+      showComparisonCollapse: false,
       showPhenogrid: false,
       pgIndex: 0,
       rejectedPhenotypeCuries: [],
       rejectedGeneCuries: [],
-      showGeneAlert: false,
       showPhenotypeAlert: false,
       phenoCurieList: '',
+      phenoComparisonCurieList: '',
       geneCurieList: '',
       messages: [],
       phenotypes: [],
+      phenotypeComparison: [],
       genes: [],
+      diseases: [],
       selectedGroups: [],
+      mode: 'search',
       yAxis: [],
       xAxis: [],
       geneCurieType: 'NCBIGene',
@@ -364,178 +440,187 @@ export default {
           value: 'HGNC'
         }
       ],
-      groupOptions: [
-        {
+      groupOptions: {
+        'human': {
           text: 'Homo sapiens',
-          value: {
-            groupId: '9606',
-            groupName: 'Homo sapiens'
-          }
+          groupId: '9606',
+          groupName: 'Homo sapiens'
         },
-        {
+        'mouse': {
           text: 'Mus musculus (genes)',
-          value: {
-            groupId: '10090',
-            groupName: 'Mus musculus'
-          }
+          groupId: '10090',
+          groupName: 'Mus musculus'
         },
-        {
+        'zebrafish': {
           text: 'Danio rerio (genes)',
-          value: {
-            groupId: '7955',
-            groupName: 'Danio rerio'
-          }
+          groupId: '7955',
+          groupName: 'Danio rerio'
         },
-        {
+        'ff': {
           text: 'Drosophila melanogaster (genes)',
-          value: {
-            groupId: '7227',
-            groupName: 'Drosophila melanogaster'
-          }
+          groupId: '7227',
+          groupName: 'Drosophila melanogaster'
         },
-        {
+        'worm': {
           text: 'Caenorhabditis elegans (genes)',
-          value: {
-            groupId: '6239',
-            groupName: 'Caenorhabditis elegans'
-          }
+          groupId: '6239',
+          groupName: 'Caenorhabditis elegans'
         },
-      ]
+      }
     };
   },
   computed: {
     showComparableList() {
       let show = false;
       if (this.phenotypes.length) {
-        if (this.genes.length || this.selectedGroups) {
+        if (this.genes.length) {
           show = true;
         }
       }
       return show;
     }
   },
+  watch: {
+    comparisonCategory(category) {
+      // Depending on second category, we change text.
+      if (category === 'disease') {
+        this.placeholderComparisonText = 'Search a disease to compare to your profile.';
+        this.searchCompCategories = ['disease'];
+      } else if (category === 'gene') {
+        this.placeholderComparisonText = 'Search a gene to compare to your profile.';
+        this.searchCompCategories = ['gene'];
+      }
+    }
+  },
   created() {
     if (this.$route.params.phenotypes) {
       this.phenoCurieList = this.$route.params.phenotypes;
+      if (this.phenoCurieList.length > 0) {
+        this.currentSubStep = 3;
+      }
     }
-
   },
-  async mounted() {
-    // await this.applyExampleData();
-  },
-
   methods: {
-    displayPhenotypeModal(item) {
-      this.selectedPhenotype = item;
-    },
-
-    displayGeneModal(item) {
-      this.selectedGene = item;
-    },
-
-    // TODO figure out why this needed?
-    async fetchLabel(curie, curieType) {
-      const that = this;
-      try {
-        const searchResponse = await BL.getNodeLabelByCurie(curie);
-        if (curieType === 'phenotype') {
-          this.convertPhenotypes(searchResponse);
-          if (searchResponse.status === 500) {
-            this.showGeneAlert = false;
-          }
-        } else if (curieType === 'gene') {
-          this.convertGenes(searchResponse);
-          if (searchResponse.status === 500) {
-            this.showGeneAlert = true;
-          }
-        }
-      } catch (e) {
-        that.dataError = e;
-        console.log('BioLink Error', e);
+    determineFinished() {
+      // all
+      if (this.comparisonCategory === 'all') {
+        return true;
+      } if (this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
+              && this.selectedGeneGroup != null) {
+        // Selected gene groups and selected a group
+        return true;
       }
+      return (this.geneCustomPathValid() || this.diseasePathValid() || this.phenotypePathValid());
     },
-    async fetchPhenotypes(curie) {
-      const that = this;
-      try {
-        const searchResponse = await BL.getNodeAssociations('disease', curie, 'phenotype');
-        const index = this.phenotypes.map(e => e.curie).indexOf(curie);
-        this.popPhenotype(index);
-        searchResponse.data.associations.forEach((elem) => {
-          this.convertPhenotypes({
-            data: {
-              id: elem.object.id,
-              label: elem.object.label,
-            }
-          });
-        });
-        if (searchResponse.status === 500) {
-          this.showGeneAlert = false;
-        }
-      } catch (e) {
-        that.dataError = e;
-        console.log('BioLink Error', e);
-      }
+    // Resetting step2 comparison profile
+    clearComparisonCategory() {
+      this.comparisonCategory = '';
+      this.genes = [];
+      this.rejectedGeneCuries = [];
+      this.diseases = [];
+      this.geneComparisonCategory = '';
+      this.diseaseComparisonCategory = '';
+      this.phenotypeComparison = [];
+      this.phenotypeComparisonCategory = '';
+      this.selectedGeneGroup = null;
     },
     popPhenotype(ind) {
       this.phenotypes.splice(ind, 1);
     },
-    popGroup() {
-      this.selectedGroups = '';
-    },
     popGene(ind) {
       this.genes.splice(ind, 1);
     },
+    popDisease(ind) {
+      this.diseases.splice(ind, 1);
+    },
+    // Creates a list of phenotypes and stores them in phenotypes after a call using autocomplete
+    // or in phenotypeComparison if we are on step 2
     handlePhenotypes(payload) {
       if (payload.curie.includes('MONDO')) {
-        this.fetchPhenotypes(payload.curie);
+        this.fetchPhenotypes(payload.curie, 'disease');
+      } else if (payload.curie.includes('HGNC')) {
+        this.fetchPhenotypes(payload.curie, 'gene');
+      } else if (this.comparisonCategory === 'phenotypes') {
+        this.phenotypeComparison.push(payload);
+      } else {
+        this.phenotypes.push(payload);
       }
-      this.phenotypes.push(payload);
     },
-    handleReplacePhenotype(payload) {
-      const replaceIndex = findIndex(this.phenotypes, {
-        curie: payload.root
-      });
-      this.phenotypes.splice(replaceIndex, 1);
-      this.phenotypes.push(payload);
-      this.selectedPhenotype = payload;
-    },
+    // Creates a list of genes returned from autocomplete
     handleGenes(payload) {
       this.genes.push(payload);
     },
-    handleReplaceGene(payload) {
-      const replaceIndex = findIndex(this.genes, {
-        curie: payload.root,
-      });
-      this.genes.splice(replaceIndex, 1);
-      this.genes.push(payload);
-      this.selectedGene = payload;
-    },
-    generatePhenogridData() {
-      this.showPhenogrid = true;
-      if (this.selectedGroups) {
-        this.xAxis = this.selectedGroups;
-      } else {
-        this.xAxis = this.genes.map((elem) => {
-          this.mode = 'compare';
-          return elem.curie;
-        });
+    // Creates a list of diseases returned from autocomplete
+    handleDisease(payload) {
+      if (payload.curie.includes('MONDO')) {
+        this.diseases.push(payload);
       }
+    },
+    phenotypePathValid() {
+      return this.comparisonCategory === 'phenotypes' && (this.phenotypeComparisonCategory === 'phenotypes-build' || this.phenotypeComparisonCategory === 'phenotypes-list') && this.phenotypeComparison.length > 0;
+    },
+    diseasePathValid() {
+      return this.comparisonCategory === 'disease' && this.diseaseComparisonCategory === 'disease-specific' && (this.diseases.length > 0 || this.comparisonCategory === 'disease') && this.diseaseComparisonCategory === 'disease-all';
+    },
+    geneCustomPathValid() {
+      return this.comparisonCategory === 'gene' && (this.geneComparisonCategory === 'custom-build' || this.geneComparisonCategory === 'custom-list') && this.genes.length > 0;
+    },
+    // Run Analysis to generate phenogrid and phenotable
+    // conditions must be met for a workflow of this tool
+    runPhenogridAnalysis() {
+      this.xAxis = [];
+      this.yAxis = [];
+      this.pgIndex = 0;
+      if (this.comparisonCategory === 'all' && this.phenotypes.length) {
+        // Search
+        this.mode = 'search';
+        Object.keys(this.groupOptions).forEach((key) => {
+          this.xAxis.push(this.groupOptions[key]);
+        });
+      } else if (this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
+              && this.selectedGeneGroup != null) {
+        // Selected gene groups and selected a group
+        this.mode = 'search';
+        const taxon = this.groupOptions[this.selectedGeneGroup];
+        this.xAxis.push(taxon);
+      } else if (this.geneCustomPathValid()) {
+        // A list of genes
+        this.mode = 'compare';
+        this.genes.map(elem => this.xAxis.push([elem.curie]));
+      } else if (this.diseasePathValid()) {
+        if (this.diseaseComparisonCategory === 'disease-all') {
+          this.mode = 'search';
+          this.xAxis.push(this.groupOptions.human);
+        } else {
+          // a list of diseases
+          this.mode = 'compare';
+          this.diseases.map(elem => this.xAxis.push([elem.curie]));
+        }
+      } else if (this.phenotypePathValid()) {
+        // / A list of phenotypes
+        this.mode = 'compare';
+        this.phenotypeComparison.map(elem => this.xAxis.push([elem.curie]));
+      }
+
       this.phenotypes.forEach(elem => this.yAxis.push({
         id: elem.curie,
         term: elem.match
       }));
+
       this.pgIndex += 1;
+      this.showPhenogrid = true;
     },
-    async geneListLookup() {
-      this.genes = [];
-      this.geneCurieList.split(',').forEach(async (elem) => {
-        await this.fetchLabel(`${this.geneCurieType}:${elem.trim()}`, 'gene');
-      });
-    },
-    async generatePGDataFromPhenotypeList() {
+    getPhenotypesFromEntityList() {
       this.rejectedPhenotypeCuries = [];
-      this.phenotypes = [];
-      this.phenoCurieList.split(',').forEach(async (elem) => {
+      let curieList = [];
+      if (this.comparisonCategory === 'phenotypes') {
+        this.phenotypeComparison = [];
+        curieList = this.phenoComparisonCurieList;
+      } else {
+        this.phenotypes = [];
+        curieList = this.phenoCurieList;
+      }
+      curieList.split(',').forEach(async (elem) => {
         const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
         if (this.acceptedPrefixes.includes(prefix)) {
@@ -546,9 +631,8 @@ export default {
         }
       });
     },
-    generatePGDataFromGeneList() {
+    getGenesFromList() {
       this.rejectedGeneCuries = [];
-      this.genes = [];
       this.geneCurieList.split(',').forEach((elem) => {
         const elemTrimmed = elem.trim();
         const prefix = elemTrimmed.split(':')[0];
@@ -556,230 +640,98 @@ export default {
           this.fetchLabel(elemTrimmed, 'gene');
         } else {
           this.rejectedGeneCuries.push(elemTrimmed);
-          this.showGeneAlert = true;
         }
       });
     },
     convertGenes(elem) {
       const geneData = elem.data;
-      this.genes.push({
+      const gene = {
         curie: geneData.id,
         match: geneData.label
-      });
+      };
+      const exists = this.genes.filter(data => data.curie === gene.curie);
+      if (exists.length === 0) {
+        this.genes.push(gene);
+      }
     },
     convertPhenotypes(elem) {
-      const phenoData = elem.data;
-      this.phenotypes.push({
-        curie: phenoData.id,
-        match: phenoData.label
-      });
+      if (this.comparisonCategory === 'phenotypes') {
+        this.phenotypeComparison.push({
+          curie: elem.data.id,
+          match: elem.data.label
+        });
+      } else {
+        this.phenotypes.push({
+          curie: elem.data.id,
+          match: elem.data.label
+        });
+      }
     },
-
-    async applyExampleData() {
-      const phenogridExampleData = [
-        {
-          'id': 'HP:0000174',
-          'term': 'Abnormality of the palate'
-        },
-        {
-          'id': 'HP:0000194',
-          'term': 'Open mouth'
-        },
-        {
-          'id': 'HP:0000218',
-          'term': 'High palate'
-        },
-        {
-          'id': 'HP:0000238',
-          'term': 'Hydrocephalus'
-        },
-        {
-          'id': 'HP:0000244',
-          'term': 'Brachyturricephaly'
-        },
-        {
-          'id': 'HP:0000272',
-          'term': 'Malar flattening'
-        },
-        {
-          'id': 'HP:0000303',
-          'term': 'Mandibular prognathia'
-        },
-        {
-          'id': 'HP:0000316',
-          'term': 'Hypertelorism'
-        },
-        {
-          'id': 'HP:0000322',
-          'term': 'Short philtrum'
-        },
-        {
-          'id': 'HP:0000324',
-          'term': 'Facial asymmetry'
-        },
-        {
-          'id': 'HP:0000327',
-          'term': 'Hypoplasia of the maxilla'
-        },
-        {
-          'id': 'HP:0000348',
-          'term': 'High forehead'
-        },
-        {
-          'id': 'HP:0000431',
-          'term': 'Wide nasal bridge'
-        },
-        {
-          'id': 'HP:0000452',
-          'term': 'Choanal stenosis'
-        },
-        {
-          'id': 'HP:0000453',
-          'term': 'Choanal atresia'
-        },
-        {
-          'id': 'HP:0000470',
-          'term': 'Short neck'
-        },
-        {
-          'id': 'HP:0000486',
-          'term': 'Strabismus'
-        },
-        {
-          'id': 'HP:0000494',
-          'term': 'Downslanted palpebral fissures'
-        },
-        {
-          'id': 'HP:0000508',
-          'term': 'Ptosis'
-        },
-        {
-          'id': 'HP:0000586',
-          'term': 'Shallow orbits'
-        },
-        {
-          'id': 'HP:0000678',
-          'term': 'Dental crowding'
-        },
-        {
-          'id': 'HP:0001156',
-          'term': 'Brachydactyly syndrome'
-        },
-        {
-          'id': 'HP:0001249',
-          'term': 'Intellectual disability'
-        },
-        {
-          'id': 'HP:0002308',
-          'term': 'Arnold-Chiari malformation'
-        },
-        {
-          'id': 'HP:0002676',
-          'term': 'Cloverleaf skull'
-        },
-        {
-          'id': 'HP:0002780',
-          'term': 'Bronchomalacia'
-        },
-        {
-          'id': 'HP:0003041',
-          'term': 'Humeroradial synostosis'
-        },
-        {
-          'id': 'HP:0003070',
-          'term': 'Elbow ankylosis'
-        },
-        {
-          'id': 'HP:0003196',
-          'term': 'Short nose'
-        },
-        {
-          'id': 'HP:0003272',
-          'term': 'Abnormality of the hip bone'
-        },
-        {
-          'id': 'HP:0003307',
-          'term': 'Hyperlordosis'
-        },
-        {
-          'id': 'HP:0003795',
-          'term': 'Short middle phalanx of toe'
-        },
-        {
-          'id': 'HP:0004209',
-          'term': 'Clinodactyly of the 5th finger'
-        },
-        {
-          'id': 'HP:0004322',
-          'term': 'Short stature'
-        },
-        {
-          'id': 'HP:0004440',
-          'term': 'Coronal craniosynostosis'
-        },
-        {
-          'id': 'HP:0005048',
-          'term': 'Synostosis of carpal bones'
-        },
-        {
-          'id': 'HP:0005280',
-          'term': 'Depressed nasal bridge'
-        },
-        {
-          'id': 'HP:0005347',
-          'term': 'Cartilaginous trachea'
-        },
-        {
-          'id': 'HP:0006101',
-          'term': 'Finger syndactyly'
-        },
-        {
-          'id': 'HP:0006110',
-          'term': 'Shortening of all middle phalanges of the fingers'
-        },
-        {
-          'id': 'HP:0009602',
-          'term': 'Abnormality of thumb phalanx'
-        },
-        {
-          'id': 'HP:0009773',
-          'term': 'Symphalangism affecting the phalanges of the hand'
-        },
-        {
-          'id': 'HP:0010055',
-          'term': 'Broad hallux'
-        },
-        {
-          'id': 'HP:0010669',
-          'term': 'Hypoplasia of the zygomatic bone'
-          // Monarch says this EquivalentTo HP:0000272: 'Malar flattening'
-        },
-        {
-          'id': 'HP:0011304',
-          'term': 'Broad thumb'
+    async fetchLabel(curie, curieType) {
+      const that = this;
+      try {
+        const searchResponse = await biolinkService.getNodeLabelByCurie(curie);
+        if (curieType === 'phenotype') {
+          this.convertPhenotypes(searchResponse);
+        } else if (curieType === 'gene') {
+          this.convertGenes(searchResponse);
         }
-      ];
-
-      this.phenoCurieList = phenogridExampleData.map(function getId(s) {
-        return s.id;
-      }).join(',');
-
-      this.geneCurieList = 'NCBIGene:3845,HGNC:2176';
-
-      this.selectedGroups = [this.groupOptions[0].value, this.groupOptions[1].value, this.groupOptions[2].value];
-
-      await this.generatePGDataFromPhenotypeList();
-      await this.generatePGDataFromGeneList();
+      } catch (e) {
+        that.dataError = e;
+        this.rejectedGeneCuries.push(curie);
+        console.log('BioLink Error', e);
+      }
+    },
+    async fetchPhenotypes(curie, nodeIdentifier) {
+      const that = this;
+      try {
+        const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
+        const phenotypeComparisonRef = this.phenotypeComparison;
+        const phenotypeRef = this.phenotypes;
+        const categoryRef = this.comparisonCategory;
+        searchResponse.data.associations.forEach((elem) => {
+          if (categoryRef === 'phenotypes') {
+            phenotypeComparisonRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          } else {
+            phenotypeRef.push({
+              curie: elem.object.id,
+              match: elem.object.label
+            });
+          }
+        });
+      } catch (e) {
+        that.dataError = e;
+        console.log('BioLink Error', e);
+      }
     },
   }
 };
 </script>
 
-<style>
+<style lang="scss">
+  @import "~@/style/variables";
+
+  .center-text {
+    text-align: center;
+  }
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
+
+  .group-badge-phenotypes .pop-phenotype {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+  }
+
+  .group-badge-phenotypes .more-info {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
+
   .wizard-style {
     margin-top: 100px;
   }
@@ -796,7 +748,94 @@ export default {
     padding-left: 4px;
     padding-right: 0;
   }
+
   .full-height {
     height: 100%;
+  }
+
+  .step-1-btn-group {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  .confirm-profile{
+    max-width: 200px;
+    width: 100%;
+    margin-top: 2rem;
+    color: #17a2b8;
+    border-color: #17a2b8;
+  }
+
+  .reset-profile {
+    max-width: 200px;
+    width: 100%;
+    margin-top: 2rem;
+    color: #17a2b8;
+    border-color: #17a2b8;
+    margin-left: 1rem;
+  }
+
+  .comparison-category-select {
+    text-align: center;
+  }
+
+  .comparison-category-edit {
+    padding: 0.1rem 0.5rem;
+  }
+
+  .edit-profile{
+    max-width: 200px;
+    width: 100%;
+    align-self: flex-end;
+  }
+
+  .current-profile {
+    color: #888888;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+  .current-phenotype-profile {
+    color: #888888;
+    flex: 0 0 100%;
+    margin-top: 25px;
+    cursor: pointer;
+    font-size: 1.2rem;
+
+    & .fa {
+      margin-left: 1rem;
+    }
+
+    &.collapsed > .when-opened, &:not(.collapsed) > .when-closed {
+      display: none;
+    }
+
+    &:hover {
+      opacity: 0.8;
+    }
+
+    & #collapse-phenotypes{
+      margin-top: 1rem;
+    }
+  }
+
+  .run-analysis {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    button {
+      align-self: flex-end;
+    }
+  }
+
+  .edit-comparison {
+    align-self: flex-end;
+  }
+
+  .submit {
+    cursor: pointer;
   }
 </style>
