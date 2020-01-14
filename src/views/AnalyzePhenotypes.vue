@@ -24,7 +24,7 @@
             </b-button>
           </h4>
           <div v-if="currentSubStep === 1" class="center-text">
-            <h6 class="center-text">How would like to continue?</h6>
+            <h6 class="center-text">How would you like to continue?</h6>
             <b-form-group>
               <b-button-group>
                 <b-button variant="outline-info" @click="currentSubStep = 2">Search & Build</b-button>
