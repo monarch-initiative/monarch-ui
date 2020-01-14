@@ -240,8 +240,8 @@ export default {
   },
   mounted() {
     if (this.definedCategories) {
-      if(this.definedCategories.length > 1){
-        this.options.push({text: "All", value: "all-subset"})
+      if (this.definedCategories.length > 1) {
+        this.options.push({ text: 'All', value: 'all-subset' });
       }
       this.definedCategories.forEach((elem) => {
         this.options.push({
@@ -249,10 +249,10 @@ export default {
           value: elem,
         });
       });
-      if(this.definedCategories.length == 1 ){
+      if (this.definedCategories.length === 1) {
         this.category = this.options[0].value;
       } else {
-        this.category = "all-subset";
+        this.category = 'all-subset';
       }
     } else {
       this.options = [
@@ -298,8 +298,8 @@ export default {
     ),
     async fetchData() {
       try {
-        let searchResponse; 
-        if(this.category == 'all-subset'){
+        let searchResponse;
+        if (this.category === 'all-subset') {
           searchResponse = await biolink.getSearchTermSuggestions(this.value, this.definedCategories, this.allowedPrefixes);
         } else {
           searchResponse = await biolink.getSearchTermSuggestions(this.value, this.category, this.allowedPrefixes);

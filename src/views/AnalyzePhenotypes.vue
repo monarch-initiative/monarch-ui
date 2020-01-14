@@ -3,105 +3,122 @@
     <div class="row">
       <div class="offset-2 col-8 text-center">
         <h2 class="page-title">Phenotype Profile Search</h2>
-        <p>This Phenotype Profile Search enables you search our database using our 
+        <p>This Phenotype Profile Search enables you search our database using our
           <a href="https://github.com/biolink/biolink-api" target="_blank">BioLink analysis</a>
           engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
           their overlap.</p>
       </div>
     </div>
-    <div class="row" v-if="!showPhenogrid">
+    <div v-if="!showPhenogrid" class="row">
       <div class="col-1"/>
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
           <h4 class="center-text">Create A Profile of Phenotypes
-            <b-button class="comparison-category-edit" v-if="currentSubStep !== 1" variant="outline-info" v-on:click="currentSubStep = 1; phenotypes = []">
-              <i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Input
+            <b-button
+              v-if="currentSubStep !== 1"
+              class="comparison-category-edit"
+              variant="outline-info"
+              @click="currentSubStep = 1; phenotypes = []">
+              <i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Input
             </b-button>
           </h4>
-          <div class="center-text" v-if="currentSubStep === 1">
+          <div v-if="currentSubStep === 1" class="center-text">
             <h6 class="center-text">How would like to continue?</h6>
             <b-form-group>
               <b-button-group>
-                <b-button variant="outline-info" v-on:click="currentSubStep = 2">Search & Build</b-button>
-                <b-button variant="outline-info" v-on:click="currentSubStep = 3">I have a phenotype list</b-button>
+                <b-button variant="outline-info" @click="currentSubStep = 2">Search & Build</b-button>
+                <b-button variant="outline-info" @click="currentSubStep = 3">I have a phenotype list</b-button>
               </b-button-group>
             </b-form-group>
           </div>
           <div v-if="currentSubStep === 2">
             <monarch-autocomplete
-                    :home-search="false"
-                    :allowed-prefixes="acceptedPrefixes"
-                    :defined-categories="searchPhenoCategories"
-                    :dynamic-placeholder="phenoSearchPH"
-                    @interface="handlePhenotypes"
+              :home-search="false"
+              :allowed-prefixes="acceptedPrefixes"
+              :defined-categories="searchPhenoCategories"
+              :dynamic-placeholder="phenoSearchPH"
+              @interface="handlePhenotypes"
             />
             <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
           </div>
           <div v-if="currentSubStep === 3">
             <b-form-textarea
-                    id="textarea1"
-                    v-model="phenoCurieList"
-                    :rows="3"
-                    :max-rows="6"
-                    placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
-                    class="my-2"
-            ></b-form-textarea>
+              id="textarea1"
+              v-model="phenoCurieList"
+              :rows="3"
+              :max-rows="6"
+              placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+              class="my-2"
+            />
             <div
-                    v-if="phenoCurieList"
-                    class="btn btn-outline-info submit"
-                    @click="getPhenotypesFromEntityList"
+              v-if="phenoCurieList"
+              class="btn btn-outline-info submit"
+              @click="getPhenotypesFromEntityList"
             >
               Confirm Phenotype List
             </div>
             <b-alert
-                    :show="showPhenotypeAlert"
-                    variant="danger"
-                    class="my-2"
-                    dismissible
-                    @dismissed="showPhenotypeAlert=false"
+              :show="showPhenotypeAlert"
+              variant="danger"
+              class="my-2"
+              dismissible
+              @dismissed="showPhenotypeAlert=false"
             >
               Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
               HP:0000002)
             </b-alert>
           </div>
         </div>
-        <div class="flex-container" v-if="phenotypes.length && !this.showPhenogrid">
-          <b-button variant="light"
-                    :class="showCollapse ? 'collapsed' : null"
-                    :aria-expanded="showCollapse ? 'true' : 'false'"
-                    aria-controls="collapse-4"
-                    @click="showCollapse = !showCollapse"
-                    class="m-1 current-phenotype-profile">
-            Current Phenotype Profile ( {{phenotypes.length}} phenotypes )
-            <i class="fa fa-chevron-down" v-if="showCollapse" aria-hidden="true"></i>
-            <i class="fa fa-chevron-right" v-if="!showCollapse" aria-hidden="true"></i>
+        <div v-if="phenotypes.length && !showPhenogrid" class="flex-container">
+          <b-button
+            :class="showCollapse ? 'collapsed' : null"
+            :aria-expanded="showCollapse ? 'true' : 'false'"
+            variant="light"
+            aria-controls="collapse-4"
+            class="m-1 current-phenotype-profile"
+            @click="showCollapse = !showCollapse">
+            Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
+            <i v-if="showCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
+            <i v-if="!showCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
           </b-button>
           <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
-                <div
-                        v-for="(phenotype, index) in phenotypes"
-                        :key="index"
-                        class="m-1 group-badge-phenotypes"
-                        >
-                  <div class="btn-group" role="group">
-                  <button class="btn btn-sm btn-info more-info">
-                    <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
-                  </button>
-                  <button
-                          type="button"
-                          class="btn btn-sm btn-info pop-phenotype"
-                          @click="popPhenotype(index)"
-                  >
-                    <strong>x</strong>
-                  </button>
-                  </div>
-                </div>
+            <div
+              v-for="(phenotype, index) in phenotypes"
+              :key="index"
+              class="m-1 group-badge-phenotypes"
+            >
+              <div class="btn-group" role="group">
+                <button class="btn btn-sm btn-info more-info">
+                  <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info pop-phenotype"
+                  @click="popPhenotype(index)"
+                >
+                  <strong>x</strong>
+                </button>
+              </div>
+            </div>
           </b-collapse>
         </div>
         <div class="step-1-btn-group">
-          <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="currentStep = 2; showCollapse = false" variant="outline-primary" class="confirm-profile">Confirm Profile</b-button>
-          <b-button v-if="currentStep === 1 && phenotypes.length" v-on:click="phenotypes = []; currentSubStep = 1;" variant="outline-primary" class="reset-profile">Reset Profile</b-button>
-          <b-button v-if="currentStep === 2 && phenotypes.length" v-on:click="currentStep = 1; clearComparisonCategory" variant="outline-dark" class="edit-profile">Edit Profile</b-button>
+          <b-button
+            v-if="currentStep === 1 && phenotypes.length"
+            variant="outline-primary"
+            class="confirm-profile"
+            @click="currentStep = 2; showCollapse = false">Confirm Profile</b-button>
+          <b-button
+            v-if="currentStep === 1 && phenotypes.length"
+            variant="outline-primary"
+            class="reset-profile"
+            @click="phenotypes = []; currentSubStep = 1;">Reset Profile</b-button>
+          <b-button
+            v-if="currentStep === 2 && phenotypes.length"
+            variant="outline-dark"
+            class="edit-profile"
+            @click="currentStep = 1; clearComparisonCategory">Edit Profile</b-button>
         </div>
       </div>
       <!-- end of step 1 -->
@@ -116,129 +133,129 @@
           <h5>What would you like to compare your profile with?</h5>
           <b-form-group>
             <b-button-group>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'all'">Everything</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'disease'">Disease Profile</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'gene'">Gene Profile</b-button>
-              <b-button variant="outline-info" v-on:click="comparisonCategory = 'phenotypes'">Phenotype Profile</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'all'">Everything</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'disease'">Disease Profile</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'gene'">Gene Profile</b-button>
+              <b-button variant="outline-info" @click="comparisonCategory = 'phenotypes'">Phenotype Profile</b-button>
             </b-button-group>
           </b-form-group>
         </div>
         <div v-if="comparisonCategory">
           <h4 class="center-text">
-            Select your {{comparisonCategory}} profile for comparison
-            <b-button class="comparison-category-edit" variant="outline-info" v-on:click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"></i> Change Profile </b-button>
+            Select your {{ comparisonCategory }} profile for comparison
+            <b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Profile </b-button>
           </h4>
           <div v-if="comparisonCategory === 'gene'">
             <b-form-group class="center-text">
               <b-button-group>
-                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'gene-group'">Taxon Grouped Genes</b-button>
-                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'custom-build'">Search & Build</b-button>
-                <b-button variant="outline-info" v-on:click="geneComparisonCategory = 'custom-list'; genes = []">I have gene a list</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'gene-group'">Taxon Grouped Genes</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-build'">Search & Build</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-list'; genes = []">I have gene a list</b-button>
               </b-button-group>
             </b-form-group>
             <div v-if="geneComparisonCategory === 'gene-group'">
-              <b-form-select v-model="selectedGeneGroup" :options="targetGeneGroups"></b-form-select>
+              <b-form-select v-model="selectedGeneGroup" :options="targetGeneGroups"/>
             </div>
             <div v-if="geneComparisonCategory === 'custom-build'">
               <monarch-autocomplete
-                      :home-search="false"
-                      :defined-categories="searchCompCategories"
-                      :dynamic-placeholder="placeholderComparisonText"
-                      @interface="handleGenes"
+                :home-search="false"
+                :defined-categories="searchCompCategories"
+                :dynamic-placeholder="placeholderComparisonText"
+                @interface="handleGenes"
               />
             </div>
             <div v-if="geneComparisonCategory === 'custom-list'">
               <b-form-textarea
-                      id="textarea2"
-                      v-if="comparisonCategory === 'gene'"
-                      v-model="geneCurieList"
-                      :rows="3"
-                      :max-rows="6"
-                      placeholder="Enter a comma separated list of prefixed gene ids from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)"
-                      class="my-2"
-              ></b-form-textarea>
+                v-if="comparisonCategory === 'gene'"
+                id="textarea2"
+                v-model="geneCurieList"
+                :rows="3"
+                :max-rows="6"
+                placeholder="Enter a comma separated list of prefixed gene ids from NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)"
+                class="my-2"
+              />
               <div v-if="geneCurieList" class="btn btn-outline-info submit" @click="getGenesFromList">
                 Confirm Gene List
               </div>
               <b-alert
-                      :show="rejectedGeneCuries.length > 0"
-                      variant="danger"
-                      class="my-2"
-                      dismissible
-                      @dismissed="rejectedGeneCuries.length == 0"
+                :show="rejectedGeneCuries.length > 0"
+                variant="danger"
+                class="my-2"
+                dismissible
+                @dismissed="rejectedGeneCuries.length == 0"
               >
                 Error: {{ rejectedGeneCuries }} <br> Gene curie format incorrect should be one of NCBI (e.g. NCBIGene:3845) or HGNC (e.g. HGNC:2176)
               </b-alert>
             </div>
             <div v-if="genes.length > 0">
-                <p class="current-profile">Current Gene Comparisons</p>
-                <div class="flex-container">
+              <p class="current-profile">Current Gene Comparisons</p>
+              <div class="flex-container">
                 <div
-                        v-for="(gene, index) in genes"
-                        :key="index"
-                        class="m-1 group-badge-phenotypes"
+                  v-for="(gene, index) in genes"
+                  :key="index"
+                  class="m-1 group-badge-phenotypes"
                 >
                   <div class="btn-group" role="group">
                     <button class="btn btn-sm btn-info more-info">
                       <strong>{{ gene.match }}</strong> | {{ gene.curie }}
                     </button>
                     <button
-                            type="button"
-                            class="btn btn-sm btn-info pop-phenotype"
-                            @click="popGene(index)"
+                      type="button"
+                      class="btn btn-sm btn-info pop-phenotype"
+                      @click="popGene(index)"
                     >
                       <strong>x</strong>
                     </button>
                   </div>
                 </div>
-                </div>
               </div>
+            </div>
           </div>
           <div v-if="comparisonCategory === 'disease'">
             <b-form-group class="center-text">
-                <b-button-group>
-                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-all'">All Human Diseases</b-button>
-                  <b-button variant="outline-info" v-on:click="diseaseComparisonCategory = 'disease-specific'">Specific Disease(s)</b-button>
-                </b-button-group>
+              <b-button-group>
+                <b-button variant="outline-info" @click="diseaseComparisonCategory = 'disease-all'">All Human Diseases</b-button>
+                <b-button variant="outline-info" @click="diseaseComparisonCategory = 'disease-specific'">Specific Disease(s)</b-button>
+              </b-button-group>
             </b-form-group>
             <div v-if="diseaseComparisonCategory == 'disease-specific'">
-            <monarch-autocomplete
-                    :home-search="false"
-                    :defined-categories="searchCompCategories"
-                    :dynamic-placeholder="placeholderComparisonText"
-                    @interface="handleDisease"
-            />
-            <div v-if="diseases.length > 0">
-              <p class="current-profile">Current Disease Comparisons</p>
-              <div class="flex-container">
-              <div
-                      v-for="(disease, index) in diseases"
-                      :key="index"
-                      class="m-1 group-badge-phenotypes"
-              >
-                <div class="btn-group" role="group">
-                  <button class="btn btn-sm btn-info more-info">
-                    <strong>{{ disease.match }}</strong> | {{ disease.curie }}
-                  </button>
-                  <button
-                          type="button"
-                          class="btn btn-sm btn-info pop-phenotype"
-                          @click="popDisease(index)"
+              <monarch-autocomplete
+                :home-search="false"
+                :defined-categories="searchCompCategories"
+                :dynamic-placeholder="placeholderComparisonText"
+                @interface="handleDisease"
+              />
+              <div v-if="diseases.length > 0">
+                <p class="current-profile">Current Disease Comparisons</p>
+                <div class="flex-container">
+                  <div
+                    v-for="(disease, index) in diseases"
+                    :key="index"
+                    class="m-1 group-badge-phenotypes"
                   >
-                    <strong>x</strong>
-                  </button>
+                    <div class="btn-group" role="group">
+                      <button class="btn btn-sm btn-info more-info">
+                        <strong>{{ disease.match }}</strong> | {{ disease.curie }}
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-info pop-phenotype"
+                        @click="popDisease(index)"
+                      >
+                        <strong>x</strong>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              </div>
-            </div>
             </div>
           </div>
           <div v-if="comparisonCategory === 'phenotypes'">
-              <b-form-group class="center-text">
-                <b-button-group>
-                  <b-button variant="outline-info" v-on:click="phenotypeComparisonCategory = 'phenotypes-build'">Search & Build</b-button>
-                  <b-button variant="outline-info" v-on:click="phenotypeComparisonCategory = 'phenotypes-list'">I have a phenotype list</b-button>
-                </b-button-group>
+            <b-form-group class="center-text">
+              <b-button-group>
+                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-build'">Search & Build</b-button>
+                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-list'">I have a phenotype list</b-button>
+              </b-button-group>
             </b-form-group>
             <div v-if="phenotypeComparisonCategory == 'phenotypes-build'">
               <monarch-autocomplete
@@ -276,40 +293,41 @@
                 Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
                 HP:0000002)
               </b-alert>
-          </div>
-          <div class="flex-container" v-if="phenotypeComparison.length > 0">
-            <b-button variant="light"
-                    :class="showComparisonCollapse ? 'collapsed' : null"
-                    :aria-expanded="showComparisonCollapse ? 'true' : 'false'"
-                    aria-controls="collapse-4"
-                    @click="showComparisonCollapse = !showComparisonCollapse"
-                    class="m-1 current-phenotype-profile">
-            Comparison Phenotype Profile ( {{phenotypeComparison.length}} phenotypes )
-            <i class="fa fa-chevron-down" v-if="showComparisonCollapse" aria-hidden="true"></i>
-            <i class="fa fa-chevron-right" v-if="!showComparisonCollapse" aria-hidden="true"></i>
-          </b-button>
-          <b-collapse id="collapse-phenotypes" v-model="showComparisonCollapse" class="flex-container">
+            </div>
+            <div v-if="phenotypeComparison.length > 0" class="flex-container">
+              <b-button
+                :class="showComparisonCollapse ? 'collapsed' : null"
+                :aria-expanded="showComparisonCollapse ? 'true' : 'false'"
+                variant="light"
+                aria-controls="collapse-4"
+                class="m-1 current-phenotype-profile"
+                @click="showComparisonCollapse = !showComparisonCollapse">
+                Comparison Phenotype Profile ( {{ phenotypeComparison.length }} phenotypes )
+                <i v-if="showComparisonCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
+                <i v-if="!showComparisonCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
+              </b-button>
+              <b-collapse id="collapse-phenotypes" v-model="showComparisonCollapse" class="flex-container">
                 <div
-                        v-for="(phenotype, index) in phenotypeComparison"
-                        :key="index"
-                        class="m-1 group-badge-phenotypes"
-                        >
+                  v-for="(phenotype, index) in phenotypeComparison"
+                  :key="index"
+                  class="m-1 group-badge-phenotypes"
+                >
                   <div class="btn-group" role="group">
-                  <button class="btn btn-sm btn-info more-info">
-                    <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
-                  </button>
-                  <button
-                          type="button"
-                          class="btn btn-sm btn-info pop-phenotype"
-                          @click="popPhenotype(index)"
-                  >
-                    <strong>x</strong>
-                  </button>
+                    <button class="btn btn-sm btn-info more-info">
+                      <strong>{{ phenotype.match }}</strong> | {{ phenotype.curie }}
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-info pop-phenotype"
+                      @click="popPhenotype(index)"
+                    >
+                      <strong>x</strong>
+                    </button>
                   </div>
                 </div>
-          </b-collapse>
+              </b-collapse>
+            </div>
           </div>
-        </div>
           <div v-if="determineFinished()" class="run-analysis">
             <button class="btn btn-outline-success" @click="runPhenogridAnalysis()">
               Run Similarity Analysis
@@ -321,12 +339,12 @@
       <div class="col-1"/>
     </div>
     <!--results below here based on path chosen-->
-    <div class="results" v-if="showPhenogrid">
+    <div v-if="showPhenogrid" class="results">
       <div class="row">
         <div class="col-1"/>
         <div class="col-10 card">
           <p class="current-profile">Similarity Results</p>
-          <b-button v-on:click="currentStep = 1; showCollapse = true; showPhenogrid = false;" variant="outline-dark" class="edit-profile">Back</b-button>
+          <b-button variant="outline-dark" class="edit-profile" @click="currentStep = 1; showCollapse = true; showPhenogrid = false;">Back</b-button>
           <pheno-grid
             :x-axis="xAxis"
             :y-axis="yAxis"
@@ -341,7 +359,7 @@
         </div>
         <div class="col-1"/>
       </div>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -375,11 +393,11 @@ export default {
       searchPhenoCategories: ['phenotype', 'disease', 'gene'],
       searchCompCategories: [],
       targetGeneGroups: [
-        { value: null, text: "Select by taxon"},
+        { value: null, text: 'Select by taxon' },
         { value: 'mouse', text: 'Mouse (genes)' },
         { value: 'zebrafish', text: 'Zebrafish (genes)' },
         { value: 'ff', text: 'Fruit fly (genes)' },
-        { value: 'worm', text: 'Nematode (genes)'}
+        { value: 'worm', text: 'Nematode (genes)' }
       ],
       selectedGeneGroup: null,
       currentStep: 1,
@@ -423,41 +441,33 @@ export default {
         }
       ],
       groupOptions: {
-          "human":  {
-            text: 'Homo sapiens',
-            groupId: '9606',
-            groupName: 'Homo sapiens'
-          },
-          "mouse": {
-            text: 'Mus musculus (genes)',
-            groupId: '10090',
-            groupName: 'Mus musculus'
-          },
-          "zebrafish":  {
-            text: 'Danio rerio (genes)',
-            groupId: '7955',
-            groupName: 'Danio rerio'
-          },
-          "ff": {
-            text: 'Drosophila melanogaster (genes)',
-            groupId: '7227',
-            groupName: 'Drosophila melanogaster'
-          },
-          "worm":  {
-            text: 'Caenorhabditis elegans (genes)',
-            groupId: '6239',
-            groupName: 'Caenorhabditis elegans'
-          },
-        }
-    };
-  },
-  created() {
-    if (this.$route.params.phenotypes) {
-      this.phenoCurieList = this.$route.params.phenotypes;
-      if(this.phenoCurieList.length > 0){
-        this.currentSubStep = 3;
+        'human': {
+          text: 'Homo sapiens',
+          groupId: '9606',
+          groupName: 'Homo sapiens'
+        },
+        'mouse': {
+          text: 'Mus musculus (genes)',
+          groupId: '10090',
+          groupName: 'Mus musculus'
+        },
+        'zebrafish': {
+          text: 'Danio rerio (genes)',
+          groupId: '7955',
+          groupName: 'Danio rerio'
+        },
+        'ff': {
+          text: 'Drosophila melanogaster (genes)',
+          groupId: '7227',
+          groupName: 'Drosophila melanogaster'
+        },
+        'worm': {
+          text: 'Caenorhabditis elegans (genes)',
+          groupId: '6239',
+          groupName: 'Caenorhabditis elegans'
+        },
       }
-    }
+    };
   },
   computed: {
     showComparableList() {
@@ -473,7 +483,7 @@ export default {
   watch: {
     comparisonCategory(category) {
       // Depending on second category, we change text.
-      if(category === 'disease') {
+      if (category === 'disease') {
         this.placeholderComparisonText = 'Search a disease to compare to your profile.';
         this.searchCompCategories = ['disease'];
       } else if (category === 'gene') {
@@ -482,20 +492,28 @@ export default {
       }
     }
   },
+  created() {
+    if (this.$route.params.phenotypes) {
+      this.phenoCurieList = this.$route.params.phenotypes;
+      if (this.phenoCurieList.length > 0) {
+        this.currentSubStep = 3;
+      }
+    }
+  },
   methods: {
     determineFinished() {
       // all
-      if(this.comparisonCategory === 'all'){
+      if (this.comparisonCategory === 'all') {
         return true;
-      } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
-              && this.selectedGeneGroup != null){
+      } if (this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
+              && this.selectedGeneGroup != null) {
         // Selected gene groups and selected a group
         return true;
       }
       return (this.geneCustomPathValid() || this.diseasePathValid() || this.phenotypePathValid());
     },
     // Resetting step2 comparison profile
-    clearComparisonCategory(){
+    clearComparisonCategory() {
       this.comparisonCategory = '';
       this.genes = [];
       this.rejectedGeneCuries = [];
@@ -513,16 +531,16 @@ export default {
       this.genes.splice(ind, 1);
     },
     popDisease(ind) {
-      this.diseases.splice(ind,1);
+      this.diseases.splice(ind, 1);
     },
     // Creates a list of phenotypes and stores them in phenotypes after a call using autocomplete
     // or in phenotypeComparison if we are on step 2
     handlePhenotypes(payload) {
       if (payload.curie.includes('MONDO')) {
         this.fetchPhenotypes(payload.curie, 'disease');
-      } else if (payload.curie.includes('HGNC')){
+      } else if (payload.curie.includes('HGNC')) {
         this.fetchPhenotypes(payload.curie, 'gene');
-      } else if(this.comparisonCategory == "phenotypes"){
+      } else if (this.comparisonCategory === 'phenotypes') {
         this.phenotypeComparison.push(payload);
       } else {
         this.phenotypes.push(payload);
@@ -538,13 +556,13 @@ export default {
         this.diseases.push(payload);
       }
     },
-    phenotypePathValid(){ 
+    phenotypePathValid() {
       return this.comparisonCategory === 'phenotypes' && (this.phenotypeComparisonCategory === 'phenotypes-build' || this.phenotypeComparisonCategory === 'phenotypes-list') && this.phenotypeComparison.length > 0;
     },
     diseasePathValid() {
-      return this.comparisonCategory === 'disease' && this.diseaseComparisonCategory == 'disease-specific' && this.diseases.length > 0 || this.comparisonCategory == 'disease' && this.diseaseComparisonCategory == 'disease-all';
+      return this.comparisonCategory === 'disease' && this.diseaseComparisonCategory === 'disease-specific' && (this.diseases.length > 0 || this.comparisonCategory === 'disease') && this.diseaseComparisonCategory === 'disease-all';
     },
-    geneCustomPathValid(){
+    geneCustomPathValid() {
       return this.comparisonCategory === 'gene' && (this.geneComparisonCategory === 'custom-build' || this.geneComparisonCategory === 'custom-list') && this.genes.length > 0;
     },
     // Run Analysis to generate phenogrid and phenotable
@@ -553,37 +571,37 @@ export default {
       this.xAxis = [];
       this.yAxis = [];
       this.pgIndex = 0;
-      if(this.comparisonCategory === 'all' && this.phenotypes.length){
+      if (this.comparisonCategory === 'all' && this.phenotypes.length) {
         // Search
-        this.mode = "search";
-        Object.keys(this.groupOptions).forEach(key => {
+        this.mode = 'search';
+        Object.keys(this.groupOptions).forEach((key) => {
           this.xAxis.push(this.groupOptions[key]);
         });
-      } else if(this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
-              && this.selectedGeneGroup != null){
+      } else if (this.comparisonCategory === 'gene' && this.geneComparisonCategory === 'gene-group'
+              && this.selectedGeneGroup != null) {
         // Selected gene groups and selected a group
-        this.mode = "search";
+        this.mode = 'search';
         const taxon = this.groupOptions[this.selectedGeneGroup];
         this.xAxis.push(taxon);
-      } else if(this.geneCustomPathValid()){
-          // A list of genes
-          this.mode = "compare";
-          this.genes.map((elem) => this.xAxis.push([elem.curie]));
-      } else if(this.diseasePathValid()){
-        if(this.diseaseComparisonCategory == 'disease-all'){
-          this.mode = "search";
-          this.xAxis.push(this.groupOptions["human"]);
+      } else if (this.geneCustomPathValid()) {
+        // A list of genes
+        this.mode = 'compare';
+        this.genes.map(elem => this.xAxis.push([elem.curie]));
+      } else if (this.diseasePathValid()) {
+        if (this.diseaseComparisonCategory === 'disease-all') {
+          this.mode = 'search';
+          this.xAxis.push(this.groupOptions.human);
         } else {
           // a list of diseases
-          this.mode = "compare";
-          this.diseases.map((elem) => this.xAxis.push([elem.curie]));
+          this.mode = 'compare';
+          this.diseases.map(elem => this.xAxis.push([elem.curie]));
         }
-      } else if(this.phenotypePathValid()){
-        /// A list of phenotypes
-        this.mode = "compare";
-        this.phenotypeComparison.map((elem) => this.xAxis.push([elem.curie]));
+      } else if (this.phenotypePathValid()) {
+        // / A list of phenotypes
+        this.mode = 'compare';
+        this.phenotypeComparison.map(elem => this.xAxis.push([elem.curie]));
       }
-      
+
       this.phenotypes.forEach(elem => this.yAxis.push({
         id: elem.curie,
         term: elem.match
@@ -595,7 +613,7 @@ export default {
     getPhenotypesFromEntityList() {
       this.rejectedPhenotypeCuries = [];
       let curieList = [];
-      if(this.comparisonCategory == 'phenotypes'){
+      if (this.comparisonCategory === 'phenotypes') {
         this.phenotypeComparison = [];
         curieList = this.phenoComparisonCurieList;
       } else {
@@ -631,25 +649,25 @@ export default {
         curie: geneData.id,
         match: geneData.label
       };
-      const exists = this.genes.filter((data) => data.curie === gene.curie);
-      if(exists.length === 0){
+      const exists = this.genes.filter(data => data.curie === gene.curie);
+      if (exists.length === 0) {
         this.genes.push(gene);
       }
     },
     convertPhenotypes(elem) {
-      if(this.comparisonCategory == 'phenotypes'){
-         this.phenotypeComparison.push({
+      if (this.comparisonCategory === 'phenotypes') {
+        this.phenotypeComparison.push({
           curie: elem.data.id,
           match: elem.data.label
         });
       } else {
-         this.phenotypes.push({
+        this.phenotypes.push({
           curie: elem.data.id,
           match: elem.data.label
         });
       }
     },
-        async fetchLabel(curie, curieType) {
+    async fetchLabel(curie, curieType) {
       const that = this;
       try {
         const searchResponse = await biolinkService.getNodeLabelByCurie(curie);
@@ -672,7 +690,7 @@ export default {
         const phenotypeRef = this.phenotypes;
         const categoryRef = this.comparisonCategory;
         searchResponse.data.associations.forEach((elem) => {
-          if(categoryRef == "phenotypes"){
+          if (categoryRef === 'phenotypes') {
             phenotypeComparisonRef.push({
               curie: elem.object.id,
               match: elem.object.label

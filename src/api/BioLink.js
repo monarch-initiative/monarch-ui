@@ -413,10 +413,10 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
 
   if (!category || category === 'all') {
     category = categoriesAll;
-  } else if(!Array.isArray(category)) {
+  } else if (!Array.isArray(category)) {
     category = [category];
   }
-  
+
   category.forEach((elem) => {
     params.append('category', elem);
   });
