@@ -525,7 +525,11 @@ export default {
       this.selectedGeneGroup = null;
     },
     popPhenotype(ind) {
-      this.phenotypes.splice(ind, 1);
+      if(this.comparisonCategory === 'phenotypes'){
+        this.phenotypeComparison.splice(ind, 1);
+      } else {
+        this.phenotypes.splice(ind, 1);
+      }
     },
     popGene(ind) {
       this.genes.splice(ind, 1);

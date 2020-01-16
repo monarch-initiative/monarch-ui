@@ -1,4 +1,5 @@
-import '@babel/polyfill';
+// Avoiding polyfill collision
+//import '@babel/polyfill'; 
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
 import axios from 'axios';
