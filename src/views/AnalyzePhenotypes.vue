@@ -724,11 +724,7 @@ export default {
   .center-text {
     text-align: center;
   }
-
-  .step-identifier {
-    float: left;
-  }
-
+  
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
