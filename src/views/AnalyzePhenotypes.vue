@@ -14,13 +14,13 @@
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
-          <h4 class="center-text">Create A Profile of Phenotypes
+          <h4 class="text-center">1. Create A Profile of Phenotypes
             <b-button
               v-if="currentSubStep !== 1"
               class="comparison-category-edit"
               variant="outline-info"
               @click="currentSubStep = 1; phenotypes = []">
-              <i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Input
+              <i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Edit Selection
             </b-button>
           </h4>
           <div v-if="currentSubStep === 1" class="center-text">
@@ -78,9 +78,10 @@
             aria-controls="collapse-4"
             class="m-1 current-phenotype-profile"
             @click="showCollapse = !showCollapse">
-            Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
-            <i v-if="showCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
-            <i v-if="!showCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
+            <i v-if="showCollapse" class="fa fa-eye" aria-hidden="true"/>
+            <i v-if="!showCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
+            &nbsp;Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
+            
           </b-button>
           <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
             <div
@@ -130,7 +131,7 @@
       <div class="col-1"/>
       <div class="col-10 card card-body">
         <div v-if="currentStep === 2 && !comparisonCategory" class="comparison-category-select">
-          <h5>What would you like to compare your profile with?</h5>
+          <h5>2. What would you like to compare your profile with?</h5>
           <b-form-group>
             <b-button-group>
               <b-button variant="outline-info" @click="comparisonCategory = 'all'">Everything</b-button>
@@ -142,8 +143,9 @@
         </div>
         <div v-if="comparisonCategory">
           <h4 class="center-text">
-            Select your {{ comparisonCategory }} profile for comparison
-            <b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Change Profile </b-button>
+            <span v-if="comparisonCategory != 'all'">Build your {{ comparisonCategory }} profile for comparison</span>
+            <span v-if="comparisonCategory == 'all'">Comparing everything.</span>
+            &nbsp;<b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Edit Selection </b-button>
           </h4>
           <div v-if="comparisonCategory === 'gene'">
             <b-form-group class="center-text">
@@ -302,9 +304,9 @@
                 aria-controls="collapse-4"
                 class="m-1 current-phenotype-profile"
                 @click="showComparisonCollapse = !showComparisonCollapse">
-                Comparison Phenotype Profile ( {{ phenotypeComparison.length }} phenotypes )
-                <i v-if="showComparisonCollapse" class="fa fa-chevron-down" aria-hidden="true"/>
-                <i v-if="!showComparisonCollapse" class="fa fa-chevron-right" aria-hidden="true"/>
+                <i v-if="showComparisonCollapse" class="fa fa-eye" aria-hidden="true"/>
+                <i v-if="!showComparisonCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
+                &nbsp;Comparison Phenotype Profile ( {{ phenotypeComparison.length }} phenotypes )
               </b-button>
               <b-collapse id="collapse-phenotypes" v-model="showComparisonCollapse" class="flex-container">
                 <div
@@ -343,8 +345,9 @@
       <div class="row">
         <div class="col-1"/>
         <div class="col-10 card">
-          <p class="current-profile">Similarity Results</p>
-          <b-button variant="outline-dark" class="edit-profile" @click="currentStep = 1; showCollapse = true; showPhenogrid = false;">Back</b-button>
+          <h4 class="current-profile">Similarity Results</h4>
+          <b-button variant="outline-dark" class="btn-sm edit-profile" @click="currentStep = 1; showCollapse = true; showPhenogrid = false; clearComparisonCategory();">Back</b-button>
+          <br>
           <pheno-grid
             :x-axis="xAxis"
             :y-axis="yAxis"
@@ -406,8 +409,8 @@ export default {
       geneComparisonCategory: '',
       diseaseComparisonCategory: '',
       phenotypeComparisonCategory: '',
-      showCollapse: false,
-      showComparisonCollapse: false,
+      showCollapse: true,
+      showComparisonCollapse: true,
       showPhenogrid: false,
       pgIndex: 0,
       rejectedPhenotypeCuries: [],
@@ -564,7 +567,7 @@ export default {
       return this.comparisonCategory === 'phenotypes' && (this.phenotypeComparisonCategory === 'phenotypes-build' || this.phenotypeComparisonCategory === 'phenotypes-list') && this.phenotypeComparison.length > 0;
     },
     diseasePathValid() {
-      return this.comparisonCategory === 'disease' && this.diseaseComparisonCategory === 'disease-specific' && (this.diseases.length > 0 || this.comparisonCategory === 'disease') && this.diseaseComparisonCategory === 'disease-all';
+      return this.comparisonCategory === 'disease' && (this.diseaseComparisonCategory === 'disease-specific' && this.diseases.length > 0) || this.diseaseComparisonCategory === 'disease-all';
     },
     geneCustomPathValid() {
       return this.comparisonCategory === 'gene' && (this.geneComparisonCategory === 'custom-build' || this.geneComparisonCategory === 'custom-list') && this.genes.length > 0;
@@ -721,6 +724,11 @@ export default {
   .center-text {
     text-align: center;
   }
+
+  .step-identifier {
+    float: left;
+  }
+
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
@@ -791,12 +799,11 @@ export default {
   .edit-profile{
     max-width: 200px;
     width: 100%;
-    align-self: flex-end;
+    align-self: flex-start;
   }
 
   .current-profile {
     color: #888888;
-    font-size: 1.2rem;
     text-align: center;
     margin-bottom: 5px;
     margin-top: 5px;
@@ -828,11 +835,8 @@ export default {
   .run-analysis {
     margin-top: 2rem;
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    button {
-      align-self: flex-end;
-    }
+    justify-content: center;
+    align-items: center;
   }
 
   .edit-comparison {
