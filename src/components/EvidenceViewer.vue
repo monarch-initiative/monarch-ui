@@ -137,7 +137,7 @@
         responsive="true"
         class="table-sm"
       >
-        <template v-slot:subject="data">
+        <template v-slot:cell(subject)="data">
           <template v-if="data.item.subject.url">
             <router-link
               :to="data.item.subject.url"
@@ -148,11 +148,11 @@
           </template>
         </template>
 
-        <template v-slot:relation="data">
+        <template v-slot:cell(relation)="data">
           {{ data.item.relation.label }}
         </template>
 
-        <template v-slot:object="data">
+        <template v-slot:cell(object)="data">
           <template v-if="data.item.object.url">
             <router-link
               :to="data.item.object.url"
@@ -163,7 +163,7 @@
           </template>
         </template>
 
-        <template v-slot:publications="data">
+        <template v-slot:cell(publications)="data">
 
           <template v-if="data.item.publications.length < 3">
             <div
@@ -244,7 +244,7 @@
           </template>
         </template>
 
-        <template v-slot:sources="data">
+        <template v-slot:cell(sources)="data">
 
           <div
             v-for="(source, index) in data.item.provided_by"
@@ -255,7 +255,7 @@
           </div>
         </template>
 
-        <template v-slot:references="data">
+        <template v-slot:cell(references)="data">
           <div
             v-for="(reference, index) in data.item.references"
             :key="index"

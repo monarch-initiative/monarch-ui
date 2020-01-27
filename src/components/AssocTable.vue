@@ -28,11 +28,11 @@
         responsive="true"
         class="table-sm"
       >
-        <template v-slot:taxon="data" v-if="hasTaxon">
+        <template v-slot:cell(taxon)="data" v-if="hasTaxon">
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
-        <template v-slot:assocObject="data">
+        <template v-slot:cell(assocObject)="data">
           <template v-if="data.item.objectLink">
             <strong>
               <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)"/>
@@ -45,7 +45,7 @@
           </template>
         </template>
 
-        <template v-slot:relation="data">
+        <template v-slot:cell(relation)="data">
           <small>
             <a
               :href="data.item.relation.url"
@@ -63,7 +63,7 @@
           </small>
         </template>
 
-        <template v-slot:assocSubject="data" v-if="isGroup">
+        <template v-slot:cell(assocSubject)="data" v-if="isGroup">
           <template v-if="data.item.subjectLink">
             <strong>
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
@@ -78,7 +78,7 @@
           </template>
         </template>
 
-        <template v-slot:frequency="data" v-if="hasFrequencyOnset">
+        <template v-slot:cell(frequency)="data" v-if="hasFrequencyOnset">
           <a
             v-if="data.item.frequency"
             :href="data.item.frequency.url"
@@ -91,7 +91,7 @@
           </a>
         </template>
 
-        <template v-slot:onset="data" v-if="hasFrequencyOnset">
+        <template v-slot:cell(onset)="data" v-if="hasFrequencyOnset">
           <a
             v-if="data.item.onset"
             :href="data.item.onset.url"
@@ -104,7 +104,7 @@
           </a>
         </template>
 
-        <template v-slot:support="data">
+        <template v-slot:cell(support)="data">
           <b-button
             :pressed.sync="data.item._showDetails"
             size="small"
@@ -387,18 +387,8 @@ export default {
         if (nodeType === 'variant' && cardType === 'gene') {
           inverse = true;
         }
-        // }
         relation.inverse = inverse;
-        // if (inverse) {
-        //   relation.label = `&Larr;&nbsp;${relation.label}&nbsp;&Larr;`;
-        // }
-        // else {
-        //   relation.label = `&Rarr;&nbsp;${relation.label}&nbsp;&Rarr;`;
-        // }
       }
-
-
-      // console.log('fixupRelation2', relation.id, relation.label);
     },
 
     populateRows() {
@@ -410,7 +400,6 @@ export default {
         const objectElem = elem.object;
         const subjectElem = elem.subject;
         let objectTaxon = this.parseTaxon(objectElem);
-        // const subjectTaxon = this.parseTaxon(subjectElem);
 
         const evidence = us.pick(
           elem, ['id', 'provided_by', 'publications', 'evidence_types']

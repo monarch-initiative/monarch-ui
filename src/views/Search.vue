@@ -136,18 +136,12 @@
               responsive="true"
               class="table-sm table-border-soft test-search-results-table"
               hover>
-              <template
-                slot="label"
-                slot-scope="row"
-              >
-                <router-link :to="row.item.toLink">
+              <template v-slot:cell(label)="row">
+              <router-link :to="row.item.toLink">
                   <span v-html="row.item.label"/>
                 </router-link>
               </template>
-              <template
-                slot="highlight"
-                slot-scope="row"
-              >
+              <template v-slot:cell(highlight)="row">
                 <span v-html="row.item.highlight"/>
               </template>
             </b-table>
