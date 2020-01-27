@@ -21,6 +21,9 @@
             <h6><i>How do we use it?</i></h6>
             {{ source.monarchUsage }}
           </div>
+          <div v-if="source.reusableDataUrl" class="source-reusable">
+            <h6><a :href="source.reusableDataUrl">License details for source database</a></h6>
+          </div>
           <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
             <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
           </div>
@@ -73,7 +76,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage,.source-rdf-download,.source-files {
+  .source-usage,.source-rdf-download,.source-files, .source-reusable {
       margin-top: 15px;
   }
 
