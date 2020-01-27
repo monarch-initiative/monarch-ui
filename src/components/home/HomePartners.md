@@ -53,7 +53,7 @@
 <p>
 Monarch is supported generously by a NIH Office of the Director Grant #5R24OD011883, as well as by NIH-UDP: 
 HHSN268201350036C, HHSN268201400093P, NCI/Leidos #15X143. We are grateful to the many 
-<a href="/sources">original sources of our data</a> for allowing Monarch to integrate them in this way. 
+<a href="/about/data-sources">original sources of our data</a> for allowing Monarch to integrate them in this way. 
 Except where forbidden by the original sources, this work is licensed under a Creative Commons Attribution 3.0 License.
 </p>
 </div>
