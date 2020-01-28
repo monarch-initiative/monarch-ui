@@ -64,6 +64,11 @@ const router = new Router({
       component: require('@/views/Disclaimer.md').default,
     },
     {
+      path: '/about/licensing',
+      name: 'about-licensing',
+      component: require('@/views/AboutLicensing.md').default,
+    },
+    {
       path: '/documentation/publications',
       name: 'about-publications',
       component: require('@/views/Publications.md').default,
