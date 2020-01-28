@@ -33,7 +33,7 @@
     <li><a href="https://github.com/OBF/FALDO">FALDO</a>: 
     <a href="https://github.com/OBF/FALDO#license">Creative Commons Zero 1.0 Public Domain</a>
     </li>
-    <li><a href="http://www.ontobee.org/ontology/IAO">IAO</a>
+    <li><a href="http://www.ontobee.org/ontology/IAO">IAO: </a>
         <a href="http://www.ontobee.org/ontology/IAO">Creative Commons BY 4.0</a></li>
     <li><a href="https://github.com/monarch-initiative/SEPIO-ontology">SEPIO</a>:
         <a href="https://github.com/monarch-initiative/SEPIO-ontology#license">Creative Commons BY 3.0</a></li>
