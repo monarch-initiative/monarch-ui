@@ -14,30 +14,37 @@
           <div class="displayName">
             <h5>{{ source.sourceDisplayName }}</h5>
           </div>
-          <div class="display-name">
-            {{ source.sourceDescription }}
-          </div>
-          <div v-if="source.monarchUsage" class="source-usage">
-            <h6><i>How do we use it?</i></h6>
-            {{ source.monarchUsage }}
-          </div>
-          <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
-            <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
-          </div>
-          <div v-if="source.sourceFiles.length > 0" class="source-files">
-            <h6><i>Ingested files:</i></h6>
-          </div>
-          <div v-for="file in source.sourceFiles" :key="file">
-            <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
-          </div>
-          <div class="versions">
-            <div class="source-version"/>
-            <div class="monarch-version">
-              Monarch Ingest Date: {{ source.ingestDate }}
-            </div>
-          </div>
+          <div>
+              <b-button v-b-toggle.collapse-1 variant="primary">More info</b-button>
+              <b-collapse id="collapse-1" class="mt-2">
+                <b-card>
+                  <div class="display-name">
+                    {{ source.sourceDescription }}
+                  </div>
+                  <div v-if="source.monarchUsage" class="source-usage">
+                    <h6><i>How do we use it?</i></h6>
+                    {{ source.monarchUsage }}
+                  </div>
+                  <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
+                    <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
+                  </div>
+                  <div v-if="source.sourceFiles.length > 0" class="source-files">
+                    <h6><i>Ingested files:</i></h6>
+                  </div>
+                  <div v-for="file in source.sourceFiles" :key="file">
+                    <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
+                  </div>
+                  <div class="versions">
+                    <div class="source-version"/>
+                    <div class="monarch-version">
+                      Monarch Ingest Date: {{ source.ingestDate }}
+                    </div>
+                  </div>
+                </b-card>
+              </b-collapse>
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
