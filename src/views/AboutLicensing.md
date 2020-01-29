@@ -37,12 +37,14 @@
         <a href="http://www.ontobee.org/ontology/IAO">Creative Commons BY 4.0</a></li>
     <li><a href="https://github.com/monarch-initiative/SEPIO-ontology">SEPIO</a>:
         <a href="https://github.com/monarch-initiative/SEPIO-ontology#license">Creative Commons BY 3.0</a></li>
-    <li><a href="http://www.ontobee.org/ontology/ERO">ERO</a>: Unknown license</li>
+    <li><a href="http://www.ontobee.org/ontology/ERO">ERO</a>: 
+        <a href="https://github.com/OBOFoundry/OBOFoundry.github.io/pull/795/files">Creative Commons BY 4.0</a></li>
     <li><a href="http://www.obofoundry.org/ontology/pw.html">PW</a>: 
         <a href="http://www.obofoundry.org/ontology/pw.html">Creative Commons BY 4.0</a></li>
     <li><a href="https://github.com/EBISPOT/OBAN/blob/master/README.md">OBAN-CORE: </a>
         <a href="http://www.obofoundry.org/ontology/pw.html">Creative Commons BY 4.0</a></li>
-    <li><a href="https://github.com/CLO-ontology/CLO/">CLO-CORE</a>: Unknown license</li>
+    <li><a href="http://obofoundry.org/ontology/clo">CLO</a>:
+            <a href="http://obofoundry.org/ontology/clo">Creative Commons BY 3.0</a></li>
     <li><a href="http://obofoundry.org/ontology/pco.html">PCO</a>:
         <a href="http://obofoundry.org/ontology/pco.html">Creative Commons 1.0</a></li>
     <li><a href="https://www.ebi.ac.uk/ols/ontologies/xco">XCO</a>: Unknown license</li>
