@@ -4,6 +4,7 @@ import * as bbopgraph from 'bbop-graph';
 import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
 import getStaticSourceData from './StaticSourceData';
 import * as bbopgraphUtil from './BBOPGraphUtil';
+import {labelToId, isTaxonCardType, isSubjectCardType} from '../lib/TaxonMap';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -33,18 +34,6 @@ const servers = {
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
   },
 
-  production: {
-    'type': 'production',
-    'app_base': 'https://monarchinitiative.org',
-    'scigraph_url': 'https://scigraph-ontology.monarchinitiative.org/scigraph/',
-    'scigraph_data_url': 'https://scigraph-data.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
-    'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
-    'analytics_id': '',
-    'biolink_url': 'https://api.monarchinitiative.org/api/',
-  },
-
   beta: {
     'type': 'beta',
     'app_base': 'https://beta.monarchinitiative.org',
@@ -57,11 +46,22 @@ const servers = {
     'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
   },
 
+  production: {
+    'type': 'production',
+    'app_base': 'https://monarchinitiative.org',
+    'scigraph_url': 'https://scigraph-ontology.monarchinitiative.org/scigraph/',
+    'scigraph_data_url': 'https://scigraph-data.monarchinitiative.org/scigraph/',
+    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
+    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
+    'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
+    'analytics_id': '',
+    'biolink_url': 'https://api.monarchinitiative.org/api/',
+  }
+
 };
 
 const productionServers = [
-  // 'localhost',
-  'monarchinitiative.org',
+  'monarchinitiative.org'
 ];
 
 const defaultApiServer =
@@ -77,7 +77,7 @@ const scigraph = serverConfiguration.scigraph_url;
 export const summaryVersionPredicate = metadataKeys.summaryVersionPredicate;
 
 /**
- Lighter-weight BL node info. Used by LocalNav.vue
+  Lighter-weight BioLink node info. Used by LocalNav.vue
  */
 
 export async function getNodeSummary(nodeId, nodeType) {
@@ -128,9 +128,43 @@ export async function getNode(nodeId, nodeType) {
     rows: 1
   };
 
+<<<<<<< HEAD
   const nodeSummary = axios.get(bioentityUrl, { params })
     .then((bioentityResp) => {
       const bioentityResponseData = bioentityResp.data;
+=======
+  //
+  // There should be no need for a separate API call to get the uri field.
+  // the /bioentity/ endpoints should return uri when appropriate.
+  // Until then, we parallelize a call to identifier/prefixes/expand to get a uri,
+  // which is really stupid.
+  // Once BL's bioentity/ endpoint returns uri, we can delete this hack.
+  //
+
+  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
+
+  //
+  // Temporary hack until BL gets taxon-faceted association counts built in.
+  //
+  const useAssociationTypeKey = false;
+  const subjectKey = useAssociationTypeKey ? 'association_type' : 'subject_category';
+  const objectKey = useAssociationTypeKey ? 'association_type' : 'object_category';
+
+  const nodeSummary = axios.all(
+    [
+      axios.get(bioentityUrl, { params }),
+      axios.get(getIdentifierUrl),
+    ]
+  ).then(
+    axios.spread(
+      function response(bioentityResp, getIdentifierResp) {
+        const bioentityResponseData = bioentityResp.data;
+
+        if (!bioentityResponseData.xrefs) {
+          bioentityResponseData.xrefs = [
+          ];
+        }
+>>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
 
       if (!bioentityResponseData.xrefs) {
         bioentityResponseData.xrefs = [];
@@ -506,6 +540,24 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
     response.data.numFound = response.data.associations.length;
   }
 
+
+  if (isTaxonCardType(cardType)) {
+    params.facet = true;
+    params.facet_fields = "object_taxon";
+    if(isSubjectCardType(cardType)){
+      params.facet_fields = "subject_taxon";
+    }
+
+    if(taxons != null && taxons !== -1){
+      params.taxon = taxons.length > 1 ? taxons: taxons[0];
+    }
+
+  }
+  const qs = require('qs');
+  const response = await axios.get(url, { params,
+    paramsSerializer: function(params) {
+      return qs.stringify(params, {arrayFormat: 'repeat'})
+    }});
   return response;
 }
 

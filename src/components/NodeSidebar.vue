@@ -29,13 +29,6 @@
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
-
-        <li class="list-group-item list-group-item-squat">
-          <b-link :disabled="facetsDisabled" @click="toggleFacets()">
-            <i class="fa fa-fw fa-cubes"/>
-            <span class="list-group-item-value">Facets</span>
-          </b-link>
-        </li>
         <li
           v-for="cardType in cardsToDisplay"
           :class="{ active: expandedCard === cardType }"
@@ -52,10 +45,6 @@
       </ul>
     </div>
 
-    <node-sidebar-facets
-      :is-visible="isFacetsShowing"
-      v-model="facetObject"
-    />
 
   </div>
 
@@ -66,7 +55,6 @@
 import * as biolinkService from '@/api/BioLink';
 
 import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
-import NodeSidebarFacets from '@/components/NodeSidebarFacets.vue';
 import vClickOutside from 'v-click-outside';
 
 export default {
@@ -74,7 +62,6 @@ export default {
 
   components: {
     'node-sidebar-neighborhood': NodeSidebarNeighborhood,
-    'node-sidebar-facets': NodeSidebarFacets,
   },
   directives: {
     clickOutside: vClickOutside.directive
@@ -115,15 +102,11 @@ export default {
       required: false,
       default: null,
     },
-    facetObject: {
-      type: Object,
-      required: false,
-      default: null,
-    },
     isNeighborhoodShowing: {
       type: Boolean,
       required: false,
       default: false,
+<<<<<<< HEAD
     },
     isFacetsShowing: {
       type: Boolean,
@@ -135,6 +118,9 @@ export default {
       required: false,
       default: false
     },
+=======
+    }
+>>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
   },
 
   data() {
@@ -165,19 +151,17 @@ export default {
     expandCard(cardType) {
       this.$emit('expand-card', cardType);
     },
-
-    toggleFacets() {
-      this.$emit('toggle-facets');
-    },
-
     toggleNeighborhood() {
       this.$emit('toggle-neighborhood');
     },
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
+<<<<<<< HEAD
       } else if (this.isFacetsShowing) {
         this.toggleFacets();
+=======
+>>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
       }
     }
   }

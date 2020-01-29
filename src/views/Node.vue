@@ -12,19 +12,16 @@
       :card-counts="counts"
       :parent-node="node"
       :parent-node-id="nodeId"
-      :facet-object="facetObject"
-      :is-facets-showing="isFacetsShowing"
       :is-neighborhood-showing="isNeighborhoodShowing"
       :subclasses="subclasses"
       :superclasses="superclasses"
       @expand-card="expandCard"
-      @toggle-facets="toggleFacets"
       @toggle-neighborhood="toggleNeighborhood"
     />
 
     <div class="container-cards">
       <div class="wrapper">
-        <div :class="{ active: isNeighborhoodShowing || isFacetsShowing }" class="overlay"/>
+        <div :class="{ active: isNeighborhoodShowing }" class="overlay"></div>
 
         <div v-if="!node" class="loading">
           <div v-if="nodeError">
@@ -48,17 +45,7 @@
               (Redirected from {{ originalId }})
             </span>
           </h4>
-          <span v-if="node.taxon && node.taxon.id" class="node-label-taxon">
-            <a
-              :href="node.taxon.uri"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="node-label-id">
-              <em>{{ node.taxon.label }}</em>
-            </a>
-          </span>
           &nbsp;
-
           <!--
               <a
                 v-if="entrezResult && entrezResult.abstractURL"
@@ -165,8 +152,7 @@
 
           <div v-if="expandedCard" class="expanded-card-view">
             <assoc-table
-              :facets="facetObject"
-              :card-counts="counts"
+              :taxon-counts="taxonCounts"
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
@@ -316,8 +302,6 @@ export default {
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
-        selectedTaxons: {
-        },
         evidence: {
           IEA: true
         },
@@ -355,6 +339,7 @@ export default {
         models: false,
         diseases: false
       },
+      taxonCounts: {},
       node: null,
       nodeError: null,
       equivalentClasses: null,
@@ -423,8 +408,6 @@ export default {
   watch: {
     facetObject: {
       handler(val, oldVal) {
-        // console.log('facetObject');
-        // console.log(JSON.stringify(val.selectedTaxons, null, 2));
         this.updateCounts();
       },
       deep: true
@@ -432,7 +415,6 @@ export default {
 
     $route(to, _from) {
       // Only fetchData if the path is different.
-
       if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
         this.originalId = null;
@@ -475,23 +457,17 @@ export default {
     },
 
     hideOverlay() {
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
-    },
-
-    toggleFacets() {
-      this.isNeighborhoodShowing = false;
-      this.isFacetsShowing = !this.isFacetsShowing;
     },
 
     toggleNeighborhood() {
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = !this.isNeighborhoodShowing;
     },
 
-    buildFacets() {
+    buildCounts() {
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
+<<<<<<< HEAD
       } else {
         const associationCountsByCardType = this.node.association_counts;
 
@@ -513,6 +489,10 @@ export default {
 
         this.facetObject.taxons = taxonTotals;
         this.facetObject.selectedTaxons = selectedTaxons;
+=======
+      }
+      else {
+>>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
         this.updateCounts();
       }
     },
@@ -523,25 +503,10 @@ export default {
         console.log('Missing association_counts', this.node);
       } else {
         const associationCountsByCardType = this.node.association_counts;
-        // console.log(JSON.stringify(Object.keys(associationCountsByCardType), null, 2));
-
         this.availableCards.forEach((cardType) => {
-
           const associationCounts = associationCountsByCardType[cardType];
           const count = (associationCounts && associationCounts.counts) || 0;
-          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
-          const taxonTotal = count;
-          let taxonFiltered = count;
-
-          if (countsByTaxon) {
-            Object.keys(countsByTaxon).forEach((t) => {
-              if (!this.facetObject.selectedTaxons[t]) {
-                taxonFiltered -= countsByTaxon[t];
-              }
-            });
-          }
-
-          this.counts[cardType] = taxonFiltered;
+          this.counts[cardType] = count;
           if (count > 0) {
             nonEmptyCards.push(cardType);
           }
@@ -564,7 +529,6 @@ export default {
       this.entrezResult = null;
       this.expandedCard = null;
       this.nonEmptyCards = [];
-      this.isFacetsShowing = false;
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
       this.references = [];
@@ -770,7 +734,7 @@ export default {
       this.nodeIcon = this.icons[this.nodeCategory];
       this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
 
-      this.buildFacets();
+      this.buildCounts();
 
       //
       // If we got here via someone specifying a cardType in the
