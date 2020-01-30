@@ -15,8 +15,8 @@
             <h5>{{ source.sourceDisplayName }}</h5>
           </div>
           <div>
-              <b-button v-b-toggle.collapse-1 variant="primary">More info</b-button>
-              <b-collapse id="collapse-1" class="mt-2">
+            <b-button v-b-toggle="'collapse-' + index" variant="primary">More info</b-button>
+              <b-collapse :id="'collapse-' + index" class="mt-2">
                 <b-card>
                   <div class="display-name">
                     {{ source.sourceDescription }}
