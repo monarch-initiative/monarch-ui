@@ -1,4 +1,4 @@
-<div class="container-fluid monarch-view monarch-licensing">
+<div class="container-fluid monarch-view monarch-licensing offset-1 col-10">
     <h2 class="page-title">About Licensing</h2>
     <p>The Monarch App is comprised of multiple different components: interface, data, ontologies, software and algorithms. 
     It is therefore not possible to provide everything under a unified license. The specific components and their licensing information are below.</p>
