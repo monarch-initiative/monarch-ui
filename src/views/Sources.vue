@@ -81,7 +81,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage,.source-rdf-download,.source-files {
+  .source-usage,.source-rdf-download,.source-files, .source-reusable {
       margin-top: 15px;
   }
 
