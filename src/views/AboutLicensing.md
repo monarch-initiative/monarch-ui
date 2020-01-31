@@ -4,8 +4,8 @@
     It is therefore not possible to provide everything under a unified license. The specific components and their licensing information are below.</p>
     <h4>Interface</h4>
     <ul>
-    <li><a href="https://github.com/monarch-initiative/monarch-app/">The Monarch-App: </a>
-    <a href="https://github.com/monarch-initiative/monarch-app/blob/master/LICENSE.txt">BSD 3 License</a></li>
+    <li><a href="https://github.com/monarch-initiative/monarch-ui">The Monarch-UI: </a>
+    <a href="https://github.com/monarch-initiative/monarch-ui/blob/master/LICENSE.txt">BSD 3 License</a></li>
     </ul>
     <h4>Algorithms</h4>
     <ul>
