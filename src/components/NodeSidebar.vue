@@ -106,21 +106,12 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-<<<<<<< HEAD
-    },
-    isFacetsShowing: {
-      type: Boolean,
-      required: false,
-      default: false,
     },
     isGroup: {
       type: Boolean,
       required: false,
       default: false
     },
-=======
-    }
->>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
   },
 
   data() {
@@ -157,11 +148,6 @@ export default {
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
-<<<<<<< HEAD
-      } else if (this.isFacetsShowing) {
-        this.toggleFacets();
-=======
->>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
       }
     }
   }

@@ -467,32 +467,8 @@ export default {
     buildCounts() {
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
-<<<<<<< HEAD
-      } else {
-        const associationCountsByCardType = this.node.association_counts;
-
-        const taxonTotals = {};
-        const selectedTaxons = {};
-        Object.keys(associationCountsByCardType).forEach((cardType) => {
-          const associationCounts = associationCountsByCardType[cardType];
-          const count = (associationCounts && associationCounts.counts) || 0;
-          const countsByTaxon = (associationCounts && associationCounts.counts_by_taxon) || {};
-
-          if (countsByTaxon) {
-            Object.keys(countsByTaxon).forEach((taxon) => {
-              selectedTaxons[taxon] = true;
-              const taxonCount = taxonTotals[taxon] || 0;
-              taxonTotals[taxon] = taxonCount + countsByTaxon[taxon];
-            });
-          }
-        });
-
-        this.facetObject.taxons = taxonTotals;
-        this.facetObject.selectedTaxons = selectedTaxons;
-=======
       }
       else {
->>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
         this.updateCounts();
       }
     },

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import us from 'underscore';
 import * as bbopgraph from 'bbop-graph';
-import { labelToId, isTaxonCardType } from '../lib/TaxonMap';
 import getStaticSourceData from './StaticSourceData';
 import * as bbopgraphUtil from './BBOPGraphUtil';
 import {labelToId, isTaxonCardType, isSubjectCardType} from '../lib/TaxonMap';
@@ -128,43 +127,9 @@ export async function getNode(nodeId, nodeType) {
     rows: 1
   };
 
-<<<<<<< HEAD
   const nodeSummary = axios.get(bioentityUrl, { params })
     .then((bioentityResp) => {
       const bioentityResponseData = bioentityResp.data;
-=======
-  //
-  // There should be no need for a separate API call to get the uri field.
-  // the /bioentity/ endpoints should return uri when appropriate.
-  // Until then, we parallelize a call to identifier/prefixes/expand to get a uri,
-  // which is really stupid.
-  // Once BL's bioentity/ endpoint returns uri, we can delete this hack.
-  //
-
-  const getIdentifierUrl = `${biolink}identifier/prefixes/expand/${nodeId}`;
-
-  //
-  // Temporary hack until BL gets taxon-faceted association counts built in.
-  //
-  const useAssociationTypeKey = false;
-  const subjectKey = useAssociationTypeKey ? 'association_type' : 'subject_category';
-  const objectKey = useAssociationTypeKey ? 'association_type' : 'object_category';
-
-  const nodeSummary = axios.all(
-    [
-      axios.get(bioentityUrl, { params }),
-      axios.get(getIdentifierUrl),
-    ]
-  ).then(
-    axios.spread(
-      function response(bioentityResp, getIdentifierResp) {
-        const bioentityResponseData = bioentityResp.data;
-
-        if (!bioentityResponseData.xrefs) {
-          bioentityResponseData.xrefs = [
-          ];
-        }
->>>>>>> 3e18efb6f8ee697ed4eb88cde6b337cd8f5274ad
 
       if (!bioentityResponseData.xrefs) {
         bioentityResponseData.xrefs = [];
@@ -522,24 +487,6 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
     params.start = 0;
     params.rows = 10000;
   }
-  const response = await axios.get(url, { params });
-
-  if (useTaxonRestriction) {
-    response.data.associations = response.data.associations.filter((d) => {
-      const subjTaxon = d.subject.taxon;
-      const objTaxon = d.object.taxon;
-      let result = false;
-      if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
-        result = true;
-      }
-      if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
-        result = true;
-      }
-      return result;
-    });
-    response.data.numFound = response.data.associations.length;
-  }
-
 
   if (isTaxonCardType(cardType)) {
     params.facet = true;
@@ -550,6 +497,7 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
 
     if(taxons != null && taxons !== -1){
       params.taxon = taxons.length > 1 ? taxons: taxons[0];
+      params.direct_taxon = true;
     }
 
   }
@@ -558,6 +506,22 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
     paramsSerializer: function(params) {
       return qs.stringify(params, {arrayFormat: 'repeat'})
     }});
+
+    if (useTaxonRestriction) {
+      response.data.associations = response.data.associations.filter((d) => {
+        const subjTaxon = d.subject.taxon;
+        const objTaxon = d.object.taxon;
+        let result = false;
+        if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
+          result = true;
+        }
+        if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
+          result = true;
+        }
+        return result;
+      });
+      response.data.numFound = response.data.associations.length;
+    }
   return response;
 }
 

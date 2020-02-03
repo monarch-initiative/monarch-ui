@@ -7,7 +7,7 @@
       </div>
     </div>
     <div v-show="!dataError && initialLoad">
-      <taxon-filter @toggle-filter="toggleTaxonFilter($event)"  :is-visible="isFacetsShowing" v-model="taxonFilter"></taxon-filter>
+      <taxon-filter @toggle-filter="toggleTaxonFilter($event)"  :is-visible="isTaxonShowing" v-model="taxonFilter"></taxon-filter>
       <div>
         <h5>
           <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
@@ -176,7 +176,17 @@ export default {
     },
     taxonCounts: {
       type: Object,
-      required: true,
+      required: true
+    },
+    isFacetsShowing: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    isGroup: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
   data() {
@@ -199,7 +209,8 @@ export default {
         counts: {},
         taxons: {}
       },
-      filterActive: null
+      filterActive: null,
+      isTaxonShowing: this.isFacetsShowing
     };
   },
   watch: {
@@ -207,7 +218,7 @@ export default {
       this.taxonFilter = {counts: {}, taxons: {}};
       this.initialLoad = false;
       this.dataError = false;
-      this.isFacetsShowing = false;
+      this.isTaxonShowing = false;
 
 
       window.scroll(0, 0);
@@ -222,10 +233,10 @@ export default {
   },
   methods: {
     toggleTaxonFilter(shouldApply) {
-      if(this.isFacetsShowing && shouldApply){
+      if(this.isTaxonShowing && shouldApply){
         this.$refs.tableRef.refresh();
       }
-      this.isFacetsShowing = !this.isFacetsShowing;
+      this.isTaxonShowing = !this.isTaxonShowing;
     },
     hasFalseFilter() {
       let foundFalseTaxons = false;
@@ -357,98 +368,105 @@ export default {
       }
       }
     },
-
     populateRows() {
       this.rows = [];
       let count = 0;
       this.associationData.associations.forEach((elem) => {
         count += 1;
-
         const objectElem = elem.object;
         const subjectElem = elem.subject;
         let objectTaxon = this.parseTaxon(objectElem);
-
         const evidence = us.pick(
           elem, ['id', 'provided_by', 'publications', 'evidence_types']
         );
-
         evidence.publications = processPublications(evidence.publications);
-
         evidence.provided_by = processSources(evidence.provided_by);
-
         // Provide icon and label for database (provided_by)
         evidence.provided_by = evidence.provided_by.map(db => sourceToLabel(db));
-
         // add href for ECO code
         evidence.evidence_types = evidence.evidence_types.map(eco => ({
           id: eco.id,
           label: eco.label,
           url: this.eviHref(eco.id)
         }));
-
         const supportIcons = [];
-
         if (evidence.evidence_types.length > 0) {
           const eviIcon = 'fa-flask'; // 'fa-legal' 'fa-chain';
           supportIcons.push(eviIcon);
         }
-
         if (evidence.publications.length > 0) {
           const pubIcon = 'fa-book';
           supportIcons.push(pubIcon);
         }
-
         if (evidence.provided_by.length > 0) {
           const sourceIcon = 'fa-database';
           supportIcons.push(sourceIcon);
         }
-
-        const supportLength = support.length;
-        let simplifiedCardType = this.cardType;
-        if (simplifiedCardType === 'interaction' || simplifiedCardType === 'ortholog-phenotype'
-                || simplifiedCardType === 'ortholog-disease') {
-          simplifiedCardType = 'gene';
-          objectTaxon = this.parseTaxon(subjectElem);
-        }
-
-        let objectLink = `/${simplifiedCardType}/${objectElem.id}`;
-        if (objectElem.id.indexOf(':.well-known') === 0) {
-          objectLink = null;
-        }
-        const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
-
-        this.fixupRelation(elem, this.nodeType, this.cardType);
-        this.rows.push({
-          publications: pubs,
-          publicationsLength: pubsLength,
-          annotationType: this.cardType,
-          evidence,
-          evidenceLength,
-          support,
-          supportLength,
-          supportIcons,
-          objectCurie: objectElem.id,
-          sources: elem.provided_by,
-          sourcesLength: elem.provided_by.length,
-          assocObject: objectElem.label,
-          objectLink,
-          assocSubject: subjectElem.label,
-          subjectLink,
-          taxonLabel: objectTaxon.label,
-          taxonId: objectTaxon.id,
-          relation: elem.relation,
-          frequency: elem.frequency,
-          onset: elem.onset,
-          _showDetails: false,
-        });
-
-        elem.relation.url = this.relationHref(elem.relation);
-        if (elem.frequency) {
-          elem.frequency.url = this.frequencyHref(elem.frequency);
-        }
-        if (elem.onset) {
-          elem.onset.url = this.onsetHref(elem.onset);
-        }
+        const supportLength = [
+          evidence.provided_by.length,
+          evidence.publications.length,
+          evidence.evidence_types.length,
+        ].reduce((accum, item) => accum + item);
+          let modifiedCardType = this.cardType;
+          if (modifiedCardType === 'interaction') {
+            modifiedCardType = 'gene';
+            objectTaxon = this.parseTaxon(subjectElem);
+          } else if (modifiedCardType === 'ortholog-phenotype') {
+            modifiedCardType = 'phenotype';
+            objectTaxon = this.parseTaxon(subjectElem);
+          } else if (modifiedCardType === 'ortholog-disease') {
+            modifiedCardType = 'disease';
+            objectTaxon = this.parseTaxon(subjectElem);
+          } else if (modifiedCardType === 'homolog') {
+            modifiedCardType = 'gene';
+            objectTaxon = this.parseTaxon(objectElem);
+          } else if (
+            modifiedCardType === 'causal-disease'
+            || modifiedCardType === 'noncausal-disease'
+          ) {
+            modifiedCardType = 'disease';
+          } else if (
+            modifiedCardType === 'causal-gene'
+            || modifiedCardType === 'noncausal-gene'
+          ) {
+            modifiedCardType = 'gene';
+          }
+          let objectLink = `/${modifiedCardType}/${objectElem.id}`;
+          if (modifiedCardType === 'model') {
+            // Models are an index level type (not in our db)
+            // see if the resolver can better type this node
+            objectLink = `/${objectElem.id}`;
+          }
+          if (objectElem.id.startsWith('BNODE')
+              && modifiedCardType !== 'publication') {
+            objectLink = null;
+          }
+          const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
+          this.fixupRelation(elem, this.nodeType, this.cardType);
+          this.rows.push({
+            annotationType: this.cardType,
+            evidence,
+            supportLength,
+            supportIcons,
+            objectCurie: objectElem.id,
+            assocObject: objectElem.label,
+            objectLink,
+            assocSubject: subjectElem.label,
+            subjectLink,
+            taxonLabel: objectTaxon.label,
+            taxonId: objectTaxon.id,
+            relation: elem.relation,
+            frequency: elem.frequency,
+            onset: elem.onset,
+            _showDetails: false,
+          });
+          elem.relation.url = this.relationHref(elem.relation);
+          if (elem.frequency) {
+            elem.frequency.url = this.frequencyHref(elem.frequency);
+          }
+          if (elem.onset) {
+            elem.onset.url = this.onsetHref(elem.onset);
+          }
       });
       if(isTaxonCardType(this.cardType)){
         const taxonFacetTarget = Object.keys(this.associationData.facet_counts)[0];
@@ -457,8 +475,7 @@ export default {
         });
         this.taxonFilter.counts = this.associationData.facet_counts[taxonFacetTarget];
       }
-      this.paginationTotals = this.getTotalRowCounts();
-      this.totalAssociations = this.associationData.numFound
+      this.totalAssociations = this.associationData.numFound;
     },
     getTotalRowCounts(){
       let count = 0;
