@@ -6,7 +6,7 @@
     -->
     <div v-if="compact" class="row footer compact">
       <div class="col-lg-4 version">
-        <i>The Monarch Initiative 2019</i>
+        <i>The Monarch Initiative 2020</i>
       </div>
       <div class="col-4 report">
         <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">

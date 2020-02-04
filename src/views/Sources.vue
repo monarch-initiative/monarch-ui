@@ -8,36 +8,44 @@
         class="row source-wrapper"
       >
         <div class="offset-1 col-10 source">
+
           <div>
-            <img :src="source.logoUrl" >
-          </div>
-          <div class="displayName">
             <h5>{{ source.sourceDisplayName }}</h5>
           </div>
-          <div class="display-name">
-            {{ source.sourceDescription }}
+
+          <div>
+            <b-button v-b-toggle="'collapse-' + index" variant="primary" class="btn btn-info">More info</b-button>
+            <b-collapse :id="'collapse-' + index" class="mt-2">
+                <b-card>
+                  <img :src="source.logoUrl" >
+                  <div class="display-name">
+                    {{ source.sourceDescription }}
+                  </div>
+                  <div v-if="source.monarchUsage" class="source-usage">
+                    <h6><i>How do we use it?</i></h6>
+                    {{ source.monarchUsage }}
+                  </div>
+                  <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
+                    <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
+                  </div>
+                  <div v-if="source.sourceFiles.length > 0" class="source-files">
+                    <h6><i>Ingested files:</i></h6>
+                  </div>
+                  <div v-for="file in source.sourceFiles" :key="file">
+                    <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
+                  </div>
+                  <div class="versions">
+                    <div class="source-version"/>
+                    <div class="monarch-version">
+                      Monarch Ingest Date: {{ source.ingestDate }}
+                    </div>
+                  </div>
+                </b-card>
+            </b-collapse>
           </div>
-          <div v-if="source.monarchUsage" class="source-usage">
-            <h6><i>How do we use it?</i></h6>
-            {{ source.monarchUsage }}
-          </div>
-          <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
-            <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
-          </div>
-          <div v-if="source.sourceFiles.length > 0" class="source-files">
-            <h6><i>Ingested files:</i></h6>
-          </div>
-          <div v-for="file in source.sourceFiles" :key="file">
-            <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
-          </div>
-          <div class="versions">
-            <div class="source-version"/>
-            <div class="monarch-version">
-              Monarch Ingest Date: {{ source.ingestDate }}
-            </div>
-          </div>
-        </div>
+
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -73,7 +81,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage,.source-rdf-download,.source-files {
+  .source-usage,.source-rdf-download,.source-files, .source-reusable {
       margin-top: 15px;
   }
 

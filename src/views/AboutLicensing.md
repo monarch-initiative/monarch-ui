@@ -1,11 +1,11 @@
-<div class="container-fluid monarch-view monarch-licensing">
+<div class="container-fluid monarch-view monarch-licensing offset-1 col-10">
     <h2 class="page-title">About Licensing</h2>
     <p>The Monarch App is comprised of multiple different components: interface, data, ontologies, software and algorithms. 
     It is therefore not possible to provide everything under a unified license. The specific components and their licensing information are below.</p>
     <h4>Interface</h4>
     <ul>
-    <li><a href="https://github.com/monarch-initiative/monarch-app/">The Monarch-App: </a>
-    <a href="https://github.com/monarch-initiative/monarch-app/blob/master/LICENSE.txt">BSD 3 License</a></li>
+    <li><a href="https://github.com/monarch-initiative/monarch-ui">The Monarch-UI: </a>
+    <a href="https://github.com/monarch-initiative/monarch-ui/blob/master/LICENSE.txt">BSD 3 License</a></li>
     </ul>
     <h4>Algorithms</h4>
     <ul>
@@ -37,12 +37,14 @@
         <a href="http://www.ontobee.org/ontology/IAO">Creative Commons BY 4.0</a></li>
     <li><a href="https://github.com/monarch-initiative/SEPIO-ontology">SEPIO</a>:
         <a href="https://github.com/monarch-initiative/SEPIO-ontology#license">Creative Commons BY 3.0</a></li>
-    <li><a href="http://www.ontobee.org/ontology/ERO">ERO</a>: Unknown license</li>
+    <li><a href="http://www.ontobee.org/ontology/ERO">ERO</a>: 
+        <a href="https://github.com/OBOFoundry/OBOFoundry.github.io/pull/795/files">Creative Commons BY 4.0</a></li>
     <li><a href="http://www.obofoundry.org/ontology/pw.html">PW</a>: 
         <a href="http://www.obofoundry.org/ontology/pw.html">Creative Commons BY 4.0</a></li>
     <li><a href="https://github.com/EBISPOT/OBAN/blob/master/README.md">OBAN-CORE: </a>
         <a href="http://www.obofoundry.org/ontology/pw.html">Creative Commons BY 4.0</a></li>
-    <li><a href="https://github.com/CLO-ontology/CLO/">CLO-CORE</a>: Unknown license</li>
+    <li><a href="http://obofoundry.org/ontology/clo">CLO</a>:
+            <a href="http://obofoundry.org/ontology/clo">Creative Commons BY 3.0</a></li>
     <li><a href="http://obofoundry.org/ontology/pco.html">PCO</a>:
         <a href="http://obofoundry.org/ontology/pco.html">Creative Commons 1.0</a></li>
     <li><a href="https://www.ebi.ac.uk/ols/ontologies/xco">XCO</a>: Unknown license</li>
