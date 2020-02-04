@@ -138,7 +138,7 @@
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="paginationTotals"
+          :total-rows="totalAssociations"
           class="pag-width my-1"
           align="center"
           size="md"></b-pagination>
@@ -192,9 +192,8 @@ export default {
   data() {
     return {
       currentPage: 1,
-      rowsPerPage: 25,
+      rowsPerPage: 20,
       totalAssociations: 0,
-      paginationTotals: 0,
       hasTaxon: false,
       hasFrequencyOnset: false,
       associationData: '',
