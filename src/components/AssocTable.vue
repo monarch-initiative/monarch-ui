@@ -136,6 +136,7 @@
         </template>
       </b-table>
         <b-pagination
+          v-if="totalAssociations > rowsPerPage"
           v-model="currentPage"
           :per-page="rowsPerPage"
           :total-rows="totalAssociations"
