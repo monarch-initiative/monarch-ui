@@ -91,6 +91,11 @@ export function isTaxonCardType(cardType) {
   return cardTypesSupportingTaxon.indexOf(cardType) >= 0;
 }
 
+export function isSubjectCardType(cardType) {
+  const subjectCardTypes = ['ortholog-phenotype', 'ortholog-disease', 'variant'];
+  return subjectCardTypes.includes(cardType);
+}
+
 
 const apolloAGRTaxons = [
   6239, // 'Caenorhabditis elegans'
