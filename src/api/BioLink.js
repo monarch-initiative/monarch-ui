@@ -533,30 +533,83 @@ export async function getNodeLabelByCurie(curie) {
   });
 }
 
+export function comparePhenotypes(sourceList, compareList, mode, species){
 
-export function comparePhenotypes(phenotypesList, geneList, species = 'all', mode = 'search') {
-  // WARNING this is about to be deprecated, replace with biolink compare
-  const baseUrl = 'https://monarchinitiative.org/analyze/phenotypes.json?';
-  const params = new URLSearchParams();
-  const phenoCuries = phenotypesList.map(elem => elem.curie);
-  params.append('input_items', phenoCuries);
-  params.append('gene_items', geneList);
-  params.append('target_species', species);
-  params.append('mode', mode);
-  return new Promise((resolve, reject) => {
-    axios.get(baseUrl, { params })
-      .then((resp) => {
-        const responseData = resp;
-        if (typeof responseData !== 'object') {
-          reject(responseData);
-        } else {
-          resolve(responseData);
-        }
-      })
-      .catch((err) => {
-        reject(err);
+  if(mode == "search"){
+    const baseUrl = `${biolink}sim/search`;
+    var params = new URLSearchParams();
+    sourceList.map(item => params.append("id", item.id));
+    if(compareList.length == 1){
+      params.append('taxon', compareList[0].groupId);
+      return new Promise((resolve, reject) => {
+        axios.get(baseUrl, {params})
+          .then((resp) => {
+            const responseData = resp;
+            if (typeof responseData !== 'object') {
+              reject(responseData);
+            } else {
+              resolve(responseData);
+            }
+          })
+          .catch((err) => {
+            reject(err);
+          });
       });
-  });
+    } else if (compareList.length > 1){
+      var requestList = [];
+      compareList.map(function(item){
+        params.append('taxon', item.groupId);
+        requestList.push(axios.get(baseUrl + "?" + params.toString()));
+        params.delete('taxon');
+      });
+      return new Promise((resolve, reject) => {
+        axios.all(requestList).then(axios.spread((...responses) => {
+          var responseData = {
+            data: {
+              matches: []
+            }
+          };
+          responses.map(currentItem => {
+            responseData.data.matches.push(currentItem.data.matches)
+          });
+          responseData.data.matches = responseData.data.matches.flat();
+          if (typeof responseData !== 'object') {
+            reject(responseData);
+          } else {
+            resolve(responseData);
+          }
+        })).catch(err => {
+          reject(err);
+        })
+      });
+    }
+  } else {
+    const baseUrl = `${biolink}sim/compare`;
+    var isAllPhenotypes = compareList.filter(item => {
+      return item.includes("HP:");
+    });
+    var feature_set = isAllPhenotypes.length > 0;
+    sourceList = sourceList.map(source => source.id);
+    const postBody = {
+          "is_feature_set": feature_set,
+          "reference_ids": sourceList,
+          "query_ids": compareList
+    }
+    return new Promise((resolve, reject) => {
+      axios.post(baseUrl, postBody)
+        .then((resp) => {
+          const responseData = resp;
+          if (typeof responseData !== 'object') {
+            reject(responseData);
+          } else {
+            resolve(responseData);
+          }
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
 }
 
 export async function annotateText(queryText, longestOnly) {
