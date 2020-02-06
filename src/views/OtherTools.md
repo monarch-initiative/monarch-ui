@@ -1,4 +1,4 @@
-<div class="container-fluid monarch-view other-tools">
+<div class="container-fluid monarch-view other-tools px-5">
 
 <h2 class="page-title">Other Resources from Monarch Initiative</h2>
     <div class="card">
