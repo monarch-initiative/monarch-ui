@@ -67,7 +67,7 @@
     <li><a href="https://github.com/biolink/biolink-api">BioLink-api</a>:
         <a href="https://github.com/biolink/biolink-api/blob/master/LICENSE">BSD 3 License</a></li>
     <li><a href="https://github.com/biolink/biolink-model">BioLink-model</a>:
-        <a href="https://github.com/biolink/biolink-model/blob/master/LICENSE">CC0 v1.0 Universal License</a></li>
+        <a href="https://github.com/biolink/biolink-model/blob/master/LICENSE">CC-0 v1.0 Universal License</a></li>
     </ul>
     <h4>Data</h4>
     <p>Data are derived from multiple sources (see <a href="/about/data-sources">here</a>), each with its own license. We
