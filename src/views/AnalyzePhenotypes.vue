@@ -81,7 +81,7 @@
             <i v-if="showCollapse" class="fa fa-eye" aria-hidden="true"/>
             <i v-if="!showCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
             &nbsp;Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
-            
+
           </b-button>
           <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
             <div
@@ -692,7 +692,11 @@ export default {
     async fetchPhenotypes(curie, nodeIdentifier) {
       const that = this;
       try {
-        const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
+        const params = {
+          'direct': true
+        };
+        const searchResponse = await biolinkService.getNodeAssociations(
+          nodeIdentifier, curie, 'phenotype', null, params);
         const phenotypeComparisonRef = this.phenotypeComparison;
         const phenotypeRef = this.phenotypes;
         const categoryRef = this.comparisonCategory;
@@ -724,7 +728,7 @@ export default {
   .center-text {
     text-align: center;
   }
-  
+
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
