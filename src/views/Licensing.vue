@@ -28,21 +28,24 @@
     <a href="https://github.com/biolink/ontobio/blob/master/LICENSE">BSD 3 License</a>
     </li>
     </ul>
-    <h4>Core Ontologies</h4>
-        <ul v-for="ontology in ontologyLicenseInfo.ontologies">
+    <h4>Ontologies maintained by Monarch</h4>
+        <ul>
+            <div v-for="ontology in ontologyLicenseInfo.ontologies">
             <li v-if="['ecto', 'geno', 'hp', 'maxo', 'mondo', 'sepio', 'upheno'].includes(ontology.id)">
                 <a v-if="ontology.homepage" :href="ontology.homepage" target="_blank">{{ontology.title}}</a>
                 <span v-else>{{ontology.title}}</span>
                 :
                 <a v-if="ontology.license" :href="ontology.license.url" target="_blank">
-                    <img :src="ontology.license.logo" height="15">
+                    {{ontology.license.label}} License
                 </a>
                 <span v-else>No license info</span>
             </li>
+            </div>
         </ul>
 
-    <h4>Key Ontologies</h4>
-        <ul v-for="ontology in ontologyLicenseInfo.ontologies">
+    <h4>Ontologies used by Monarch</h4>
+        <ul>
+            <div v-for="ontology in ontologyLicenseInfo.ontologies">
             <li v-if="['bfo', 'caro', 'chebi', 'cl', 'clo', 'dc', 'eco', 'ero', 'faldo', 'fao', 'fbbt', 'foaf', 'go',
             'hsapdv', 'iao', 'mpath', 'nbo', 'ncbitaxon', 'ncit', 'oba', 'oban', 'pato', 'pco', 'po', 'pw', 'ro', 'so',
             'stato', 'uberon', 'vt', 'wbbt', 'xco', 'zfa'].includes(ontology.id)">
@@ -50,9 +53,10 @@
                 <a v-else>{{ontology.title}}</a>
                 :
                 <a v-if="ontology.license" :href="ontology.license.url" target="_blank">
-                    <img :src="ontology.license.logo" height="15">
+                    {{ontology.license.label}} License
                 </a>
             </li>
+            </div>
         </ul>
 
     <h4>Other Standards</h4>
@@ -63,7 +67,7 @@
     <li><a href="https://github.com/biolink/biolink-api">BioLink-api</a>:
         <a href="https://github.com/biolink/biolink-api/blob/master/LICENSE">BSD 3 License</a></li>
     <li><a href="https://github.com/biolink/biolink-model">BioLink-model</a>:
-        <a href="https://github.com/biolink/biolink-model/blob/master/LICENSE">Creative Commons Zero v1.0 Universal License</a></li>
+        <a href="https://github.com/biolink/biolink-model/blob/master/LICENSE">CC0 v1.0 Universal License</a></li>
     </ul>
     <h4>Data</h4>
     <p>Data are derived from multiple sources (see <a href="/about/data-sources">here</a>), each with its own license. We
