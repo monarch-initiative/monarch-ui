@@ -202,6 +202,11 @@ export default {
       type: String,
       required: false,
       default: 'Explore Monarch for phenotypes, diseases, genes and more..'
+    },
+    typeSort: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   data() {
@@ -317,6 +322,16 @@ export default {
           };
           this.suggestions.push(resultPacket);
         });
+        const sortCategory = this.typeSort;
+        if(sortCategory){
+          this.suggestions.sort(function(a, b) {
+            if (a.category == sortCategory) return -1;
+            if (b.category == sortCategory) return 1;
+            if(a.category == b.category) {
+              return 0;
+            } 
+          });
+        }
         this.open = true;
         this.loading = false;
       } catch (e) {

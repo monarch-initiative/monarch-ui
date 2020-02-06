@@ -3,10 +3,8 @@
     <div class="row">
       <div class="offset-2 col-8 text-center">
         <h2 class="page-title">Phenotype Profile Search</h2>
-        <p>This Phenotype Profile Search enables you search our database using our
-          <a href="https://github.com/biolink/biolink-api" target="_blank">BioLink analysis</a>
-          engine to find phenotypically similar diseases or genes in a variety of organisms, then visualize
-          their overlap.</p>
+        <p>This Phenotype Profile Search enables you to find phenotypically similar diseases or genes in a variety of organisms, then visualize
+          their overlap. Begin by constructing a "profile" (a collection of phenotypes) then create a comparison profile. </p>
       </div>
     </div>
     <div v-if="!showPhenogrid" class="row">
@@ -14,15 +12,15 @@
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
-          <h4 class="text-center">1. Create A Profile of Phenotypes
+          <h5 class="text-center">1. Create a Profile of Phenotypes
             <b-button
               v-if="currentSubStep !== 1"
               class="comparison-category-edit"
               variant="outline-info"
               @click="currentSubStep = 1; phenotypes = []">
-              <i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Edit Selection
+              <i class="fa fa-chevron-up edit-comparison" aria-hidden="true"/> Go Back
             </b-button>
-          </h4>
+          </h5>
           <div v-if="currentSubStep === 1" class="center-text">
             <h6 class="center-text">How would you like to continue?</h6>
             <b-form-group>
@@ -38,6 +36,7 @@
               :allowed-prefixes="acceptedPrefixes"
               :defined-categories="searchPhenoCategories"
               :dynamic-placeholder="phenoSearchPH"
+              :type-sort="'phenotype'"
               @interface="handlePhenotypes"
             />
             <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
@@ -48,7 +47,7 @@
               v-model="phenoCurieList"
               :rows="3"
               :max-rows="6"
-              placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+              placeholder="Please enter comma seperated phenotype term identifiers from the Human Phenotype Ontology (e.g. HP:0000322, HP:0001166, HP:0001238)"
               class="my-2"
             />
             <div
@@ -65,8 +64,7 @@
               dismissible
               @dismissed="showPhenotypeAlert=false"
             >
-              Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
-              HP:0000002)
+              Error: '{{ rejectedPhenotypeCuries }}' Please ensure your list is comma seperated and the id's are valid <a target="_blank" href="https://hpo.jax.org">HPO</a> id's.
             </b-alert>
           </div>
         </div>
@@ -145,7 +143,7 @@
           <h4 class="center-text">
             <span v-if="comparisonCategory != 'all'">Build your {{ comparisonCategory }} profile for comparison</span>
             <span v-if="comparisonCategory == 'all'">Comparing everything.</span>
-            &nbsp;<b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-pencil edit-comparison" aria-hidden="true"/> Edit Selection </b-button>
+            &nbsp;<b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-chevron-up edit-comparison" aria-hidden="true"/> Go Back </b-button>
           </h4>
           <div v-if="comparisonCategory === 'gene'">
             <b-form-group class="center-text">
@@ -275,7 +273,7 @@
                 v-model="phenoComparisonCurieList"
                 :rows="3"
                 :max-rows="6"
-                placeholder="Enter a comma separated list of prefixed phenotype ids e.g. HP:0000322"
+                placeholder="Please enter comma seperated phenotype term identifiers from the Human Phenotype Ontology (e.g. HP:0000322, HP:0001166, HP:0001238)"
                 class="my-2"
               />
               <div
@@ -292,8 +290,7 @@
                 dismissible
                 @dismissed="showPhenotypeAlert=false"
               >
-                Error: '{{ rejectedPhenotypeCuries }}' Please enter phenotype term id's from the Human Phenotype Ontology (e.g.
-                HP:0000002)
+                Error: '{{ rejectedPhenotypeCuries }}' Please ensure your list is comma seperated and the id's are valid <a target="_blank" href="https://hpo.jax.org">HPO</a> id's.
               </b-alert>
             </div>
             <div v-if="phenotypeComparison.length > 0" class="flex-container">
@@ -358,7 +355,7 @@
         <div class="col-1"/>
         <div class="col-1"/>
         <div class="col-10 card card-body">
-          <phenotypes-table :phenotypes="phenotypes"/>
+          <phenotypes-table :mode="mode" :compare="xAxis" :source="yAxis"/>
         </div>
         <div class="col-1"/>
       </div>
@@ -619,6 +616,7 @@ export default {
     },
     getPhenotypesFromEntityList() {
       this.rejectedPhenotypeCuries = [];
+      this.showPhenotypeAlert = false;
       let curieList = [];
       if (this.comparisonCategory === 'phenotypes') {
         this.phenotypeComparison = [];

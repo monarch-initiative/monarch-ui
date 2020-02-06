@@ -63,11 +63,11 @@
   </div>
 </template>
 <script>
-import * as BL from '@/api/BioLink';
+import * as bioLinkService from '@/api/BioLink';
 
 export default {
   props: {
-    phenotypes: {
+    source: {
       type: Array,
       required: true
     },
@@ -76,34 +76,26 @@ export default {
       required: false,
       default: '9606'
     },
-    geneList: {
+    compare: {
       type: Array,
       required: false,
       default: null,
+    },
+    mode: {
+      type: String,
+      required: true,
+      default: 'search'
     }
   },
 
 
   data() {
     return {
-      test: {
-        combinedScore: 65,
-        hitId: 'MONDO:0015999',
-        hitLabel: 'primary pigmented nodular adrenocortical disease',
-        mostInformativeIc: '10.16',
-        mostInformativeId: 'HP:0001065',
-        mostInformativeLabel: 'Striae distensae',
-        mostInformativeLink: '/phenotype/HP:0001065',
-        otherMatchIc: '3.67',
-        otherMatchId: 'MP:0001533',
-        otherMatchLabel: 'abnormal skeleton physiology',
-        otherMatchLink: '/phenotype/MP:0001533'
-      },
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
       fields: [
-        {
+         {
           key: 'hitLabel',
           label: 'Match Label',
           sortable: true
@@ -115,24 +107,19 @@ export default {
         },
         {
           label: 'Similarity Score',
-          key: 'combinedScore',
+          key: 'score',
           sortable: true
         },
         {
-          key: 'mostInformativeLabel',
-          label: 'Most Informative Phenotype',
+          key: 'taxonId',
+          label: 'Taxon Id',
           sortable: true
-        },
+        }, 
         {
-          key: 'mostInformativeId',
-          label: 'Most Informative Id',
-          sortable: true,
-        }, {
-          key: 'mostInformativeIc',
-          label: 'Most Informative IC Score',
-          sortable: true,
-        },
-
+          key: 'taxonLabel',
+          label: 'Taxon Label',
+          sortable: true
+        }
       ],
       items: [],
       preItems: []
@@ -153,7 +140,7 @@ export default {
     async comparePhenotypes() {
       const that = this;
       try {
-        const searchResponse = await BL.comparePhenotypes(this.phenotypes, this.genes);
+        const searchResponse = await bioLinkService.comparePhenotypes(this.source, this.compare, this.mode);
         this.preItems = searchResponse;
         this.dataFetched = true;
       } catch (e) {
@@ -161,30 +148,16 @@ export default {
         console.log('BioLink Error', e);
       }
     },
-    processItems() {
+    processItems(){
       this.items = [];
-      this.preItems.data.results.forEach((elem) => {
+      this.preItems.data.matches.forEach((elem) => {
         const rowData = {
-          hitLabel: elem.j.label,
-          hitId: elem.j.id,
-          mostInformativeId: elem.maxIC_class.id,
-          mostInformativeIc: this.round(elem.maxIC_class.IC, 2),
-          mostInformativeLabel: elem.maxIC_class.label,
-          mostInformativeLink: `/phenotype/${elem.maxIC_class.id}`,
-          combinedScore: elem.combinedScore,
-          otherMatchId: '',
-          otherMatchLabel: '',
-          otherMatchIc: '',
-          otherMatchLink: ''
-        };
-        elem.matches.forEach((match) => {
-          if (match.lcs.id !== rowData.hitId) {
-            rowData.otherMatchIc = this.round(match.lcs.IC, 2);
-            rowData.otherMatchId = match.lcs.id;
-            rowData.otherMatchLabel = match.lcs.label;
-            rowData.otherMatchLink = `/phenotype/${match.lcs.id}`;
-          }
-        });
+          hitLabel: elem.label,
+          hitId: elem.id,
+          score: elem.score,
+          taxonId: elem.taxon.id,
+          taxonLabel: elem.taxon.label
+        }
         this.items.push(rowData);
       });
     },
