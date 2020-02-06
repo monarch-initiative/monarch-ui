@@ -4,7 +4,8 @@ import yaml from 'js-yaml';
 // Functions to retrieve license info from OBO Foundry http://obofoundry.org
 
 export default async function getOntologyLicenseInfo() {
-  const ontologyYamlUrl = 'http://obofoundry.org/registry/ontologies.yml';
+  // retrieved from http://obofoundry.org/registry/ontologies.yml
+  const ontologyYamlUrl = `${process.env.BASE_URL}ontologies.yml`;
   const ontologyResp = await axios.get(ontologyYamlUrl);
 
   let ontologyLicenseInfo = null;
