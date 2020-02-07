@@ -64,11 +64,6 @@ const router = new Router({
       component: require('@/views/Disclaimer.md').default,
     },
     {
-      path: '/about/licensing',
-      name: 'about-licensing',
-      component: require('@/views/AboutLicensing.md').default,
-    },
-    {
       path: '/documentation/publications',
       name: 'about-publications',
       component: require('@/views/Publications.md').default,
@@ -127,6 +122,11 @@ const router = new Router({
       name: 'sources',
       // Work done at Hackathon Seth Dan Nathan Chris
       component: () => import(/* webpackChunkName: "data-sources" */ './views/Sources.vue'),
+    },
+    {
+      path: '/about/licensing',
+      name: 'licensing',
+      component: () => import(/* webpackChunkName: "licensing" */ './views/Licensing.vue'),
     },
     {
       path: '/glossary',
