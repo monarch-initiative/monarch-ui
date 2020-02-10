@@ -17,7 +17,7 @@
             <b-button v-b-toggle="'collapse-' + index" variant="primary" class="btn btn-info">More info</b-button>
             <b-collapse :id="'collapse-' + index" class="mt-2">
                 <b-card>
-                  <img :src="source.logoUrl" >
+                  <img v-if="source.logoUrl" :src="source.logoUrl" >
                   <div class="display-name">
                     {{ source.sourceDescription }}
                   </div>
