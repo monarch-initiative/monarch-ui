@@ -9,7 +9,7 @@ const predicates = { // predicates used to retrieve items from BBOP graph json e
   'retrievedOn': 'http://purl.org/pav/retrievedOn',
   'created': 'http://purl.org/dc/terms/created',
   'downloadUrl': 'dcterms:downloadURL',
-  'logo': 'schemaorg:logo',
+  'logo': 'schema:logo',
 };
 
 const curiePrefixURLs = { // various curie prefixes that need to be fixed/expanded to URLs
