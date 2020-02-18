@@ -1,8 +1,9 @@
 <template>
   <div>
     <div v-if="dataFetched">
+      <b-form-input v-model="filter" placeholder="Filter by match or taxon"></b-form-input>
       <b-table
-        :items="items"
+        :items="filtered"
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
@@ -52,7 +53,7 @@
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="items.length"
+          :total-rows="filtered.length"
           class="my-1"
           align="center"
           size="md"
@@ -94,6 +95,7 @@ export default {
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
+      filter: '',
       fields: [
          {
           key: 'hitLabel',
@@ -133,6 +135,19 @@ export default {
       this.processItems();
     }
   },
+  computed: {
+    filtered () {
+      const filterValue = this.filter;
+      console.log(filterValue);
+      const fields = ["hitLabel", "hitId", "taxonId", "taxonLabel"];
+      const filtered = this.items.filter( row => {
+        return fields.some(field => {
+          return row[field].includes(filterValue);
+        })
+      });
+      return filtered.length > 0 ? filtered : this.items;
+    }
+  },
   mounted() {
     this.comparePhenotypes();
   },
@@ -167,6 +182,3 @@ export default {
   }
 };
 </script>
-<style>
-
-</style>
