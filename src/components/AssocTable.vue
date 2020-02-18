@@ -34,6 +34,18 @@
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
+        <template v-slot:cell(relation)="data">
+          <small>
+            <a
+              :href="data.item.relation.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ data.item.relation.label }}
+            </a>
+          </small>
+        </template>
+        
         <template v-slot:cell(assocObject)="data">
           <template v-if="data.item.objectLink">
             <strong>
@@ -45,24 +57,6 @@
               {{ data.item.assocObject }}
             </strong>
           </template>
-        </template>
-
-        <template v-slot:cell(relation)="data">
-          <small>
-            <a
-              :href="data.item.relation.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span v-if="data.item.relation.inverse">
-                <b>&Larr;</b>
-              </span>
-              {{ data.item.relation.label }}
-              <span v-if="data.item.relation.inverse">
-                <b>&Larr;</b>
-              </span>
-            </a>
-          </small>
         </template>
 
         <template v-slot:cell(assocSubject)="data" v-if="isGroup">
@@ -491,15 +485,15 @@ export default {
 
       const fields = [
         {
-          key: 'assocObject',
-          label: this.firstCap(this.cardType),
-          class: 'assoc-object',
-          // sortable: true,
-        },
-        {
           key: 'relation',
           label: 'Relation',
           class: 'relation-column-width',
+          // sortable: true,
+        },
+        {
+          key: 'assocObject',
+          label: this.firstCap(this.cardType),
+          class: 'assoc-object',
           // sortable: true,
         },
         {
