@@ -1,6 +1,6 @@
 <div class="container-fluid monarch-view other-tools px-5">
 
-<h2 class="page-title">Other Resources from Monarch Initiative</h2>
+<h2 class="page-title">Other Resources from the Monarch Initiative</h2>
     <div class="card">
         <h4>Exomiser</h4>
         <p>
@@ -74,7 +74,42 @@
             here</a>.
             </p>
     </div>
-</div>
+    <div class="card">
+            <h4>Phenogrid</h4>
+            <p><a href="https://github.com/monarch-initiative/phenogrid">Phenogrid</a> is a Javascript component that
+            visualizes semantic similarity calculations provided by OWLSim,
+            as provided through APIs from the Monarch Initiative. Given an input list of phenotypes and parameters 
+            specified in config/phenogrid_config.js indicating desired source of matching models (humans, model
+            organisms, etc.), the phenogrid will call the Monarch API to get OWLSim results and render them in your web
+            browser in data visualization.</p>
+    </div>
+    <div class="card">
+            <h4>Dipper</h4>
+            <p><a href="https://github.com/monarch-initiative/dipper">Dipper</a> is a Python package to generate RDF 
+            triples from common scientific resources. Dipper includes subpackages and modules to create graphical models
+            of this data. Data generated from this pipeline can be used in a variety of ways downstream. We recommend
+            loading the data into a triple store or graph database that is optimized for use with ontologies, such as
+            BlazeGraph. We also maintain SciGraph, an application that loads RDF and OWL into Neo4J. Smaller files can
+            be loaded into an ontology editor like Protege.</p>
+    </div>
+    <div class="card">
+            <h4>HPO Case Annotator</h4>
+            <p>
+            <a href="https://github.com/monarch-initiative/HpoCaseAnnotator">The HPO Case Annotator (HCA)</a> GUI is a
+            Java app created with aim to make the biocuration of published pathogenic human variants easier.
+            </p>
+    </div>
+    <div class="card">
+            <h4>BOOM: Bayes OWL Ontology Merging</h4>
+            <p><a href="https://github.com/monarch-initiative/kboom">BOOM</a> is an ontology construction technique
+            that takes two or more ontologies linked by hypothetical axioms, and estimates the most likely unified
+            logical ontology. Hypothetical axioms can themselves be derived from semantically loose mappings. The method
+            combines deductive reasoning and probabilistic inference. A special form of this strategy
+            called k-BOOM works by factorizing the probabilistic ontology into k submodules. A 
+            preprint describing this in greater detail is available
+            <a href="https://www.biorxiv.org/content/10.1101/048843v2">here</a>.
+            </p>
+    </div></div>
 
 <style lang="scss">
 @import "~@/style/variables";
