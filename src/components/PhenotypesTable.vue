@@ -139,7 +139,6 @@ export default {
   computed: {
     filtered () {
       const filterValue = this.filter;
-      console.log(filterValue);
       const fields = ["hitLabel", "hitId", "taxonId", "taxonLabel"];
       const filtered = this.items.filter( row => {
         return fields.some(field => {
