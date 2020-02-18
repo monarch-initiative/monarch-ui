@@ -31,6 +31,7 @@
         <template
           slot="misp_ic"
           slot-scope="data"
+          class="ic-score"
         >
           {{ data.item.mostInformativeIc }}
         </template>
@@ -182,3 +183,9 @@ export default {
   }
 };
 </script>
+
+<style>
+  .ic-score{
+    color: rgb(135, 99, 163);
+  }
+</style>

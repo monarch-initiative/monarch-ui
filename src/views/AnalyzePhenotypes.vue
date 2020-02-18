@@ -12,15 +12,14 @@
       <!-- Step 1 of Phenotype profile search -->
       <div class="col-10 card card-body step-1">
         <div v-if="currentStep === 1">
-          <h5 class="text-center">1. Create a Profile of Phenotypes
-            <b-button
+          <b-button
               v-if="currentSubStep !== 1"
               class="comparison-category-edit"
               variant="outline-info"
               @click="currentSubStep = 1; phenotypes = []">
-              <i class="fa fa-chevron-up edit-comparison" aria-hidden="true"/> Go Back
-            </b-button>
-          </h5>
+              <i class="fa fa-chevron-left edit-comparison" aria-hidden="true"/> Go Back
+          </b-button>
+          <h5 class="text-center step-title">1. Create a Profile of Phenotypes</h5>
           <div v-if="currentSubStep === 1" class="center-text">
             <h6 class="center-text">How would you like to continue?</h6>
             <b-form-group>
@@ -129,7 +128,7 @@
       <div class="col-1"/>
       <div class="col-10 card card-body">
         <div v-if="currentStep === 2 && !comparisonCategory" class="comparison-category-select">
-          <h5>2. What would you like to compare your profile with?</h5>
+          <h5 class="step-title">2. What would you like to compare your profile with?</h5>
           <b-form-group>
             <b-button-group>
               <b-button variant="outline-info" @click="comparisonCategory = 'all'">Everything</b-button>
@@ -140,10 +139,9 @@
           </b-form-group>
         </div>
         <div v-if="comparisonCategory">
-          <h4 class="center-text">
+          <b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-chevron-left edit-comparison" aria-hidden="true"/> Go Back </b-button>
+          <h4 class="center-text step-title">
             <span v-if="comparisonCategory != 'all'">Build your {{ comparisonCategory }} profile for comparison</span>
-            <span v-if="comparisonCategory == 'all'">Comparing everything.</span>
-            &nbsp;<b-button class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory"><i class="fa fa-chevron-up edit-comparison" aria-hidden="true"/> Go Back </b-button>
           </h4>
           <div v-if="comparisonCategory === 'gene'">
             <b-form-group class="center-text">
@@ -839,5 +837,9 @@ export default {
 
   .submit {
     cursor: pointer;
+  }
+
+  .step-title {
+    margin-bottom: 1rem;
   }
 </style>
