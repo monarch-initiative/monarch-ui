@@ -25,7 +25,7 @@
             <b-form-group>
               <b-button-group>
                 <b-button variant="outline-info" @click="currentSubStep = 2">Search & Build</b-button>
-                <b-button variant="outline-info" @click="currentSubStep = 3">I have a phenotype list</b-button>
+                <b-button variant="outline-info" @click="currentSubStep = 3">Paste a phenotype list</b-button>
               </b-button-group>
             </b-form-group>
           </div>
@@ -148,7 +148,7 @@
               <b-button-group>
                 <b-button variant="outline-info" @click="geneComparisonCategory = 'gene-group'">Taxon Grouped Genes</b-button>
                 <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-build'">Search & Build</b-button>
-                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-list'; genes = []">I have gene a list</b-button>
+                <b-button variant="outline-info" @click="geneComparisonCategory = 'custom-list'; genes = []">Paste a gene list</b-button>
               </b-button-group>
             </b-form-group>
             <div v-if="geneComparisonCategory === 'gene-group'">
@@ -252,7 +252,7 @@
             <b-form-group class="center-text">
               <b-button-group>
                 <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-build'">Search & Build</b-button>
-                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-list'">I have a phenotype list</b-button>
+                <b-button variant="outline-info" @click="phenotypeComparisonCategory = 'phenotypes-list'">Paste a phenotype list</b-button>
               </b-button-group>
             </b-form-group>
             <div v-if="phenotypeComparisonCategory == 'phenotypes-build'">
