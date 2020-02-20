@@ -129,6 +129,11 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "licensing" */ './views/Licensing.vue'),
     },
     {
+      path: '/about/ontologies',
+      name: 'ontologies',
+      component: () => import(/* webpackChunkName: "ontologies" */ './views/Ontologies.vue'),
+    },
+    {
       path: '/glossary',
       name: 'glossary',
       component: require('@/views/glossary.md').default,
