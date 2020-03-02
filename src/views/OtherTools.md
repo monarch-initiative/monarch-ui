@@ -98,17 +98,6 @@
             <a href="https://github.com/monarch-initiative/HpoCaseAnnotator">The HPO Case Annotator (HCA)</a> GUI is a
             Java app created with aim to make the biocuration of published pathogenic human variants easier.
             </p>
-    </div>
-    <div class="card">
-            <h4>BOOM: Bayes OWL Ontology Merging</h4>
-            <p><a href="https://github.com/monarch-initiative/kboom">BOOM</a> is an ontology construction technique
-            that takes two or more ontologies linked by hypothetical axioms, and estimates the most likely unified
-            logical ontology. Hypothetical axioms can themselves be derived from semantically loose mappings. The method
-            combines deductive reasoning and probabilistic inference. A special form of this strategy
-            called k-BOOM works by factorizing the probabilistic ontology into k submodules. A 
-            preprint describing this in greater detail is available
-            <a href="https://www.biorxiv.org/content/10.1101/048843v2">here</a>.
-            </p>
     </div></div>
 
 <style lang="scss">
