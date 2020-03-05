@@ -45,6 +45,10 @@
             Licensing
           </b-dropdown-item>
 
+          <b-dropdown-item to="/about/licensing#ontologies">
+            Ontologies
+          </b-dropdown-item>
+
           <b-dropdown-item to="/about/disclaimer">
             Disclaimer
           </b-dropdown-item>
