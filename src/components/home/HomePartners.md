@@ -39,8 +39,8 @@
     </div>
     <div class="row">
         <div class="col-sm-4 offset-xl-4 col-xl-2 collab">
-           <a href="https://www.charite.de/en/" target="__blank">
-                <img src="../../assets/img/charite.png" alt="charite">
+           <a href="https://ada.com/" target="__blank">
+                <img src="../../assets/img/ada.png" alt="ada">
             </a>
         </div>
         <div class=" col-sm-4 col-xl-2 collab">
