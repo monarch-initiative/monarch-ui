@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="dataFetched">
+      <h4>Source data for each match result (each column) in the Phenogrid above is represented as a row in the table below.</h4>
       <b-form-input v-model="filter" placeholder="Filter by match or taxon"></b-form-input>
       <b-table
         :items="filtered"

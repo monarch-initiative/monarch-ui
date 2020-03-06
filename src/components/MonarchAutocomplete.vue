@@ -215,9 +215,7 @@ export default {
       category: 'all',
       selectDisplay: 'All',
       exampleSearches,
-      options: [
-
-      ],
+      options: [],
       catDropDown: false,
       value: '',
       suggestions: [],
@@ -242,51 +240,12 @@ export default {
         }
       }
     },
+    definedCategories() {
+      this.configureOptions();
+    }
   },
   mounted() {
-    if (this.definedCategories) {
-      if (this.definedCategories.length > 1) {
-        this.options.push({ text: 'All', value: 'all-subset' });
-      }
-      this.definedCategories.forEach((elem) => {
-        this.options.push({
-          text: this.firstCap(elem),
-          value: elem,
-        });
-      });
-      if (this.definedCategories.length === 1) {
-        this.category = this.options[0].value;
-      } else {
-        this.category = 'all-subset';
-      }
-    } else {
-      this.options = [
-        {
-          text: 'All',
-          value: 'all'
-        },
-        {
-          text: 'Gene',
-          value: 'gene',
-        },
-        {
-          text: 'Genotype',
-          value: 'genotype',
-        },
-        {
-          text: 'Variant',
-          value: 'variant',
-        },
-        {
-          text: 'Phenotype',
-          value: 'phenotype',
-        },
-        {
-          text: 'Disease',
-          value: 'disease',
-        }
-      ];
-    }
+    this.configureOptions();
   },
   beforeDestroy() {
     this.destroying = true;
@@ -336,6 +295,52 @@ export default {
         this.loading = false;
       } catch (e) {
         console.log('nodeResponse ERROR', e, this);
+      }
+    },
+    configureOptions(){
+      this.options = [];
+      if (this.definedCategories) {
+        if (this.definedCategories.length > 1) {
+          this.options.push({ text: 'All', value: 'all-subset' });
+        }
+        this.definedCategories.forEach((elem) => {
+          this.options.push({
+            text: this.firstCap(elem),
+            value: elem,
+          });
+        });
+        if (this.definedCategories.length === 1) {
+          this.category = this.options[0].value;
+        } else {
+          this.category = 'all-subset';
+        }
+      } else {
+        this.options = [
+          {
+            text: 'All',
+            value: 'all'
+          },
+          {
+            text: 'Gene',
+            value: 'gene',
+          },
+          {
+            text: 'Genotype',
+            value: 'genotype',
+          },
+          {
+            text: 'Variant',
+            value: 'variant',
+          },
+          {
+            text: 'Phenotype',
+            value: 'phenotype',
+          },
+          {
+            text: 'Disease',
+            value: 'disease',
+          }
+        ];
       }
     },
     enter() {
