@@ -3,8 +3,7 @@
     <div class="contact">
         <p>
             If you have a specific question about Monarch, its data, usage, software, or services, you can create a 
-            ticket on our helpdesk <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a> 
-            or get live feedback on <a href="https://gitter.im/monarch-initiative/helpdesk" target="__blank">gitter</a>.
+            ticket on our helpdesk <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a> or get live feedback on <a href="https://gitter.im/monarch-initiative/helpdesk" target="__blank">gitter</a>.
             We invite you to join the rest of the Monarch Initiative community on 
             <a href="https://github.com/monarch-initiative" target="__blank">GitHub!</a>
         </p>
@@ -13,22 +12,23 @@
             <a href="https://status.monarchinitiative.org/" target="__blank">status page</a>. 
         </p>
         <p>
-            For information on using or contributing to the Human Phenotype Ontology (HPO), 
-            please visit <a href="https://hpo.jax.org/" target="__blank">https://hpo.jax.org/</a> 
-            for more information.
+            For more information on using or contributing to the Human Phenotype Ontology (HPO), 
+            please visit <a href="https://hpo.jax.org/" target="__blank">https://hpo.jax.org/</a>.
         </p>
         <p>
             To learn more about using or contributing to the Mondo Disease Ontology, 
             please visit 
             <a href="https://monarch-initiative.github.io/mondo/" target="__blank">https://monarch-initiative.github.io/mondo/</a> 
-            for more details.
+            for details.
         </p>
         <p>
-        Join our mailing list and stay informed! We support two mailing lists for conversations about the Monarch Initiative. 
-        Subscribe to one or both of these lists to follow <br>general developments and discussions, or to post a message 
-        to the Monarch community: <br><br>
-        monarch-friends mailing list<br>
-        monarch-users mailing list
+            Join our mailing list and stay informed! Use our mailing list to follow general developments and discussions about
+            the Monarch Initiative, and to reach out to the community built around Monarch: 
+        <br><br>
+            Join the <a href="https://groups.google.com/forum/#!forumsearch/Monarch$20Initiative$20Friends">Monarch Initiative 
+            Friends mailing list</a>.<br> 
+            Learn more aboout <a href="https://support.google.com/groups/answer/1067205?hl=en"> "Finding and 
+            joining a Google group"</a>.<br>
         </p>
         <p> 
             For all other general questions or comments, please send us an <a href="mailto:info@monarchinitiative.org">email</a>. 
