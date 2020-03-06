@@ -28,7 +28,7 @@
     <a href="https://github.com/biolink/ontobio/blob/master/LICENSE">BSD 3 License</a>
     </li>
     </ul>
-    <h4>Ontologies maintained by Monarch</h4>
+    <h4 id="ontologies">Ontologies maintained by Monarch</h4>
         <ul>
             <div v-for="ontology in ontologyLicenseInfo.ontologies">
             <li v-if="['ecto', 'geno', 'hp', 'maxo', 'mondo', 'sepio', 'upheno'].includes(ontology.id)">
