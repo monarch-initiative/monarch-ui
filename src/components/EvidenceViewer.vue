@@ -8,6 +8,11 @@
       }})
     </div>
 
+    <template v-if="nodeId !== subjectId">
+      <i class="fa fa-fw fa-share-alt neighbors" />
+      <span class="subclass-of">{{ subjectLabel }} is a subclass of {{ nodeLabel }}</span>
+    </template>
+
     <template v-if="evidence.evidence_types.length">
       <div>
         <b-button
@@ -144,7 +149,7 @@
               v-html="$sanitizeText(data.item.subject.label)"/>
           </template>
           <template v-else>
-            {{ data.item.subject.label }}
+            <span v-html="$sanitizeText(data.item.subject.label)"/>
           </template>
         </template>
 
@@ -159,7 +164,7 @@
               v-html="$sanitizeText(data.item.object.label)"/>
           </template>
           <template v-else>
-            {{ data.item.object.label }}
+            <span v-html="$sanitizeText(data.item.object.label)"/>
           </template>
         </template>
 
@@ -282,7 +287,7 @@
 
 <script>
 import { getEvidence } from '@/api/BioLink';
-import { getXrefUrl, processSources } from '@/lib/Utils';
+import { getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText } from '@/lib/Utils';
 import sourceToLabel from '@/lib/sources';
 
 export default {
@@ -300,10 +305,22 @@ export default {
       type: String,
       required: true,
     },
+    nodeLabel: {
+      type: String,
+      required: false,
+    },
     nodeType: {
       type: String,
       required: false,
       default: ''
+    },
+    subjectId: {
+      type: String,
+      required: false,
+    },
+    subjectLabel: {
+      type: String,
+      required: false,
     },
   },
   data() {
@@ -398,6 +415,11 @@ export default {
 
         [evi.subject, evi.object].forEach((node) => {
           node.label = node.label || node.id;
+
+          if (node.label !== sanitizeText(node.label)) {
+            node.label = sanitizeNodeLabel(node.label);
+          }
+
           if (
             node.id.startsWith('BNODE') // blank node
             || node.id.startsWith('MONARCH') // monarch association (likely)
@@ -487,12 +509,14 @@ export default {
         evi.rowNum = ++rowNum;
       });
 
+      // Sort is browser dependent, redo in ontobio
       evidenceTable =
         evidenceTable.sort((a, b) => (
           (b.provided_by.join().includes('OMIM')
             || b.provided_by.join().includes('Orphanet'))
             ? 1 : -1));
 
+      // Sort is browser dependent, redo in ontobio
       // Sorting by has phenotype seems to help the flow of statements,
       // but more testing needed, ideally these statements would be
       // grouped together o coupled with a graph view to disambiguate
@@ -510,8 +534,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~@/style/variables";
 
-.evidence-section {
+  .evidence-section {
     //max-height: 200px;
     //overflow-y: auto;
   div {
@@ -531,6 +556,12 @@ export default {
   .summary-btn:hover {
     background-color: #ebedee;
     border: none;
+  }
+
+  .subclass-of {
+    font-size: 0.9rem;
+    vertical-align: middle;
+    padding-bottom: 5px;
   }
 
   .collapsed > .when-opened,
@@ -566,6 +597,14 @@ export default {
 
   .nowrap {
     white-space: nowrap;
+  }
+
+  & .fa  {
+    &.neighbors {
+      font-size: 1.4em;
+      transform: rotate(90deg);
+      color: $monarch-bg-color;
+    }
   }
 }
 

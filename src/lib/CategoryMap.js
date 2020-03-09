@@ -11,14 +11,17 @@ export function reduceCategoryList(categoryList) {
   const validCats = {
     'gene': 'gene',
     'variant': 'variant',
-    'sequence feature': 'variant',
     'genotype': 'genotype',
     'phenotype': 'phenotype',
     'disease': 'disease',
     'pathway': 'pathway',
     'anatomical entity': 'anatomy',
     'publication': 'publication',
-    'case': 'case'
+    'case': 'case',
+    // TODO remove this
+    // when https://github.com/monarch-initiative/monarch-cypher-queries/commit/c3ff7c1
+    // makes it to production
+    'sequence featurevariant': 'variant',
   };
 
   const modelCats = ['cell line', 'organism'];

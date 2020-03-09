@@ -137,9 +137,10 @@
 </template>
 
 <script>
+
+import vClickOutside from 'v-click-outside';
 import * as biolink from '@/api/BioLink';
 import { reduceCategoryList } from '@/lib/CategoryMap';
-import vClickOutside from 'v-click-outside';
 
 const debounce = require('lodash/debounce');
 
@@ -198,6 +199,11 @@ export default {
       required: false,
       default: null,
     },
+    searchFilters: {
+      type: Array,
+      required: false,
+      default: null,
+    },
     dynamicPlaceholder: {
       type: String,
       required: false,
@@ -237,9 +243,9 @@ export default {
       this.closeFilterBox();
       if (!this.definedCategories) {
         this.suggestions = [];
-        if (this.value.length > 0) {
-          this.fetchData();
-        }
+      }
+      if (this.value.length > 0) {
+        this.fetchData();
       }
     },
   },
@@ -305,9 +311,13 @@ export default {
       try {
         let searchResponse;
         if (this.category === 'all-subset') {
-          searchResponse = await biolink.getSearchTermSuggestions(this.value, this.definedCategories, this.allowedPrefixes);
+          searchResponse = await biolink.getSearchTermSuggestions(
+            this.value, this.definedCategories, this.allowedPrefixes, this.searchFilters
+          );
         } else {
-          searchResponse = await biolink.getSearchTermSuggestions(this.value, this.category, this.allowedPrefixes);
+          searchResponse = await biolink.getSearchTermSuggestions(
+            this.value, this.category, this.allowedPrefixes, this.searchFilters
+          );
         }
         this.suggestions = [];
         this.current = -1;
@@ -323,13 +333,12 @@ export default {
           this.suggestions.push(resultPacket);
         });
         const sortCategory = this.typeSort;
-        if(sortCategory){
-          this.suggestions.sort(function(a, b) {
-            if (a.category == sortCategory) return -1;
-            if (b.category == sortCategory) return 1;
-            if(a.category == b.category) {
-              return 0;
-            } 
+        if (sortCategory) {
+          this.suggestions.sort(function (a, b) {
+            if (a.category === sortCategory) return -1;
+            if (b.category === sortCategory) return 1;
+            if (a.category === b.category) return 0;
+            return 0;
           });
         }
         this.open = true;

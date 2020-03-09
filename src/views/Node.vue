@@ -156,6 +156,7 @@
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
+              :node-label="node.label"
               :is-group="isGroup"
             />
           </div>
@@ -175,10 +176,11 @@
 <script>
 
 import us from 'underscore';
+import MarkdownIt from 'markdown-it';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
-import { getXrefUrl, processSources } from '@/lib/Utils';
+import { getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText } from '@/lib/Utils';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -188,7 +190,6 @@ import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
 import ReactomeViewer from '@/components/ReactomeViewer.vue';
 
-import MarkdownIt from 'markdown-it';
 
 
 // https://stackoverflow.com/a/34064434/5667222
@@ -249,11 +250,11 @@ const labels = {
   cellline: 'Cell Line',
   disease: 'Disease',
   'causal-disease': 'Disease (causal)',
-  'noncausal-disease': 'Disease (noncausal)',
+  'noncausal-disease': 'Disease (correlated)',
   function: 'Function',
   gene: 'Gene',
   'causal-gene': 'Gene (causal)',
-  'noncausal-gene': 'Gene (noncausal)',
+  'noncausal-gene': 'Gene (correlated)',
   genotype: 'Genotype',
   case: 'Case',
   homolog: 'Homolog',
@@ -452,7 +453,7 @@ export default {
 
   methods: {
     expandCard(cardType) {
-      this.$router.push({ hash: cardType });
+      this.$router.push({ hash: cardType }).catch((err) => {});
       this.expandedCard = cardType;
     },
 
@@ -539,6 +540,10 @@ export default {
 
       if (!this.node.label) {
         this.node.label = this.node.id;
+      }
+
+      if (this.node.label !== sanitizeText(this.node.label)) {
+        this.node.label = sanitizeNodeLabel(this.node.label);
       }
 
       if (this.nodeType === 'publication') {

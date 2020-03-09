@@ -33,9 +33,9 @@
           <div v-if="currentSubStep === 2">
             <monarch-autocomplete
               :home-search="false"
-              :allowed-prefixes="acceptedPrefixes"
               :defined-categories="searchPhenoCategories"
               :dynamic-placeholder="phenoSearchPH"
+              :search-filters="searchFilters"
               :type-sort="'phenotype'"
               @interface="handlePhenotypes"
             />
@@ -79,7 +79,7 @@
             <i v-if="showCollapse" class="fa fa-eye" aria-hidden="true"/>
             <i v-if="!showCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
             &nbsp;Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
-            
+
           </b-button>
           <b-collapse id="collapse-phenotypes" v-model="showCollapse" class="flex-container">
             <div
@@ -222,6 +222,7 @@
               <monarch-autocomplete
                 :home-search="false"
                 :defined-categories="searchCompCategories"
+                :search-filters="searchFilters"
                 :dynamic-placeholder="placeholderComparisonText"
                 @interface="handleDisease"
               />
@@ -260,9 +261,9 @@
             <div v-if="phenotypeComparisonCategory == 'phenotypes-build'">
               <monarch-autocomplete
                 :home-search="false"
-                :allowed-prefixes="acceptedPrefixes"
                 :defined-categories="searchPhenoCategories"
                 :dynamic-placeholder="phenoSearchPH"
+                :search-filters="searchFilters"
                 @interface="handlePhenotypes"
               />
               *Non-phenotype entities will automatically be mapped to their associated phenotypes.
@@ -383,11 +384,35 @@ export default {
     'monarch-autocomplete': MonarchAutocomplete,
     'pheno-grid': PhenoGrid,
     'phenotypes-table': PhenotypesTable,
-    'local-nav': LocalNav,
   },
   data() {
     return {
-      acceptedPrefixes: ['MONDO', 'HP', 'NCBIGene', 'HGNC'],
+      acceptedPrefixes: [
+        'MONDO',
+        // genes
+        'NCBIGene',
+        'HGNC',
+        'MGI',
+        'ZFIN',
+        'FlyBase',
+        'RGD',
+        'WormBase',
+        'Xenbase',
+        // phenotypes
+        'HP', // human
+        'MP', // mammal (but really mouse, rat)
+        'ZP', // zebrafish
+        'FBbt', // fruit fly
+        'CL', // Cell ontology converted phenotypes (worm)
+        'WBPhenotype', // worm
+      ],
+      // Filter to prevent diseases without phenotypes and most genes without phenotypes
+      // We can't specify human (HGNC) because phenotypes are usually inferred
+      // across diseases
+      searchFilters: [
+        '(category:phenotype OR (category:gene AND (has_phenotype:true OR prefix:HGNC)) ' +
+            '(category:disease AND has_phenotype:true))',
+      ],
       phenoSearchPH: 'Search by phenotype, disease or gene...',
       placeholderComparisonText: '',
       searchPhenoCategories: ['phenotype', 'disease', 'gene'],
@@ -525,7 +550,7 @@ export default {
       this.selectedGeneGroup = null;
     },
     popPhenotype(ind) {
-      if(this.comparisonCategory === 'phenotypes'){
+      if (this.comparisonCategory === 'phenotypes') {
         this.phenotypeComparison.splice(ind, 1);
       } else {
         this.phenotypes.splice(ind, 1);
@@ -540,9 +565,20 @@ export default {
     // Creates a list of phenotypes and stores them in phenotypes after a call using autocomplete
     // or in phenotypeComparison if we are on step 2
     handlePhenotypes(payload) {
-      if (payload.curie.includes('MONDO')) {
+      const prefix = payload.curie.split(':')[0];
+      const genePrefixes = [
+        'NCBIGene',
+        'HGNC',
+        'MGI',
+        'ZFIN',
+        'FlyBase',
+        'RGD',
+        'WormBase',
+        'Xenbase',
+      ];
+      if (prefix === 'MONDO') {
         this.fetchPhenotypes(payload.curie, 'disease');
-      } else if (payload.curie.includes('HGNC')) {
+      } else if (genePrefixes.includes(prefix)) {
         this.fetchPhenotypes(payload.curie, 'gene');
       } else if (this.comparisonCategory === 'phenotypes') {
         this.phenotypeComparison.push(payload);
@@ -690,17 +726,23 @@ export default {
     async fetchPhenotypes(curie, nodeIdentifier) {
       const that = this;
       try {
-        const searchResponse = await biolinkService.getNodeAssociations(nodeIdentifier, curie, 'phenotype');
+        let params = new URLSearchParams();
+        params = {
+          'direct': true
+        };
+        const searchResponse = await biolinkService.getNodeAssociations(
+          nodeIdentifier, curie, 'phenotype', null, params
+        );
         const phenotypeComparisonRef = this.phenotypeComparison;
         const phenotypeRef = this.phenotypes;
         const categoryRef = this.comparisonCategory;
         searchResponse.data.associations.forEach((elem) => {
-          if (categoryRef === 'phenotypes') {
+          if (categoryRef === 'phenotypes' && !elem.object.id.startsWith('EFO')) {
             phenotypeComparisonRef.push({
               curie: elem.object.id,
               match: elem.object.label
             });
-          } else {
+          } else if (!elem.object.id.startsWith('EFO')) {
             phenotypeRef.push({
               curie: elem.object.id,
               match: elem.object.label
@@ -722,7 +764,7 @@ export default {
   .center-text {
     text-align: center;
   }
-  
+
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

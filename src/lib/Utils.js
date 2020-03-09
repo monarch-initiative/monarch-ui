@@ -1,5 +1,7 @@
-import xrefs from '@/lib/conf/xrefs';
 import us from 'underscore';
+import sanitizeHTML from 'sanitize-html';
+import xrefs from '@/lib/conf/xrefs';
+
 
 /**
  * Processes a list of publications and returns a list
@@ -35,12 +37,15 @@ export function processPublications(publications) {
  */
 export function processSources(sources) {
   sources = us.uniq(sources.map(db => db.replace(/_?slim/, '')));
+  console.log(sources);
   return sources.map(db => db
     .split('/')
     .pop()
     .replace('#', '')
     .split('.')[0]
-    .toLowerCase());
+    .toLowerCase()
+    // monarch data boutique curated from OMIA data
+    .replace('monarch', 'omia'));
 }
 
 /**
@@ -66,4 +71,19 @@ export function getXrefUrl(source, curie, label) {
     url = url.replace('[label]', label);
   }
   return url;
+}
+
+export function sanitizeText(dirty) {
+  const result = sanitizeHTML(dirty, {
+    allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img', 'sup'])
+  });
+
+  return result;
+}
+
+export function sanitizeNodeLabel(dirty) {
+  // See https://github.com/monarch-initiative/monarch-ui/issues/108
+  // as a background for the below hack
+  const tagRegex = new RegExp('<(.*?)>', 'g');
+  return dirty.replace(tagRegex, '<sup>$1</sup>');
 }
