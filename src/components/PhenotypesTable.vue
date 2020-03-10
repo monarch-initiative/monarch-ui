@@ -1,8 +1,10 @@
 <template>
   <div>
     <div v-if="dataFetched">
+      <h4>Source data for each match result (each column) in the Phenogrid above is represented as a row in the table below.</h4>
+      <b-form-input v-model="filter" placeholder="Filter by match or taxon"></b-form-input>
       <b-table
-        :items="items"
+        :items="filtered"
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
@@ -30,6 +32,7 @@
         <template
           slot="misp_ic"
           slot-scope="data"
+          class="ic-score"
         >
           {{ data.item.mostInformativeIc }}
         </template>
@@ -52,7 +55,7 @@
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="items.length"
+          :total-rows="filtered.length"
           class="my-1"
           align="center"
           size="md"
@@ -94,6 +97,7 @@ export default {
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
+      filter: '',
       fields: [
          {
           key: 'hitLabel',
@@ -133,6 +137,18 @@ export default {
       this.processItems();
     }
   },
+  computed: {
+    filtered () {
+      const filterValue = this.filter;
+      const fields = ["hitLabel", "hitId", "taxonId", "taxonLabel"];
+      const filtered = this.items.filter( row => {
+        return fields.some(field => {
+          return row[field].includes(filterValue);
+        })
+      });
+      return filtered.length > 0 ? filtered : this.items;
+    }
+  },
   mounted() {
     this.comparePhenotypes();
   },
@@ -167,6 +183,9 @@ export default {
   }
 };
 </script>
-<style>
 
+<style>
+  .ic-score{
+    color: rgb(135, 99, 163);
+  }
 </style>
