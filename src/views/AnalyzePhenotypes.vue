@@ -94,8 +94,8 @@
             aria-controls="collapse-4"
             class="m-1 current-phenotype-profile"
             @click="showCollapse = !showCollapse">
-            <i v-if="showCollapse" class="fa fa-eye" aria-hidden="true"/>
-            <i v-if="!showCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
+            <i v-if="showCollapse" class="fa fa-eye" v-b-tooltip.hover title="Hide your profile" aria-hidden="true"/>
+            <i v-if="!showCollapse" class="fa fa-eye-slash" v-b-tooltip.hover title="Show your profile" aria-hidden="true"/>
             &nbsp;Current Phenotype Profile ( {{ phenotypes.length }} phenotypes )
             
           </b-button>
@@ -279,8 +279,8 @@
                 aria-controls="collapse-4"
                 class="m-1 current-phenotype-profile"
                 @click="showComparisonCollapse = !showComparisonCollapse">
-                <i v-if="showComparisonCollapse" class="fa fa-eye" aria-hidden="true"/>
-                <i v-if="!showComparisonCollapse" class="fa fa-eye-slash" aria-hidden="true"/>
+                <i v-if="showComparisonCollapse" class="fa fa-eye" v-b-tooltip.hover title="Hide your profile" aria-hidden="true"/>
+                <i v-if="!showComparisonCollapse" class="fa fa-eye-slash" v-b-tooltip.hover title="Show your profile" aria-hidden="true"/>
                 &nbsp;Comparison Phenotype Profile ( {{ phenotypeComparison.length }} phenotypes )
               </b-button>
               <b-collapse id="collapse-phenotypes" v-model="showComparisonCollapse" class="flex-container">
@@ -495,6 +495,7 @@ export default {
       this.selectedGeneGroup = null;
       this.everythingCategory = '';
       this.customCategory = '';
+      this.phenoComparisonCurieList = "";
     },
     popPhenotype(ind) {
       if(this.comparisonCategory === 'phenotypes'){
