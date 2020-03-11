@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "8.12.0"
+install:
+  - npm update
+  - npm install
+stages:
+  - test and lint
+jobs:
+  include:
+    - stage: test and lint
+      script:
+        - npm run test:unit
+    - stage: test and lint
+      script:
+        - node_modules/.bin/vue-cli-service lint --no-fix
