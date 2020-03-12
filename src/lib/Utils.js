@@ -37,7 +37,6 @@ export function processPublications(publications) {
  */
 export function processSources(sources) {
   sources = us.uniq(sources.map(db => db.replace(/_?slim/, '')));
-  console.log(sources);
   return sources.map(db => db
     .split('/')
     .pop()
