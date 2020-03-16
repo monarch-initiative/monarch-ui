@@ -11,6 +11,7 @@ export function reduceCategoryList(categoryList) {
   const validCats = {
     'gene': 'gene',
     'variant': 'variant',
+    'sequence feature': 'variant',
     'genotype': 'genotype',
     'phenotype': 'phenotype',
     'disease': 'disease',

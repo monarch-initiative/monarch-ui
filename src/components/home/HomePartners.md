@@ -37,17 +37,10 @@
             </a>
         </div>     
     </div>
-    <div class="row">
-        <div class="col-sm-4 offset-xl-4 col-xl-2 collab">
-           <a href="https://www.charite.de/en/" target="__blank">
-                <img src="../../assets/img/charite.png" alt="charite">
-            </a>
-        </div>
-        <div class=" col-sm-4 col-xl-2 collab">
-            <a href="https://renci.org/" target="__blank">
-                <img src="../../assets/img/renci.png" alt="renci">
-            </a>
-        </div>
+    <div class="offset-sm-5 col-sm-2 collab renci" style=";">
+        <a href="https://renci.org/" target="__blank">
+            <img src="../../assets/img/renci.png" alt="renci">
+        </a>
     </div>
 </div>
 <p>
@@ -92,6 +85,17 @@ div.partners-section {
     }
     
    }
+   
+   .renci {
+       margin-top: -60px;
+   }
+    
+    @media screen and (max-width: 580px){
+        .renci {
+            margin-top: 0;
+        }
+    }
+    
     
   p {
     text-align: center;
