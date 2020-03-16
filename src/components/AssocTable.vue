@@ -187,7 +187,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      rowsPerPage: 20,
+      rowsPerPage: 15,
       totalAssociations: 0,
       hasTaxon: false,
       hasFrequencyOnset: false,

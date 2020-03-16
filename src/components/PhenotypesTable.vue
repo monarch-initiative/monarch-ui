@@ -1,58 +1,27 @@
 <template>
   <div>
     <div v-if="dataFetched">
+      <h6>Source data for each match result (each column) in the Phenogrid above is represented as a row in the table below.</h6>
+      <b-form-input v-model="filter" placeholder="Filter by match or taxon"></b-form-input>
       <b-table
-        :items="items"
+        :items="filtered"
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
         responsive="true"
         class="table-border-soft"
       >
-        <template
-          slot="hitLabel"
-          slot-scope="data"
-        >
-          <strong>{{ data.item.hitLabel }}</strong>
-        </template>
-        <template
-          slot="hitId"
-          slot-scope="data"
-        >
-          {{ data.item.hitId }}
-        </template>
-        <template
-          slot="mostInformativeLabel"
-          slot-scope="data"
-        >
-          {{ data.item.mostInformativeLabel }}
-        </template>
-        <template
-          slot="misp_ic"
-          slot-scope="data"
-        >
-          {{ data.item.mostInformativeIc }}
-        </template>
-        <template
-          slot="other_matching_phenotypes"
-          slot-scope="data"
-        >
-          <router-link :to="data.item.otherMatchLink">
-            {{ data.item.otherMatchLabel }}
-          </router-link>
-        </template>
-        <template
-          slot="omp_ic"
-          slot-scope="data"
-        >
-          {{ data.item.otherMatchIc }}
+        <template v-slot:cell(score)="data">
+          <span class="ic-score">{{data.item.score}}</span>
         </template>
       </b-table>
       <div v-if="items.length > 10">
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
-          :total-rows="items.length"
+          :total-rows="filtered.length"
           class="my-1"
           align="center"
           size="md"
@@ -94,6 +63,9 @@ export default {
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
+      filter: '',
+      sortBy: 'score',
+      sortDesc: 'true',
       fields: [
          {
           key: 'hitLabel',
@@ -110,11 +82,6 @@ export default {
           key: 'score',
           sortable: true
         },
-        {
-          key: 'taxonId',
-          label: 'Taxon Id',
-          sortable: true
-        }, 
         {
           key: 'taxonLabel',
           label: 'Taxon Label',
@@ -133,6 +100,18 @@ export default {
       this.processItems();
     }
   },
+  computed: {
+    filtered () {
+      const filterValue = this.filter;
+      const fields = ["hitLabel", "hitId", "taxonId", "taxonLabel"];
+      const filtered = this.items.filter( row => {
+        return fields.some(field => {
+          return row[field].includes(filterValue);
+        })
+      });
+      return filtered.length > 0 ? filtered : this.items;
+    }
+  },
   mounted() {
     this.comparePhenotypes();
   },
@@ -140,6 +119,8 @@ export default {
     async comparePhenotypes() {
       const that = this;
       try {
+        console.log(this.source);
+        console.log(this.compare);
         const searchResponse = await bioLinkService.comparePhenotypes(this.source, this.compare, this.mode);
         this.preItems = searchResponse;
         this.dataFetched = true;
@@ -155,8 +136,7 @@ export default {
           hitLabel: elem.label,
           hitId: elem.id,
           score: elem.score,
-          taxonId: elem.taxon.id,
-          taxonLabel: elem.taxon.label
+          taxonLabel: elem.taxon.label  !== null ? elem.taxon.label : "-"
         }
         this.items.push(rowData);
       });
@@ -167,6 +147,9 @@ export default {
   }
 };
 </script>
-<style>
 
+<style>
+  .ic-score{
+    color: rgb(135, 99, 163);
+  }
 </style>
