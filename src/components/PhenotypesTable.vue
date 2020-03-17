@@ -103,10 +103,14 @@ export default {
   computed: {
     filtered () {
       const filterValue = this.filter;
-      const fields = ["hitLabel", "hitId", "taxonId", "taxonLabel"];
+      const fields = this.fields;
       const filtered = this.items.filter( row => {
         return fields.some(field => {
-          return row[field].includes(filterValue);
+          const fieldKey = field.key;
+          if(fieldKey !== "score"){
+            return row[fieldKey].toUpperCase().includes(filterValue.toUpperCase());
+          }
+          return false;
         })
       });
       return filtered.length > 0 ? filtered : this.items;
