@@ -7,7 +7,7 @@
     "serve": "node_modules/.bin/vue-cli-service serve --port 8081",
     "build": "node_modules/.bin/vue-cli-service build && cp dist/index.html dist/404.html",
     "test": "npm run test:unit && npm run test:e2e",
-    "lint": "node_modules/.bin/vue-cli-service lint --no-fix",
+    "lint": "NODE_ENV=production node_modules/.bin/vue-cli-service lint --no-fix",
     "analyze": "BUILD=analyze node_modules/.bin/vue-cli-service build",
     "buildandserve": "npm run build && (cd dist/ && ln -s . monarch-ui) && http-server -c-1 dist/",
     "clean": "rm -rf dist/",

@@ -389,7 +389,6 @@ export default {
 
         } catch (err) {
           that.evidenceError = err;
-          console.log('BioLink Error', err);
         }
       } else {
         // console.log("getting evidence from cache");
