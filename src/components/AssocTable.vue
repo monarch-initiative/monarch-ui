@@ -308,14 +308,14 @@ export default {
       }
       catch (e) {
         that.dataError = e;
-        console.log('BioLink Error', e);
+        // console.log('BioLink Error', e);
       }
     },
     fixupRelation(elem, nodeType, cardType) {
       const relation = elem.relation;
 
       if (!relation) {
-        console.log(JSON.stringify(elem, null, 2));
+        // console.log(JSON.stringify(elem, null, 2));
         elem.relation = {
           label: 'Unknown',
           id: 'RO:Unknown',

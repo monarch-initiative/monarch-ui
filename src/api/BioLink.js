@@ -67,7 +67,7 @@ const defaultApiServer =
   (productionServers.indexOf(window.location.hostname) >= 0) ? 'production' : 'development';
 
 const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
-console.log('apiServer', window.location.hostname, apiServer);
+// console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
 export const biolink = serverConfiguration.biolink_url;
@@ -327,7 +327,7 @@ export async function getSources() {
     const dynamicSourceData = await axios.get(url, { params });
     dynamicSourceDataGraph.load_base_json(dynamicSourceData.data);
   } catch (error) {
-    console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
+    // console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
   }
 
   // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
