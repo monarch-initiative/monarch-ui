@@ -10,7 +10,7 @@ export default async function getNewsItems() {
     const newsParsed = yaml.safeLoad(newsResponse.data, 'utf8');
     newsItems = newsParsed.news.items;
   } catch (e) {
-    console.log('getNewsItems yaml.safeLoad ERROR', e);
+    // console.log('getNewsItems yaml.safeLoad ERROR', e);
   }
 
   return newsItems;

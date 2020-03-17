@@ -18,7 +18,11 @@ export function reduceCategoryList(categoryList) {
     'pathway': 'pathway',
     'anatomical entity': 'anatomy',
     'publication': 'publication',
-    'case': 'case'
+    'case': 'case',
+    // TODO remove this
+    // when https://github.com/monarch-initiative/monarch-cypher-queries/commit/c3ff7c1
+    // makes it to production
+    'sequence featurevariant': 'variant',
   };
 
   const modelCats = ['cell line', 'organism'];

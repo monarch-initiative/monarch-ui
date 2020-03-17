@@ -26,7 +26,7 @@ module.exports = {
   ],
   rules: {
     'no-plusplus': 0,
-    'no-console': 0, // errorInProduction,
+    'no-console': errorInProduction,
     'no-debugger': errorInProduction,
     'import/dynamic-import-chunkname': 'error',
     'brace-style': [2, '1tbs'],

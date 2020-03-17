@@ -56,18 +56,18 @@ export async function getGeneDescription(geneId) {
       const symbol = hit.symbol;
 
       if (!hit.genomic_pos) {
-        console.log('getGeneDescription MyGene response missing hit.genomic_pos. Clearing hits', result);
+        // console.log('getGeneDescription MyGene response missing hit.genomic_pos. Clearing hits', result);
         result.hits = [];
       } else {
         let locationObj = hit.genomic_pos;
         if (Array.isArray(locationObj)) {
-          console.log('getGeneDescription multiple genomic_pos found. Merging regions', locationObj);
+          // console.log('getGeneDescription multiple genomic_pos found. Merging regions', locationObj);
 
           const newLocation = locationObj[0];
           let minStart = newLocation.start;
           let maxEnd = newLocation.end;
           if (minStart > maxEnd) {
-            console.log('getGeneDescription minStart > maxEnd', geneId, minStart, maxEnd);
+            // console.log('getGeneDescription minStart > maxEnd', geneId, minStart, maxEnd);
             result.hits = [];
           } else {
             let error = false;
@@ -80,7 +80,7 @@ export async function getGeneDescription(geneId) {
                 maxEnd = l.end;
               }
               if (newLocation.chr !== l.chr) {
-                console.log('...MISMATCH chr', geneId, newLocation.chr, l.chr);
+                // console.log('...MISMATCH chr', geneId, newLocation.chr, l.chr);
                 error = true;
               }
               // if (newLocation.ensemblgene !== l.ensemblgene) {
@@ -112,7 +112,7 @@ export async function getGeneDescription(geneId) {
         }
         // use this mapping: http://docs.mygene.info/en/latest/doc/data.html#species
         if (!isAGRApolloTaxon(taxid)) {
-          console.log(`Species ${taxid} not available from Apollo.  Not showing genome features.`);
+          // console.log(`Species ${taxid} not available from Apollo.  Not showing genome features.`);
         } else {
           const thisSpecies = idToLabel(`NCBITaxon:${taxid}`);
           const defaultTrackName = 'All Genes'; // this is the generic track name
@@ -129,14 +129,14 @@ export async function getGeneDescription(geneId) {
             result.trackResponse = trackResponse.data;
             result.externalURL = externalUrl;
           } catch (e) {
-            console.log(`Error from Apollo at ${trackDataWithHighlightURL}`);
-            console.log(JSON.stringify(e, null, 2));
+            // console.log(`Error from Apollo at ${trackDataWithHighlightURL}`);
+            // console.log(JSON.stringify(e, null, 2));
           }
         }
       }
     }
   } catch (e) {
-    console.log('MyGene.getGeneDescription error', e.message);
+    // console.log('MyGene.getGeneDescription error', e.message);
   }
 
   return result;

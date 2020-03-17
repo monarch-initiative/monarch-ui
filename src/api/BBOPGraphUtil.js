@@ -112,7 +112,7 @@ export function populateRdfDownloadUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const distributionIRI = _versionIRI2distributionIRI(sourceData[i]._version_iri, graph);
     const downloadUrl = _subjectPredicate2Object(distributionIRI, predicates.downloadUrl, graph);
-    if (downloadUrl != undefined) {
+    if (downloadUrl !== undefined) {
       sourceData[i].rdfDownloadUrl = downloadUrl.replace('MonarchArchive:', curiePrefixURLs.MonarchArchive);
     }
   }
@@ -121,7 +121,7 @@ export function populateRdfDownloadUrl(sourceData, graph) {
 export function populateLogoUrl(sourceData, graph) {
   for (let i = 0; i < sourceData.length; i++) {
     const logoUrl = _subjectPredicate2Object(sourceData[i]._summary_iri, predicates.logo, graph);
-    if (logoUrl != undefined) {
+    if (logoUrl !== undefined) {
       sourceData[i].logoUrl = logoUrl.replace('MonarchLogoRepo:', curiePrefixURLs.MonarchLogoRepo);
     }
   }

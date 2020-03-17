@@ -152,7 +152,7 @@ const router = new Router({
         getBasicNode(nodeId)
           .then((node) => {
             const reducedType = reduceCategoryList(node.category);
-            if (reducedType === null) {
+            if (!reducedType) {
               next();
             } else {
               router.push(`/${reducedType}/${nodeId}`);

@@ -12,7 +12,7 @@ export default async function getOntologyLicenseInfo() {
   try {
     ontologyLicenseInfo = await yaml.safeLoad(ontologyResp.data, 'utf8');
   } catch (e) {
-    console.log('ontology license info yaml.safeLoad ERROR', e);
+    // console.log('ontology license info yaml.safeLoad ERROR', e);
   }
   return ontologyLicenseInfo;
 }

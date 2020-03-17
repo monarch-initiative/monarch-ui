@@ -3,7 +3,7 @@ import us from 'underscore';
 import * as bbopgraph from 'bbop-graph';
 import getStaticSourceData from './StaticSourceData';
 import * as bbopgraphUtil from './BBOPGraphUtil';
-import {labelToId, isTaxonCardType, isSubjectCardType} from '../lib/TaxonMap';
+import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 
 // Example of a domain-specific (as opposed to a generic loadJSON)
 // service function. This set of domain-specific services will pretty much
@@ -67,7 +67,7 @@ const defaultApiServer =
   (productionServers.indexOf(window.location.hostname) >= 0) ? 'production' : 'development';
 
 const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
-console.log('apiServer', window.location.hostname, apiServer);
+// console.log('apiServer', window.location.hostname, apiServer);
 
 const serverConfiguration = servers[apiServer];
 export const biolink = serverConfiguration.biolink_url;
@@ -207,12 +207,14 @@ export async function getNeighborhood(nodeId, nodeType) {
   const xrefProp = 'http://www.geneontology.org/formats/oboInOwl#hasDbXref';
   const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
-  const params = {};
+  const params = new URLSearchParams();
 
   if (neighborhoodTypes.includes(nodeType)) {
-    params.graph = 'ontology';
+    params.append('relationship_type', 'equivalentClass');
+    params.append('relationship_type', 'subClassOf');
+    params.append('relationship_type', 'BFO:0000050');
   } else {
-    params.relationship_type = 'equivalentClass';
+    params.append('relationship_type', 'equivalentClass');
   }
 
   const graphResponse = await axios.get(graphUrl, { params });
@@ -325,7 +327,7 @@ export async function getSources() {
     const dynamicSourceData = await axios.get(url, { params });
     dynamicSourceDataGraph.load_base_json(dynamicSourceData.data);
   } catch (error) {
-    console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
+    // console.log('Error calling biolink-api dataset metadata endpoint: ' + error);
   }
 
   // make object for view that is populated with summary and version IRIs from Biolink-api, and blank attributes
@@ -390,7 +392,7 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
 }
 
 
-export async function getSearchTermSuggestions(term, category, prefixes) {
+export async function getSearchTermSuggestions(term, category, prefixes, filters) {
   const baseUrl = `${biolink}search/entity/autocomplete/`;
   const urlExtension = `${baseUrl}${term}`;
   const params = new URLSearchParams();
@@ -429,6 +431,12 @@ export async function getSearchTermSuggestions(term, category, prefixes) {
     }
   }
 
+  if (filters) {
+    filters.forEach((elem) => {
+      params.append('fq', filters);
+    });
+  }
+
   return new Promise((resolve, reject) => {
     axios.get(urlExtension, { params })
       .then((resp) => {
@@ -464,12 +472,19 @@ function getBiolinkAnnotation(cardType) {
   return result;
 }
 
-export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, params) {
+export async function getNodeAssociations(
+  nodeType,
+  nodeId,
+  cardType,
+  taxons,
+  params = new URLSearchParams(),
+) {
   const baseUrl = `${biolink}bioentity/`;
   const biolinkMappedCardType = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
   let url = `${baseUrl}${urlExtension}`;
   const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
+
 
   // Use monarch solr until amigo-ontobio connection is ready
   if (cardType === 'function') {
@@ -490,38 +505,35 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
 
   if (isTaxonCardType(cardType)) {
     params.facet = true;
-    params.facet_fields = "object_taxon";
-    if(isSubjectCardType(cardType)){
-      params.facet_fields = "subject_taxon";
+    params.facet_fields = 'object_taxon';
+    if (isSubjectCardType(cardType)) {
+      params.facet_fields = 'subject_taxon';
     }
 
-    if(taxons != null && taxons !== -1){
+    if (taxons != null && taxons !== -1) {
       params.taxon = taxons.length > 1 ? taxons: taxons[0];
       params.direct_taxon = true;
     }
 
   }
-  const qs = require('qs');
-  const response = await axios.get(url, { params,
-    paramsSerializer: function(params) {
-      return qs.stringify(params, {arrayFormat: 'repeat'})
-    }});
 
-    if (useTaxonRestriction) {
-      response.data.associations = response.data.associations.filter((d) => {
-        const subjTaxon = d.subject.taxon;
-        const objTaxon = d.object.taxon;
-        let result = false;
-        if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
-          result = true;
-        }
-        if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
-          result = true;
-        }
-        return result;
-      });
-      response.data.numFound = response.data.associations.length;
-    }
+  const response = await axios.get(url, { params });
+
+  if (useTaxonRestriction) {
+    response.data.associations = response.data.associations.filter((d) => {
+      const subjTaxon = d.subject.taxon;
+      const objTaxon = d.object.taxon;
+      let result = false;
+      if (subjTaxon.id !== null && taxons.indexOf(subjTaxon.id) >= 0) {
+        result = true;
+      }
+      if (objTaxon.id !== null && taxons.indexOf(objTaxon.id) >= 0) {
+        result = true;
+      }
+      return result;
+    });
+    response.data.numFound = response.data.associations.length;
+  }
   return response;
 }
 
@@ -549,16 +561,16 @@ export async function getNodeLabelByCurie(curie) {
   });
 }
 
-export function comparePhenotypes(sourceList, compareList, mode, species){
+export function comparePhenotypes(sourceList, compareList, mode) {
 
-  if(mode == "search"){
+  if (mode === 'search') {
     const baseUrl = `${biolink}sim/search`;
-    var params = new URLSearchParams();
-    sourceList.map(item => params.append("id", item.id));
-    if(compareList.length == 1){
+    const params = new URLSearchParams();
+    sourceList.forEach(item => params.append('id', item.id));
+    if (compareList.length === 1) {
       params.append('taxon', compareList[0].groupId);
       return new Promise((resolve, reject) => {
-        axios.get(baseUrl, {params})
+        axios.get(baseUrl, { params })
           .then((resp) => {
             const responseData = resp;
             if (typeof responseData !== 'object') {
@@ -571,21 +583,21 @@ export function comparePhenotypes(sourceList, compareList, mode, species){
             reject(err);
           });
       });
-    } else if (compareList.length > 1){
-      var requestList = [];
-      compareList.map(function(item){
+    } else if (compareList.length > 1) {
+      const requestList = [];
+      compareList.forEach((item) => {
         params.append('taxon', item.groupId);
-        requestList.push(axios.get(baseUrl + "?" + params.toString()));
+        requestList.push(axios.get(baseUrl + '?' + params.toString()));
         params.delete('taxon');
       });
       return new Promise((resolve, reject) => {
         axios.all(requestList).then(axios.spread((...responses) => {
-          var responseData = {
+          const responseData = {
             data: {
               matches: []
             }
           };
-          responses.map(currentItem => {
+          responses.forEach((currentItem) => {
             responseData.data.matches.push(currentItem.data.matches)
           });
           responseData.data.matches = responseData.data.matches.flat();
@@ -594,23 +606,23 @@ export function comparePhenotypes(sourceList, compareList, mode, species){
           } else {
             resolve(responseData);
           }
-        })).catch(err => {
+        })).catch((err) => {
           reject(err);
-        })
+        });
       });
     }
   } else {
     const baseUrl = `${biolink}sim/compare`;
-    var isAllPhenotypes = compareList.filter(item => {
-      return item.includes("HP:");
+    const isAllPhenotypes = compareList.filter((item) => {
+      return item.includes('HP:');
     });
-    var feature_set = isAllPhenotypes.length > 0;
+    const featureSet = isAllPhenotypes.length > 0;
     sourceList = sourceList.map(source => source.id);
     const postBody = {
-          "is_feature_set": feature_set,
-          "reference_ids": sourceList,
-          "query_ids": compareList
-    }
+      'is_feature_set': featureSet,
+      'reference_ids': sourceList,
+      'query_ids': compareList
+    };
     return new Promise((resolve, reject) => {
       axios.post(baseUrl, postBody)
         .then((resp) => {
