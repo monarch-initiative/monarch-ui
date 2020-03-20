@@ -203,12 +203,12 @@ const availableCardTypes = [
   'phenotype',
   'gene',
   'causal-gene',
-  'noncausal-gene',
+  'correlated-gene',
   'variant',
   'model',
   'disease',
   'causal-disease',
-  'noncausal-disease',
+  'correlated-disease',
   'pathway',
   'cellline',
   'anatomy',
@@ -227,11 +227,11 @@ const icons = {
   cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
   disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
   'causal-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  'noncausal-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
+  'correlated-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
   function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
   gene: require('../assets/img/monarch-ui-icon_GENE.png'),
   'causal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
-  'noncausal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
+  'correlated-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
   genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
   case: require('../assets/img/monarch-ui-icon_DISEASE.png'),
   homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
@@ -250,11 +250,11 @@ const labels = {
   cellline: 'Cell Line',
   disease: 'Disease',
   'causal-disease': 'Disease (causal)',
-  'noncausal-disease': 'Disease (correlated)',
+  'correlated-disease': 'Disease (correlated)',
   function: 'Function',
   gene: 'Gene',
   'causal-gene': 'Gene (causal)',
-  'noncausal-gene': 'Gene (correlated)',
+  'correlated-gene': 'Gene (correlated)',
   genotype: 'Genotype',
   case: 'Case',
   homolog: 'Homolog',
@@ -499,6 +499,14 @@ export default {
       this.path = this.$route.path;
       this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
+
+      // copying from old app bbop.monarch.Engine.prototype.convertIdToCurie
+      // Looks like people still link to terms using fragment format instead of curie
+      // eg IMPC phenogrid https://www.mousephenotype.org/data/genes/MGI:98297
+      if (/_/.test(this.nodeId) && !/:/.test(this.nodeId)) {
+        const newNodeId = this.nodeId.replace('_', ':');
+        this.$router.push(newNodeId);
+      }
 
       // TIP: setup the pre-fetch state, waiting for the async result
       this.node = null;

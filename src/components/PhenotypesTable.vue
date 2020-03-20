@@ -65,9 +65,9 @@ export default {
       currentPage: 1,
       filter: '',
       sortBy: 'score',
-      sortDesc: 'true',
+      sortDesc: true,
       fields: [
-         {
+        {
           key: 'hitLabel',
           label: 'Match Label',
           sortable: true
@@ -123,14 +123,14 @@ export default {
     async comparePhenotypes() {
       const that = this;
       try {
-        console.log(this.source);
-        console.log(this.compare);
+        // console.log(this.source);
+        // console.log(this.compare);
         const searchResponse = await bioLinkService.comparePhenotypes(this.source, this.compare, this.mode);
         this.preItems = searchResponse;
         this.dataFetched = true;
       } catch (e) {
         that.dataError = e;
-        console.log('BioLink Error', e);
+        // console.log('BioLink Error', e);
       }
     },
     processItems(){
@@ -140,7 +140,7 @@ export default {
           hitLabel: elem.label,
           hitId: elem.id,
           score: elem.score,
-          taxonLabel: elem.taxon.label  !== null ? elem.taxon.label : "-"
+          taxonLabel: elem.taxon.label !== null ? elem.taxon.label : '-'
         }
         this.items.push(rowData);
       });
