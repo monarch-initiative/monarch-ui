@@ -433,12 +433,12 @@ export default {
           objectTaxon = this.parseTaxon(objectElem);
         } else if (
           modifiedCardType === 'causal-disease'
-          || modifiedCardType === 'noncausal-disease'
+          || modifiedCardType === 'correlated-disease'
         ) {
           modifiedCardType = 'disease';
         } else if (
           modifiedCardType === 'causal-gene'
-          || modifiedCardType === 'noncausal-gene'
+          || modifiedCardType === 'correlated-gene'
         ) {
           modifiedCardType = 'gene';
         }

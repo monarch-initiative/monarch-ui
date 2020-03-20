@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import { biolink } from '@/api/BioLink';
 
 /* global Phenogrid */
 
@@ -53,8 +54,11 @@ export default {
         'yAxis': this.yAxis
       };
 
+      const appBase = window.location.protocol + '//' + window.location.host;
+
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
-        serverURL: 'https://api.monarchinitiative.org',
+        serverURL: biolink,
+        appURL: appBase,
         gridSkeletonData: pgData,
         selectedCalculation: 0,
         selectedSort: 'Frequency',

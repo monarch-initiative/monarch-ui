@@ -349,7 +349,6 @@ import 'vue-form-wizard/dist/vue-form-wizard.min.css';
 import * as biolinkService from '@/api/BioLink';
 import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
 import PhenoGrid from '@/components/PhenoGrid.vue';
-import LocalNav from '@/components/LocalNav.vue';
 import PhenotypesTable from '@/components/PhenotypesTable.vue';
 
 Vue.use(VueFormWizard);

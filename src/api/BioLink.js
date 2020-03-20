@@ -461,9 +461,9 @@ function getBiolinkAnnotation(cardType) {
     result = 'ortholog/phenotypes';
   } else if (cardType === 'ortholog-disease') {
     result = 'ortholog/diseases';
-  } else if (cardType === 'causal-disease' || cardType === 'noncausal-disease') {
+  } else if (cardType === 'causal-disease' || cardType === 'correlated-disease') {
     result = 'diseases';
-  } else if (cardType === 'causal-gene' || cardType === 'noncausal-gene') {
+  } else if (cardType === 'causal-gene' || cardType === 'correlated-gene') {
     result = 'genes';
   } else if (cardType === 'function') {
     result = cardType;
@@ -485,6 +485,7 @@ export async function getNodeAssociations(
   let url = `${baseUrl}${urlExtension}`;
   const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
 
+  params.unselect_evidence = true;
 
   // Use monarch solr until amigo-ontobio connection is ready
   if (cardType === 'function') {
@@ -494,7 +495,7 @@ export async function getNodeAssociations(
 
   if (cardType.startsWith('causal')) {
     params.association_type = 'causal';
-  } else if (cardType.startsWith('noncausal')) {
+  } else if (cardType.startsWith('correlated')) {
     params.association_type = 'non_causal';
   }
 
