@@ -397,7 +397,7 @@ export default {
         evidence.evidence_types = evidence.evidence_types.map(eco => ({
           id: eco.id,
           label: eco.label,
-          url: this.eviHref(eco.id)
+          url: this.eviHref(eco)
         }));
         const supportIcons = [];
         if (evidence.evidence_types.length > 0) {
