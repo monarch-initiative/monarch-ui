@@ -254,6 +254,15 @@ export async function getNeighborhood(nodeId, nodeType) {
           }
         } else if (edge.obj === nodeId) {
           // console.log('Subclass Edge', edge.sub, edge.pred, edge.obj);
+
+          // remove hacks around subclassing UPHENO:0001001 by filtering
+          // anything but monarch.owl
+          if (nodeId === 'UPHENO:0001001'
+               && 'isDefinedBy' in edge.meta
+               && !edge.meta.isDefinedBy.includes('http://purl.obolibrary.org/obo/upheno/monarch.owl')
+          ) {
+            return;
+          }
           subclasses.push(edge.sub);
         } else {
           // console.log('Unexpected edge', nodeId, edge.sub, edge.pred, edge.obj);
@@ -512,7 +521,7 @@ export async function getNodeAssociations(
     }
 
     if (taxons != null && taxons !== -1) {
-      params.taxon = taxons.length > 1 ? taxons: taxons[0];
+      params.taxon = taxons.length > 1 ? taxons : taxons[0];
       params.direct_taxon = true;
     }
 
