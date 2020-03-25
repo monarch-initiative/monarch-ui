@@ -40,7 +40,7 @@
     "lodash": "^4.17.15",
     "markdown-it": "^10.0.0",
     "markdown-it-anchor": "^5.2.5",
-    "phenogrid": "git://github.com/kshefchek/phenogrid.git#1.5.1",
+    "phenogrid": "^1.5.1",
     "register-service-worker": "^1.6.2",
     "sanitize-html": "^1.20.1",
     "underscore": "^1.9.2",
