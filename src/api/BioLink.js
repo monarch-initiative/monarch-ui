@@ -60,7 +60,8 @@ const servers = {
 };
 
 const productionServers = [
-  'monarchinitiative.org'
+  'monarchinitiative.org',
+  'preview.monarchinitiative.org'
 ];
 
 const defaultApiServer =
