@@ -33,4 +33,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
-window.MonarchUIVersion = '1.0.0';
+window.MonarchUIVersion = '1.0.2';
