@@ -1,6 +1,6 @@
 <div class="container-fluid monarch-view other-tools px-5">
 
-<h2 class="page-title">Other Resources from the Monarch Initiative</h2>
+<h2 class="page-title">Other Resources</h2>
     <div class="card">
         <h4>Exomiser</h4>
         <p>
