@@ -4,7 +4,7 @@
      <h5 class="news"><i class="fa fa-newspaper-o fa-fw"></i> News from <a href="https://medium.com/@MonarchInit" target="__blank">@MonarchInit</a></h5>
       <ul class="list-inline">
         <li
-          v-for="(item, index) in newsItems"
+          v-for="(item, index) in newsItems.slice(0, 7)"
           :key="index">
           <span class="news-date">{{ item.date }}</span>
           <a
