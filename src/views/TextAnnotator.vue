@@ -87,7 +87,7 @@
                   <b-button
                     v-if="annotatedText"
                     ref="analyzePhenotypes"
-                    :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes } }"
+                    :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
                     :disabled="!validForm"
                     class="stepper-button submit">
                     Analyze Phenotypes<i class="fa fa-caret-right fa-fw"/>

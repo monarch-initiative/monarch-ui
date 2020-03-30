@@ -75,7 +75,7 @@ export default {
             {
               'id': 1,
               'genome': genomeName,
-              'type': 'isoform',
+              'type': 'ISOFORM',
               'url': [
                 'https://agr-apollo.berkeleybop.io/apollo/track/',
                 '/All%20Genes/',

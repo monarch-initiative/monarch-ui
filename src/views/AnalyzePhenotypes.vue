@@ -496,7 +496,8 @@ export default {
     if (this.$route.params.phenotypes) {
       this.phenoCurieList = this.$route.params.phenotypes;
       if (this.phenoCurieList.length > 0) {
-        this.currentSubStep = 3;
+        this.currentSubStep = 2;
+        this.getPhenotypesFromEntityList();
       }
     }
   },
