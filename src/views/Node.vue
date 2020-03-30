@@ -419,12 +419,12 @@ export default {
       if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
         this.originalId = null;
-        this.isRedirected = false;
       } else {
         const strippedHash = to.hash.slice(1);
         if (strippedHash !== this.cardType) {
           this.expandCard(strippedHash);
         }
+        this.isRedirected = false;
       }
     },
   },
