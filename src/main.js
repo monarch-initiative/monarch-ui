@@ -1,23 +1,25 @@
-// Avoiding polyfill collision
-//import '@babel/polyfill'; 
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
-import axios from 'axios';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-// import Phenogrid from 'phenogrid/dist/phenogrid-bundle';
-import 'phenogrid/dist/phenogrid-bundle.css';
-
+import VueGtag from 'vue-gtag';
 import router from './router';
-// import './registerServiceWorker';
-
+import { productionServers } from './api/BioLink';
 import App from './App.vue';
-
-const Phenogrid = require('phenogrid');
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
-// Vue.use(Phenogrid);
+
+if (productionServers.includes(window.location.hostname)) {
+  Vue.use(VueGtag, {
+    config: {
+      id: 'UA-41803362-1',
+      params: {
+        anonymize_ip: true
+      }
+    }
+  }, router);
+}
 
 new Vue({
   router,
@@ -26,4 +28,4 @@ new Vue({
   render: h => h(App)
 }).$mount('#app');
 
-window.MonarchUIVersion = '0.0.20';
+window.MonarchUIVersion = '1.0.0';
