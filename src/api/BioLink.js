@@ -59,13 +59,13 @@ const servers = {
 
 };
 
-const productionServers = [
+export const productionServers = [
   'monarchinitiative.org',
   'preview.monarchinitiative.org'
 ];
 
 const defaultApiServer =
-  (productionServers.indexOf(window.location.hostname) >= 0) ? 'production' : 'development';
+  (productionServers.includes(window.location.hostname)) ? 'production' : 'development';
 
 const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
 // console.log('apiServer', window.location.hostname, apiServer);
@@ -609,7 +609,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
             }
           };
           responses.forEach((currentItem) => {
-            responseData.data.matches.push(currentItem.data.matches)
+            responseData.data.matches.push(currentItem.data.matches);
           });
           responseData.data.matches = responseData.data.matches.flat();
           if (typeof responseData !== 'object') {
