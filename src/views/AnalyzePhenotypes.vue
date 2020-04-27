@@ -366,8 +366,7 @@
     </b-modal>
     <b-modal size="xl" id="help-two" title="Creating Comparison Profile" ok-only>
       <h5>The next step is to choose what to compare your profile to. </h5>
-      <p>You may choose a blanket search by selecting all genes by a species, 
-            all human disease, then run the analysis.</p>
+      <p>You may choose to conduct a blanket search by selecting either all genes from a single species or all human diseases. Once you make a selection, you may run the analysis.</p>
       <div class="text-center">
         <img src="../assets/img/second-comparison.gif">
       </div>
