@@ -4,7 +4,8 @@
       <div class="offset-2 col-8 text-center">
         <h2 class="page-title">Phenotype Profile Search</h2>
         <p>This Phenotype Profile Search enables you to find phenotypically similar diseases or genes in a variety of organisms, then visualize
-          their overlap. Begin by constructing a "profile" (a collection of phenotypes) then create a comparison profile. </p>
+          their overlap. Begin by constructing a "profile" (a collection of phenotypes) then create a comparison profile.
+        </p>
       </div>
     </div>
     <div v-if="!showPhenogrid" class="row">
@@ -18,6 +19,12 @@
               variant="outline-info"
               @click="goBack()">
               <i class="fa fa-chevron-left edit-comparison" aria-hidden="true"/> Go Back
+          </b-button>
+          <b-button
+              class="comparison-category-edit help-btn"
+              variant="info"
+              v-b-modal.help-one>
+              <i class="fa fa-info-circle edit-comparison" aria-hidden="true"/> Help
           </b-button>
           <h5 class="text-center step-title">1. Create a Profile of Phenotypes</h5>
           <div v-if="currentSubStep === 1" class="center-text">
@@ -63,28 +70,28 @@
               </b-button-group>
             </b-form-group>
           </div>
-        </div>
-        <div v-if="currentSubStep === 4">
-          <monarch-autocomplete
-                  :home-search="false"
-                  :search-filters="searchFilters"
-                  :defined-categories="geneOnlyCategory"
-                  :dynamic-placeholder="'Search by gene...'"
-                  :type-sort="'gene'"
-                  @interface="handlePhenotypes"
-          />
-          <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
-        </div>
-        <div v-if="currentSubStep === 5">
-          <monarch-autocomplete
-                  :home-search="false"
-                  :search-filters="searchFilters"
-                  :defined-categories="diseaseOnlyCategory"
-                  :dynamic-placeholder="'Search by disease...'"
-                  :type-sort="'disease'"
-                  @interface="handlePhenotypes"
-          />
-          <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
+          <div v-if="currentSubStep === 4">
+            <monarch-autocomplete
+                    :home-search="false"
+                    :search-filters="searchFilters"
+                    :defined-categories="geneOnlyCategory"
+                    :dynamic-placeholder="'Search by gene...'"
+                    :type-sort="'gene'"
+                    @interface="handlePhenotypes"
+            />
+            <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
+          </div>
+          <div v-if="currentSubStep === 5">
+            <monarch-autocomplete
+                    :home-search="false"
+                    :search-filters="searchFilters"
+                    :defined-categories="diseaseOnlyCategory"
+                    :dynamic-placeholder="'Search by disease...'"
+                    :type-sort="'disease'"
+                    @interface="handlePhenotypes"
+            />
+            <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
+          </div>
         </div>
         <div v-if="phenotypes.length && !showPhenogrid" class="flex-container">
           <b-button
@@ -149,6 +156,12 @@
         <div>
           <b-button v-if="comparisonCategory" class="comparison-category-edit" variant="outline-info" @click="clearComparisonCategory">
             <i class="fa fa-chevron-left edit-comparison" aria-hidden="true"/> Go Back
+          </b-button>
+          <b-button
+              class="comparison-category-edit help-btn"
+              variant="info"
+              v-b-modal.help-two>
+              <i class="fa fa-info-circle edit-comparison" aria-hidden="true"/> Help
           </b-button>
           <h5 class="step-title center-text">2. What do you want to compare against?</h5>
         </div>
@@ -339,6 +352,31 @@
         <div class="col-1"/>
       </div>
     </div>
+    <b-modal size="xl" id="help-one" title="Creating Starting Profile" ok-only>
+      <p>To begin, you can create a profile by pasting a list of phenotypes (<a href="https://hpo.jax.org" target="_blank">Human Phenotype Ontology</a>) and confirming your profile.</p>
+      <div class="text-center">
+        <img src="../assets/img/first-comparison.gif">
+      </div>
+      <br>
+      <p>As an alternative you can build a profile of phenotypes by choosing a gene or disease. The associated phenotypes to those entities will 
+        be populated for you.</p>
+      <div class="text-center">
+        <img src="../assets/img/first-comparison2.gif">
+      </div>
+    </b-modal>
+    <b-modal size="xl" id="help-two" title="Creating Comparison Profile" ok-only>
+      <h5>The next step is to choose what to compare your profile to. </h5>
+      <p>You may choose to conduct a blanket search by selecting either all genes from a single species or all human diseases. Once you make a selection, you may run the analysis.</p>
+      <div class="text-center">
+        <img src="../assets/img/second-comparison.gif">
+      </div>
+      <br>
+      <p>For a more fine grained search, you can again build a profile by selecting a specific disease or gene, as well as pasting another list of phenotypes. 
+        Finally, you can run the analysis.</p>
+      <div class="text-center">
+        <img src="../assets/img/second-comparison2.gif">
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -852,8 +890,8 @@ export default {
     align-items: center;
   }
 
-  .edit-comparison {
-    align-self: flex-end;
+  .help-btn {
+    float: right;
   }
 
   .submit {
