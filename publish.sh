@@ -1,6 +1,6 @@
 # publish.sh [remote_name]
 # [remote_name] Optional name of remote. Default is 'origin'
-#
+# 
 # Builds the application and pushes to the gh-pages branch of remote_name
 #
 
