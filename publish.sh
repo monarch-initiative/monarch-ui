@@ -1,6 +1,6 @@
 # publish.sh [remote_name]
 # [remote_name] Optional name of remote. Default is 'origin'
-# 
+#
 # Builds the application and pushes to the gh-pages branch of remote_name
 #
 
@@ -14,7 +14,7 @@ echo "pwd: `pwd`"
 # exit
 
 rm -rf dist
-BUILD=nonrootdomain npm run build
+npm run build
 cp src/gh_404.html dist/404.html
 cd dist
 git init
