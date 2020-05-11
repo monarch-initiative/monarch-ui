@@ -16,11 +16,13 @@ echo "pwd: `pwd`"
 rm -rf dist
 npm run build
 cp src/gh_404.html dist/404.html
-cd dist
 
 if [ "${BUILD}" != "nonrootdomain" ]; then
-  echo "alpha.monarchinitiative.org" > CNAME
+  echo "alpha.monarchinitiative.org" > dist/CNAME
+  cp src/alpha_404.html dist/404.html
 fi
+
+cd dist
 
 git init
 git add .
