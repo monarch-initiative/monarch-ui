@@ -19,6 +19,6 @@ cp src/gh_404.html dist/404.html
 cd dist
 git init
 git add .
-git commit -m "Initial commit"
+git commit -m "update gh-pages"
 git remote add ${REMOTENAME} ${REMOTE}
 git push --force ${REMOTENAME} master:gh-pages
