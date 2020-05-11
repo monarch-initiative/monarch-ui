@@ -17,6 +17,11 @@ rm -rf dist
 npm run build
 cp src/gh_404.html dist/404.html
 cd dist
+
+if [ "${BUILD}" != "nonrootdomain" ]; then
+  echo "alpha.monarchinitiative.org" > CNAME
+fi
+
 git init
 git add .
 git commit -m "update gh-pages"
