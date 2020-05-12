@@ -66,15 +66,6 @@
             </p>
     </div>
     <div class="card">
-            <h4>HIPPO</h4>
-            <p>
-            Do you often search for a phenotype, a gene symbol or a disease in Pubmed and try to find out other relevant 
-            biomedical entities in the same context? If that’s you then the Monarch <a target="_blank" href="http://hippo.monarchinitiative.org/">
-            Hippo</a> can help you to do it in a few clicks. A tutorial is available <a target="_blank" href="http://hippo.monarchinitiative.org/#/tutorial">
-            here</a>.
-            </p>
-    </div>
-    <div class="card">
             <h4>Phenogrid</h4>
             <p><a target="_blank" href="https://github.com/monarch-initiative/phenogrid">Phenogrid</a> is a Javascript component that
             visualizes semantic similarity calculations provided by OWLSim,
