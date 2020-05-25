@@ -4,7 +4,7 @@
     <div class="card">
         <h4>Exomiser</h4>
         <p>
-                <a target="_blank" href="https://exomiser.monarchinitiative.org/exomiser">Exomiser</a>
+                <a target="_blank" href="https://exomiser.monarchinitiative.org">Exomiser</a>
                 is a Java program that functionally annotates variants
                 from whole-exome sequencing data starting from a VCF file (version 4) and a set 
                 of phenotypes encoded using the <a target="_blank" href="https://hpo.jax.org/app/">Human Phenotype 
