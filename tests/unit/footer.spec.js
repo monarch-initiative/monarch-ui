@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 // import { shallowMount } from '@vue/test-utils';
-import { shallowMountWithRouting } from './test-utils';
 import MonarchFooter from '@/components/Footer.vue';
+import { shallowMountWithRouting } from './test-utils';
 
 // Fixing the:
 //  Unknown custom element: <router-link>

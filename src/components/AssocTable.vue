@@ -8,23 +8,26 @@
     </div>
 
     <div v-show="!initialLoad && !dataError" class="loading-div">
-
-      <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
+      <b-spinner class="loading-spinner" type="grow" label="Spinning" />
     </div>
 
     <div v-show="!dataError && initialLoad">
-
-      <taxon-filter @toggle-filter="toggleTaxonFilter($event)"  :is-visible="isTaxonShowing" v-model="taxonFilter"></taxon-filter>
+      <taxon-filter v-model="taxonFilter" :is-visible="isTaxonShowing" @toggle-filter="toggleTaxonFilter($event)" />
       <div>
         <h5>
           <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
           {{ cardType }} associations.
         </h5>
 
-        <b-button class="taxon-filter" size="sm" v-if="nodeType === 'gene' && hasTaxon"
-                  @click="toggleTaxonFilter()"
-                  variant="primary">
-        <i class="fa fa-filter" v-bind:class="{ 'filter-active': hasFalseFilter() }" aria-hidden="true"></i> Taxon Filter</b-button>
+        <b-button
+          v-if="nodeType === 'gene' && hasTaxon"
+          class="taxon-filter"
+          size="sm"
+          variant="primary"
+          @click="toggleTaxonFilter()"
+        >
+          <i class="fa fa-filter" :class="{ 'filter-active': hasFalseFilter() }" aria-hidden="true" /> Taxon Filter
+        </b-button>
         <br>
       </div>
       <b-table
@@ -37,7 +40,7 @@
         responsive="true"
         class="table-sm"
       >
-        <template v-slot:cell(taxon)="data" v-if="hasTaxon">
+        <template v-if="hasTaxon" v-slot:cell(taxon)="data">
           <i>{{ data.item.taxonLabel }}</i>
         </template>
 
@@ -56,7 +59,7 @@
         <template v-slot:cell(assocObject)="data">
           <template v-if="data.item.objectLink">
             <strong>
-              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)"/>
+              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
             </strong>
           </template>
           <template v-else>
@@ -66,7 +69,7 @@
           </template>
         </template>
 
-        <template v-slot:cell(assocSubject)="data" v-if="isGroup">
+        <template v-if="isGroup" v-slot:cell(assocSubject)="data">
           <template v-if="data.item.subjectLink">
             <strong>
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
@@ -81,7 +84,7 @@
           </template>
         </template>
 
-        <template v-slot:cell(frequency)="data" v-if="hasFrequencyOnset">
+        <template v-if="hasFrequencyOnset" v-slot:cell(frequency)="data">
           <a
             v-if="data.item.frequency && nodeId === data.item.subjectCurie"
             :href="data.item.frequency.url"
@@ -94,7 +97,7 @@
           </a>
         </template>
 
-        <template v-slot:cell(onset)="data" v-if="hasFrequencyOnset">
+        <template v-if="hasFrequencyOnset" v-slot:cell(onset)="data">
           <a
             v-if="data.item.onset && nodeId === data.item.subjectCurie"
             :href="data.item.onset.url"
@@ -112,7 +115,8 @@
             :pressed.sync="data.item._showDetails"
             size="small"
             class="btn btn-xs px-1 py-0 m-0"
-            variant="outline-info">
+            variant="outline-info"
+          >
             <span v-if="data.item._showDetails">
               &blacktriangledown;&nbsp;
             </span>
@@ -121,7 +125,7 @@
             </span>
 
             <span v-for="(icon, index) in data.item.supportIcons" :key="index">
-              <i :class="icon" class="fa fa-fw"></i>
+              <i :class="icon" class="fa fa-fw" />
             </span>
             <small>{{ data.item.supportLength }}</small>
           </b-button>
@@ -139,26 +143,29 @@
           />
         </template>
       </b-table>
-        <b-pagination
-          v-if="totalAssociations > rowsPerPage"
-          v-model="currentPage"
-          :per-page="rowsPerPage"
-          :total-rows="totalAssociations"
-          class="pag-width my-1"
-          align="center"
-          size="md"></b-pagination>
+      <b-pagination
+        v-if="totalAssociations > rowsPerPage"
+        v-model="currentPage"
+        :per-page="rowsPerPage"
+        :total-rows="totalAssociations"
+        class="pag-width my-1"
+        align="center"
+        size="md"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import us from 'underscore';
-import { processPublications, processSources, sanitizeNodeLabel, sanitizeText } from '@/lib/Utils';
-import sourceToLabel from '../lib/sources';
-import { isTaxonCardType } from '../lib/TaxonMap';
+import {
+  processPublications, processSources, sanitizeNodeLabel, sanitizeText
+} from '@/lib/Utils';
 import EvidenceViewer from '@/components/EvidenceViewer.vue';
 import * as bioLinkService from '@/api/BioLink';
 import TaxonFilter from '@/components/TaxonFilter.vue';
+import { isTaxonCardType } from '../lib/TaxonMap';
+import sourceToLabel from '../lib/sources';
 
 export default {
   components: {
@@ -222,7 +229,7 @@ export default {
   },
   watch: {
     cardType() {
-      this.taxonFilter = {counts: {}, taxons: {}};
+      this.taxonFilter = { counts: {}, taxons: {} };
       this.initialLoad = false;
       this.dataError = false;
       this.isTaxonShowing = false;
@@ -305,8 +312,7 @@ export default {
         that.populateRows();
         that.tableBusy = false;
         this.initialLoad = true;
-      }
-      catch (e) {
+      } catch (e) {
         that.dataError = e;
         // console.log('BioLink Error', e);
       }
@@ -494,7 +500,7 @@ export default {
       });
       if (isTaxonCardType(this.cardType)) {
         const taxonFacetTarget = Object.keys(this.associationData.facet_counts)[0];
-        Object.keys(this.associationData.facet_counts[taxonFacetTarget]).forEach(key => {
+        Object.keys(this.associationData.facet_counts[taxonFacetTarget]).forEach((key) => {
           this.taxonFilter.taxons[key] = true;
         });
         this.taxonFilter.counts = this.associationData.facet_counts[taxonFacetTarget];
@@ -503,7 +509,7 @@ export default {
     },
     getTotalRowCounts() {
       let count = 0;
-      for (let taxon of this.trueTaxonFilters()) {
+      for (const taxon of this.trueTaxonFilters()) {
         count += this.taxonFilter.counts[taxon];
       }
       return count;

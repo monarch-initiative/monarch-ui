@@ -1,12 +1,15 @@
 <template>
   <div
-    class="genome-feature">
+    class="genome-feature"
+  >
     <div
       v-if="mygeneData.externalURL"
-      class="row">
+      class="row"
+    >
       <svg
         id="genome-feature"
-        width="80%"/>
+        width="80%"
+      />
     </div>
 
     <div
@@ -17,15 +20,17 @@
         :href="mygeneData.externalURL"
         target="_blank"
         rel="noopener noreferrer"
-        class="col-12">
+        class="col-12"
+      >
         Browse Genome at {{ position.chr }}:{{ position.start }}..{{ position.end }} {{ position.strand > 0 ?
-        '+' : '-' }} ( {{ position.end-position.start }} kb)
-        <i class="fa fa-link"/>
+          '+' : '-' }} ( {{ position.end-position.start }} kb)
+        <i class="fa fa-link" />
       </a>
     </div>
 
     <div
-      v-else>
+      v-else
+    >
       <h6>No Position Data Available for gene {{ geneInfo.symbol }}</h6>
     </div>
   </div>

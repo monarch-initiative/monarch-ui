@@ -11,11 +11,13 @@
             <router-link
               to="/analytics"
               class="btn btn-link"
-              role="button">
+              role="button"
+            >
               <img
                 style="max-height:35px;"
                 src="../assets/img/monarch-ui-icon_DISEASE.png"
-                alt="disease">
+                alt="disease"
+              >
             </router-link>
             <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
           </div>
@@ -23,11 +25,13 @@
             <router-link
               to="/analytics"
               class="btn btn-link"
-              role="button">
+              role="button"
+            >
               <img
                 style="max-height:35px;"
                 src="../assets/img/monarch-ui-icon_GENE.png"
-                alt="genes">
+                alt="genes"
+              >
             </router-link>
             <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
           </div>
@@ -35,11 +39,13 @@
             <router-link
               to="/analytics"
               class="btn btn-link"
-              role="button">
+              role="button"
+            >
               <img
                 style="max-height:35px;"
                 src="../assets/img/monarch-ui-icon_MODEL.png"
-                alt="models">
+                alt="models"
+              >
             </router-link>
             <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
           </div>
@@ -52,7 +58,8 @@
         <img
           class="center-block text-center img-fluid"
           style="max-height:300px;"
-          src="../assets/img/tax-heat-plotly.png">
+          src="../assets/img/tax-heat-plotly.png"
+        >
         <h4>For the top 15 species in Monarch</h4>
       </div>
     </section>

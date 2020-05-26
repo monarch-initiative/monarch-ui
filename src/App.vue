@@ -1,20 +1,20 @@
 <template>
   <div
     id="app"
-    class="page-wrapper">
-
+    class="page-wrapper"
+  >
     <div class="content-wrapper">
-      <monarch-navbar/>
+      <monarch-navbar />
       <div class="main-wrapper">
-        <router-view/>
+        <router-view />
       </div>
     </div>
 
     <div class="footer-wrapper">
       <monarch-footer
-        :compact="useCompactFooter"/>
+        :compact="useCompactFooter"
+      />
     </div>
-
   </div>
 </template>
 

@@ -594,7 +594,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
             reject(err);
           });
       });
-    } else if (compareList.length > 1) {
+    } if (compareList.length > 1) {
       const requestList = [];
       compareList.forEach((item) => {
         params.append('taxon', item.groupId);
@@ -624,9 +624,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
     }
   } else {
     const baseUrl = `${biolink}sim/compare`;
-    const isAllPhenotypes = compareList.filter((item) => {
-      return item.includes('HP:');
-    });
+    const isAllPhenotypes = compareList.filter(item => item.includes('HP:'));
     const featureSet = isAllPhenotypes.length > 0;
     sourceList = sourceList.map(source => source.id);
     const postBody = {

@@ -1,14 +1,17 @@
 <template>
   <div
     id="reactome-wrapper"
-    class="reactome-wrapper">
+    class="reactome-wrapper"
+  >
     <div
       v-if="reactomeId"
       id="reactome-div"
-      class="row"/>
+      class="row"
+    />
 
     <div
-      v-else>
+      v-else
+    >
       <h6>No Reactome ID</h6>
     </div>
   </div>

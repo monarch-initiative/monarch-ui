@@ -23,7 +23,7 @@
         >
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
-          <i class="fa fa-fw fa-flask text-info"/>
+          <i class="fa fa-fw fa-flask text-info" />
           Evidence Codes ({{ evidence.evidence_types.length }})
         </b-button>
         <b-collapse :id="'collapse-1' + evidence.id">
@@ -54,7 +54,7 @@
         >
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
-          <i class="fa fa-fw fa-book text-info"/>
+          <i class="fa fa-fw fa-book text-info" />
           Publications ({{ evidence.publications.length }})
         </b-button>
         <b-collapse :id="'collapse-2' + evidence.id">
@@ -70,13 +70,12 @@
                 rel="noopener noreferrer"
               >
                 {{ pub.label }}
-                <i class="fa fa-external-link" aria-hidden="true"/>
+                <i class="fa fa-external-link" aria-hidden="true" />
               </a>
             </span>
             <span v-else>
               <router-link :to="pub.url">{{ pub.label }}</router-link>
             </span>
-
           </div>
         </b-collapse>
       </div>
@@ -92,7 +91,7 @@
         >
           <span class="when-opened">&blacktriangledown;&nbsp;</span>
           <span class="when-closed">&blacktriangleright;&nbsp;</span>
-          <i class="fa fa-fw fa-database text-info"/>
+          <i class="fa fa-fw fa-database text-info" />
           Sources ({{ evidence.provided_by.length }})
         </b-button>
         <b-collapse :id="'collapse-3' + evidence.id">
@@ -107,7 +106,6 @@
     </div>
 
     <div v-show="!evidenceFetched && !evidenceError" class="evidence-ajax-msg">
-
       <b-spinner
         class="loading-spinner"
         type="grow"
@@ -117,11 +115,11 @@
     </div>
 
     <div v-show="evidenceFetched && !evidenceError">
-
-      <div class="statements">Supporting Statements ({{ totalStatements }})</div>
+      <div class="statements">
+        Supporting Statements ({{ totalStatements }})
+      </div>
 
       <div v-if="totalStatements > rowsPerPage">
-
         <b-pagination
           v-model="currentPage"
           :per-page="rowsPerPage"
@@ -146,10 +144,11 @@
           <template v-if="data.item.subject.url">
             <router-link
               :to="data.item.subject.url"
-              v-html="$sanitizeText(data.item.subject.label)"/>
+              v-html="$sanitizeText(data.item.subject.label)"
+            />
           </template>
           <template v-else>
-            <span v-html="$sanitizeText(data.item.subject.label)"/>
+            <span v-html="$sanitizeText(data.item.subject.label)" />
           </template>
         </template>
 
@@ -161,15 +160,15 @@
           <template v-if="data.item.object.url">
             <router-link
               :to="data.item.object.url"
-              v-html="$sanitizeText(data.item.object.label)"/>
+              v-html="$sanitizeText(data.item.object.label)"
+            />
           </template>
           <template v-else>
-            <span v-html="$sanitizeText(data.item.object.label)"/>
+            <span v-html="$sanitizeText(data.item.object.label)" />
           </template>
         </template>
 
         <template v-slot:cell(publications)="data">
-
           <template v-if="data.item.publications.length < 3">
             <div
               v-for="(pub, index) in data.item.publications"
@@ -183,7 +182,7 @@
                   rel="noopener noreferrer"
                 >
                   {{ pub.label }}
-                  <i class="fa fa-external-link" aria-hidden="true"/>
+                  <i class="fa fa-external-link" aria-hidden="true" />
                 </a>
               </span>
               <span v-else class="nowrap">
@@ -197,7 +196,6 @@
               :key="index"
               class="row"
             >
-
               <span v-if="pub.id.startsWith('PMID')" class="nowrap">
                 <a
                   :href="pub.url"
@@ -205,7 +203,7 @@
                   rel="noopener noreferrer"
                 >
                   {{ pub.label }}
-                  <i class="fa fa-external-link" aria-hidden="true"/>
+                  <i class="fa fa-external-link" aria-hidden="true" />
                 </a>
               </span>
               <span v-else class="nowrap">
@@ -219,7 +217,6 @@
                   :key="index"
                   class="row final-row"
                 >
-
                   <span v-if="pub.id.startsWith('PMID')" class="nowrap">
                     <a
                       :href="pub.url"
@@ -227,7 +224,7 @@
                       rel="noopener noreferrer"
                     >
                       {{ pub.label }}
-                      <i class="fa fa-external-link" aria-hidden="true"/>
+                      <i class="fa fa-external-link" aria-hidden="true" />
                     </a>
                   </span>
 
@@ -250,7 +247,6 @@
         </template>
 
         <template v-slot:cell(sources)="data">
-
           <div
             v-for="(source, index) in data.item.provided_by"
             :key="index"
@@ -273,21 +269,21 @@
                 rel="noopener noreferrer"
               >
                 {{ reference.label }}
-                <i class="fa fa-external-link" aria-hidden="true"/>
+                <i class="fa fa-external-link" aria-hidden="true" />
               </a>
             </span>
           </div>
         </template>
-
       </b-table>
-
     </div>
   </div>
 </template>
 
 <script>
 import { getEvidence } from '@/api/BioLink';
-import { getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText } from '@/lib/Utils';
+import {
+  getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText
+} from '@/lib/Utils';
 import sourceToLabel from '@/lib/sources';
 
 export default {

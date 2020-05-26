@@ -1,26 +1,29 @@
 <template>
-
   <b-navbar
     id="monarchng-navbar"
     class="fixed-top"
     fixed="true"
     toggleable="sm"
     type="dark"
-    variant="info">
+    variant="info"
+  >
     <b-navbar-brand to="/">
       <img
         class="branding-logo"
         src="../assets/img/monarch-logo-white.svg"
         alt="Monarch Initiative logo"
-        title="Monarch Initiative front page">
+        title="Monarch Initiative front page"
+      >
     </b-navbar-brand>
     <b-collapse
       id="nav_collapse"
-      is-nav="">
+      is-nav=""
+    >
       <b-navbar-nav>
         <b-nav-item-dropdown text="Tools">
           <b-dropdown-item
-            to="/analyze/phenotypes">
+            to="/analyze/phenotypes"
+          >
             Phenotype Profile Search
           </b-dropdown-item>
 
@@ -53,7 +56,7 @@
             Disclaimer
           </b-dropdown-item>
 
-          <b-dropdown-divider/>
+          <b-dropdown-divider />
 
           <b-dropdown-item to="/about/data-sources">
             Data Sources
@@ -84,7 +87,6 @@
           <b-dropdown-item href="https://github.com/obophenotype/upheno" target="_blank" rel="noopener noreferrer">
             Phenotype Ontologies Project
           </b-dropdown-item>
-
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Help">
@@ -132,7 +134,7 @@
           <b-dropdown-item to="/disease/MONDO:0010156">
             Disease: Troyer Syndrome MONDO:0010156
           </b-dropdown-item>
-          <b-dropdown-divider/>
+          <b-dropdown-divider />
           <b-dropdown-item to="/gene/MGI:2447362#model">
             Gene: Slc24a4 <em>Mus musculus</em> MGI:2447362 (models)
           </b-dropdown-item>
@@ -152,7 +154,7 @@
           <b-dropdown-item to="/gene/NCBIGene:428534">
             Gene: SOX17 <em>Gallus gallus</em> NCBIGene:428534
           </b-dropdown-item>
-          <b-dropdown-divider/>
+          <b-dropdown-divider />
           <b-dropdown-item to="/publication/PMID:28650316">
             Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
           </b-dropdown-item>
@@ -171,17 +173,18 @@
       </b-navbar-nav>
       <b-navbar-nav v-if="$route.path !== '/'" class="ml-auto">
         <div class="nav-ac nav-search">
-          <monarch-autocomplete :full-width-search="false"/>
+          <monarch-autocomplete :full-width-search="false" />
         </div>
       </b-navbar-nav>
     </b-collapse>
 
-    <b-navbar-toggle target="nav_collapse"/>
+    <b-navbar-toggle target="nav_collapse" />
     <div
-      v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
       v-if="getEnvironment() === 'development' || getEnvironment() === 'beta'"
+      v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
       title="Monarch UI BETA"
-      class="beta">
+      class="beta"
+    >
       BETA
     </div>
     <div v-if="getEnvironment() != 'production'" class="production">
@@ -192,7 +195,6 @@
       </b-navbar-nav>
     </div>
   </b-navbar>
-
 </template>
 
 <script>

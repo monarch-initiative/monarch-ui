@@ -1,5 +1,4 @@
 <template>
-
   <div v-click-outside="hideNeighborhoodOrFacets" class="node-sidebar">
     <node-sidebar-neighborhood
       :is-visible="isNeighborhoodShowing"
@@ -17,22 +16,23 @@
         </li>
         <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
           <b-link @click="expandCard(null)">
-            <i class="fa fa-fw fa-th-large"/>
+            <i class="fa fa-fw fa-th-large" />
             <span class="list-group-item-value">Overview</span>
           </b-link>
         </li>
 
         <li class="list-group-item list-group-item-squat">
           <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
-            <i class="fa fa-fw fa-share-alt neighbors"/>
+            <i class="fa fa-fw fa-share-alt neighbors" />
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
         </li>
         <li
           v-for="cardType in cardsToDisplay"
-          :class="{ active: expandedCard === cardType }"
           :key="cardType"
-          class="list-group-item">
+          :class="{ active: expandedCard === cardType }"
+          class="list-group-item"
+        >
           <a :href="'#' + cardType" @click="expandCard(cardType)">
             <img :src="$parent.icons[cardType]" class="entity-type-icon">
             <span class="list-group-item-value">
@@ -40,13 +40,9 @@
             </span>
           </a>
         </li>
-
       </ul>
     </div>
-
-
   </div>
-
 </template>
 
 

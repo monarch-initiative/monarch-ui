@@ -1,10 +1,10 @@
 <template>
   <div class="container-fluid monarch-home-view">
-    <vml-home-intro-component/>
-    <vml-home-about-monarch-component/>
-    <vml-home-news-component/>
-    <vml-home-partners-component/>
-    <div class="spacer"/>
+    <vml-home-intro-component />
+    <vml-home-about-monarch-component />
+    <vml-home-news-component />
+    <vml-home-partners-component />
+    <div class="spacer" />
   </div>
 </template>
 

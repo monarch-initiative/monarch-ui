@@ -5,7 +5,8 @@
     <br>
     <br>
     <h3
-      class="text-center border">
+      class="text-center border"
+    >
       No such path available: <b>{{ badPath }}</b>
     </h3>
   </div>

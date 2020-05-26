@@ -1,19 +1,29 @@
 <template>
   <div>
-    <div v-if="!dataFetched">Loading Related Terms ...</div>
+    <div v-if="!dataFetched">
+      Loading Related Terms ...
+    </div>
     <div v-else>
       <div class="row border-bottom">
-        <div class="col-4"><h6>Parent Terms</h6></div>
-        <div class="col-4"><h6>Equivalent Terms</h6></div>
-        <div class="col-4"><h6>Child Terms</h6></div>
+        <div class="col-4">
+          <h6>Parent Terms</h6>
+        </div>
+        <div class="col-4">
+          <h6>Equivalent Terms</h6>
+        </div>
+        <div class="col-4">
+          <h6>Child Terms</h6>
+        </div>
       </div>
 
       <div
         v-for="(row, rowIndex) in classRows"
         :key="rowIndex"
-        class="row">
+        class="row"
+      >
         <div
-          class="col-4">
+          class="col-4"
+        >
           <button
             v-if="row.superclass"
             class="m-1 btn btn-sm btn-info"
@@ -24,7 +34,8 @@
         </div>
 
         <div
-          class="col-4">
+          class="col-4"
+        >
           <button
             v-if="row.equivalentClass"
             class="m-1 btn btn-sm btn-info"
@@ -35,7 +46,8 @@
         </div>
 
         <div
-          class="col-4">
+          class="col-4"
+        >
           <button
             v-if="row.subclass"
             class="m-1 btn btn-sm btn-info"

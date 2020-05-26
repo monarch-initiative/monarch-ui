@@ -2,7 +2,7 @@
   <div>
     <div v-if="dataFetched">
       <h6>Source data for each match result (each column) in the Phenogrid above is represented as a row in the table below.</h6>
-      <b-form-input v-model="filter" placeholder="Filter by match or taxon"></b-form-input>
+      <b-form-input v-model="filter" placeholder="Filter by match or taxon" />
       <b-table
         :items="filtered"
         :fields="fields"
@@ -14,7 +14,7 @@
         class="table-border-soft"
       >
         <template v-slot:cell(score)="data">
-          <span class="ic-score">{{data.item.score}}</span>
+          <span class="ic-score">{{ data.item.score }}</span>
         </template>
       </b-table>
       <div v-if="items.length > 10">
@@ -28,7 +28,9 @@
         />
       </div>
     </div>
-    <div v-else>Loading Phenotype Comparison Table ...</div>
+    <div v-else>
+      Loading Phenotype Comparison Table ...
+    </div>
   </div>
 </template>
 <script>
@@ -92,28 +94,26 @@ export default {
       preItems: []
     };
   },
+  computed: {
+    filtered() {
+      const filterValue = this.filter;
+      const fields = this.fields;
+      const filtered = this.items.filter(row => fields.some((field) => {
+        const fieldKey = field.key;
+        if (fieldKey !== 'score') {
+          return row[fieldKey].toUpperCase().includes(filterValue.toUpperCase());
+        }
+        return false;
+      }));
+      return filtered.length > 0 ? filtered : this.items;
+    }
+  },
   watch: {
     phenotypes() {
       this.comparePhenotypes();
     },
     preItems() {
       this.processItems();
-    }
-  },
-  computed: {
-    filtered () {
-      const filterValue = this.filter;
-      const fields = this.fields;
-      const filtered = this.items.filter( row => {
-        return fields.some(field => {
-          const fieldKey = field.key;
-          if(fieldKey !== "score"){
-            return row[fieldKey].toUpperCase().includes(filterValue.toUpperCase());
-          }
-          return false;
-        })
-      });
-      return filtered.length > 0 ? filtered : this.items;
     }
   },
   mounted() {
@@ -133,7 +133,7 @@ export default {
         // console.log('BioLink Error', e);
       }
     },
-    processItems(){
+    processItems() {
       this.items = [];
       this.preItems.data.matches.forEach((elem) => {
         const rowData = {
@@ -141,7 +141,7 @@ export default {
           hitId: elem.id,
           score: elem.score,
           taxonLabel: elem.taxon.label !== null ? elem.taxon.label : '-'
-        }
+        };
         this.items.push(rowData);
       });
     },

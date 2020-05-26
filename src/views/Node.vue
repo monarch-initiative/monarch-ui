@@ -21,7 +21,7 @@
 
     <div class="container-cards">
       <div class="wrapper">
-        <div :class="{ active: isNeighborhoodShowing }" class="overlay"></div>
+        <div :class="{ active: isNeighborhoodShowing }" class="overlay" />
 
         <div v-if="!node" class="loading">
           <div v-if="nodeError">
@@ -33,14 +33,16 @@
             </small>
           </div>
           <div v-else>
-            <b-spinner class="loading-spinner" type="grow" label="Spinning"/>
-            <h5 class="text-center">{{ nodeId }}</h5>
+            <b-spinner class="loading-spinner" type="grow" label="Spinning" />
+            <h5 class="text-center">
+              {{ nodeId }}
+            </h5>
           </div>
         </div>
 
         <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
-            <span v-html="node.label"/>&nbsp;<span class="node-label-id">{{ node.id }}</span>
+            <span v-html="node.label" />&nbsp;<span class="node-label-id">{{ node.id }}</span>
             <span v-if="originalId" class="node-label-id">
               (Redirected from {{ originalId }})
             </span>
@@ -63,17 +65,18 @@
               <div class="node-description">
                 <b>Description</b><br>
                 <div class="description">
-                  <div v-html="node.description"/>
+                  <div v-html="node.description" />
                 </div>
               </div>
             </div>
             <div v-if="entrezResult" class="col-12">
               <h6>Date: {{ entrezResult.pubdate }}</h6>
-              <h6>Authors:
+              <h6>
+                Authors:
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
               </h6>
 
-              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown"/>
+              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
             </div>
 
             <div class="col-12">
@@ -90,7 +93,6 @@
           </div>
 
           <div v-if="!expandedCard" class="row node-content-section">
-
             <div v-if="references.length" class="col-12">
               <span v-if="nodeType === 'disease'"><b>Mappings:</b>&nbsp;</span>
               <span v-else><b>External Resources:</b>&nbsp;</span>
@@ -101,9 +103,10 @@
                       :href="r.uri"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="node-label-id">
+                      class="node-label-id"
+                    >
                       {{ r.label }}
-                      <i class="fa fa-external-link" aria-hidden="true"/>
+                      <i class="fa fa-external-link" aria-hidden="true" />
                     </a>
                   </span>
                 </span>
@@ -122,21 +125,21 @@
                 </li>
               </ul>
             </div>
-
           </div>
 
 
           <div v-if="!expandedCard && hasGeneExac" class="row py-2">
-            <exac-gene :node-id="nodeId"/>
+            <exac-gene :node-id="nodeId" />
           </div>
 
           <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="row py-2">
             <genome-feature
-              :mygene-data="node.geneInfo"/>
+              :mygene-data="node.geneInfo"
+            />
           </div>
 
           <div v-if="!expandedCard && reactomeId" class="row py-0">
-            <reactome-viewer :reactome-id="reactomeId"/>
+            <reactome-viewer :reactome-id="reactomeId" />
           </div>
 
           <!--<div v-if="!expandedCard" class="row node-cards-section">
@@ -161,14 +164,15 @@
             />
           </div>
           <div v-if="!expandedCard && nodeType === 'variant'">
-            <exac-variant :node-id="nodeId"/>
+            <exac-variant :node-id="nodeId" />
           </div>
         </div>
       </div>
     </div>
     <script
       type="application/ld+json"
-      v-html="jsonld"/>
+      v-html="jsonld"
+    />
   </div>
 </template>
 
@@ -180,7 +184,9 @@ import MarkdownIt from 'markdown-it';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
-import { getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText } from '@/lib/Utils';
+import {
+  getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText
+} from '@/lib/Utils';
 
 import NodeSidebar from '@/components/NodeSidebar.vue';
 import NodeCard from '@/components/NodeCard.vue';
@@ -189,7 +195,6 @@ import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
 import ReactomeViewer from '@/components/ReactomeViewer.vue';
-
 
 
 // https://stackoverflow.com/a/34064434/5667222
@@ -468,8 +473,7 @@ export default {
     buildCounts() {
       if (!this.node.association_counts) {
         console.log('Missing association_counts', this.node);
-      }
-      else {
+      } else {
         this.updateCounts();
       }
     },
