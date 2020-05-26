@@ -76,7 +76,6 @@
                     :search-filters="searchFilters"
                     :defined-categories="geneOnlyCategory"
                     :dynamic-placeholder="'Search by gene...'"
-                    :type-sort="'gene'"
                     @interface="handlePhenotypes"
             />
             <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
@@ -87,7 +86,6 @@
                     :search-filters="searchFilters"
                     :defined-categories="diseaseOnlyCategory"
                     :dynamic-placeholder="'Search by disease...'"
-                    :type-sort="'disease'"
                     @interface="handlePhenotypes"
             />
             <small>*Non-phenotype entities will automatically be mapped to their associated phenotypes. </small>
@@ -358,7 +356,7 @@
         <img src="../assets/img/first-comparison.gif">
       </div>
       <br>
-      <p>As an alternative you can build a profile of phenotypes by choosing a gene or disease. The associated phenotypes to those entities will 
+      <p>As an alternative you can build a profile of phenotypes by choosing a gene or disease. The associated phenotypes to those entities will
         be populated for you.</p>
       <div class="text-center">
         <img src="../assets/img/first-comparison2.gif">
@@ -371,7 +369,7 @@
         <img src="../assets/img/second-comparison.gif">
       </div>
       <br>
-      <p>For a more fine grained search, you can again build a profile by selecting a specific disease or gene, as well as pasting another list of phenotypes. 
+      <p>For a more fine grained search, you can again build a profile by selecting a specific disease or gene, as well as pasting another list of phenotypes.
         Finally, you can run the analysis.</p>
       <div class="text-center">
         <img src="../assets/img/second-comparison2.gif">
