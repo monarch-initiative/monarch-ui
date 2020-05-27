@@ -135,7 +135,7 @@ export default {
       dataStep: true,
       errorAnnotating: false,
       showSpinner: false,
-      longestOnly: false,
+      longestOnly: true,
       phenotypes: ''
 
     };
@@ -244,7 +244,10 @@ export default {
       annotations.forEach((annotation) => {
         let finalBuiltAnnotation = '';
         annotation = annotation.split(',');
-        finalBuiltAnnotation += '<div class=\'annotation\'><span class=\'ontology-id\'>' + annotation[1] + '</span>';
+        finalBuiltAnnotation += '<div class=\'annotation\'><span class=\'ontology-id\'>'
+          + '<a href="/' + annotation[1] + '\"> ' + annotation[1]
+          + ' </a>'
+          + '</span>';
         finalBuiltAnnotation += annotation[0] + '</div>';
         body.innerHTML += finalBuiltAnnotation;
       });
@@ -293,6 +296,7 @@ export default {
       .popover {
         max-width: 450px !important;
         top: unset !important;
+        cursor: initial;
 
         .annotation {
           font-weight: bold;

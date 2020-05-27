@@ -890,7 +890,6 @@ div.container-cards {
 
     & .node-label-id {
       font-size: .8rem;
-      color: #a9a9a9a1;
     }
   }
 }
