@@ -36,6 +36,11 @@ export function processPublications(publications) {
  *
  */
 export function processSources(sources) {
+  if (sources === null) {
+    // This happens when we get an assoc from mondo
+    // https://github.com/monarch-initiative/monarch-ui/issues/333
+    sources = ['http://purl.obolibrary.org/obo/mondo.owl'];
+  }
   sources = us.uniq(sources.map(db => db.replace(/_?slim/, '')));
   return sources.map(db => db
     .split('/')

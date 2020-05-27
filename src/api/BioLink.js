@@ -234,8 +234,15 @@ export async function getNeighborhood(nodeId, nodeType) {
       }
     });
   }
-  xrefs = xrefMap[nodeId].map(elem => (
-    elem.startsWith('Orphanet') ? elem.replace('Orphanet', 'ORPHA') : elem));
+  xrefs = xrefMap[nodeId]
+    .map((elem) => {
+      if (elem.startsWith('Orphanet')) {
+        elem = elem.replace('Orphanet', 'ORPHA');
+      } else if (/^OMIMPS:\d/.test(elem)) {
+        elem = elem.replace('PS:', 'PS:PS');
+      }
+      return elem;
+    });
 
   if (!internalId.test(nodeId)) {
     // Unless we own the Id (Mondo/Monarch), the IDs

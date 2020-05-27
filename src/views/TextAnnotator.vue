@@ -244,8 +244,8 @@ export default {
       annotations.forEach((annotation) => {
         let finalBuiltAnnotation = '';
         annotation = annotation.split(',');
-        finalBuiltAnnotation += '<div class=\'annotation\'><span class=\'ontology-id\'>'
-          + '<a href="/' + annotation[1] + '\"> ' + annotation[1]
+        finalBuiltAnnotation += '<div class="annotation"><span class="ontology-id">'
+          + '<a href="/' + annotation[1] + '"> ' + annotation[1]
           + ' </a>'
           + '</span>';
         finalBuiltAnnotation += annotation[0] + '</div>';
