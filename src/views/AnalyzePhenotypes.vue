@@ -828,7 +828,7 @@ export default {
       } catch (e) {
         that.dataError = e;
         this.rejectedGeneCuries.push(curie);
-        console.log('BioLink Error', e);
+        // console.log('BioLink Error', e);
       }
     },
     async fetchPhenotypes(curie, nodeIdentifier) {
@@ -859,7 +859,7 @@ export default {
         });
       } catch (e) {
         that.dataError = e;
-        console.log('BioLink Error', e);
+        // console.log('BioLink Error', e);
       }
     },
   }

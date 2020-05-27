@@ -62,6 +62,7 @@
                     </b-form-checkbox>
                   </div>
                   <div v-if="resultsStep" class="step2">
+                    <!-- eslint-disable-next-line vue/no-v-html -->
                     <div ref="step2text" class="step2" v-html="annotatedText" />
                   </div>
                   <div v-if="showSpinner" class="spinner">

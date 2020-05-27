@@ -330,7 +330,7 @@ export async function getSources() {
   // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
   // get dynamic data from biolink-api and put in BBOP graph
-  const dynamicSourceDataGraph = new bbopgraph.graph();
+  const dynamicSourceDataGraph = new bbopgraph.graph(); // eslint-disable-line new-cap
   try {
     const url = `${biolink}metadata/datasets`;
     const params = new URLSearchParams();
@@ -573,14 +573,14 @@ export async function getNodeLabelByCurie(curie) {
 }
 
 export function comparePhenotypes(sourceList, compareList, mode) {
-
+  let comparePromise;
   if (mode === 'search') {
     const baseUrl = `${biolink}sim/search`;
     const params = new URLSearchParams();
     sourceList.forEach(item => params.append('id', item.id));
     if (compareList.length === 1) {
       params.append('taxon', compareList[0].groupId);
-      return new Promise((resolve, reject) => {
+      comparePromise = new Promise((resolve, reject) => {
         axios.get(baseUrl, { params })
           .then((resp) => {
             const responseData = resp;
@@ -594,14 +594,15 @@ export function comparePhenotypes(sourceList, compareList, mode) {
             reject(err);
           });
       });
-    } if (compareList.length > 1) {
+    }
+    if (compareList.length > 1) {
       const requestList = [];
       compareList.forEach((item) => {
         params.append('taxon', item.groupId);
         requestList.push(axios.get(baseUrl + '?' + params.toString()));
         params.delete('taxon');
       });
-      return new Promise((resolve, reject) => {
+      comparePromise = new Promise((resolve, reject) => {
         axios.all(requestList).then(axios.spread((...responses) => {
           const responseData = {
             data: {
@@ -632,7 +633,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
       'reference_ids': sourceList,
       'query_ids': compareList
     };
-    return new Promise((resolve, reject) => {
+    comparePromise = new Promise((resolve, reject) => {
       axios.post(baseUrl, postBody)
         .then((resp) => {
           const responseData = resp;
@@ -647,13 +648,16 @@ export function comparePhenotypes(sourceList, compareList, mode) {
         });
     });
   }
+  return comparePromise;
 }
 
-export async function annotateText(queryText, longestOnly) {
-  const baseUrl = `${scigraph}annotations`;
+export async function annotateText(queryText, longestOnly = true) {
+  const baseUrl = `${biolink}nlp/annotate/`;
 
   const params = new URLSearchParams();
   params.append('content', queryText);
+  params.append('longestOnly', longestOnly);
+
   return new Promise((resolve, reject) => {
     axios.post(baseUrl, params, {
       headers: { 'content-type': 'application/x-www-form-urlencoded' }

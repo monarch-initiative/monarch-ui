@@ -142,12 +142,11 @@
       >
         <template v-slot:cell(subject)="data">
           <template v-if="data.item.subject.url">
-            <router-link
-              :to="data.item.subject.url"
-              v-html="$sanitizeText(data.item.subject.label)"
-            />
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <router-link :to="data.item.subject.url" v-html="$sanitizeText(data.item.subject.label)" />
           </template>
           <template v-else>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-html="$sanitizeText(data.item.subject.label)" />
           </template>
         </template>
@@ -158,12 +157,11 @@
 
         <template v-slot:cell(object)="data">
           <template v-if="data.item.object.url">
-            <router-link
-              :to="data.item.object.url"
-              v-html="$sanitizeText(data.item.object.label)"
-            />
+            <!-- eslint-disable-next-line vue/no-v-html -->
+            <router-link :to="data.item.object.url" v-html="$sanitizeText(data.item.object.label)" />
           </template>
           <template v-else>
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-html="$sanitizeText(data.item.object.label)" />
           </template>
         </template>
@@ -304,19 +302,22 @@ export default {
     nodeLabel: {
       type: String,
       required: false,
+      default: null,
     },
     nodeType: {
       type: String,
       required: false,
-      default: ''
+      default: null
     },
     subjectId: {
       type: String,
       required: false,
+      default: null
     },
     subjectLabel: {
       type: String,
       required: false,
+      default: null
     },
   },
   data() {

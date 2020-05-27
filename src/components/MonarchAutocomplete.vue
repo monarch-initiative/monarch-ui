@@ -94,6 +94,7 @@
               v-if="suggestion.has_hl"
               class="col-5"
             >
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <span v-html="$sanitizeText(suggestion.highlight)" />
             </div>
             <div
@@ -296,7 +297,7 @@ export default {
         this.open = true;
         this.loading = false;
       } catch (e) {
-        console.log('nodeResponse ERROR', e, this);
+        // console.log('nodeResponse ERROR', e, this);
       }
     },
     configureOptions() {

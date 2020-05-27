@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import GenomeFeatureViewer from 'GenomeFeatureViewer';
+import GenomeFeatureViewer from 'genomefeaturecomponent';
 import { idToLabel, isAGRApolloTaxon } from '../lib/TaxonMap';
 
 export default {

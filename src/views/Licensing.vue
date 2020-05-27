@@ -48,7 +48,7 @@
       Ontologies maintained by Monarch
     </h4>
     <ul>
-      <div v-for="ontology in ontologyLicenseInfo.ontologies">
+      <div v-for="ontology in ontologyLicenseInfo.ontologies" :key="ontology.id">
         <li v-if="['ecto', 'geno', 'hp', 'maxo', 'mondo', 'sepio', 'upheno'].includes(ontology.id)">
           <a v-if="ontology.homepage" :href="ontology.homepage" target="_blank">{{ ontology.title }}</a>
           <span v-else>{{ ontology.title }}</span>
@@ -63,7 +63,7 @@
 
     <h4>Ontologies used by Monarch</h4>
     <ul>
-      <div v-for="ontology in ontologyLicenseInfo.ontologies">
+      <div v-for="ontology in ontologyLicenseInfo.ontologies" :key="ontology.id">
         <li
           v-if="['bfo', 'caro', 'chebi', 'cl', 'clo', 'dc', 'eco', 'ero', 'faldo', 'fao', 'fbbt', 'foaf', 'go',
                  'hsapdv', 'iao', 'mpath', 'nbo', 'ncbitaxon', 'ncit', 'oba', 'oban', 'pato', 'pco', 'po', 'pw', 'ro', 'so',

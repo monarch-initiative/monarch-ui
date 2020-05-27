@@ -75,7 +75,7 @@ export default {
       return c.label || c.id;
     },
     closeNeighborhood() {
-      console.log('trying to close');
+      // console.log('trying to close');
       this.$emit('toggleNeighborhood');
     }
   },

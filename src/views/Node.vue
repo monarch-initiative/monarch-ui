@@ -42,6 +42,7 @@
 
         <div v-else ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
+            <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-html="node.label" />&nbsp;<span class="node-label-id">{{ node.id }}</span>
             <span v-if="originalId" class="node-label-id">
               (Redirected from {{ originalId }})
@@ -65,6 +66,7 @@
               <div class="node-description">
                 <b>Description</b><br>
                 <div class="description">
+                  <!-- eslint-disable-next-line vue/no-v-html -->
                   <div v-html="node.description" />
                 </div>
               </div>
@@ -75,7 +77,7 @@
                 Authors:
                 {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
               </h6>
-
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
             </div>
 
@@ -169,10 +171,8 @@
         </div>
       </div>
     </div>
-    <script
-      type="application/ld+json"
-      v-html="jsonld"
-    />
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <script type="application/ld+json" v-html="jsonld" />
   </div>
 </template>
 
@@ -276,7 +276,7 @@ const labels = {
 export default {
   components: {
     'node-sidebar': NodeSidebar,
-    'node-card': NodeCard,
+    // 'node-card': NodeCard,
     'assoc-table': AssocTable,
     'exac-gene': ExacGeneSummary,
     'exac-variant': ExacVariantTable,
@@ -472,7 +472,7 @@ export default {
 
     buildCounts() {
       if (!this.node.association_counts) {
-        console.log('Missing association_counts', this.node);
+        // console.log('Missing association_counts', this.node);
       } else {
         this.updateCounts();
       }
@@ -481,7 +481,7 @@ export default {
     updateCounts() {
       const nonEmptyCards = [];
       if (!this.node.association_counts) {
-        console.log('Missing association_counts', this.node);
+        // console.log('Missing association_counts', this.node);
       } else {
         const associationCountsByCardType = this.node.association_counts;
         this.availableCards.forEach((cardType) => {
@@ -562,7 +562,7 @@ export default {
         const entrezResult = await Entrez.getPublication(this.nodeId);
 
         if (!entrezResult) {
-          console.log('Entrez.getPublication null for ', this.nodeId);
+          // console.log('Entrez.getPublication null for ', this.nodeId);
         } else {
           this.entrezResult = entrezResult;
           const entrezTitle = htmlDecode(entrezResult.title);
@@ -594,7 +594,7 @@ export default {
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
           if (node.description) {
-            console.log('Overriding node.description with hit.summary', node.description, hit.summary);
+            // console.log('Overriding node.description with hit.summary', node.description, hit.summary);
           }
 
           node.description = hit.summary;

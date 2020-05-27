@@ -105,7 +105,7 @@ export default {
         this.dataFetched = true;
       } catch (e) {
         that.dataError = e;
-        console.log('BioLink Error', e);
+        // console.log('BioLink Error', e);
       }
     },
     emitSelection(termLabel, termId) {

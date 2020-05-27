@@ -59,6 +59,7 @@
         <template v-slot:cell(assocObject)="data">
           <template v-if="data.item.objectLink">
             <strong>
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
             </strong>
           </template>
@@ -72,6 +73,7 @@
         <template v-if="isGroup" v-slot:cell(assocSubject)="data">
           <template v-if="data.item.subjectLink">
             <strong>
+              <!-- eslint-disable-next-line vue/no-v-html -->
               <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
                 {{ data.item.assocSubject }}
               </router-link>
@@ -509,9 +511,11 @@ export default {
     },
     getTotalRowCounts() {
       let count = 0;
-      for (const taxon of this.trueTaxonFilters()) {
+
+      Object.values(this.trueTaxonFilters()).forEach((taxon) => {
         count += this.taxonFilter.counts[taxon];
-      }
+      });
+
       return count;
     },
     generateFields() {

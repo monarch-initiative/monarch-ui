@@ -87,7 +87,7 @@ export default {
         this.width = wrapper.clientWidth;
         this.height = window.innerHeight - 150;
       } else {
-        console.log('fit() no wrapper', reactomeWrapperId, this.diagram);
+        // console.log('fit() no wrapper', reactomeWrapperId, this.diagram);
         this.width = 50;
         this.height = 50;
       }

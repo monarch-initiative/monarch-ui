@@ -93,9 +93,7 @@ export default {
         this.showMessage = false;
         const newTaxons = Object.values(this.taxonFilter.taxons);
         const originalTaxons = Object.values(this.localCopy.taxons);
-        if (!newTaxons.sort().every(function (value, index) {
-          return value === originalTaxons.sort()[index];
-        })) {
+        if (!newTaxons.sort().every((value, index) => value === originalTaxons.sort()[index])) {
           this.$emit('toggle-filter', true);
         } else {
           this.$emit('toggle-filter', false);
@@ -104,9 +102,11 @@ export default {
     },
     toggleSelectedFilter() {
       this.selectedAll = !this.selectedAll;
-      for (const key in this.taxonFilter.taxons) {
-        this.taxonFilter.taxons[key] = this.selectedAll;
-      }
+
+      Object.keys(this.taxonFilter.taxons).forEach((taxon) => {
+        this.taxonFilter.taxons[taxon] = this.selectedAll;
+      });
+
       this.updateTaxonFilter();
     },
   },

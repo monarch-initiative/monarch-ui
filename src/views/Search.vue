@@ -151,10 +151,12 @@
             >
               <template v-slot:cell(label)="row">
                 <router-link :to="row.item.toLink">
+                  <!-- eslint-disable-next-line vue/no-v-html -->
                   <span v-html="row.item.label" />
                 </router-link>
               </template>
               <template v-slot:cell(highlight)="row">
+                <!-- eslint-disable-next-line vue/no-v-html -->
                 <span v-html="row.item.highlight" />
               </template>
             </b-table>
@@ -302,7 +304,7 @@ export default {
           this.searchResults.push(resultPacket);
         });
       } catch (e) {
-        console.log('Search ERROR', e, this);
+        // console.log('Search ERROR', e, this);
       }
     }
   },
