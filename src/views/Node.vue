@@ -81,16 +81,12 @@
               <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
             </div>
 
-            <div class="col-12 node-content-section">
-              <span v-if="inheritance">
+            <div v-if="inheritance" class="col-12 node-content-section">
                 <b>Heritability: </b>&nbsp;{{ inheritance }}
-              </span>
             </div>
 
-            <div class="col-12 node-content-section">
-              <span v-if="modifiers">
+            <div v-if="modifiers" class="col-12 node-content-section">
                 <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
-              </span>
             </div>
           </div>
 
@@ -118,29 +114,34 @@
                 &nbsp;
               </span>
             </div>
+          </div>
 
-            <div class="col-12">
-              <span v-if="synonyms && synonyms['Exact Synonym'].length" class="node-synonyms">
-                <b>Exact Synonyms: </b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
-              </span>
+          <div v-if="!expandedCard" class="row">
+
+            <div v-if="nodeType === 'disease'" class="col-12">
+
+              <div v-if="synonyms && synonyms['Exact Synonym'].length" class="node-content-section">
+                <b>Exact Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
+              </div>
+
+              <div v-if="synonyms && synonyms['Narrow Synonym'].length" class="node-content-section">
+                <b>Narrow Synonyms:</b>&nbsp;{{ synonyms['Narrow Synonym'].join(', ') }}
+              </div>
+
+              <div v-if="synonyms && synonyms['Broad Synonym'].length" class="node-content-section">
+                <b>Broad Synonyms:</b>&nbsp;{{ synonyms['Broad Synonym'].join(', ') }}
+              </div>
+
+              <div v-if="synonyms && synonyms['Related Synonym'].length" class="node-content-section">
+                <b>Related Synonyms:</b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
+              </div>
+
             </div>
 
-            <div class="col-12">
-             <span v-if="synonyms && synonyms['Narrow Synonym'].length" class="node-synonyms">
-               <b>Narrow Synonyms: </b>&nbsp;{{ synonyms['Narrow Synonym'].join(', ') }}
-             </span>
-            </div>
-
-            <div class="col-12">
-            <span v-if="synonyms && synonyms['Broad Synonym'].length" class="node-synonyms">
-              <b>Broad Synonyms: </b>&nbsp;{{ synonyms['Broad Synonym'].join(', ') }}
-            </span>
-            </div>
-
-            <div class="col-12">
-            <span v-if="synonyms && synonyms['Related Synonym'].length" class="node-synonyms">
-              <b>Related Synonyms: </b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
-            </span>
+            <div v-else class="col-12">
+              <div v-if="synonyms && synonyms['Exact Synonym'].length" class="node-content-section">
+                <b>Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
+              </div>
             </div>
 
           </div>
@@ -864,7 +865,7 @@ div.container-cards {
 
   & .node-content-section {
     line-height: $line-height-compact;
-    padding-top: 5px;
+    padding-top: 4px;
   }
 
   & .node-cards-section {
@@ -889,12 +890,12 @@ div.container-cards {
   font-size: 1.5rem;
   padding: 5px 15% 5px 5px;
 
-  & .synonym {
-    padding: 0 2px;
-    margin: 0 15px 0 0;
-    font-size: 0.9em;
-    font-weight: 500;
-  }
+  // & .synonym {
+  //   padding: 0 2px;
+  //   margin: 0 15px 0 0;
+  //   font-size: 0.9em;
+  //   font-weight: 500;
+  // }
 
   & .node-label {
     margin: 2px;
@@ -909,11 +910,6 @@ div.container-cards {
       font-size: .8rem;
     }
   }
-}
-
-.node-synonyms {
-  padding-top: 5px;
-  display: block;
 }
 
 div.publication-abstract {
