@@ -10,7 +10,12 @@
 
     <template v-if="nodeId !== subjectId">
       <i class="fa fa-fw fa-share-alt neighbors" />
-      <span class="subclass-of">{{ subjectLabel }} is a subclass of {{ nodeLabel }}</span>
+      <span v-if="cardType.includes('ortholog')" class="subclass-of">
+        {{ subjectLabel }} is an ortholog of {{ nodeLabel }}
+      </span>
+      <span v-else class="subclass-of">
+        {{ subjectLabel }} is a subclass of {{ nodeLabel }}
+      </span>
     </template>
 
     <template v-if="evidence.evidence_types.length">
@@ -294,6 +299,10 @@ export default {
     evidenceCache: {
       type: Object,
       required: true,
+    },
+    cardType: {
+      type: String,
+      required: true
     },
     nodeId: {
       type: String,

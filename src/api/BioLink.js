@@ -197,15 +197,26 @@ const neighborhoodTypes = [
 ];
 
 export async function getNeighborhood(nodeId, nodeType) {
-  // const graphUrl = `${biolink}graph/node/${nodeId}`;
+  // KS - This function is becoming a bit unwieldy
+  // and looks an awful lot like
+  // https://github.com/monarch-initiative/monarch-app/
+  // blob/master/lib/monarch/api.js#L2459
   const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
-  const nodeLabelMap = {};
-  const xrefMap = {};
+  const nodeMap = {};
   const equivalentClasses = [];
   const superclasses = [];
   const subclasses = [];
   let xrefs = [];
+  const synonyms = {};
+  const synonymMap = {
+    'Exact Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasExactSynonym',
+    'Narrow Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym',
+    'Broad Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym',
+    'Related Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym'
+  };
+
   const xrefProp = 'http://www.geneontology.org/formats/oboInOwl#hasDbXref';
+
   const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
   const params = new URLSearchParams();
@@ -226,15 +237,14 @@ export async function getNeighborhood(nodeId, nodeType) {
 
   if (graphResponseData.nodes) {
     graphResponseData.nodes.forEach((node) => {
-      nodeLabelMap[node.id] = node.lbl;
-      if (xrefProp in node.meta) {
-        xrefMap[node.id] = node.meta[xrefProp];
-      } else {
-        xrefMap[node.id] = [];
+      if (!(xrefProp in node.meta)) {
+        node.meta[xrefProp] = [];
       }
+      nodeMap[node.id] = node;
+
     });
   }
-  xrefs = xrefMap[nodeId]
+  xrefs = nodeMap[nodeId].meta[xrefProp]
     .map((elem) => {
       if (elem.startsWith('Orphanet')) {
         elem = elem.replace('Orphanet', 'ORPHA');
@@ -243,6 +253,15 @@ export async function getNeighborhood(nodeId, nodeType) {
       }
       return elem;
     });
+
+  Object.keys(synonymMap).forEach((key) => {
+    if (synonymMap[key] in nodeMap[nodeId].meta) {
+      synonyms[key] = nodeMap[nodeId].meta[synonymMap[key]]
+        .map(syn => syn.replace(',', ''));
+    } else {
+      synonyms[key] = [];
+    }
+  });
 
   if (!internalId.test(nodeId)) {
     // Unless we own the Id (Mondo/Monarch), the IDs
@@ -279,10 +298,36 @@ export async function getNeighborhood(nodeId, nodeType) {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
         if (edge.sub === nodeId) {
           equivalentClasses.push(edge.obj);
-          xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
+          // Clean up OBO:NS_1234 curies
+          const newXref = edge.obj.replace('OBO:', '').replace('_', ':');
+          xrefs = xrefs.concat([newXref], nodeMap[edge.obj].meta[xrefProp]);
+
+          Object.keys(synonyms).forEach((key) => {
+            if (synonymMap[key] in nodeMap[edge.obj].meta) {
+              synonyms[key] = synonyms[key]
+                .concat(
+                  nodeMap[edge.obj].meta[synonymMap[key]]
+                    .map(syn => syn.replace(',', ''))
+                );
+            }
+          });
+
         } else {
+          // TO DO DRY this off
           equivalentClasses.push(edge.sub);
-          xrefs = xrefs.concat([edge.sub], xrefMap[edge.sub]);
+          const newXref = edge.sub.replace('OBO:', '').replace('_', ':');
+          xrefs = xrefs.concat([newXref], nodeMap[edge.sub].meta[xrefProp]);
+
+          Object.keys(synonyms).forEach((key) => {
+            if (synonymMap[key] in nodeMap[edge.sub].meta) {
+              synonyms[key] = synonyms[key]
+                .concat(
+                  nodeMap[edge.sub].meta[synonymMap[key]]
+                    .map(syn => syn.replace(',', ''))
+                );
+            }
+          });
+
         }
       }
       // else {
@@ -290,15 +335,21 @@ export async function getNeighborhood(nodeId, nodeType) {
       //   console.log(JSON.stringify(edge, null, 2));
       // }
     });
+    // Uniquify xrefs and synonyms
     xrefs = us.uniq(xrefs);
+
+    Object.keys(synonyms).forEach((key) => {
+      synonyms[key] = us.uniq(synonyms[key]);
+    });
   }
 
   return {
-    nodeLabelMap,
+    nodeMap,
     equivalentClasses,
     superclasses,
     subclasses,
-    xrefs
+    xrefs,
+    synonyms
   };
 }
 

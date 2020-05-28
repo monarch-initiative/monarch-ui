@@ -70,7 +70,7 @@
           </template>
         </template>
 
-        <template v-if="isGroup" v-slot:cell(assocSubject)="data">
+        <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
           <template v-if="data.item.subjectLink">
             <strong>
               <!-- eslint-disable-next-line vue/no-v-html -->
@@ -142,6 +142,7 @@
             :node-type="nodeType"
             :subject-id="row.item.subjectCurie"
             :subject-label="row.item.assocSubject"
+            :card-type="cardType"
           />
         </template>
       </b-table>
@@ -525,15 +526,15 @@ export default {
 
       const fields = [
         {
-          key: 'relation',
-          label: 'Relation',
-          class: 'relation-column-width',
-          // sortable: true,
-        },
-        {
           key: 'assocObject',
           label: this.firstCap(this.cardType),
           class: 'assoc-object',
+          // sortable: true,
+        },
+        {
+          key: 'relation',
+          label: 'Relation',
+          class: 'relation-column-width',
           // sortable: true,
         },
         {
@@ -545,6 +546,15 @@ export default {
 
       if (this.isGroup) {
         fields.splice(spliceStart, 0, {
+          key: 'assocSubject',
+          label: this.firstCap(this.nodeType),
+          class: 'assoc-subject',
+        });
+        spliceStart++;
+      }
+
+      if (this.cardType.includes('ortholog')) {
+        fields.splice(0, 0, {
           key: 'assocSubject',
           label: this.firstCap(this.nodeType),
           class: 'assoc-subject',

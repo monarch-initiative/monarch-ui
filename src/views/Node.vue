@@ -81,23 +81,23 @@
               <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
             </div>
 
-            <div class="col-12">
+            <div class="col-12 node-content-section">
               <span v-if="inheritance">
-                <b>Heritability:</b>&nbsp;{{ inheritance }}
+                <b>Heritability: </b>&nbsp;{{ inheritance }}
               </span>
             </div>
 
-            <div class="col-12">
+            <div class="col-12 node-content-section">
               <span v-if="modifiers">
-                <b>Clinical Modifiers:</b>&nbsp;{{ modifiers }}
+                <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
               </span>
             </div>
           </div>
 
           <div v-if="!expandedCard" class="row node-content-section">
             <div v-if="references.length" class="col-12">
-              <span v-if="nodeType === 'disease'"><b>Mappings:</b>&nbsp;</span>
-              <span v-else><b>External Resources:</b>&nbsp;</span>
+              <span v-if="nodeType === 'disease'"><b>Mappings: </b>&nbsp;</span>
+              <span v-else><b>External Resources: </b>&nbsp;</span>
               <span v-for="(r, index) in references" :key="index" class="synonym">
                 <span v-if="r.uri">
                   <span class="reference-external">
@@ -119,16 +119,31 @@
               </span>
             </div>
 
-            <div v-if="node.synonyms" class="col-12 node-synonyms">
-              <b>Synonyms</b><br><br>
-              <ul>
-                <li v-for="(s, index) in synonyms" :key="index" class="synonym">
-                  {{ s }}
-                </li>
-              </ul>
+            <div class="col-12">
+              <span v-if="synonyms && synonyms['Exact Synonym'].length" class="node-synonyms">
+                <b>Exact Synonyms: </b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
+              </span>
             </div>
-          </div>
 
+            <div class="col-12">
+             <span v-if="synonyms && synonyms['Narrow Synonym'].length" class="node-synonyms">
+               <b>Narrow Synonyms: </b>&nbsp;{{ synonyms['Narrow Synonym'].join(', ') }}
+             </span>
+            </div>
+
+            <div class="col-12">
+            <span v-if="synonyms && synonyms['Broad Synonym'].length" class="node-synonyms">
+              <b>Broad Synonyms: </b>&nbsp;{{ synonyms['Broad Synonym'].join(', ') }}
+            </span>
+            </div>
+
+            <div class="col-12">
+            <span v-if="synonyms && synonyms['Related Synonym'].length" class="node-synonyms">
+              <b>Related Synonyms: </b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
+            </span>
+            </div>
+
+          </div>
 
           <div v-if="!expandedCard && hasGeneExac" class="row py-2">
             <exac-gene :node-id="nodeId" />
@@ -544,10 +559,11 @@ export default {
       }
 
       this.node = node;
-      if (this.node.synonyms) {
-        this.synonyms = this.node.synonyms.map(s => s.val);
+
+      if (neighborhood.synonyms) {
+        this.synonyms = neighborhood.synonyms;
       } else {
-        this.synonyms = [];
+        this.synonyms = {};
       }
 
       if (!this.node.label) {
@@ -600,9 +616,9 @@ export default {
           node.description = hit.summary;
 
           node.geneInfo = geneInfo;
-          if (this.synonyms.indexOf(hit.name) !== -1) {
-            this.synonyms.unshift(hit.name);
-          }
+          // if (this.synonyms.indexOf(hit.name) !== -1) {
+          //   this.synonyms.unshift(hit.name);
+          // }
         }
       } else if (this.nodeType === 'case') {
         node.description = this.getCaseDescription();
@@ -631,22 +647,22 @@ export default {
       // Build out the superclass/subclass/equivclass lists from
       // the info provided by getNeighborhood()
       //
-      const nodeLabelMap = neighborhood.nodeLabelMap;
+      const nodeMap = neighborhood.nodeMap;
       /* const equivalentClasses = neighborhood.equivalentClasses;
-      //this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
+      // this.equivalentClasses = us.map(us.uniq(equivalentClasses), c => ({
       //  id: c,
-      //  label: nodeLabelMap[c]
+      //  label: nodeMap[c]
       })); */
       const superclasses = neighborhood.superclasses;
       const subclasses = neighborhood.subclasses;
       const xrefs = neighborhood.xrefs;
       this.superclasses = us.map(us.uniq(superclasses), c => ({
         id: c,
-        label: nodeLabelMap[c]
+        label: nodeMap[c].lbl
       }));
       this.subclasses = us.map(us.uniq(subclasses), c => ({
         id: c,
-        label: nodeLabelMap[c]
+        label: nodeMap[c].lbl
       }));
 
       this.isGroup = this.subclasses.length > 0;
@@ -848,6 +864,7 @@ div.container-cards {
 
   & .node-content-section {
     line-height: $line-height-compact;
+    padding-top: 5px;
   }
 
   & .node-cards-section {
@@ -895,13 +912,8 @@ div.container-cards {
 }
 
 .node-synonyms {
-  line-height: 1.0em;
-  margin: 5px 0;
-  padding: 0 10px;
-
-  & ul {
-    list-style: none;
-  }
+  padding-top: 5px;
+  display: block;
 }
 
 div.publication-abstract {
@@ -920,6 +932,8 @@ div.publication-abstract {
 
 .reference-external {
   white-space: nowrap;
+  padding: 0 2px;
+  display: inline-block;
 }
 
 </style>
