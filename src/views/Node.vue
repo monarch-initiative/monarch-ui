@@ -82,11 +82,11 @@
             </div>
 
             <div v-if="inheritance" class="col-12 node-content-section">
-                <b>Heritability: </b>&nbsp;{{ inheritance }}
+              <b>Heritability: </b>&nbsp;{{ inheritance }}
             </div>
 
             <div v-if="modifiers" class="col-12 node-content-section">
-                <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
+              <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
             </div>
           </div>
 
@@ -117,9 +117,7 @@
           </div>
 
           <div v-if="!expandedCard" class="row">
-
-            <div v-if="nodeType === 'disease'" class="col-12">
-
+            <div v-if="nodeType === 'disease' || nodeType === 'phenotype'" class="col-12">
               <div v-if="synonyms && synonyms['Exact Synonym'].length" class="node-content-section">
                 <b>Exact Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
               </div>
@@ -135,7 +133,6 @@
               <div v-if="synonyms && synonyms['Related Synonym'].length" class="node-content-section">
                 <b>Related Synonyms:</b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
               </div>
-
             </div>
 
             <div v-else class="col-12">
@@ -143,7 +140,6 @@
                 <b>Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
               </div>
             </div>
-
           </div>
 
           <div v-if="!expandedCard && hasGeneExac" class="row py-2">

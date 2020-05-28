@@ -1,17 +1,19 @@
 import axios from 'axios';
-import yaml from 'js-yaml';
+
 
 export default async function getNewsItems() {
-  const newsUrl = `${process.env.BASE_URL}news.yaml`;
-  const newsResponse = await axios.get(newsUrl);
-
+  const monarchRss = 'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@monarchinit';
   let newsItems = [];
-  try {
-    const newsParsed = yaml.safeLoad(newsResponse.data, 'utf8');
-    newsItems = newsParsed.news.items;
-  } catch (e) {
-    // console.log('getNewsItems yaml.safeLoad ERROR', e);
-  }
 
+  try {
+    const newsResponse = await axios.get(monarchRss);
+    newsItems = newsResponse.data.items.map(elem => ({
+      url: elem.link,
+      date: new Date(elem.pubDate).toDateString().slice(4),
+      title: elem.title
+    }));
+  } catch (e) {
+    // console.log('ERROR fetching and parsing medium RSS', e);
+  }
   return newsItems;
 }
