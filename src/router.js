@@ -26,18 +26,29 @@ const availableCardTypes = [
   'variant',
 ];
 
-const nodeRoutes = availableCardTypes.map(nodeType => (
-  {
-    path: `/${nodeType}/:id`,
-    name: `/Node${nodeType}`,
-    component: Node,
-  }));
 
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    ...nodeRoutes,
+    ...availableCardTypes.map(nodeType => (
+      {
+        path: `/${nodeType}/:id`,
+        name: `/Node${nodeType}`,
+        component: Node,
+        beforeEnter: (to, from, next) => {
+          // We generally want to avoid routing hacks but are
+          // making an exception since a lot of our referral
+          // traffic comes from GARD, see
+          // https://github.com/monarch-initiative/monarch-ui/issues/325
+          if (to.fullPath.startsWith('/disease/Orphanet:')) {
+            const nodeId = to.params.id.replace('Orphanet', 'ORPHA');
+            router.push(`/disease/${nodeId}`);
+          } else {
+            next();
+          }
+        }
+      })),
     {
       path: '/',
       name: 'home',
@@ -153,6 +164,9 @@ const router = new Router({
           .then((node) => {
             const reducedType = reduceCategoryList(node.category);
             if (!reducedType) {
+              next();
+            } else if (!availableCardTypes.includes(reducedType)) {
+              // Should these go to some generic page?
               next();
             } else {
               router.push(`/${reducedType}/${nodeId}`);

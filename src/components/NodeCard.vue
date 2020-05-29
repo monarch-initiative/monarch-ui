@@ -4,15 +4,16 @@
   <div
     :class="{ active: isSelected }"
     class="card node-card"
-    @click="toggleSelected()">
+    @click="toggleSelected()"
+>
     <div class="card-title card-header">
       <img
         :src="cardIcon"
-        class="card-img-top">
+        class="card-img-top"
+>
       {{ pluralize(cardLabel, cardCount[cardType]) }}
     </div>
   </div>
-
 </template>
 
 <script>

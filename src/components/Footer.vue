@@ -14,31 +14,33 @@
         </b-button>
       </div>
       <div class="col-lg-4 copyright">
-        <i class="fa fa-creative-commons fa-fw"/>
+        <i class="fa fa-creative-commons fa-fw" />
         CC-BY 3.0, except where noted.
       </div>
     </div>
     <div
       v-else
-      class="row footer">
+      class="row footer"
+    >
       <div class="col-4 col-lg-2">
         <div class="media">
           <img
             class="img-fluid monarch-logo"
             src="../assets/img/monarch-logo-white.png"
-            alt="Monarch logo">
+            alt="Monarch logo"
+          >
         </div>
       </div>
       <div class="socials col-8 col-lg-10">
         <div class="icons">
           <a href="mailto:info@monarchinitiative.org">
-            <i class="fa fa-envelope fa-fw"/>
+            <i class="fa fa-envelope fa-fw" />
           </a>
           <a target="_blank" href="https://twitter.com/MonarchInit">
-            <i class="fa fa-twitter fa-fw"/>
+            <i class="fa fa-twitter fa-fw" />
           </a>
           <a target="_blank" href="https://github.com/monarch-initiative/">
-            <i class="fa fa-github fa-fw"/>
+            <i class="fa fa-github fa-fw" />
           </a>
         </div>
       </div>

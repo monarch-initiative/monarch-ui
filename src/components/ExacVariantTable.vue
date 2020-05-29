@@ -2,10 +2,12 @@
   <div
     v-if="showTable"
     id="vue-exac"
-    class="col-md-8" >
-    <h2 class="p-2">Exac Population Frequencies</h2>
+    class="col-md-8"
+  >
+    <h2 class="p-2">
+      Exac Population Frequencies
+    </h2>
     <table class="table table-hover">
-
       <thead>
         <tr>
           <th>Population</th>
@@ -17,56 +19,72 @@
       </thead>
       <tbody>
         <tr>
-          <th scope="row">South Asian</th>
+          <th scope="row">
+            South Asian
+          </th>
           <td>{{ rowData.sas.aC }}</td>
           <td>{{ rowData.sas.aN }}</td>
           <td>{{ rowData.sas.hom }}</td>
           <td>{{ rowData.sas.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">Other</th>
+          <th scope="row">
+            Other
+          </th>
           <td>{{ rowData.oth.aC }}</td>
           <td>{{ rowData.oth.aN }}</td>
           <td>{{ rowData.oth.hom }}</td>
           <td>{{ rowData.oth.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">Latino</th>
+          <th scope="row">
+            Latino
+          </th>
           <td>{{ rowData.amr.aC }}</td>
           <td>{{ rowData.amr.aN }}</td>
           <td>{{ rowData.amr.hom }}</td>
           <td>{{ rowData.amr.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">European (Non-Finnish)</th>
+          <th scope="row">
+            European (Non-Finnish)
+          </th>
           <td>{{ rowData.nfe.aC }}</td>
           <td>{{ rowData.nfe.aN }}</td>
           <td>{{ rowData.nfe.hom }}</td>
           <td>{{ rowData.nfe.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">African</th>
+          <th scope="row">
+            African
+          </th>
           <td>{{ rowData.afr.aC }}</td>
           <td>{{ rowData.afr.aN }}</td>
           <td>{{ rowData.afr.hom }}</td>
           <td>{{ rowData.afr.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">East Asian</th>
+          <th scope="row">
+            East Asian
+          </th>
           <td>{{ rowData.eas.aC }}</td>
           <td>{{ rowData.eas.aN }}</td>
           <td>{{ rowData.eas.hom }}</td>
           <td>{{ rowData.eas.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">European (Finnish)</th>
+          <th scope="row">
+            European (Finnish)
+          </th>
           <td>{{ rowData.fin.aC }}</td>
           <td>{{ rowData.fin.aN }}</td>
           <td>{{ rowData.fin.hom }}</td>
           <td>{{ rowData.fin.aF }}</td>
         </tr>
         <tr style="border-top: solid black 2px;">
-          <th scope="row">Total</th>
+          <th scope="row">
+            Total
+          </th>
           <td>
             {{ rowData.tot.aC }}
           </td>
@@ -82,10 +100,13 @@
         </tr>
       </tbody>
     </table>
-    <div id="exac-link"><a
-      :href="exacID"
-      target="_blank"
-      class="glyphicon glyphicon-link"/></div>
+    <div id="exac-link">
+      <a
+        :href="exacID"
+        target="_blank"
+        class="glyphicon glyphicon-link"
+      />
+    </div>
   </div>
 </template>
 <script>

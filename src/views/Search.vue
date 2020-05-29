@@ -1,22 +1,24 @@
 <template>
   <div
     id="monarch-search-container"
-    class="container-fluid monarch-view">
-
+    class="container-fluid monarch-view"
+  >
     <div class="row">
       <div
         class="container col-md-3"
       >
         <div
           v-if="categoryFilters.length > 0 || taxonFilters.length > 0"
-          class="row card" >
+          class="row card"
+        >
           <div class="card-header py-2">
             Filters
           </div>
 
           <div
             v-if="categoryFilters.length > 0"
-            class="px-2">
+            class="px-2"
+          >
             <div class="font-weight-bold">
               Categories
             </div>
@@ -25,19 +27,22 @@
                 v-for="category in categoryFilters"
                 :key="category"
                 href
-                class="row">
+                class="row"
+              >
                 {{ biolinkCategory(category) }}
                 &nbsp;
                 <button
                   class="fa fa-remove"
-                  @click="removeCategoryFilter(category)"/>
+                  @click="removeCategoryFilter(category)"
+                />
               </li>
             </ul>
           </div>
 
           <div
             v-if="taxonFilters.length > 0"
-            class="px-2">
+            class="px-2"
+          >
             <div class="font-weight-bold">
               Taxa
             </div>
@@ -46,20 +51,22 @@
                 v-for="taxon in taxonFilters"
                 :key="taxon"
                 href
-                class="row">
+                class="row"
+              >
                 {{ taxon }}
                 &nbsp;
                 <button
                   class="fa fa-remove"
-                  @click="removeTaxonFilter(taxon)"/>
+                  @click="removeTaxonFilter(taxon)"
+                />
               </li>
             </ul>
           </div>
-
         </div>
         <div
           class="row card"
-          style="margin-top: 20px">
+          style="margin-top: 20px"
+        >
           <div class="card-header py-1">
             Categories
           </div>
@@ -72,13 +79,14 @@
               >
                 <a
                   href
-                  @click.prevent="addCategoryFilter(category)">
+                  @click.prevent="addCategoryFilter(category)"
+                >
                   {{ biolinkCategory(category) }}
                   &nbsp;
                   <div class="pull-right">
                     {{ value }}
                   </div>
-                  <div class="clearfix"/>
+                  <div class="clearfix" />
                 </a>
               </li>
             </ul>
@@ -86,7 +94,8 @@
         </div>
         <div
           class="row card"
-          style="margin-top: 20px">
+          style="margin-top: 20px"
+        >
           <div class="card-header py-1">
             Taxa
           </div>
@@ -99,13 +108,14 @@
               >
                 <a
                   href
-                  @click.prevent="addTaxonFilter(taxon)">
+                  @click.prevent="addTaxonFilter(taxon)"
+                >
                   {{ taxon }}
                   &nbsp;
                   <div class="pull-right">
                     {{ value }}
                   </div>
-                  <div class="clearfix"/>
+                  <div class="clearfix" />
                 </a>
               </li>
             </ul>
@@ -114,18 +124,20 @@
       </div>
       <div class="col-md-8">
         <b-pagination
+          v-model="currentPage"
           :total-rows="numFound"
           :per-page="rowsPerPage"
-          v-model="currentPage"
           responsive="true"
           class="table-sm table-border-soft mt-2"
           size="md"
         />
         <div class="search-results-rows">
-
           <div v-if="searchResults && searchResults.length > 0 ">
-            <h3><span class="searchTerm">{{ query }}</span> has <span
-              class="searchTerm">{{ numFound }}</span> matches</h3>
+            <h3>
+              <span class="searchTerm">{{ query }}</span> has <span
+                class="searchTerm"
+              >{{ numFound }}</span> matches
+            </h3>
             <b-table
               ref="results-table"
               :fields="fields"
@@ -135,20 +147,22 @@
               striped
               responsive="true"
               class="table-sm table-border-soft test-search-results-table"
-              hover>
+              hover
+            >
               <template v-slot:cell(label)="row">
-              <router-link :to="row.item.toLink">
-                  <span v-html="row.item.label"/>
+                <router-link :to="row.item.toLink">
+                  <!-- eslint-disable-next-line vue/no-v-html -->
+                  <span v-html="row.item.label" />
                 </router-link>
               </template>
               <template v-slot:cell(highlight)="row">
-                <span v-html="row.item.highlight"/>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <span v-html="row.item.highlight" />
               </template>
             </b-table>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -290,7 +304,7 @@ export default {
           this.searchResults.push(resultPacket);
         });
       } catch (e) {
-        console.log('Search ERROR', e, this);
+        // console.log('Search ERROR', e, this);
       }
     }
   },

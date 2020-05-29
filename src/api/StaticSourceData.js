@@ -336,4 +336,4 @@ export default function getStaticSourceData() {
   }, {});
   return staticSourceDataHashMap;
 
-};
+}

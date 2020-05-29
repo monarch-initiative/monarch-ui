@@ -197,15 +197,26 @@ const neighborhoodTypes = [
 ];
 
 export async function getNeighborhood(nodeId, nodeType) {
-  // const graphUrl = `${biolink}graph/node/${nodeId}`;
+  // KS - This function is becoming a bit unwieldy
+  // and looks an awful lot like
+  // https://github.com/monarch-initiative/monarch-app/
+  // blob/master/lib/monarch/api.js#L2459
   const graphUrl = `${biolink}graph/edges/from/${nodeId}`;
-  const nodeLabelMap = {};
-  const xrefMap = {};
+  const nodeMap = {};
   const equivalentClasses = [];
   const superclasses = [];
   const subclasses = [];
   let xrefs = [];
+  const synonyms = {};
+  const synonymMap = {
+    'Exact Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasExactSynonym',
+    'Narrow Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasNarrowSynonym',
+    'Broad Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasBroadSynonym',
+    'Related Synonym': 'http://www.geneontology.org/formats/oboInOwl#hasRelatedSynonym'
+  };
+
   const xrefProp = 'http://www.geneontology.org/formats/oboInOwl#hasDbXref';
+
   const internalId = new RegExp(/MONDO|:?MONARCH|PHENOTYPE$/);
 
   const params = new URLSearchParams();
@@ -226,16 +237,31 @@ export async function getNeighborhood(nodeId, nodeType) {
 
   if (graphResponseData.nodes) {
     graphResponseData.nodes.forEach((node) => {
-      nodeLabelMap[node.id] = node.lbl;
-      if (xrefProp in node.meta) {
-        xrefMap[node.id] = node.meta[xrefProp];
-      } else {
-        xrefMap[node.id] = [];
+      if (!(xrefProp in node.meta)) {
+        node.meta[xrefProp] = [];
       }
+      nodeMap[node.id] = node;
+
     });
   }
-  xrefs = xrefMap[nodeId].map(elem => (
-    elem.startsWith('Orphanet') ? elem.replace('Orphanet', 'ORPHA') : elem));
+  xrefs = nodeMap[nodeId].meta[xrefProp]
+    .map((elem) => {
+      if (elem.startsWith('Orphanet')) {
+        elem = elem.replace('Orphanet', 'ORPHA');
+      } else if (/^OMIMPS:\d/.test(elem)) {
+        elem = elem.replace('PS:', 'PS:PS');
+      }
+      return elem;
+    });
+
+  Object.keys(synonymMap).forEach((key) => {
+    if (synonymMap[key] in nodeMap[nodeId].meta) {
+      synonyms[key] = nodeMap[nodeId].meta[synonymMap[key]]
+        .map(syn => syn.replace(',', ''));
+    } else {
+      synonyms[key] = [];
+    }
+  });
 
   if (!internalId.test(nodeId)) {
     // Unless we own the Id (Mondo/Monarch), the IDs
@@ -272,10 +298,36 @@ export async function getNeighborhood(nodeId, nodeType) {
         // console.log('Equiv Edge', edge.sub, edge.pred, edge.obj);
         if (edge.sub === nodeId) {
           equivalentClasses.push(edge.obj);
-          xrefs = xrefs.concat([edge.obj], xrefMap[edge.obj]);
+          // Clean up OBO:NS_1234 curies
+          const newXref = edge.obj.replace('OBO:', '').replace('_', ':');
+          xrefs = xrefs.concat([newXref], nodeMap[edge.obj].meta[xrefProp]);
+
+          Object.keys(synonyms).forEach((key) => {
+            if (synonymMap[key] in nodeMap[edge.obj].meta) {
+              synonyms[key] = synonyms[key]
+                .concat(
+                  nodeMap[edge.obj].meta[synonymMap[key]]
+                    .map(syn => syn.replace(',', ''))
+                );
+            }
+          });
+
         } else {
+          // TO DO DRY this off
           equivalentClasses.push(edge.sub);
-          xrefs = xrefs.concat([edge.sub], xrefMap[edge.sub]);
+          const newXref = edge.sub.replace('OBO:', '').replace('_', ':');
+          xrefs = xrefs.concat([newXref], nodeMap[edge.sub].meta[xrefProp]);
+
+          Object.keys(synonyms).forEach((key) => {
+            if (synonymMap[key] in nodeMap[edge.sub].meta) {
+              synonyms[key] = synonyms[key]
+                .concat(
+                  nodeMap[edge.sub].meta[synonymMap[key]]
+                    .map(syn => syn.replace(',', ''))
+                );
+            }
+          });
+
         }
       }
       // else {
@@ -283,15 +335,21 @@ export async function getNeighborhood(nodeId, nodeType) {
       //   console.log(JSON.stringify(edge, null, 2));
       // }
     });
+    // Uniquify xrefs and synonyms
     xrefs = us.uniq(xrefs);
+
+    Object.keys(synonyms).forEach((key) => {
+      synonyms[key] = us.uniq(synonyms[key]);
+    });
   }
 
   return {
-    nodeLabelMap,
+    nodeMap,
     equivalentClasses,
     superclasses,
     subclasses,
-    xrefs
+    xrefs,
+    synonyms
   };
 }
 
@@ -330,7 +388,7 @@ export async function getSources() {
   // https://berkeleybop.github.io/bbop-graph/doc/index.html
 
   // get dynamic data from biolink-api and put in BBOP graph
-  const dynamicSourceDataGraph = new bbopgraph.graph();
+  const dynamicSourceDataGraph = new bbopgraph.graph(); // eslint-disable-line new-cap
   try {
     const url = `${biolink}metadata/datasets`;
     const params = new URLSearchParams();
@@ -573,14 +631,14 @@ export async function getNodeLabelByCurie(curie) {
 }
 
 export function comparePhenotypes(sourceList, compareList, mode) {
-
+  let comparePromise;
   if (mode === 'search') {
     const baseUrl = `${biolink}sim/search`;
     const params = new URLSearchParams();
     sourceList.forEach(item => params.append('id', item.id));
     if (compareList.length === 1) {
       params.append('taxon', compareList[0].groupId);
-      return new Promise((resolve, reject) => {
+      comparePromise = new Promise((resolve, reject) => {
         axios.get(baseUrl, { params })
           .then((resp) => {
             const responseData = resp;
@@ -594,14 +652,15 @@ export function comparePhenotypes(sourceList, compareList, mode) {
             reject(err);
           });
       });
-    } else if (compareList.length > 1) {
+    }
+    if (compareList.length > 1) {
       const requestList = [];
       compareList.forEach((item) => {
         params.append('taxon', item.groupId);
         requestList.push(axios.get(baseUrl + '?' + params.toString()));
         params.delete('taxon');
       });
-      return new Promise((resolve, reject) => {
+      comparePromise = new Promise((resolve, reject) => {
         axios.all(requestList).then(axios.spread((...responses) => {
           const responseData = {
             data: {
@@ -624,9 +683,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
     }
   } else {
     const baseUrl = `${biolink}sim/compare`;
-    const isAllPhenotypes = compareList.filter((item) => {
-      return item.includes('HP:');
-    });
+    const isAllPhenotypes = compareList.filter(item => item.includes('HP:'));
     const featureSet = isAllPhenotypes.length > 0;
     sourceList = sourceList.map(source => source.id);
     const postBody = {
@@ -634,7 +691,7 @@ export function comparePhenotypes(sourceList, compareList, mode) {
       'reference_ids': sourceList,
       'query_ids': compareList
     };
-    return new Promise((resolve, reject) => {
+    comparePromise = new Promise((resolve, reject) => {
       axios.post(baseUrl, postBody)
         .then((resp) => {
           const responseData = resp;
@@ -649,13 +706,16 @@ export function comparePhenotypes(sourceList, compareList, mode) {
         });
     });
   }
+  return comparePromise;
 }
 
-export async function annotateText(queryText, longestOnly) {
-  const baseUrl = `${scigraph}annotations`;
+export async function annotateText(queryText, longestOnly = true) {
+  const baseUrl = `${biolink}nlp/annotate/`;
 
   const params = new URLSearchParams();
   params.append('content', queryText);
+  params.append('longestOnly', longestOnly);
+
   return new Promise((resolve, reject) => {
     axios.post(baseUrl, params, {
       headers: { 'content-type': 'application/x-www-form-urlencoded' }

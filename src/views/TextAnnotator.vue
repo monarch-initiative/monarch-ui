@@ -1,6 +1,8 @@
 <template>
   <div class="monarch-view container-fluid">
-    <h2 class="page-title">Text Annotator</h2>
+    <h2 class="page-title">
+      Text Annotator
+    </h2>
     <div>
       <section class="section">
         <div class="container">
@@ -8,33 +10,36 @@
             <div class="column is-8 is-offset-2">
               <div class="stepper-box">
                 <div class="top">
-                  <div class="divider-line"/>
+                  <div class="divider-line" />
                   <div class="steps-wrapper">
                     <div ref="step1" class="step">
                       <div class="icon">
-                        <i class="fa fa-file-text fa-fw"/>
+                        <i class="fa fa-file-text fa-fw" />
                       </div>
                       <div class="step-title">
                         <h4>Data</h4>
-                        <h5 class="step-subtitle">Enter a phrase, piece of text or abstract</h5>
+                        <h5 class="step-subtitle">
+                          Enter a phrase, piece of text or abstract
+                        </h5>
                       </div>
                     </div>
                     <div ref="step2" :class="['step', (resultsStep) ? '' : 'deactivated']">
                       <div class="icon">
-                        <i class="fa fa-check fa-fw"/>
+                        <i class="fa fa-check fa-fw" />
                       </div>
                       <div class="step-title">
                         <h4>Results</h4>
-                        <h5 class="step-subtitle">Your annotated results</h5>
+                        <h5 class="step-subtitle">
+                          Your annotated results
+                        </h5>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="content">
                   <div v-if="!resultsStep" class="step1">
-
                     <b-link @click="populateExample">
-                      <i class="fa fa-arrow-circle-down" aria-hidden="true"/> Try example
+                      <i class="fa fa-arrow-circle-down" aria-hidden="true" /> Try example
                     </b-link>
                     <br>
                     <b-form-textarea
@@ -57,14 +62,17 @@
                     </b-form-checkbox>
                   </div>
                   <div v-if="resultsStep" class="step2">
-                    <div ref="step2text" class="step2" v-html="annotatedText"/>
+                    <!-- eslint-disable-next-line vue/no-v-html -->
+                    <div ref="step2text" class="step2" v-html="annotatedText" />
                   </div>
                   <div v-if="showSpinner" class="spinner">
-                    <b-spinner type="grow" label="Spinning"/>
+                    <b-spinner type="grow" label="Spinning" />
                   </div>
                   <div v-if="errorAnnotating" class="error">
-                    <h4>Sorry, looks like we couldn't process that text. If you think this is an error,
-                    please open a ticket <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank"> here</a> and we can address it right way.</h4>
+                    <h4>
+                      Sorry, looks like we couldn't process that text. If you think this is an error,
+                      please open a ticket <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank"> here</a> and we can address it right way.
+                    </h4>
                   </div>
                 </div>
                 <div :class="['bottom', (!annotatedText) ? 'only-submit' : '']">
@@ -73,24 +81,27 @@
                     ref="backButton"
                     :disabled="!validForm"
                     class="stepper-button back"
-                    @click="back">
-                    <i class="fa fa-caret-left fa-fw"/>Back
+                    @click="back"
+                  >
+                    <i class="fa fa-caret-left fa-fw" />Back
                   </b-button>
                   <b-button
                     v-if="!resultsStep"
                     ref="submitButton"
                     :disabled="!validForm"
                     class="stepper-button submit"
-                    @click="annotateText">
-                    Submit<i class="fa fa-caret-right fa-fw"/>
+                    @click="annotateText"
+                  >
+                    Submit<i class="fa fa-caret-right fa-fw" />
                   </b-button>
                   <b-button
                     v-if="annotatedText"
                     ref="analyzePhenotypes"
                     :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
                     :disabled="!validForm"
-                    class="stepper-button submit">
-                    Analyze Phenotypes<i class="fa fa-caret-right fa-fw"/>
+                    class="stepper-button submit"
+                  >
+                    Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
                   </b-button>
                 </div>
               </div>
@@ -124,7 +135,7 @@ export default {
       dataStep: true,
       errorAnnotating: false,
       showSpinner: false,
-      longestOnly: false,
+      longestOnly: true,
       phenotypes: ''
 
     };
@@ -233,7 +244,10 @@ export default {
       annotations.forEach((annotation) => {
         let finalBuiltAnnotation = '';
         annotation = annotation.split(',');
-        finalBuiltAnnotation += '<div class=\'annotation\'><span class=\'ontology-id\'>' + annotation[1] + '</span>';
+        finalBuiltAnnotation += '<div class="annotation"><span class="ontology-id">'
+          + '<a href="/' + annotation[1] + '"> ' + annotation[1]
+          + ' </a>'
+          + '</span>';
         finalBuiltAnnotation += annotation[0] + '</div>';
         body.innerHTML += finalBuiltAnnotation;
       });
@@ -282,6 +296,7 @@ export default {
       .popover {
         max-width: 450px !important;
         top: unset !important;
+        cursor: initial;
 
         .annotation {
           font-weight: bold;

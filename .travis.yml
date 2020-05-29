@@ -7,6 +7,9 @@ stages:
   - test
 jobs:
   include:
-    - stage: test
+    - stage: test and lint
       script:
         - npm run test:unit
+    - stage: test and lint
+      script:
+        - npm run lint

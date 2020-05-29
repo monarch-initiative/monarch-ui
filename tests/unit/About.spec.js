@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import axios from 'axios';
-import { shallowMountWithRouting } from './test-utils';
 import AboutMonarch from '@/views/AboutMonarch.md';
 import AboutTeam from '@/views/AboutTeam.md';
+import { shallowMountWithRouting } from './test-utils';
 
 const teamResponse = {
   data:

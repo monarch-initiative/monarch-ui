@@ -13,7 +13,8 @@
       class="input-group"
     >
       <div
-        class="input-group-prepend">
+        class="input-group-prepend"
+      >
         <button
           class="btn btn-secondary dropdown-toggle"
           type="button"
@@ -22,25 +23,26 @@
           {{ selectDisplay }}
         </button>
         <div
-          v-click-outside="closeFilterBox"
           v-if="catDropDown"
+          v-click-outside="closeFilterBox"
           class="dropdown-menu list-group dropCatList px-4"
         >
           <div class="form-group">
             <b-form-radio-group
               v-model="category"
               :options="options"
-              stacked/>
+              stacked
+            />
           </div>
         </div>
       </div>
       <input
+        v-model="value"
         v-click-outside="toggleSuggestions"
         :placeholder="dynamicPlaceholder"
         :class="{
           'loading': loading
         }"
-        v-model="value"
         class="form-control xform-control-sm test-input-search-text"
         type="text"
         @input="debounceInput"
@@ -63,7 +65,7 @@
           title="Show all matching results"
           @click="showMore"
         >
-          <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid"/>
+          <i class="p-0 m-0 fa xfa-2x fa-search-plus fa-solid" />
         </button>
       </div>
       <div
@@ -86,12 +88,14 @@
           @mouseover="mouseOver(index)"
         >
           <div
-            class="row m-0 p-0">
+            class="row m-0 p-0"
+          >
             <div
               v-if="suggestion.has_hl"
               class="col-5"
             >
-              <span v-html="$sanitizeText(suggestion.highlight)"/>
+              <!-- eslint-disable-next-line vue/no-v-html -->
+              <span v-html="$sanitizeText(suggestion.highlight)" />
             </div>
             <div
               v-else
@@ -100,11 +104,13 @@
               <strong>{{ suggestion.match }}</strong>
             </div>
             <div
-              class="col-4">
+              class="col-4"
+            >
               <i>{{ suggestion.taxon }}</i>
             </div>
             <div
-              class="col-3 text-align-right">
+              class="col-3 text-align-right"
+            >
               <small>{{ suggestion.category }}</small>
             </div>
           </div>
@@ -121,7 +127,8 @@
     </div>
     <div
       v-if="homeSearch"
-      class="examples">
+      class="examples"
+    >
       e.g.
       <button
         v-for="(example, index) in exampleSearches"
@@ -208,11 +215,6 @@ export default {
       type: String,
       required: false,
       default: 'Explore Monarch for phenotypes, diseases, genes and more..'
-    },
-    typeSort: {
-      type: String,
-      required: false,
-      default: ''
     }
   },
   data() {
@@ -291,22 +293,14 @@ export default {
           };
           this.suggestions.push(resultPacket);
         });
-        const sortCategory = this.typeSort;
-        if (sortCategory) {
-          this.suggestions.sort(function (a, b) {
-            if (a.category === sortCategory) return -1;
-            if (b.category === sortCategory) return 1;
-            if (a.category === b.category) return 0;
-            return 0;
-          });
-        }
+
         this.open = true;
         this.loading = false;
       } catch (e) {
-        console.log('nodeResponse ERROR', e, this);
+        // console.log('nodeResponse ERROR', e, this);
       }
     },
-    configureOptions(){
+    configureOptions() {
       this.options = [];
       if (this.definedCategories) {
         if (this.definedCategories.length > 1) {

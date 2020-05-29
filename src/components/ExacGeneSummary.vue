@@ -2,7 +2,8 @@
   <div
     v-show="showGeneExac"
     id="exacGene"
-    class="container-fluid">
+    class="container-fluid"
+  >
     <h4>Exac Population Frequencies</h4>
     <table class="table table-hover">
       <thead>
@@ -15,19 +16,25 @@
       </thead>
       <tbody>
         <tr>
-          <th scope="row">Synonymous</th>
+          <th scope="row">
+            Synonymous
+          </th>
           <td>{{ exacGene.exp_syn }}</td>
           <td>{{ exacGene.n_syn }}</td>
           <td>z = {{ exacGene.syn_z }}</td>
         </tr>
         <tr>
-          <th scope="row">Missense</th>
+          <th scope="row">
+            Missense
+          </th>
           <td>{{ exacGene.exp_mis }}</td>
           <td>{{ exacGene.n_mis }}</td>
           <td>z = {{ exacGene.mis_z }}</td>
         </tr>
         <tr>
-          <th scope="row">LoF</th>
+          <th scope="row">
+            LoF
+          </th>
           <td>{{ exacGene.exp_lof }}</td>
           <td>{{ exacGene.n_lof }}</td>
           <td>pLI = {{ exacGene.p_li }}</td>
@@ -37,22 +44,26 @@
     <div class="row">
       <div
         id="mgi-link"
-        class="col-9">
+        class="col-9"
+      >
         [Retrieved from
         <a
           :href="exacGene.link"
-          target="_blank">
+          target="_blank"
+        >
           MyGene.info
         </a>
         ]
       </div>
       <div
         id="exac-link"
-        class="col-3">
+        class="col-3"
+      >
         <a
           target="_blank"
           href="http://exac.broadinstitute.org/"
-          class="fa fa-link"/>
+          class="fa fa-link"
+        />
       </div>
     </div>
   </div>

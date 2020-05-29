@@ -1,8 +1,8 @@
 <template>
   <div
     v-if="pgVersion === index"
-    ref="phenogridbox"
     :id="'phenogridbox-'+index"
+    ref="phenogridbox"
   />
 </template>
 

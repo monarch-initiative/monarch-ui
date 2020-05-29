@@ -1,14 +1,17 @@
 <template>
   <div
     id="reactome-wrapper"
-    class="reactome-wrapper">
+    class="reactome-wrapper"
+  >
     <div
       v-if="reactomeId"
       id="reactome-div"
-      class="row"/>
+      class="row"
+    />
 
     <div
-      v-else>
+      v-else
+    >
       <h6>No Reactome ID</h6>
     </div>
   </div>
@@ -84,7 +87,7 @@ export default {
         this.width = wrapper.clientWidth;
         this.height = window.innerHeight - 150;
       } else {
-        console.log('fit() no wrapper', reactomeWrapperId, this.diagram);
+        // console.log('fit() no wrapper', reactomeWrapperId, this.diagram);
         this.width = 50;
         this.height = 50;
       }

@@ -1,15 +1,16 @@
 <template>
-
   <nav id="neighborhood" :class="{ active: isVisible }">
-    <i class="close fa fa-times" aria-hidden="true" @click="closeNeighborhood()"/>
+    <i class="close fa fa-times" aria-hidden="true" @click="closeNeighborhood()" />
     <div class="neighborhood">
       <div
         v-for="c in superclasses"
         :key="c.id"
-        class="row superclass">
+        class="row superclass"
+      >
         <div class="col-12">
           <router-link
-            :to="'/' + nodeType + '/' + c.id">
+            :to="'/' + nodeType + '/' + c.id"
+          >
             {{ getLabel(c) }}
           </router-link>
         </div>
@@ -17,14 +18,15 @@
 
       <div class="row currentclass">
         <div class="col-12">
-          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true"/>
+          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true" />
         </div>
       </div>
 
       <div
         v-for="c in subclasses"
         :key="c.id"
-        class="row subclass">
+        class="row subclass"
+      >
         <div class="col-12">
           <router-link :to="'/' + nodeType + '/' + c.id">
             {{ getLabel(c) }}
@@ -33,7 +35,6 @@
       </div>
     </div>
   </nav>
-
 </template>
 
 
@@ -74,7 +75,7 @@ export default {
       return c.label || c.id;
     },
     closeNeighborhood() {
-      console.log('trying to close');
+      // console.log('trying to close');
       this.$emit('toggleNeighborhood');
     }
   },
