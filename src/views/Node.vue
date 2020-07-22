@@ -47,6 +47,8 @@
             <span v-if="originalId" class="node-label-id">
               (Redirected from {{ originalId }})
             </span>
+            <br>
+            <span class="node-label-synonyms">AKA: &nbsp;{{ synonyms['Exact Synonym'].join(', ') }}</span>
           </h4>
           &nbsp;
           <!--
@@ -80,63 +82,58 @@
               <!-- eslint-disable-next-line vue/no-v-html -->
               <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
             </div>
-
-            <div v-if="inheritance" class="col-12 node-content-section">
+          </div>
+<!--
+            <div v-if="inheritance" class="col-12">
               <b>Heritability: </b>&nbsp;{{ inheritance }}
             </div>
 
-            <div v-if="modifiers" class="col-12 node-content-section">
+            <div v-if="modifiers" class="col-12">
               <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
             </div>
-          </div>
-
-          <div v-if="!expandedCard" class="row node-content-section">
             <div v-if="references.length" class="col-12">
               <span v-if="nodeType === 'disease'"><b>Mappings: </b>&nbsp;</span>
               <span v-else><b>External Resources: </b>&nbsp;</span>
-              <span v-for="(r, index) in references" :key="index" class="synonym">
-                <span v-if="r.uri">
-                  <span class="reference-external">
-                    <a
-                      :href="r.uri"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="node-label-id"
-                    >
+                <b-list-group>
+                  <b-list-group-item v-for="(r, index) in references" :key="index" class="synonym">
+                    <span v-if="r.uri">
+                      <span class="reference-external">
+                        <a
+                          :href="r.uri"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="node-label-id"
+                        >
+                          {{ r.label }}
+                          <i class="fa fa-external-link" aria-hidden="true" />
+                        </a>
+                      </span>
+                    </span>
+                    <span v-else>
                       {{ r.label }}
-                      <i class="fa fa-external-link" aria-hidden="true" />
-                    </a>
-                  </span>
-                </span>
-                <span v-else>
-                  {{ r.label }}
-                </span>
-                &nbsp;
-              </span>
+                    </span>
+                  </b-list-group-item>
+                </b-list-group>
             </div>
-          </div>
-
-          <div v-if="!expandedCard" class="row">
             <div v-if="nodeType === 'disease' || nodeType === 'phenotype'" class="col-12">
-              <div v-if="synonyms && synonyms['Exact Synonym'].length" class="node-content-section">
+              <div v-if="synonyms && synonyms['Exact Synonym'].length">
                 <b>Exact Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
               </div>
 
-              <div v-if="synonyms && synonyms['Narrow Synonym'].length" class="node-content-section">
+              <div v-if="synonyms && synonyms['Narrow Synonym'].length">
                 <b>Narrow Synonyms:</b>&nbsp;{{ synonyms['Narrow Synonym'].join(', ') }}
               </div>
 
-              <div v-if="synonyms && synonyms['Broad Synonym'].length" class="node-content-section">
+              <div v-if="synonyms && synonyms['Broad Synonym'].length">
                 <b>Broad Synonyms:</b>&nbsp;{{ synonyms['Broad Synonym'].join(', ') }}
               </div>
 
-              <div v-if="synonyms && synonyms['Related Synonym'].length" class="node-content-section">
+              <div v-if="synonyms && synonyms['Related Synonym'].length">
                 <b>Related Synonyms:</b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
               </div>
             </div>
-
             <div v-else class="col-12">
-              <div v-if="synonyms && synonyms['Exact Synonym'].length" class="node-content-section">
+              <div v-if="synonyms && synonyms['Exact Synonym'].length">
                 <b>Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
               </div>
             </div>
@@ -155,7 +152,7 @@
           <div v-if="!expandedCard && reactomeId" class="row py-0">
             <reactome-viewer :reactome-id="reactomeId" />
           </div>
-
+  -->
           <!--<div v-if="!expandedCard" class="row node-cards-section">
             <node-card
               v-for="cardType in nonEmptyCards"
@@ -452,7 +449,8 @@ export default {
   updated() {
     // console.log('updated', this.nodeId);
     if (this.$refs.titleBar) {
-      if (this.$refs.titleBar.scrollHeight > 60) {
+      console.log(this.$refs.titleBar.scrollHeight);
+      if (this.$refs.titleBar.scrollHeight > 85) {
         this.$refs.titleBar.style.fontSize = '1.1rem';
       } else {
         this.$refs.titleBar.style.fontSize = '';
@@ -804,6 +802,7 @@ $line-height-compact: 1.3em;
 
 .node-wrapper {
   min-height: 100%;
+  background-color: #ebebeb;
 }
 
 .overlay {
@@ -820,7 +819,7 @@ $line-height-compact: 1.3em;
 }
 
 .container-fluid.node-container {
-  margin-top: ($title-bar-max-height + 15);
+  margin-top: ($title-bar-max-height + 25);
   transition: all 0.3s;
   width: 100%;
   height: 100%;
@@ -862,6 +861,10 @@ div.container-cards {
   & .node-content-section {
     line-height: $line-height-compact;
     padding-top: 4px;
+    background-color: white;
+    margin: .25rem;
+    padding: .5rem;
+    box-shadow: 0px 1px 2px 0px #80808040;
   }
 
   & .node-cards-section {
@@ -870,12 +873,11 @@ div.container-cards {
 }
 
 .title-bar {
-  border-bottom: 1px solid lightgray;
-  background: #1b5f75;
+  background: #5d5d5d;
   color: white;
   position: fixed;
-  height: $title-bar-max-height;
   overflow-y: hidden;
+  box-shadow: 0px 1px 3px 1px #cee450;
   line-height: $line-height-compact;
   top: ($navbar-height);
   left: 0;
@@ -885,6 +887,7 @@ div.container-cards {
   z-index: 1;
   font-size: 1.5rem;
   padding: 5px 15% 5px 5px;
+  border-top: 10px solid #ebebeb;
 
   // & .synonym {
   //   padding: 0 2px;
@@ -898,12 +901,14 @@ div.container-cards {
   }
   & .node-label-label {
     margin: 0;
-    padding-left: 15px;
-    padding-top: 15px;
+    padding: 5px 0 5px 15px;
     font-size: inherit;
 
     & .node-label-id {
       font-size: .8rem;
+    }
+    & .node-label-synonyms {
+      font-size: .75rem;
     }
   }
 }
