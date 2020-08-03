@@ -17,7 +17,7 @@ export async function getGeneDescription(geneId) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'mim:$1');
     speciesParam = 9606;
   } else if (geneId.match(/^MGI/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'mgi:MGI\\\\:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, 'mgi:MGI\\:$1');
     speciesParam = 10090;
   } else if (geneId.match(/^FlyBase/)) {
     formattedId = geneId.replace(/\S+:(\d+)/, 'flybase:$1');
