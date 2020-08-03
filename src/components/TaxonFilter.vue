@@ -91,19 +91,19 @@ export default {
         this.showMessage = true;
       } else {
         this.showMessage = false;
-		let isChanged = false;
-		const newKeys = Object.keys(this.taxonFilter.taxons);
-		const oldKeys = Object.keys(this.localCopy.taxons);
-		if (oldKeys.length !== newKeys.length) {
-			isChanged = true;
-		} else {
-			for (let objKey of newKeys) {
-				if (this.taxonFilter.taxons[objKey] !== this.localCopy.taxons[objKey]) {
-					isChanged = true;
-				}
-			}
-		}
-		if (isChanged) {
+        let isChanged = false;
+        const newKeys = Object.keys(this.taxonFilter.taxons);
+        const oldKeys = Object.keys(this.localCopy.taxons);
+        if (oldKeys.length !== newKeys.length) {
+          isChanged = true;
+        } else {
+          newKeys.forEach((objKey) => {
+            if (this.taxonFilter.taxons[objKey] !== this.localCopy.taxons[objKey]) {
+              isChanged = true;
+            }
+          });
+        }
+        if (isChanged) {
           this.$emit('toggle-filter', true);
         } else {
           this.$emit('toggle-filter', false);

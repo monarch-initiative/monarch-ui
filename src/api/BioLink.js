@@ -550,45 +550,43 @@ export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, pa
     parms.start = 0;
     parms.rows = 10000;
   }
-  
+
   const params = new URLSearchParams();
-  Object.keys(parms).forEach(function (key) {
-		params.append(key, parms[key]);
+  Object.keys(parms).forEach(function fcnAppend(key) {
+    params.append(key, parms[key]);
   });
   params.append('unselect_evidence', true);
 
   // Use monarch solr until amigo-ontobio connection is ready
   if (cardType === 'function') {
     url = `${biolink}association/type/gene_function`;
-	params.append('subject', nodeId);
+    params.append('subject', nodeId);
   }
 
   if (cardType.startsWith('causal')) {
-	params.append('association_type', 'causal');
+    params.append('association_type', 'causal');
   } else if (cardType.startsWith('correlated')) {
-	params.append('association_type', 'non_causal');
+    params.append('association_type', 'non_causal');
   }
 
-
-
   if (isTaxonCardType(cardType)) {
-	params.append('facet', true);
-	if (isSubjectCardType(cardType)) {
-		params.append('facet_fields', 'subject_taxon');
+    params.append('facet', true);
+    if (isSubjectCardType(cardType)) {
+      params.append('facet_fields', 'subject_taxon');
     } else {
-		params.append('facet_fields', 'object_taxon');
-	}
-	
-	if (taxons != null && taxons !== -1) {
-	  if (taxons.length > 1) {
-		  taxons.forEach((elem) => {
-			params.append('taxon', elem);
-		  });
-	  } else {
-		  params.append('taxon', taxons[0]);
-	  }
-	  
-	  params.append('direct_taxon', true);
+      params.append('facet_fields', 'object_taxon');
+    }
+
+    if (taxons != null && taxons !== -1) {
+      if (taxons.length > 1) {
+        taxons.forEach((elem) => {
+          params.append('taxon', elem);
+        });
+      } else {
+        params.append('taxon', taxons[0]);
+      }
+
+      params.append('direct_taxon', true);
     }
 
   }
