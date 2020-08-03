@@ -434,7 +434,6 @@ export default {
           .icon {
             margin-bottom: 1rem;
             padding: 0 1rem;
-            background-color: white;
 
             i {
               background-color: $monarch-bg-color;

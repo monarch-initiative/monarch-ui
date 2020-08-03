@@ -4,7 +4,6 @@
     id="exacGene"
     class="container-fluid"
   >
-    <h4>Exac Population Frequencies</h4>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -102,6 +101,8 @@ export default {
   mounted() {
     if (this.nodePrefix.prefix in this.curieMap) {
       this.hitMyGene();
+    } else {
+      this.$emit('show-exac', false);
     }
   },
   methods: {
@@ -127,6 +128,7 @@ export default {
           const hits = resp.data.hits[0];
           if (hits && hits.exac) {
             this.showGeneExac = true;
+            this.$emit('show-exac', true);
             this.exacGene = {
               exp_syn: this.round(hits.exac.all.exp_syn, 1),
               n_syn: this.round(hits.exac.all.n_syn, 1),
@@ -139,10 +141,14 @@ export default {
               p_li: this.round(hits.exac.all.p_li, 1),
               link: resp.request.responseURL
             };
+          } else {
+            this.$emit('show-exac', false);
           }
+          
         })
         .catch((err) => {
           // eslint-disable-next-line
+          this.$emit('show-exac', false);
           console.log('mygene.info error', err.message);
         });
     }
@@ -150,11 +156,6 @@ export default {
 };
 </script>
 <style>
-  #exacGene {
-    border-radius: 10px;
-    border: solid darkgray 1px;
-  }
-
   #mgi-link {
     text-align: left;
     margin-bottom: 4px;

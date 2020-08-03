@@ -1,15 +1,9 @@
 <template>
-  <div
-    id="app"
-    class="page-wrapper"
-  >
+  <div id="app" class="page-wrapper">
+    <monarch-navbar />
     <div class="content-wrapper">
-      <monarch-navbar />
-      <div class="main-wrapper">
         <router-view />
-      </div>
     </div>
-
     <div class="footer-wrapper">
       <monarch-footer
         :compact="useCompactFooter"
@@ -66,20 +60,20 @@ $fa-font-path: "~font-awesome/fonts" !default;
   padding-left: 15px;
 }
 #app.page-wrapper {
-  position: absolute;
-  min-height: 100vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 #app.page-wrapper .content-wrapper {
-  padding-bottom: $footer-height;
+  padding: $navbar-height 0 0 0;
+  flex: 1;
   margin: 0;
-  min-height: 100vh;
-  display: flex;
+  background-color: #efefef;
 }
 
 #app.page-wrapper .footer-wrapper {
-  position: absolute;
   z-index: $monarch-footer-z;
   bottom: 0;
   width: 100%;
@@ -92,13 +86,6 @@ $fa-font-path: "~font-awesome/fonts" !default;
   padding-top: 15px;
   padding-bottom: 15px;
 }
-
-#app.page-wrapper .main-wrapper {
-  padding: $navbar-height 0 0 0;
-  min-height: 100%;
-  min-width: 100%;
-}
-
 
 div.vue-markdown {
   xmargin-top: $navbar-height;
@@ -179,6 +166,10 @@ blockquote.blockquote {
 
 html, body {
   font-family: 'Poppins', sans-serif;
+}
+
+.gfc-tooltip {
+  position: fixed !important;
 }
 
 @media (min-width: 2400px) {

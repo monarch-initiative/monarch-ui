@@ -19,11 +19,7 @@
       @toggle-neighborhood="toggleNeighborhood"
     />
 
-    <div class="container-cards">
-      <div class="wrapper">
-        <div :class="{ active: isNeighborhoodShowing }" class="overlay" />
-
-        <div v-if="!node" class="loading">
+    <div v-if="!node" class="loading">
           <div v-if="nodeError">
             <small>
               <h6>
@@ -38,9 +34,12 @@
               {{ nodeId }}
             </h5>
           </div>
-        </div>
+    </div>
 
-        <div v-else ref="titleBar" class="title-bar">
+    <div class="container-cards">
+      <div class="title-bar-wrapper">
+        <div :class="{ active: isNeighborhoodShowing }" class="overlay" />
+        <div v-if="node" ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
             <!-- eslint-disable-next-line vue/no-v-html -->
             <span v-html="node.label" />&nbsp;<span class="node-label-id">{{ node.id }}</span>
@@ -48,7 +47,7 @@
               (Redirected from {{ originalId }})
             </span>
             <br>
-            <span class="node-label-synonyms">AKA: &nbsp;{{ synonyms['Exact Synonym'].join(', ') }}</span>
+            <span v-if="synonyms['Exact Synonym'].length > 1" class="node-label-synonyms">&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}</span>
           </h4>
           &nbsp;
           <!--
@@ -62,124 +61,125 @@
               </a>
              -->
         </div>
-        <div v-if="node" class="container-fluid node-container">
-          <div v-if="!expandedCard" class="row node-content-section">
-            <div v-if="node.description" class="col-12">
-              <div class="node-description">
-                <b>Description</b><br>
-                <div class="description">
-                  <!-- eslint-disable-next-line vue/no-v-html -->
-                  <div v-html="node.description" />
+      </div>
+      <div v-if="node" class="container-fluid node-container">
+          <div class="row">
+            <div v-if="!expandedCard && overviewSection()" class="node-content-section col-12">
+              <div class="node-content-section-content">
+                <h5>Overview</h5>
+                <div class="node-sub-section" v-if="node.description">
+                  <div class="node-description">
+                    <div class="description">
+                      <!-- eslint-disable-next-line vue/no-v-html -->
+                      <div v-html="node.description" />
+                    </div>
+                  </div>
+                </div>
+                <!-- Publications -->
+                <div class="node-sub-section" v-if="entrezResult">
+                  <h6>{{ entrezResult.pubdate }}</h6>
+                  <h6>
+                    {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
+                  </h6>
+                  <h6>
+                    {{ entrezResult.abstract}}
+                  </h6>
+                  <h6>
+                    DOI: {{entrezResult.doi}}
+                  </h6>
+                  <br>
+                  <b-button :href="entrezResult.pubmedURL" target="__blank" variant="outline-primary">View on PubMed</b-button>
+                </div>
+                <div v-if="inheritance || modifiers">
+                  <h5>Key Features</h5>
+                  <!-- Inheritance -->
+                  <div class="node-sub-section" v-if="inheritance">
+                    <b>Heritability: </b>{{ inheritance }}
+                  </div>
+                  <div class="node-sub-section" v-if="modifiers">
+                    <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
+                  </div>
                 </div>
               </div>
             </div>
-            <div v-if="entrezResult" class="col-12">
-              <h6>Date: {{ entrezResult.pubdate }}</h6>
-              <h6>
-                Authors:
-                {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
-              </h6>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <div v-if="entrezResult" class="publication-abstract" v-html="entrezResult.abstractMarkdown" />
-            </div>
-          </div>
-<!--
-            <div v-if="inheritance" class="col-12">
-              <b>Heritability: </b>&nbsp;{{ inheritance }}
-            </div>
-
-            <div v-if="modifiers" class="col-12">
-              <b>Clinical Modifiers: </b>&nbsp;{{ modifiers }}
-            </div>
-            <div v-if="references.length" class="col-12">
-              <span v-if="nodeType === 'disease'"><b>Mappings: </b>&nbsp;</span>
-              <span v-else><b>External Resources: </b>&nbsp;</span>
-                <b-list-group>
-                  <b-list-group-item v-for="(r, index) in references" :key="index" class="synonym">
-                    <span v-if="r.uri">
-                      <span class="reference-external">
-                        <a
-                          :href="r.uri"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="node-label-id"
-                        >
+            <div v-if="!expandedCard && supportSection()" class="node-content-section col-6">
+              <div class="node-content-section-content">
+                <h5>Support & Mappings</h5>
+                  <div class="node-sub-section">
+                    <div class="linked-references" v-if="references.linked.length > 0">
+                      <h6 v-if="nodeType === 'disease'"><b>Core Mappings </b>&nbsp;</h6>
+                      <h6 v-else><b>Core External Resources </b>&nbsp;</h6>
+                        <span v-for="(r, index) in references.linked" :key="index" class="synonym">
+                          <span class="reference-external">
+                            <a
+                              :href="r.uri"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="node-label-id"
+                            >
+                              {{ r.label }}
+                              <i class="fa fa-external-link" aria-hidden="true" />
+                            </a>
+                          </span>
+                        </span>
+                    </div>
+                    <div class="static-references" v-if ="references.static.length > 0">
+                      <h6 class="heading-toggle" v-b-toggle.collapse-1 v-if="nodeType === 'disease'">
+                        <strong>
+                          <i class="fa fa-angle-right" aria-hidden="true"></i> 
+                          <i class="fa fa-angle-down" aria-hidden="true"></i> 
+                          Other Mappings 
+                        </strong>
+                      </h6>
+                      <h6 class="heading-toggle" v-b-toggle.collapse-1 v-else>
+                        <strong>
+                          <i class="fa fa-angle-right" aria-hidden="true"></i> 
+                          <i class="fa fa-angle-down" aria-hidden="true"></i> 
+                          Other External Resources 
+                        </strong>
+                      </h6>
+                      <b-collapse id="collapse-1">
+                        <span v-for="(r, index) in references.static" :key="index" class="synonym">
                           {{ r.label }}
-                          <i class="fa fa-external-link" aria-hidden="true" />
-                        </a>
-                      </span>
-                    </span>
-                    <span v-else>
-                      {{ r.label }}
-                    </span>
-                  </b-list-group-item>
-                </b-list-group>
-            </div>
-            <div v-if="nodeType === 'disease' || nodeType === 'phenotype'" class="col-12">
-              <div v-if="synonyms && synonyms['Exact Synonym'].length">
-                <b>Exact Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
+                        </span>
+                      </b-collapse>
+                    </div>
+                  </div>
               </div>
-
-              <div v-if="synonyms && synonyms['Narrow Synonym'].length">
-                <b>Narrow Synonyms:</b>&nbsp;{{ synonyms['Narrow Synonym'].join(', ') }}
-              </div>
-
-              <div v-if="synonyms && synonyms['Broad Synonym'].length">
-                <b>Broad Synonyms:</b>&nbsp;{{ synonyms['Broad Synonym'].join(', ') }}
-              </div>
-
-              <div v-if="synonyms && synonyms['Related Synonym'].length">
-                <b>Related Synonyms:</b>&nbsp;{{ synonyms['Related Synonym'].join(', ') }}
+            </div>              
+            <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-6">
+              <div class="node-content-section-content">
+                <h5>ExAC Population Frequencies</h5>
+                <exac-gene :node-id="nodeId" @show-exac="showExacSection($event)"/>
               </div>
             </div>
-            <div v-else class="col-12">
-              <div v-if="synonyms && synonyms['Exact Synonym'].length">
-                <b>Synonyms:</b>&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}
+            <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-8">
+              <div class="node-content-section-content">
+                <h5>Genome Features</h5>
+                <genome-feature :mygene-data="node.geneInfo"/>
               </div>
             </div>
           </div>
-
-          <div v-if="!expandedCard && hasGeneExac" class="row py-2">
-            <exac-gene :node-id="nodeId" />
-          </div>
-
-          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="row py-2">
-            <genome-feature
-              :mygene-data="node.geneInfo"
-            />
-          </div>
-
           <div v-if="!expandedCard && reactomeId" class="row py-0">
             <reactome-viewer :reactome-id="reactomeId" />
           </div>
-  -->
-          <!--<div v-if="!expandedCard" class="row node-cards-section">
-            <node-card
-              v-for="cardType in nonEmptyCards"
-              :key="cardType"
-              :card-type="cardType"
-              :card-count="counts"
-              :parent-node="node"
-              :parent-node-id="nodeId"
-              @expand-card="expandCard(cardType)"/>
-          </div>-->
-
-          <div v-if="expandedCard" class="expanded-card-view">
-            <assoc-table
+          <div v-if="!expandedCard && nodeType === 'variant'">
+            <exac-variant :node-id="nodeId" />
+          </div>
+          <div v-if="expandedCard" class="expanded-card-view node-content-section">
+            <div class="node-content-section-content">
+              <assoc-table
               :taxon-counts="taxonCounts"
               :node-type="nodeType"
               :card-type="expandedCard"
               :node-id="nodeId"
               :node-label="node.label"
               :is-group="isGroup"
-            />
-          </div>
-          <div v-if="!expandedCard && nodeType === 'variant'">
-            <exac-variant :node-id="nodeId" />
+              />
+              </div>
           </div>
         </div>
       </div>
-    </div>
     <!-- eslint-disable-next-line vue/no-v-html -->
     <script type="application/ld+json" v-html="jsonld" />
   </div>
@@ -189,7 +189,6 @@
 <script>
 
 import us from 'underscore';
-import MarkdownIt from 'markdown-it';
 import * as biolinkService from '@/api/BioLink';
 import * as MyGene from '@/api/MyGene';
 import * as Entrez from '@/api/Entrez';
@@ -382,6 +381,7 @@ export default {
       entrezResult: null,
       reactomeId: null,
       isRedirected: false,
+      showExac: false,
 
       counts: {
         disease: 0,
@@ -447,14 +447,10 @@ export default {
   },
 
   updated() {
-    // console.log('updated', this.nodeId);
+    // Small hack to emulate fixed element taking up size.
     if (this.$refs.titleBar) {
-      console.log(this.$refs.titleBar.scrollHeight);
-      if (this.$refs.titleBar.scrollHeight > 85) {
-        this.$refs.titleBar.style.fontSize = '1.1rem';
-      } else {
-        this.$refs.titleBar.style.fontSize = '';
-      }
+      const titleBarWrapper = document.getElementsByClassName("title-bar-wrapper")[0];
+       titleBarWrapper.style.height = (this.$refs.titleBar.clientHeight + 20) + 'px';
     }
   },
 
@@ -467,6 +463,21 @@ export default {
   },
 
   methods: {
+
+    overviewSection() {
+      if(this.node.description || this.inheritance || this.entrezResult || this.modifiers){
+        return true;
+      }
+      return false;
+    },
+
+    supportSection() {
+      if((this.references.linked.length > 0 || this.references.static.length > 0) && !this.entrezResult){
+        return true;
+      }
+      return false;
+    },
+
     expandCard(cardType) {
       this.$router.push({ hash: cardType }).catch((err) => {});
       this.expandedCard = cardType;
@@ -530,7 +541,7 @@ export default {
       this.nonEmptyCards = [];
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
-      this.references = [];
+      this.references = {"linked":[], "static": []};
       this.modifiers = null;
       this.reactomeId = null;
 
@@ -561,14 +572,6 @@ export default {
         this.synonyms = {};
       }
 
-      if (!this.node.label) {
-        this.node.label = this.node.id;
-      }
-
-      if (this.node.label !== sanitizeText(this.node.label)) {
-        this.node.label = sanitizeNodeLabel(this.node.label);
-      }
-
       if (this.nodeType === 'publication') {
         const entrezResult = await Entrez.getPublication(this.nodeId);
 
@@ -580,18 +583,28 @@ export default {
           this.node.label = entrezTitle;
           this.node.uri = entrezResult.pubmedURL;
 
-          let abstractEnhanced = this.entrezResult.abstract;
-          abstractEnhanced = abstractEnhanced.replace(
-            // /^([A-Z]+): /g,
-            /\n([A-Z]+): /g,
-            `\n\n##### $1\n\n`
-          );
-          // console.log(JSON.stringify(abstractEnhanced.slice(0, 100), null, 2));
-          const md = new MarkdownIt();
-          const mdRendered = md.render(abstractEnhanced);
-          this.entrezResult.abstractMarkdown = mdRendered;
+          const parser = new DOMParser();
+          const articleXml = parser.parseFromString(this.entrezResult.abstract, "text/xml");
+          if(articleXml){
+            this.entrezResult.abstract = articleXml.getElementsByTagName("AbstractText")[0].textContent;
+            const articleIds = articleXml.getElementsByTagName("ArticleId");
+            for (const articleId of articleIds){
+              if(articleId.getAttribute("IdType") == "doi"){
+                this.entrezResult.doi = articleId.textContent;
+              }
+            }
+          }
         }
       }
+
+      if (!this.node.label) {
+        this.node.label = this.node.id;
+      }
+
+      if (this.node.label !== sanitizeText(this.node.label)) {
+        this.node.label = sanitizeNodeLabel(this.node.label);
+      }
+
 
       //
       // Because Monarch doesn't ingest gene descriptions, we must
@@ -695,7 +708,7 @@ export default {
               seenCache.add(xref);
             }
             if (!urlCache.has(url)) {
-              this.references.push({
+              this.references.linked.push({
                 label: xref,
                 uri: url
               });
@@ -704,7 +717,7 @@ export default {
           }
         });
         if (!hasRef) {
-          this.references.push({
+          this.references.static.push({
             label: xref,
             uri: null
           });
@@ -715,7 +728,7 @@ export default {
       // be in some configuration file or directly in our database
       // eg https://varsome.com/gene/HGNC:1100
       if (this.nodeId.startsWith('HGNC')) {
-        this.references.push({
+        this.references.linked.push({
           label: 'Varsome',
           uri: `https://varsome.com/gene/${this.nodeId}`
         });
@@ -785,6 +798,9 @@ export default {
       </a>
     </div>
        `;
+    },
+    showExacSection(shouldShow){
+      this.showExac = shouldShow;
     }
   }
 };
@@ -802,7 +818,6 @@ $line-height-compact: 1.3em;
 
 .node-wrapper {
   min-height: 100%;
-  background-color: #ebebeb;
 }
 
 .overlay {
@@ -819,7 +834,6 @@ $line-height-compact: 1.3em;
 }
 
 .container-fluid.node-container {
-  margin-top: ($title-bar-max-height + 25);
   transition: all 0.3s;
   width: 100%;
   height: 100%;
@@ -839,37 +853,20 @@ $line-height-compact: 1.3em;
   }
 }
 
-.wrapper {
-  display: flex;
-  align-items: stretch;
-  min-height: 100%;
-  width: 100%;
-  margin: 0;
+.collapsed .fa-angle-down, .not-collapsed .fa-angle-right {
+  display: none;
 }
 
+.collapsed .fa-angle-right, .not-collapsed .fa-angle-down {
+  display: inline-block;
+}
+.heading-toggle {
+  cursor: pointer;
+  outline: none;
+}
 
-div.container-cards {
-  width: unset;
-  padding: 0;
-  margin: 0 0 0 $sidebar-width;
-
-  .loading {
-    margin: 15% calc(50% - 14%);
-    text-align: center;
-  }
-
-  & .node-content-section {
-    line-height: $line-height-compact;
-    padding-top: 4px;
-    background-color: white;
-    margin: .25rem;
-    padding: .5rem;
-    box-shadow: 0px 1px 2px 0px #80808040;
-  }
-
-  & .node-cards-section {
-    margin-top: 50px;
-  }
+.title-bar-wrapper {
+  margin: 0 0 10px 0;
 }
 
 .title-bar {
@@ -886,7 +883,7 @@ div.container-cards {
   width: 100%;
   z-index: 1;
   font-size: 1.5rem;
-  padding: 5px 15% 5px 5px;
+  padding: 10px 15% 10px 5px;
   border-top: 10px solid #ebebeb;
 
   // & .synonym {
@@ -909,7 +906,35 @@ div.container-cards {
     }
     & .node-label-synonyms {
       font-size: .75rem;
+      font-style: italic
     }
+  }
+}
+
+div.container-cards {
+  width: unset;
+  padding: 0;
+  margin: 0 0 0 $sidebar-width;
+
+  .loading {
+    margin: 15% calc(50% - 14%);
+    text-align: center;
+  }
+
+  & .node-content-section {
+    padding-left: 0;
+    margin-bottom: 1rem;
+  }
+
+  & .node-content-section-content {
+    height:100%;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: 0px 1px 2px 0px #80808040;
+  }
+
+  & .node-cards-section {
+    margin-top: 50px;
   }
 }
 
@@ -931,6 +956,15 @@ div.publication-abstract {
   white-space: nowrap;
   padding: 0 2px;
   display: inline-block;
+}
+
+.node-sub-section {
+  margin: 0 0 .5rem;
+  padding: 0 0 0 .5rem;
+
+  & .linked-references, .static-references {
+    margin: 0 0 .5rem 0;
+  }
 }
 
 </style>

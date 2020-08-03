@@ -4,17 +4,16 @@
   >
     <div
       v-if="mygeneData.externalURL"
-      class="row"
     >
       <svg
         id="genome-feature"
-        width="80%"
+        width="100%"
       />
     </div>
 
     <div
       v-if="mygeneData.externalURL"
-      class="row p-3"
+      class="p-3"
     >
       <a
         :href="mygeneData.externalURL"
@@ -106,7 +105,7 @@ export default {
             },
           ]
         };
-        const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 900, 500);
+        const viewer = new GenomeFeatureViewer(configGlobal, '#genome-feature', 700, 400);
       }
     }
   }
@@ -116,10 +115,4 @@ export default {
 <style lang="scss">
 @import "~GenomeFeatureViewerCSS";
 @import "~@/style/variables";
-
-.genome-feature {
-  border-radius: 10px;
-  border: solid darkgray 1px;
-}
-
 </style>
