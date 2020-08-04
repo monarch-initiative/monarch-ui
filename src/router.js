@@ -140,6 +140,11 @@ const router = new Router({
       component: () => import(/* webpackChunkName: "licensing" */ './views/Licensing.vue'),
     },
     {
+      path: '/about/phenotypes',
+      name: 'about-phenotypes',
+      component: require('@/views/AboutPhenotypes.md').default,
+    },
+    {
       path: '/glossary',
       name: 'glossary',
       component: require('@/views/glossary.md').default,
