@@ -64,7 +64,7 @@
       </div>
       <div v-if="node" class="container-fluid node-container">
           <div class="row">
-            <div v-if="!expandedCard && overviewSection()" class="node-content-section col-12">
+            <div v-if="!expandedCard && overviewSection()" class="node-content-section col-7">
               <div class="node-content-section-content">
                 <h5>Overview</h5>
                 <div class="node-sub-section" v-if="node.description">
@@ -102,7 +102,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="!expandedCard && supportSection()" class="node-content-section col-6">
+            <div v-if="!expandedCard && supportSection()" class="node-content-section col-5">
               <div class="node-content-section-content">
                 <h5>Support & Mappings</h5>
                   <div class="node-sub-section">

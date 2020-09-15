@@ -56,7 +56,7 @@
 </div>
 
 <script>
-import getTeam from '@/api/Team';
+import { getTeam } from '@/api/Resources';
 import MarkdownIt from 'markdown-it';
 import { applyLinkHandlers } from '../lib/markdown';
 

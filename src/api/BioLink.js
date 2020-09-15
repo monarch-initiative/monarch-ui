@@ -113,8 +113,6 @@ export function getCurrentServerEnvironment() {
 
 export async function getNode(nodeId, nodeType) {
   let bioentityUrl = `${biolink}bioentity/${nodeType}/${nodeId}`;
-  // console.log('getNodeSummary', nodeId, nodeType, bioentityUrl);
-
   if (nodeType === 'function') {
     bioentityUrl = `${biolink}bioentity/${nodeId}`;
   }
@@ -756,4 +754,22 @@ export async function getEvidence(evidenceId, nodeType) {
         reject(err);
       });
   });
+}
+
+export async function getPhenotypeCategories(diseaseId){
+    const biolinkUrl = `${biolink}bioentity/disease/${diseaseId}/phenotypes`
+    let params = new URLSearchParams();
+    params.append('rows', 0);
+    params.append('facet', true);
+    params.append('unselect_evidence', false);
+    params.append('exclude_automatic_assertions', false);
+    params.append('fetch_objects', false);
+    params.append('use_compact_associations', false);
+    params.append('direct', false);
+    params.append('direct_taxon', false);
+    const response = await axios.get(biolinkUrl, { params });
+    if(response.data.facet_counts.closure_bin){
+        return response.data.facet_counts.closure_bin;
+    }
+    return {};
 }
