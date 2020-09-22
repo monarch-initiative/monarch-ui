@@ -15,13 +15,16 @@ export default {
     },
     watch: {
         activeItem: {
-            handler: 'updateHistoPheno',
+            handler: 'updateHistoPheno'
         }
     },
     data(){
         return {
             histoPheno: null
         }
+    },
+    mounted(){
+        this.updateHistoPheno();
     },
     methods: {
         generateHistoPheno(options) {
@@ -107,7 +110,6 @@ export default {
             };
         },
         updateHistoPheno(){
-            console.log("here");
             let activeItem = this.activeItem.categories;
             // Remove categories with 0, sort desc
             Object.keys(activeItem).forEach((key) => (activeItem[key] == 0) && delete activeItem[key]);

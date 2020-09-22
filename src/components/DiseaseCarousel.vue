@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-if="activeCarousel" class="disease-carousel">
-            <h3 class="carousel-title">Featured Diseases - August 2020</h3>
+        <div class="disease-carousel" v-if="activeCarousel">
+            <h3 class="carousel-title">Featured Diseases {{featureDate}}</h3>
             <p class="carousel-sub">We are always updating our corpus of disease - phenotype associations to support current scientific understanding of disease.
             <div class="row carousel-row" v-if="activeCarousel.id">
                 <div class="col-6 disease-information">
@@ -37,7 +37,8 @@ export default {
     data() {
         return {
             carouselData: [],
-            activeCarousel: {}
+            activeCarousel: {},
+            featureDate: ""
         }
     },
     async mounted() {
@@ -55,15 +56,19 @@ export default {
                 });
             }
         }
-        this.activeCarousel = this.carouselData[0];
-        setInterval(this.changeActiveCarouselItem, 30000);
+        if(this.carouselData.length > 0){
+            this.setDate(this.carouselData[0].date);
+            this.changeActiveCarouselItem();
+            setInterval(this.changeActiveCarouselItem, 6000);
+        }
+
     },
     methods: {
         changeActiveCarouselItem(){
             const pos = this.carouselData.map((x) => x.id).indexOf(this.activeCarousel.id);
             const limit = this.carouselData.length - 1;
             const next = pos + 1;
-            if(pos == limit){
+            if(pos == limit || pos == -1){
                 this.activeCarousel = this.carouselData[0];
             } else {
                 this.activeCarousel = this.carouselData[next];
@@ -71,6 +76,13 @@ export default {
         },
         isEmpty(){
             return Object.keys(this.activeCarousel).length === 0;
+        },
+        setDate(date){
+            date = new Date(date);
+            let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let month = months[date.getMonth()];
+            let year = date.getFullYear();
+            this.featureDate = "- " + month + " " + year;
         }
     },
     components: {

@@ -45,7 +45,7 @@ export async function getRecentlyCurated() {
       curatedLines.push(line);
     });
     curatedLines.sort((a, b) => b.date - a.date)
-    return curatedLines;
+    return curatedLines.length > 5 ? curatedLines.slice(6): curatedLines;
   } catch (e) {
     return [];
   }
