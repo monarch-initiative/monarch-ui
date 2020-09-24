@@ -169,6 +169,13 @@
                     </div>
                   </div>
               </div>
+            </div>
+            <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-6">
+                <div class="node-content-section-content histo-pheno-wrapper">
+                    <h5>HistoPheno</h5>
+                    <p>A stratification of associated phenotypes by anatomy</p>
+                    <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
+                </div>
             </div>              
             <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-6">
               <div class="node-content-section-content">
@@ -226,6 +233,7 @@ import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
 import ReactomeViewer from '@/components/ReactomeViewer.vue';
+import HistoPheno from '@/components/HistoPheno.vue';
 
 
 // https://stackoverflow.com/a/34064434/5667222
@@ -313,6 +321,7 @@ export default {
     'exac-variant': ExacVariantTable,
     'genome-feature': GenomeFeature,
     'reactome-viewer': ReactomeViewer,
+    'histo-pheno': HistoPheno
   },
 
   data() {
@@ -422,7 +431,7 @@ export default {
         genotype: 0,
         case: 0
       },
-
+      histoPhenoData: {},
       relationshipsColumns: [
         {
           label: 'Subject',
@@ -576,10 +585,21 @@ export default {
 
       this.node = node;
 
+      
+
       if (neighborhood.synonyms) {
         this.synonyms = neighborhood.synonyms;
       } else {
         this.synonyms = {};
+      }
+
+      if(this.nodeType == 'disease'){
+          // HistoPheno
+          const categories = await biolinkService.getPhenotypeCategories(this.node.id);
+          this.histoPhenoData = {
+              categories: categories
+          };
+
       }
 
       if (this.nodeType === 'publication') {
@@ -747,8 +767,7 @@ export default {
             uri: `https://varsome.com/gene/${this.nodeId}`
         }
       }
-      console.log(this.authoritiveXref);
-      console.log(this.references);
+      
       if (this.node.inheritance) {
         this.inheritance = us.uniq(
           this.node.inheritance.map(i => i.label)
@@ -1076,5 +1095,7 @@ div.publication-abstract {
 .resource-section .btn {
     text-transform: uppercase;
 }
-
+.histo-pheno-wrapper {
+    min-height: 300px !important;
+}
 </style>

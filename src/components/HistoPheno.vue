@@ -11,6 +11,10 @@ export default {
         activeItem: {
             type: Object,
             required: true
+        },
+        colorScheme: {
+            type: String,
+            default: "light"
         }
     },
     watch: {
@@ -37,6 +41,12 @@ export default {
             this.histoPheno.updateOptions(options);
         },
         getChartOptions(dataSeries, labels) {
+            let color = "#FFF";
+            let customClass = "light";
+            if(this.colorScheme == 'dark'){
+                color = "#868686";
+                customClass = "dark";
+            }
             return {
                 series: [{
                     data: dataSeries
@@ -55,20 +65,21 @@ export default {
                 },
                 stroke: {
                     width: 0,
-                    colors: ['#fff']
+                    colors: [color]
                 },
                 xaxis: {
                     showForNullSeries: false,
                     categories: labels,
                     labels: {
                         style: {
-                            colors: ['#fff']
+                            colors: [color],
+                            cssClass: customClass
                         }
                     },
                     title: {
                         text: "# of Phenotypes",
                         style: {
-                            color: '#FFF'
+                            color: color
                         }
                     },
                     lines: {
@@ -85,7 +96,8 @@ export default {
                     },
                     labels: {
                         style: {
-                                colors: ['#fff']
+                                colors: [color],
+                                cssClass: customClass
                         }
                     }
                 },
@@ -130,8 +142,12 @@ export default {
 </script>
 
 <style>
-.apexcharts-yaxis-label, .apexcharts-xaxis-title-text {
+.apexcharts-yaxis-label.light, .apexcharts-xaxis-title-text {
     color: white;
     fill: white;
+}
+.apexcharts-yaxis-label.dark {
+    color: grey;
+    fill: grey;
 }
 </style>
