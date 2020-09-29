@@ -144,7 +144,7 @@ export default {
           } else {
             this.$emit('show-exac', false);
           }
-          
+
         })
         .catch((err) => {
           // eslint-disable-next-line

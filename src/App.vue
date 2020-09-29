@@ -2,7 +2,7 @@
   <div id="app" class="page-wrapper">
     <monarch-navbar />
     <div class="content-wrapper">
-        <router-view />
+      <router-view />
     </div>
     <div class="footer-wrapper">
       <monarch-footer
