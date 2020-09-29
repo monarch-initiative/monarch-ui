@@ -79,7 +79,8 @@ export default {
                     title: {
                         text: "# of Phenotypes",
                         style: {
-                            color: color
+                            color: color,
+                            cssClass: customClass
                         }
                     },
                     lines: {
@@ -146,7 +147,7 @@ export default {
     color: white;
     fill: white;
 }
-.apexcharts-yaxis-label.dark {
+.apexcharts-yaxis-label.dark, .apexcharts-xaxis-title-text.dark {
     color: grey;
     fill: grey;
 }

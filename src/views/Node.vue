@@ -170,13 +170,12 @@
                   </div>
               </div>
             </div>
-            <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-6">
+            <div v-if="!expandedCard && histoPhenoData.categories" v-on:click="expandCard('phenotype')" class="node-content-section col-6">
                 <div class="node-content-section-content histo-pheno-wrapper">
-                    <h5>HistoPheno</h5>
-                    <p>A stratification of associated phenotypes by anatomy</p>
+                    <h5>Associated Phenotypes</h5>
                     <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
                 </div>
-            </div>              
+            </div>           
             <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-6">
               <div class="node-content-section-content">
                 <h5>ExAC Population Frequencies</h5>
@@ -563,6 +562,7 @@ export default {
       this.references = {"linked":[], "static": []};
       this.modifiers = null;
       this.reactomeId = null;
+      this.histoPhenoData = {};
 
       const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
       const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
@@ -1097,5 +1097,10 @@ div.publication-abstract {
 }
 .histo-pheno-wrapper {
     min-height: 300px !important;
+}
+
+.histo-pheno-wrapper:hover {
+    background-color:#f7f7f7 !important;
+    cursor: pointer;
 }
 </style>
