@@ -118,7 +118,7 @@ export async function getGeneDescription(geneId) {
           const defaultTrackName = 'All Genes'; // this is the generic track name
           const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
           const apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
-          const externalUrl = 'http://jbrowse.alliancegenome.org/jbrowse/index.html?data=data/' + encodeURI(thisSpecies) + '&loc=' + encodeURI(locationString);
+          const externalUrl = 'http://www.alliancegenome.org/jbrowse/index.html?data=data/' + encodeURI(thisSpecies) + '&loc=' + encodeURI(locationString) + '&tracks=' + defaultTrackName;
           const trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
           const trackDataWithHighlightURL = trackDataPrefix + '?name=' + symbol;
           // console.log('trackDataWithHighlight', trackDataWithHighlightURL);

@@ -91,9 +91,19 @@ export default {
         this.showMessage = true;
       } else {
         this.showMessage = false;
-        const newTaxons = Object.values(this.taxonFilter.taxons);
-        const originalTaxons = Object.values(this.localCopy.taxons);
-        if (!newTaxons.sort().every((value, index) => value === originalTaxons.sort()[index])) {
+        let isChanged = false;
+        const newKeys = Object.keys(this.taxonFilter.taxons);
+        const oldKeys = Object.keys(this.localCopy.taxons);
+        if (oldKeys.length !== newKeys.length) {
+          isChanged = true;
+        } else {
+          newKeys.forEach((objKey) => {
+            if (this.taxonFilter.taxons[objKey] !== this.localCopy.taxons[objKey]) {
+              isChanged = true;
+            }
+          });
+        }
+        if (isChanged) {
           this.$emit('toggle-filter', true);
         } else {
           this.$emit('toggle-filter', false);

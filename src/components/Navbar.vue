@@ -56,6 +56,10 @@
             Disclaimer
           </b-dropdown-item>
 
+          <b-dropdown-item to="/about/phenotypes">
+            About Phenotypes
+          </b-dropdown-item>
+
           <b-dropdown-divider />
 
           <b-dropdown-item to="/about/data-sources">
