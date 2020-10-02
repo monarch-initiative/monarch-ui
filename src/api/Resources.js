@@ -34,7 +34,7 @@ export async function getRecentlyCurated() {
   const recentlyCuratedUrl = `${process.env.BASE_URL}mondo_ids.txt`;
   const curatedResponse = await axios.get(recentlyCuratedUrl);
   try {
-    let curatedLines = [];
+    const curatedLines = [];
     curatedResponse.data.split('\n').forEach((line) => {
       const pieces = line.split('\t');
       const mondo = pieces[0];
@@ -44,8 +44,8 @@ export async function getRecentlyCurated() {
       line.date = Date.parse(date);
       curatedLines.push(line);
     });
-    curatedLines.sort((a, b) => b.date - a.date)
-    return curatedLines.length > 5 ? curatedLines.slice(6): curatedLines;
+    curatedLines.sort((a, b) => b.date - a.date);
+    return curatedLines.length > 5 ? curatedLines.slice(6) : curatedLines;
   } catch (e) {
     return [];
   }
