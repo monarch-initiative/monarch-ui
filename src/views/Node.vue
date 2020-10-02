@@ -163,8 +163,10 @@
                         :href="authoritiveXref.gene.clinical.omim.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.clinical.omim.label }} <i class="fa fa-external-link"
-                                                                          aria-hidden="true"/>
+                        {{ authoritiveXref.gene.clinical.omim.label }} <i
+                          class="fa fa-external-link"
+                          aria-hidden="true"
+                        />
                       </b-button>
 
 
@@ -176,9 +178,8 @@
                         target="_blank"
                       >
                         {{ authoritiveXref.gene.clinical.varsome.label }}
-                        <i class="fa fa-external-link" aria-hidden="true"/>
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
-
                     </h6>
                     <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.pathway" class="resource-section">
                       <strong>Pathway Analysis</strong>:  <b-button
