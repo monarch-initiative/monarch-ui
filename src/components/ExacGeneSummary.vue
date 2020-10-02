@@ -149,7 +149,7 @@ export default {
         .catch((err) => {
           // eslint-disable-next-line
           this.$emit('show-exac', false);
-          console.log('mygene.info error', err.message);
+          // console.log('mygene.info error', err.message);
         });
     }
   }

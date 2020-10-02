@@ -133,7 +133,7 @@
                   </div>
 
                   <div v-if="nodeType == 'gene'">
-                    <div v-if="authoritiveXref.gene.taxon && authoritiveXref.gene.taxon.label" class="resource-section resource-list">
+                    <div v-if="authoritiveXref.gene.taxon && authoritiveXref.gene.taxon.label" class="resource-section">
                       <strong>Gene Summaries</strong>:
                       <b-button
                         size="sm"
@@ -144,6 +144,7 @@
                         {{ authoritiveXref.gene.taxon.label }} <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                       <b-button
+                        v-if="authoritiveXref.gene.ensembl"
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.gene.ensembl.uri"
@@ -153,16 +154,33 @@
                       </b-button>
                     </div>
                     <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.clinical" class="resource-section">
-                      <strong>Clinical Information</strong>:  <b-button
+                      <strong>Clinical Information</strong>:
+
+                      <b-button
+                        v-if="authoritiveXref.gene && authoritiveXref.gene.clinical.omim"
                         size="sm"
                         variant="outline-info"
-                        :href="authoritiveXref.gene.clinical.uri"
+                        :href="authoritiveXref.gene.clinical.omim.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.clinical.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.gene.clinical.omim.label }} <i class="fa fa-external-link"
+                                                                          aria-hidden="true"/>
                       </b-button>
+
+
+                      <b-button
+                        v-if="authoritiveXref.gene && authoritiveXref.gene.clinical.varsome"
+                        size="sm"
+                        variant="outline-info"
+                        :href="authoritiveXref.gene.clinical.varsome.uri"
+                        target="_blank"
+                      >
+                        {{ authoritiveXref.gene.clinical.varsome.label }}
+                        <i class="fa fa-external-link" aria-hidden="true"/>
+                      </b-button>
+
                     </h6>
-                    <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.clinical" class="resource-section">
+                    <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.pathway" class="resource-section">
                       <strong>Pathway Analysis</strong>:  <b-button
                         size="sm"
                         variant="outline-info"
@@ -174,7 +192,7 @@
                     </h6>
                   </div>
 
-                  <div v-if="nodeType == 'phenotype'">
+                  <div v-if="nodeType === 'phenotype'">
                     <h6 v-if="authoritiveXref.phenotype && authoritiveXref.phenotype.label" class="resource-section">
                       <strong>Ontology Browser</strong>:  <b-button
                         size="sm"
@@ -750,6 +768,7 @@ export default {
       const seenCache = new Set([]);
       const urlCache = new Set([]);
       this.resetAuthoritiveXref();
+
       xrefs.forEach((xref) => {
         let hasRef = false;
         const xrefPrefix = xref.split(':')[0].toLowerCase();
@@ -789,18 +808,27 @@ export default {
         }
       });
 
+      if (this.nodeType === 'gene') {
+        const xref = {};
+        const prefix = this.node.id.split(':')[0];
+        xref.label = prefix;
+        xref.id = this.node.id;
+        xref.uri = getXrefUrl(prefix, this.node.id, this.node.label.split(' ')[0]);
+        this.authoritiveXref.gene.taxon = xref;
+      }
+
       // We have a deal with VarSome for mutual linking, this should
       // be in some configuration file or directly in our database
       // eg https://varsome.com/gene/HGNC:1100
       if (this.nodeId.startsWith('HGNC')) {
-        this.authoritiveXref.gene.clinical = {
+        this.authoritiveXref.gene.clinical.varsome = {
           id: this.nodeId,
           label: 'Varsome',
           uri: `https://varsome.com/gene/${this.nodeId}`
         };
       }
-      console.log(this.authoritiveXref);
-      console.log(this.references);
+      // console.log(this.authoritiveXref);
+      // console.log(this.references);
       if (this.node.inheritance) {
         this.inheritance = us.uniq(
           this.node.inheritance.map(i => i.label)
@@ -889,31 +917,17 @@ export default {
           return true;
         }
       } else if (this.nodeType === 'gene') {
-        if (xref.id.includes('HGNC')) {
-          xref.label = 'HGNC';
-          this.authoritiveXref.gene.taxon = xref;
+        if (xref.id.includes('OMIM')) {
+          xref.label = 'OMIM';
+          this.authoritiveXref.gene.clinical.omim = xref;
           return true;
-        } if (xref.id.includes('FLY')) {
-          xref.label = 'FLY';
-          this.authoritiveXref.gene.taxon = xref;
-          return true;
-        } if (xref.id.includes('ZFIN')) {
-          xref.label = 'ZFIN';
-          this.authoritiveXref.gene.taxon = xref;
-          return true;
-        } if (xref.id.includes('MGI')) {
-          xref.label = 'MGI';
-          this.authoritiveXref.gene.taxon = xref;
-          return true;
-        } if (xref.id.includes('RGD')) {
-          xref.label = 'RGD';
-          this.authoritiveXref.gene.taxon = xref;
-          return true;
-        } if (xref.id.includes('ENSEMBL') && xref.uri.includes('ensembl')) {
+        }
+        if (xref.id.includes('ENSEMBL') && xref.uri.includes('ensembl')) {
           xref.label = 'ENSEMBL';
           this.authoritiveXref.gene.ensembl = xref;
           return true;
-        } if (xref.id.includes('REACT')) {
+        }
+        if (xref.id.includes('REACT')) {
           xref.label = 'REACTOME';
           this.authoritiveXref.gene.pathway = xref;
           return true;
@@ -943,10 +957,10 @@ export default {
         gene: {
           ensembl: '',
           taxon: '',
-          clinical: '',
+          clinical: {},
           pathway: ''
         },
-        phenotype: ''
+        phenotype: '',
       };
     }
   }
@@ -1122,11 +1136,8 @@ div.publication-abstract {
     margin-top: .5rem;
 }
 
-.resource-list .btn {
-    margin-left: .5rem;
-}
-
 .resource-section .btn {
+    margin-left: .5rem;
     text-transform: uppercase;
 }
 
