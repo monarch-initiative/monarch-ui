@@ -873,6 +873,10 @@ export default {
     text-align: center;
   }
 
+  .card {
+    box-shadow: 0px 1px 2px 0px #80808040
+  }
+
   .group-badge {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

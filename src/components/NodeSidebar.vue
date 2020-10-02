@@ -157,7 +157,7 @@ $title-bar-height: 70px;
 $collapsed-sidebar-width: 50px;
 
 .node-sidebar {
-  background: $monarch-bg-color;
+  background: #191717de;
   border-right: 1px solid #292e34;
   bottom: 0;
   left: 0;

@@ -5,7 +5,7 @@
     class="col-md-8"
   >
     <h2 class="p-2">
-      Exac Population Frequencies
+      ExAC Population Frequencies
     </h2>
     <table class="table table-hover">
       <thead>
