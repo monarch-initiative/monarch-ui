@@ -153,6 +153,10 @@ export default {
         margin-left: 15px;
     }
 
+    .disease-phenotypes {
+        height: 100%;
+    }
+
     .disease-loading {
         text-align: center;
         margin-top: 2.5rem;
