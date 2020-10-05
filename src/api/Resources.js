@@ -1,7 +1,7 @@
 import axios from 'axios';
 import yaml from 'js-yaml';
 
-export default async function getTeam() {
+export async function getTeam() {
   const teamUrl = `${process.env.BASE_URL}team.yaml`;
   const teamResponse = await axios.get(teamUrl);
 
@@ -28,4 +28,25 @@ export default async function getTeam() {
   }
 
   return team;
+}
+
+export async function getRecentlyCurated() {
+  const recentlyCuratedUrl = `${process.env.BASE_URL}mondo_ids.txt`;
+  const curatedResponse = await axios.get(recentlyCuratedUrl);
+  try {
+    const curatedLines = [];
+    curatedResponse.data.split('\n').forEach((line) => {
+      const pieces = line.split('\t');
+      const mondo = pieces[0];
+      const date = pieces[1];
+      line = {};
+      line.mondo = mondo;
+      line.date = Date.parse(date);
+      curatedLines.push(line);
+    });
+    curatedLines.sort((a, b) => b.date - a.date);
+    return curatedLines.length > 5 ? curatedLines.slice(6) : curatedLines;
+  } catch (e) {
+    return [];
+  }
 }
