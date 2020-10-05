@@ -3,7 +3,7 @@
     <vml-home-intro-component />
     <vml-home-about-monarch-component />
     <vml-home-news-component />
-    <disease-carousel></disease-carousel>
+    <disease-carousel />
     <vml-home-partners-component />
   </div>
 </template>
@@ -32,8 +32,8 @@
 
 
 <script>
-import HistoPheno from '@/components/HistoPheno.vue';
 import DiseaseCarousel from '@/components/DiseaseCarousel.vue';
+
 export default {
   name: 'Home',
   components: {
@@ -41,7 +41,6 @@ export default {
     'vml-home-about-monarch-component': require('@/components/home/HomeAboutMonarch.md').default,
     'vml-home-news-component': require('@/components/home/HomeNews.md').default,
     'vml-home-partners-component': require('@/components/home/HomePartners.md').default,
-    'histo-pheno': HistoPheno,
     'disease-carousel': DiseaseCarousel
   },
 };

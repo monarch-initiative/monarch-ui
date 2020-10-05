@@ -538,48 +538,53 @@ function getBiolinkAnnotation(cardType) {
   return result;
 }
 
-export async function getNodeAssociations(
-  nodeType,
-  nodeId,
-  cardType,
-  taxons,
-  params = new URLSearchParams(),
-) {
+export async function getNodeAssociations(nodeType, nodeId, cardType, taxons, parms) {
   const baseUrl = `${biolink}bioentity/`;
   const biolinkMappedCardType = getBiolinkAnnotation(cardType);
   const urlExtension = `${nodeType}/${nodeId}/${biolinkMappedCardType}`;
   let url = `${baseUrl}${urlExtension}`;
   const useTaxonRestriction = taxons && taxons.length > 0 && isTaxonCardType(cardType);
+  if (useTaxonRestriction) {
+    parms.start = 0;
+    parms.rows = 10000;
+  }
 
-  params.unselect_evidence = true;
+  const params = new URLSearchParams();
+  Object.keys(parms).forEach(function fcnAppend(key) {
+    params.append(key, parms[key]);
+  });
+  params.append('unselect_evidence', true);
 
   // Use monarch solr until amigo-ontobio connection is ready
   if (cardType === 'function') {
     url = `${biolink}association/type/gene_function`;
-    params.subject = nodeId;
+    params.append('subject', nodeId);
   }
 
   if (cardType.startsWith('causal')) {
-    params.association_type = 'causal';
+    params.append('association_type', 'causal');
   } else if (cardType.startsWith('correlated')) {
-    params.association_type = 'non_causal';
-  }
-
-  if (useTaxonRestriction) {
-    params.start = 0;
-    params.rows = 10000;
+    params.append('association_type', 'non_causal');
   }
 
   if (isTaxonCardType(cardType)) {
-    params.facet = true;
-    params.facet_fields = 'object_taxon';
+    params.append('facet', true);
     if (isSubjectCardType(cardType)) {
-      params.facet_fields = 'subject_taxon';
+      params.append('facet_fields', 'subject_taxon');
+    } else {
+      params.append('facet_fields', 'object_taxon');
     }
 
     if (taxons != null && taxons !== -1) {
-      params.taxon = taxons.length > 1 ? taxons : taxons[0];
-      params.direct_taxon = true;
+      if (taxons.length > 1) {
+        taxons.forEach((elem) => {
+          params.append('taxon', elem);
+        });
+      } else {
+        params.append('taxon', taxons[0]);
+      }
+
+      params.append('direct_taxon', true);
     }
 
   }
@@ -756,20 +761,20 @@ export async function getEvidence(evidenceId, nodeType) {
   });
 }
 
-export async function getPhenotypeCategories(diseaseId){
-    const biolinkUrl = `${biolink}bioentity/disease/${diseaseId}/phenotypes`
-    let params = new URLSearchParams();
-    params.append('rows', 0);
-    params.append('facet', true);
-    params.append('unselect_evidence', false);
-    params.append('exclude_automatic_assertions', false);
-    params.append('fetch_objects', false);
-    params.append('use_compact_associations', false);
-    params.append('direct', false);
-    params.append('direct_taxon', false);
-    const response = await axios.get(biolinkUrl, { params });
-    if(response.data.facet_counts.closure_bin){
-        return response.data.facet_counts.closure_bin;
-    }
-    return {};
+export async function getPhenotypeCategories(diseaseId) {
+  const biolinkUrl = `${biolink}bioentity/disease/${diseaseId}/phenotypes`;
+  const params = new URLSearchParams();
+  params.append('rows', 0);
+  params.append('facet', true);
+  params.append('unselect_evidence', false);
+  params.append('exclude_automatic_assertions', false);
+  params.append('fetch_objects', false);
+  params.append('use_compact_associations', false);
+  params.append('direct', false);
+  params.append('direct_taxon', false);
+  const response = await axios.get(biolinkUrl, { params });
+  if (response.data.facet_counts.closure_bin) {
+    return response.data.facet_counts.closure_bin;
+  }
+  return {};
 }
