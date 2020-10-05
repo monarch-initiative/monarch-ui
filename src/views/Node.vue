@@ -252,6 +252,12 @@
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
+          <div v-if="!expandedCard && histoPhenoData.categories" v-on:click="expandCard('phenotype')" class="node-content-section col-6">
+            <div class="node-content-section-content histo-pheno-wrapper">
+                <h5>Associated Phenotypes</h5>
+                <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
+            </div>
+          </div> 
         </div>
         <div v-if="!expandedCard && reactomeId" class="row py-0">
           <reactome-viewer :reactome-id="reactomeId" />
@@ -923,8 +929,8 @@ export default {
           }
         } else if (xref.id.includes('GARD')) {
           let urlId = xref.id.replace('GARD:', '');
-          urlId = urlId.replaceAll('0', '');
-          const urlLabel = this.node.label.replaceAll(' ', '-');
+          urlId = urlId.replace(/0/g,"");
+          const urlLabel = this.node.label.replace(/\s/g,"-");
           xref.uri = `https://rarediseases.info.nih.gov/diseases/${urlId}/${urlLabel.toLowerCase()}`;
           xref.label = 'GARD';
           this.authoritiveXref.patient = xref;

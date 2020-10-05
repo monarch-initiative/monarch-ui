@@ -40,155 +40,86 @@ export default {
       this.histoPheno.updateOptions(options);
     },
     getChartOptions(dataSeries, labels) {
-      return {
-        series: [{
-          data: dataSeries
-        }],
-        colors: ['#CCE34C'],
-        chart: {
-          type: 'bar',
-          redrawOnParentResize: true,
-          height: '100%',
-          width: '100%'
-        },
-        plotOptions: {
-          bar: {
-            horizontal: true,
-          },
-        },
-        getChartOptions(dataSeries, labels) {
-            let color = "#FFF";
-            let customClass = "light";
-            if(this.colorScheme == 'dark'){
-                color = "#868686";
-                customClass = "dark";
-            }
-            return {
-                series: [{
-                    data: dataSeries
-                }],
-                colors: ['#CCE34C'],
-                chart: {
-                    type: 'bar',
-                    redrawOnParentResize: true,
-                    height: '100%',
-                    width: '100%'
+        let color = "#FFF";
+        let customClass = "light";
+        if(this.colorScheme == 'dark'){
+            color = "#868686";
+            customClass = "dark";
+        }
+        return {
+            series: [{
+                data: dataSeries
+            }],
+            colors: ['#CCE34C'],
+            chart: {
+                type: 'bar',
+                redrawOnParentResize: true,
+                height: '100%',
+                width: '100%'
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
                 },
-                plotOptions: {
-                    bar: {
-                        horizontal: true,
-                    },
+            },
+            stroke: {
+                width: 0,
+                colors: [color]
+            },
+            xaxis: {
+                showForNullSeries: false,
+                categories: labels,
+                labels: {
+                    style: {
+                        colors: [color],
+                        cssClass: customClass
+                    }
                 },
-                stroke: {
-                    width: 0,
-                    colors: [color]
+                title: {
+                    text: "# of Phenotypes",
+                    style: {
+                        color: color,
+                        cssClass: customClass
+                    }
                 },
-                xaxis: {
-                    showForNullSeries: false,
-                    categories: labels,
-                    labels: {
-                        style: {
+                lines: {
+                    show: false,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            yaxis: {
+                showForNullSeries: false,
+                title: {
+                    text: undefined
+                },
+                labels: {
+                    style: {
                             colors: [color],
                             cssClass: customClass
-                        }
-                    },
-                    title: {
-                        text: "# of Phenotypes",
-                        style: {
-                            color: color,
-                            cssClass: customClass
-                        }
-                    },
-                    lines: {
-                        show: false,
-                    }
-                },
-                dataLabels: {
-                    enabled: false
-                },
-                yaxis: {
-                    showForNullSeries: false,
-                    title: {
-                        text: undefined
-                    },
-                    labels: {
-                        style: {
-                                colors: [color],
-                                cssClass: customClass
-                        }
-                    }
-                },
-                tooltip: {
-                    enabled: false
-                },
-                fill: {
-                    opacity: 1
-                },
-                grid: {
-                    xaxis: {
-                        lines: {
-                            show: false
-                        }
-                    },
-                    yaxis: {
-                        lines: {
-                            show: false
-                        }
                     }
                 }
-            };
-        },
-        xaxis: {
-          showForNullSeries: false,
-          categories: labels,
-          labels: {
-            style: {
-              colors: ['#fff']
+            },
+            tooltip: {
+                enabled: false
+            },
+            fill: {
+                opacity: 1
+            },
+            grid: {
+                xaxis: {
+                    lines: {
+                        show: false
+                    }
+                },
+                yaxis: {
+                    lines: {
+                        show: false
+                    }
+                }
             }
-          },
-          title: {
-            text: '# of Phenotypes',
-            style: {
-              color: '#FFF'
-            }
-          },
-          lines: {
-            show: false,
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        yaxis: {
-          showForNullSeries: false,
-          title: {
-            text: undefined
-          },
-          labels: {
-            style: {
-              colors: ['#fff']
-            }
-          }
-        },
-        tooltip: {
-          enabled: false
-        },
-        fill: {
-          opacity: 1
-        },
-        grid: {
-          xaxis: {
-            lines: {
-              show: false
-            }
-          },
-          yaxis: {
-            lines: {
-              show: false
-            }
-          }
-        }
-      };
+        };
     },
     updateHistoPheno() {
       let activeItem = this.activeItem.categories;
