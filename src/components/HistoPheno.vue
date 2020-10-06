@@ -6,32 +6,32 @@
 import ApexCharts from 'apexcharts';
 
 export default {
-    props: {
-        activeItem: {
-            type: Object,
-            required: true
-        },
-        colorScheme: {
-            type: String,
-            default: "light"
-        },
-        toolbar : {
-            type: Boolean,
-            default: false
-        }   
+  props: {
+    activeItem: {
+      type: Object,
+      required: true
     },
-    watch: {
-        activeItem: {
-            handler: 'updateHistoPheno'
-        }
+    colorScheme: {
+      type: String,
+      default: 'light'
     },
-    data(){
-        return {
-            histoPheno: null
-        }
-    },
-    mounted() {
-        this.updateHistoPheno();
+    toolbar: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      histoPheno: null
+    };
+  },
+  watch: {
+    activeItem: {
+      handler: 'updateHistoPheno'
+    }
+  },
+  mounted() {
+    this.updateHistoPheno();
   },
   methods: {
     generateHistoPheno(options) {
@@ -44,89 +44,89 @@ export default {
       this.histoPheno.updateOptions(options);
     },
     getChartOptions(dataSeries, labels) {
-        let color = "#FFF";
-        let customClass = "light";
-        if(this.colorScheme == 'dark'){
-            color = "#868686";
-            customClass = "dark";
-        }
-        return {
-            series: [{
-                data: dataSeries
-            }],
-            colors: ['#CCE34C'],
-            chart: {
-                type: 'bar',
-                redrawOnParentResize: true,
-                height: '100%',
-                width: '100%',
-                toolbar: {
-                    show: this.toolbar
-                }
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: true,
-                },
-            },
-            stroke: {
-                width: 0,
-                colors: [color]
-            },
-            xaxis: {
-                showForNullSeries: false,
-                categories: labels,
-                labels: {
-                    style: {
-                        colors: [color],
-                        cssClass: customClass
-                    }
-                },
-                title: {
-                    text: "# of Phenotypes",
-                    style: {
-                        color: color,
-                        cssClass: customClass
-                    }
-                },
-                lines: {
-                    show: false,
-                }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            yaxis: {
-                showForNullSeries: false,
-                title: {
-                    text: undefined
-                },
-                labels: {
-                    style: {
-                            colors: [color],
-                            cssClass: customClass
-                    }
-                }
-            },
-            tooltip: {
-                enabled: false
-            },
-            fill: {
-                opacity: 1
-            },
-            grid: {
-                xaxis: {
-                    lines: {
-                        show: false
-                    }
-                },
-                yaxis: {
-                    lines: {
-                        show: false
-                    }
-                }
+      let color = '#FFF';
+      let customClass = 'light';
+      if (this.colorScheme === 'dark') {
+        color = '#868686';
+        customClass = 'dark';
+      }
+      return {
+        series: [{
+          data: dataSeries
+        }],
+        colors: ['#CCE34C'],
+        chart: {
+          type: 'bar',
+          redrawOnParentResize: true,
+          height: '100%',
+          width: '100%',
+          toolbar: {
+            show: this.toolbar
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        stroke: {
+          width: 0,
+          colors: [color]
+        },
+        xaxis: {
+          showForNullSeries: false,
+          categories: labels,
+          labels: {
+            style: {
+              colors: [color],
+              cssClass: customClass
             }
-        };
+          },
+          title: {
+            text: '# of Phenotypes',
+            style: {
+              color,
+              cssClass: customClass
+            }
+          },
+          lines: {
+            show: false,
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        yaxis: {
+          showForNullSeries: false,
+          title: {
+            text: undefined
+          },
+          labels: {
+            style: {
+              colors: [color],
+              cssClass: customClass
+            }
+          }
+        },
+        tooltip: {
+          enabled: false
+        },
+        fill: {
+          opacity: 1
+        },
+        grid: {
+          xaxis: {
+            lines: {
+              show: false
+            }
+          },
+          yaxis: {
+            lines: {
+              show: false
+            }
+          }
+        }
+      };
     },
     updateHistoPheno() {
       let activeItem = this.activeItem.categories;

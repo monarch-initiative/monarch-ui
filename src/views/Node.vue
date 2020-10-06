@@ -109,7 +109,7 @@
               <h5>External Resources</h5>
               <div class="node-sub-section">
                 <div class="linked-references">
-                  <div v-if="nodeType == 'disease'">
+                  <div v-if="nodeType === 'disease'">
                     <h6 v-if="authoritiveXref.synopsis && authoritiveXref.synopsis.label" class="resource-section">
                       <strong>Clinical Synopsis</strong>: <b-button
                         size="sm"
@@ -252,14 +252,14 @@
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
-          <div v-if="!expandedCard && histoPhenoData.categories" v-on:click="expandCard('phenotype')" class="node-content-section col-12 col-md-6">
+          <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
             <div class="node-content-section-content associated-phenotypes">
-                <h5>Associated Phenotypes</h5>
-                <div class="histo-pheno-wrapper">
-                  <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
-                </div>
+              <h5>Associated Phenotypes</h5>
+              <div class="histo-pheno-wrapper">
+                <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'" />
+              </div>
             </div>
-          </div> 
+          </div>
         </div>
         <div v-if="!expandedCard && reactomeId" class="row py-0">
           <reactome-viewer :reactome-id="reactomeId" />
@@ -657,7 +657,6 @@ export default {
 
       this.node = node;
 
-      
 
       if (neighborhood.synonyms) {
         this.synonyms = neighborhood.synonyms;
@@ -665,12 +664,12 @@ export default {
         this.synonyms = {};
       }
 
-      if(this.nodeType == 'disease'){
-          // HistoPheno
-          const categories = await biolinkService.getPhenotypeCategories(this.node.id);
-          this.histoPhenoData = {
-              categories: categories
-          };
+      if (this.nodeType == 'disease') {
+        // HistoPheno
+        const categories = await biolinkService.getPhenotypeCategories(this.node.id);
+        this.histoPhenoData = {
+          categories
+        };
 
       }
 
@@ -850,7 +849,7 @@ export default {
           uri: `https://varsome.com/gene/${this.nodeId}`
         };
       }
-      
+
       if (this.node.inheritance) {
         this.inheritance = us.uniq(
           this.node.inheritance.map(i => i.label)
@@ -931,8 +930,8 @@ export default {
           }
         } else if (xref.id.includes('GARD')) {
           let urlId = xref.id.replace('GARD:', '');
-          urlId = urlId.replace(/0/g,"");
-          const urlLabel = this.node.label.replace(/\s/g,"-");
+          urlId = urlId.replace(/0/g, '');
+          const urlLabel = this.node.label.replace(/\s/g, '-');
           xref.uri = `https://rarediseases.info.nih.gov/diseases/${urlId}/${urlLabel.toLowerCase()}`;
           xref.label = 'GARD';
           this.authoritiveXref.patient = xref;

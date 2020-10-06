@@ -305,7 +305,7 @@ $title-bar-height: 70px;
 @media (max-width: $sidebar-collapse-width) {
   .node-sidebar {
     width: $collapsed-sidebar-width;
-    
+
     .title {
       display:none;
     }
