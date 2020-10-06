@@ -109,7 +109,7 @@
               <h5>External Resources</h5>
               <div class="node-sub-section">
                 <div class="linked-references">
-                  <div v-if="nodeType === 'disease'">
+                  <div v-if="nodeType == 'disease'">
                     <h6 v-if="authoritiveXref.synopsis && authoritiveXref.synopsis.label" class="resource-section">
                       <strong>Clinical Synopsis</strong>: <b-button
                         size="sm"
@@ -664,7 +664,7 @@ export default {
         this.synonyms = {};
       }
 
-      if (this.nodeType == 'disease') {
+      if (this.nodeType === 'disease') {
         // HistoPheno
         const categories = await biolinkService.getPhenotypeCategories(this.node.id);
         this.histoPhenoData = {
