@@ -154,7 +154,6 @@ export default {
 @import "~@/style/variables";
 
 $title-bar-height: 70px;
-$collapsed-sidebar-width: 50px;
 
 .node-sidebar {
   background: #191717de;
@@ -306,6 +305,13 @@ $collapsed-sidebar-width: 50px;
 @media (max-width: $sidebar-collapse-width) {
   .node-sidebar {
     width: $collapsed-sidebar-width;
+    
+    .title {
+      display:none;
+    }
+    ul.list-group {
+      margin-top: 10px;
+    }
 
     li.list-group-item > a .list-group-item-value {
       display: none;

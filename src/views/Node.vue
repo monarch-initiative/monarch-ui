@@ -64,7 +64,7 @@
       </div>
       <div v-if="node" class="container-fluid node-container">
         <div class="row">
-          <div v-if="!expandedCard && overviewSection()" class="node-content-section col-6">
+          <div v-if="!expandedCard && overviewSection()" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>Overview</h5>
               <div v-if="node.description" class="node-sub-section">
@@ -104,7 +104,7 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && supportSection()" class="node-content-section col-6">
+          <div v-if="!expandedCard && supportSection()" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>External Resources</h5>
               <div class="node-sub-section">
@@ -240,22 +240,24 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-6">
+          <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>ExAC Population Frequencies</h5>
               <exac-gene :node-id="nodeId" @show-exac="showExacSection($event)" />
             </div>
           </div>
-          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-8">
+          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-12 col-md-8">
             <div class="node-content-section-content">
               <h5>Genome Features</h5>
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
-          <div v-if="!expandedCard && histoPhenoData.categories" v-on:click="expandCard('phenotype')" class="node-content-section col-6">
-            <div class="node-content-section-content histo-pheno-wrapper">
+          <div v-if="!expandedCard && histoPhenoData.categories" v-on:click="expandCard('phenotype')" class="node-content-section col-12 col-md-6">
+            <div class="node-content-section-content associated-phenotypes">
                 <h5>Associated Phenotypes</h5>
-                <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
+                <div class="histo-pheno-wrapper">
+                  <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'"></histo-pheno>
+                </div>
             </div>
           </div> 
         </div>
@@ -1129,7 +1131,8 @@ div.publication-abstract {
   }
 
   .title-bar {
-    padding-left: ($collapsed-sidebar-width + 5);
+    padding-left: 15px;
+    margin: 0 0 0 $collapsed-sidebar-width;
   }
 }
 
@@ -1161,10 +1164,10 @@ div.publication-abstract {
     text-transform: uppercase;
 }
 .histo-pheno-wrapper {
-    min-height: 300px !important;
+    height: 350px !important;
 }
 
-.histo-pheno-wrapper:hover {
+.associated-phenotypes:hover {
     background-color:#f7f7f7 !important;
     cursor: pointer;
 }

@@ -14,7 +14,11 @@ export default {
         colorScheme: {
             type: String,
             default: "light"
-        }
+        },
+        toolbar : {
+            type: Boolean,
+            default: false
+        }   
     },
     watch: {
         activeItem: {
@@ -55,7 +59,10 @@ export default {
                 type: 'bar',
                 redrawOnParentResize: true,
                 height: '100%',
-                width: '100%'
+                width: '100%',
+                toolbar: {
+                    show: this.toolbar
+                }
             },
             plotOptions: {
                 bar: {
