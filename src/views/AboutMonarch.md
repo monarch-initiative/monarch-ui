@@ -60,7 +60,7 @@ ontology that represents the most comprehensive integration of disease entities 
               <figcaption>
               Fig 3. The <a href="https://hpo.jax.org" target="__blank">Human Phenotype Ontology</a> (HPO) provides a standardized vocabulary of 
               phenotypic abnormalities encountered in human disease. 
-              <a href="https://currentprotocols.onlinelibrary.wiley.com/doi/abs/10.1002/cphg.9" target="__blank">More about HPO...</a>
+              <a href="https://pubmed.ncbi.nlm.nih.gov/30476213/" target="__blank">More about HPO...</a>
               </figcaption>
         </figure>
     </div>
