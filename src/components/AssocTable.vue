@@ -40,7 +40,7 @@
         <br />
       </div>
       <div>
-        <b-form-group class="col-6">
+        <b-form-group class="px-0 col-6">
           <b-input-group size="sm">
             <b-form-input
               v-model="filter"
