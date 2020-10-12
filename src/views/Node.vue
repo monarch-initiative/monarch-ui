@@ -664,7 +664,7 @@ export default {
         this.synonyms = {};
       }
 
-      if (this.nodeType == 'disease') {
+      if (this.nodeType === 'disease') {
         // HistoPheno
         const categories = await biolinkService.getPhenotypeCategories(this.node.id);
         this.histoPhenoData = {

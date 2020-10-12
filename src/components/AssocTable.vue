@@ -37,19 +37,21 @@
           />
           Taxon Filter
         </b-button>
-        <br />
+        <br>
       </div>
       <div>
         <b-form-group class="px-0 col-6">
           <b-input-group size="sm">
             <b-form-input
+              id="filterInput"
               v-model="filter"
               type="search"
-              id="filterInput"
               :placeholder="filterPlaceHolder"
-            ></b-form-input>
+            />
             <b-input-group-append>
-              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+              <b-button :disabled="!filter" @click="filter = ''">
+                Clear
+              </b-button>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -196,23 +198,23 @@
 </template>
 
 <script>
-import us from "underscore";
+import us from 'underscore';
 import {
   processPublications,
   processSources,
   sanitizeNodeLabel,
   sanitizeText,
-} from "@/lib/Utils";
-import EvidenceViewer from "@/components/EvidenceViewer.vue";
-import * as bioLinkService from "@/api/BioLink";
-import TaxonFilter from "@/components/TaxonFilter.vue";
-import { isTaxonCardType } from "../lib/TaxonMap";
-import sourceToLabel from "../lib/sources";
+} from '@/lib/Utils';
+import EvidenceViewer from '@/components/EvidenceViewer.vue';
+import * as bioLinkService from '@/api/BioLink';
+import TaxonFilter from '@/components/TaxonFilter.vue';
+import { isTaxonCardType } from '../lib/TaxonMap';
+import sourceToLabel from '../lib/sources';
 
 export default {
   components: {
     EvidenceViewer,
-    "taxon-filter": TaxonFilter,
+    'taxon-filter': TaxonFilter,
   },
   props: {
     nodeId: {
@@ -253,7 +255,7 @@ export default {
       totalAssociations: 0,
       hasTaxon: false,
       hasFrequencyOnset: false,
-      associationData: "",
+      associationData: '',
       tableBusy: false,
       dataError: false,
       initialLoad: false,
@@ -275,6 +277,19 @@ export default {
       noProviderFiltering: true
     };
   },
+  computed: {
+    sortOptions() {
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => ({ text: f.label, value: f.key }));
+    },
+    filterOn() {
+      return this.fields.filter(f => f.filterable).map(f => f.key);
+    },
+    filterPlaceHolder() {
+      return 'Filter by ' + this.firstCap(this.cardType);
+    }
+  },
   watch: {
     cardType() {
       this.taxonFilter = { counts: {}, taxons: {} };
@@ -291,23 +306,6 @@ export default {
   },
   mounted() {
     this.generateFields();
-  },
-  computed: {
-      sortOptions() {
-              return this.fields
-              .filter(f => f.sortable)
-              .map(f => {
-                return { text: f.label, value: f.key }
-              })
-      },
-      filterOn(){
-        return this.fields.filter(f => f.filterable).map(f => {
-          return f.key;
-        });
-      },
-      filterPlaceHolder(){
-        return "Filter by " + this.firstCap(this.cardType);
-      }
   },
   methods: {
     toggleTaxonFilter(shouldApply) {
@@ -368,7 +366,7 @@ export default {
           !associationsResponse.data.associations
         ) {
           that.associationData = null;
-          throw new Error("BioLink returned no data");
+          throw new Error('BioLink returned no data');
         }
 
         that.associationData = associationsResponse.data;
@@ -390,60 +388,60 @@ export default {
       if (!relation) {
         // console.log(JSON.stringify(elem, null, 2));
         elem.relation = {
-          label: "Unknown",
-          id: "RO:Unknown",
+          label: 'Unknown',
+          id: 'RO:Unknown',
         };
       } else {
         let inverse = false;
         if (!relation.label && relation.id) {
           relation.label = relation.id;
         } else if (!relation.label) {
-          relation.label = "";
-          relation.id = "";
+          relation.label = '';
+          relation.id = '';
         }
-        relation.label = relation.label.replace(/_/g, " ");
-        if (relation.id === "RO:0003301") {
-          if (nodeType === "model") {
-            relation.id = "RO:0002615";
-            relation.label = "has model";
+        relation.label = relation.label.replace(/_/g, ' ');
+        if (relation.id === 'RO:0003301') {
+          if (nodeType === 'model') {
+            relation.id = 'RO:0002615';
+            relation.label = 'has model';
           }
-        } else if (relation.id === "RO:0002615") {
-          if (nodeType !== "model") {
-            relation.id = "RO:0003301";
-            relation.label = "is model of";
+        } else if (relation.id === 'RO:0002615') {
+          if (nodeType !== 'model') {
+            relation.id = 'RO:0003301';
+            relation.label = 'is model of';
           }
-        } else if (relation.id === "RO:0002206") {
-          if (nodeType === "gene" && cardType === "anatomy") {
-            relation.id = "RO:0002292";
-            relation.label = "expresses";
+        } else if (relation.id === 'RO:0002206') {
+          if (nodeType === 'gene' && cardType === 'anatomy') {
+            relation.id = 'RO:0002292';
+            relation.label = 'expresses';
           }
-        } else if (relation.id === "RO:0002607") {
-          if (nodeType === "gene" && cardType === "disease") {
+        } else if (relation.id === 'RO:0002607') {
+          if (nodeType === 'gene' && cardType === 'disease') {
             inverse = true;
           }
-        } else if (relation.id === "RO:0003303") {
-          if (cardType === "disease" || cardType === "phenotype") {
+        } else if (relation.id === 'RO:0003303') {
+          if (cardType === 'disease' || cardType === 'phenotype') {
             inverse = true;
           }
-        } else if (relation.id === "RO:0003304") {
-          if (cardType === "disease" || cardType === "phenotype") {
+        } else if (relation.id === 'RO:0003304') {
+          if (cardType === 'disease' || cardType === 'phenotype') {
             inverse = true;
           }
-        } else if (relation.id === "GENO:0000841") {
-          if (nodeType === "gene" && cardType === "disease") {
+        } else if (relation.id === 'GENO:0000841') {
+          if (nodeType === 'gene' && cardType === 'disease') {
             inverse = true;
           }
-        } else if (relation.id === "GENO:0000408") {
-          if (nodeType === "variant" && cardType === "gene") {
-            relation.id = "GENO:0000413";
-            relation.label = "has allele";
+        } else if (relation.id === 'GENO:0000408') {
+          if (nodeType === 'variant' && cardType === 'gene') {
+            relation.id = 'GENO:0000413';
+            relation.label = 'has allele';
           }
-        } else if (relation.id === "RO:0002331") {
-          if (nodeType === "gene" && cardType === "pathway") {
+        } else if (relation.id === 'RO:0002331') {
+          if (nodeType === 'gene' && cardType === 'pathway') {
             inverse = true;
           }
-        } else if (relation.id === "GENO:0000639") {
-          if (nodeType === "variant" && cardType === "gene") {
+        } else if (relation.id === 'GENO:0000639') {
+          if (nodeType === 'variant' && cardType === 'gene') {
             inverse = true;
           }
           relation.inverse = inverse;
@@ -459,34 +457,32 @@ export default {
         const subjectElem = elem.subject;
         let objectTaxon = this.parseTaxon(objectElem);
         const evidence = us.pick(elem, [
-          "id",
-          "provided_by",
-          "publications",
-          "evidence_types",
+          'id',
+          'provided_by',
+          'publications',
+          'evidence_types',
         ]);
         evidence.publications = processPublications(evidence.publications);
         evidence.provided_by = processSources(evidence.provided_by);
         // Provide icon and label for database (provided_by)
-        evidence.provided_by = evidence.provided_by.map((db) =>
-          sourceToLabel(db)
-        );
+        evidence.provided_by = evidence.provided_by.map(db => sourceToLabel(db));
         // add href for ECO code
-        evidence.evidence_types = evidence.evidence_types.map((eco) => ({
+        evidence.evidence_types = evidence.evidence_types.map(eco => ({
           id: eco.id,
           label: eco.label,
           url: this.eviHref(eco),
         }));
         const supportIcons = [];
         if (evidence.evidence_types.length > 0) {
-          const eviIcon = "fa-flask"; // 'fa-legal' 'fa-chain';
+          const eviIcon = 'fa-flask'; // 'fa-legal' 'fa-chain';
           supportIcons.push(eviIcon);
         }
         if (evidence.publications.length > 0) {
-          const pubIcon = "fa-book";
+          const pubIcon = 'fa-book';
           supportIcons.push(pubIcon);
         }
         if (evidence.provided_by.length > 0) {
-          const sourceIcon = "fa-database";
+          const sourceIcon = 'fa-database';
           supportIcons.push(sourceIcon);
         }
         const supportLength = [
@@ -496,41 +492,41 @@ export default {
         ].reduce((accum, item) => accum + item);
 
         let modifiedCardType = this.cardType;
-        if (modifiedCardType === "interaction") {
-          modifiedCardType = "gene";
+        if (modifiedCardType === 'interaction') {
+          modifiedCardType = 'gene';
           objectTaxon = this.parseTaxon(subjectElem);
-        } else if (modifiedCardType === "ortholog-phenotype") {
-          modifiedCardType = "phenotype";
+        } else if (modifiedCardType === 'ortholog-phenotype') {
+          modifiedCardType = 'phenotype';
           objectTaxon = this.parseTaxon(subjectElem);
-        } else if (modifiedCardType === "ortholog-disease") {
-          modifiedCardType = "disease";
+        } else if (modifiedCardType === 'ortholog-disease') {
+          modifiedCardType = 'disease';
           objectTaxon = this.parseTaxon(subjectElem);
-        } else if (modifiedCardType === "homolog") {
-          modifiedCardType = "gene";
+        } else if (modifiedCardType === 'homolog') {
+          modifiedCardType = 'gene';
           objectTaxon = this.parseTaxon(objectElem);
         } else if (
-          modifiedCardType === "causal-disease" ||
-          modifiedCardType === "correlated-disease"
+          modifiedCardType === 'causal-disease' ||
+          modifiedCardType === 'correlated-disease'
         ) {
-          modifiedCardType = "disease";
+          modifiedCardType = 'disease';
         } else if (
-          modifiedCardType === "causal-gene" ||
-          modifiedCardType === "correlated-gene"
+          modifiedCardType === 'causal-gene' ||
+          modifiedCardType === 'correlated-gene'
         ) {
-          modifiedCardType = "gene";
+          modifiedCardType = 'gene';
         }
 
         let objectLink = `/${modifiedCardType}/${objectElem.id}`;
 
-        if (modifiedCardType === "model") {
+        if (modifiedCardType === 'model') {
           // Models are an index level type (not in our db)
           // see if the resolver can better type this node
           objectLink = `/${objectElem.id}`;
         }
 
         if (
-          objectElem.id.startsWith("BNODE") &&
-          modifiedCardType !== "publication"
+          objectElem.id.startsWith('BNODE') &&
+          modifiedCardType !== 'publication'
         ) {
           objectLink = null;
         }
@@ -602,40 +598,40 @@ export default {
 
       const fields = [
         {
-          key: "assocObject",
+          key: 'assocObject',
           label: this.firstCap(this.cardType),
-          class: "assoc-object",
+          class: 'assoc-object',
           sortable: true,
           filterable: true
         },
         {
-          key: "relation",
-          label: "Relation",
-          class: "relation-column-width",
+          key: 'relation',
+          label: 'Relation',
+          class: 'relation-column-width',
           sortable: true
         },
         {
-          key: "support",
-          class: "support-column-width",
-          label: "Support"
+          key: 'support',
+          class: 'support-column-width',
+          label: 'Support'
         },
       ];
 
       if (this.isGroup) {
         fields.splice(spliceStart, 0, {
-          key: "assocSubject",
+          key: 'assocSubject',
           label: this.firstCap(this.nodeType),
-          class: "assoc-subject",
+          class: 'assoc-subject',
           sortable: true
         });
         spliceStart++;
       }
 
-      if (this.cardType.includes("ortholog")) {
+      if (this.cardType.includes('ortholog')) {
         fields.splice(0, 0, {
-          key: "assocSubject",
+          key: 'assocSubject',
           label: this.firstCap(this.nodeType),
-          class: "assoc-subject",
+          class: 'assoc-subject',
           sortable: true
         });
         spliceStart++;
@@ -644,24 +640,24 @@ export default {
       if (this.isFrequencyOnsetType(this.nodeType, this.cardType)) {
         this.hasFrequencyOnset = true;
         fields.splice(spliceStart, 0, {
-          key: "frequency",
-          label: "Frequency",
-          class: "frequency-column-width",
+          key: 'frequency',
+          label: 'Frequency',
+          class: 'frequency-column-width',
         });
 
         spliceStart++;
 
         fields.splice(spliceStart, 0, {
-          key: "onset",
-          label: "Onset",
-          class: "onset-column-width",
+          key: 'onset',
+          label: 'Onset',
+          class: 'onset-column-width',
         });
       }
       if (isTaxonCardType(this.cardType)) {
         this.hasTaxon = true;
         fields.splice(0, 0, {
-          key: "taxon",
-          label: "Species",
+          key: 'taxon',
+          label: 'Species',
           sortable: true,
         });
       }
@@ -669,10 +665,10 @@ export default {
     },
     parseTaxon(elemObj) {
       const taxon = {
-        label: "",
-        id: "",
+        label: '',
+        id: '',
       };
-      if ("taxon" in elemObj) {
+      if ('taxon' in elemObj) {
         taxon.label = elemObj.taxon.label;
         taxon.id = elemObj.taxon.id;
       }
@@ -687,23 +683,23 @@ export default {
       // return `https://www.ncbi.nlm.nih.gov/pubmed/${identifier}`;
     },
     eviHref(evi) {
-      const curie = evi.id || "";
+      const curie = evi.id || '';
       const identifier = curie.split(/[:]+/).pop();
       return `http://purl.obolibrary.org/obo/ECO_${identifier}`;
     },
     relationHref(relation) {
-      const curie = relation.id || "";
-      const identifier = curie.split(/[:]+/).slice(-2, 2).join("_");
+      const curie = relation.id || '';
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
     frequencyHref(frequency) {
-      const curie = frequency.id || "";
-      const identifier = curie.split(/[:]+/).slice(-2, 2).join("_");
+      const curie = frequency.id || '';
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
     onsetHref(onset) {
-      const curie = onset.id || "";
-      const identifier = curie.split(/[:]+/).slice(-2, 2).join("_");
+      const curie = onset.id || '';
+      const identifier = curie.split(/[:]+/).slice(-2, 2).join('_');
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
     sourceLabel(url) {
@@ -712,23 +708,9 @@ export default {
     },
     isFrequencyOnsetType(nodeType, cardType) {
       return (
-        (nodeType === "disease" && cardType === "phenotype") ||
-        (nodeType === "phenotype" && cardType === "disease")
+        (nodeType === 'disease' && cardType === 'phenotype') ||
+        (nodeType === 'phenotype' && cardType === 'disease')
       );
-    },
-    sortCompare(aRow, bRow, key, sortDesc, formatter, compareOptions, compareLocale) {
-      const a = aRow[key] // or use Lodash `_.get()`
-      const b = bRow[key]
-      if (
-        (typeof a === 'number' && typeof b === 'number') ||
-        (a instanceof Date && b instanceof Date)
-      ) {
-        // If both compared fields are native numbers or both are native dates
-        return a < b ? -1 : a > b ? 1 : 0
-      } else {
-        // Otherwise stringify the field data and use String.prototype.localeCompare
-        return toString(a).localeCompare(toString(b), compareLocale, compareOptions)
-      }
     }
   },
 };
