@@ -39,6 +39,21 @@
         </b-button>
         <br />
       </div>
+      <div>
+        <b-form-group class="col-6">
+          <b-input-group size="sm">
+            <b-form-input
+              v-model="filter"
+              type="search"
+              id="filterInput"
+              :placeholder="filterPlaceHolder"
+            ></b-form-input>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">Clear</b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+      </div>
       <b-table
         ref="tableRef"
         :items="rowsProvider"
@@ -46,7 +61,10 @@
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
+        :filter="filter"
+        :filter-included-fields="filterOn"
         :no-provider-sorting="noProviderSorting"
+        :no-provider-filtering="noProviderFiltering"
         sort-icon-left
         responsive="true"
         class="table-sm"
@@ -252,7 +270,9 @@ export default {
       sortBy: '',
       sortDesc: false,
       sortDirection: 'asc',
-      noProviderSorting: true
+      filter: null,
+      noProviderSorting: true,
+      noProviderFiltering: true
     };
   },
   watch: {
@@ -279,6 +299,14 @@ export default {
               .map(f => {
                 return { text: f.label, value: f.key }
               })
+      },
+      filterOn(){
+        return this.fields.filter(f => f.filterable).map(f => {
+          return f.key;
+        });
+      },
+      filterPlaceHolder(){
+        return "Filter by " + this.firstCap(this.cardType);
       }
   },
   methods: {
@@ -578,17 +606,18 @@ export default {
           label: this.firstCap(this.cardType),
           class: "assoc-object",
           sortable: true,
+          filterable: true
         },
         {
           key: "relation",
           label: "Relation",
           class: "relation-column-width",
-          sortable: true,
+          sortable: true
         },
         {
           key: "support",
           class: "support-column-width",
-          label: "Support",
+          label: "Support"
         },
       ];
 
