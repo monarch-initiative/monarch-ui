@@ -10,6 +10,14 @@ export default {
     activeItem: {
       type: Object,
       required: true
+    },
+    colorScheme: {
+      type: String,
+      default: 'light'
+    },
+    toolbar: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -36,6 +44,12 @@ export default {
       this.histoPheno.updateOptions(options);
     },
     getChartOptions(dataSeries, labels) {
+      let color = '#FFF';
+      let customClass = 'light';
+      if (this.colorScheme === 'dark') {
+        color = '#868686';
+        customClass = 'dark';
+      }
       return {
         series: [{
           data: dataSeries
@@ -45,7 +59,10 @@ export default {
           type: 'bar',
           redrawOnParentResize: true,
           height: '100%',
-          width: '100%'
+          width: '100%',
+          toolbar: {
+            show: this.toolbar
+          }
         },
         plotOptions: {
           bar: {
@@ -54,20 +71,22 @@ export default {
         },
         stroke: {
           width: 0,
-          colors: ['#fff']
+          colors: [color]
         },
         xaxis: {
           showForNullSeries: false,
           categories: labels,
           labels: {
             style: {
-              colors: ['#fff']
+              colors: [color],
+              cssClass: customClass
             }
           },
           title: {
             text: '# of Phenotypes',
             style: {
-              color: '#FFF'
+              color,
+              cssClass: customClass
             }
           },
           lines: {
@@ -84,7 +103,8 @@ export default {
           },
           labels: {
             style: {
-              colors: ['#fff']
+              colors: [color],
+              cssClass: customClass
             }
           }
         },
@@ -129,8 +149,12 @@ export default {
 </script>
 
 <style>
-.apexcharts-yaxis-label, .apexcharts-xaxis-title-text {
+.apexcharts-yaxis-label.light, .apexcharts-xaxis-title-text {
     color: white;
     fill: white;
+}
+.apexcharts-yaxis-label.dark, .apexcharts-xaxis-title-text.dark {
+    color: grey;
+    fill: grey;
 }
 </style>

@@ -64,7 +64,7 @@
       </div>
       <div v-if="node" class="container-fluid node-container">
         <div class="row">
-          <div v-if="!expandedCard && overviewSection()" class="node-content-section col-6">
+          <div v-if="!expandedCard && overviewSection()" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>Overview</h5>
               <div v-if="node.description" class="node-sub-section">
@@ -104,7 +104,7 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && supportSection()" class="node-content-section col-6">
+          <div v-if="!expandedCard && supportSection()" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>External Resources</h5>
               <div class="node-sub-section">
@@ -240,16 +240,24 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-6">
+          <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-12 col-md-6">
             <div class="node-content-section-content">
               <h5>ExAC Population Frequencies</h5>
               <exac-gene :node-id="nodeId" @show-exac="showExacSection($event)" />
             </div>
           </div>
-          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-8">
+          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-12 col-md-8">
             <div class="node-content-section-content">
               <h5>Genome Features</h5>
               <genome-feature :mygene-data="node.geneInfo" />
+            </div>
+          </div>
+          <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
+            <div class="node-content-section-content associated-phenotypes">
+              <h5>Associated Phenotypes</h5>
+              <div class="histo-pheno-wrapper">
+                <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'" />
+              </div>
             </div>
           </div>
         </div>
@@ -296,6 +304,7 @@ import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
 import ExacVariantTable from '@/components/ExacVariantTable.vue';
 import GenomeFeature from '@/components/GenomeFeature.vue';
 import ReactomeViewer from '@/components/ReactomeViewer.vue';
+import HistoPheno from '@/components/HistoPheno.vue';
 
 
 // https://stackoverflow.com/a/34064434/5667222
@@ -383,6 +392,7 @@ export default {
     'exac-variant': ExacVariantTable,
     'genome-feature': GenomeFeature,
     'reactome-viewer': ReactomeViewer,
+    'histo-pheno': HistoPheno
   },
 
   data() {
@@ -492,7 +502,7 @@ export default {
         genotype: 0,
         case: 0
       },
-
+      histoPhenoData: {},
       relationshipsColumns: [
         {
           label: 'Subject',
@@ -624,6 +634,7 @@ export default {
       this.references = { 'linked': [], 'static': [] };
       this.modifiers = null;
       this.reactomeId = null;
+      this.histoPhenoData = {};
 
       const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
       const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
@@ -646,10 +657,20 @@ export default {
 
       this.node = node;
 
+
       if (neighborhood.synonyms) {
         this.synonyms = neighborhood.synonyms;
       } else {
         this.synonyms = {};
+      }
+
+      if (this.nodeType === 'disease') {
+        // HistoPheno
+        const categories = await biolinkService.getPhenotypeCategories(this.node.id);
+        this.histoPhenoData = {
+          categories
+        };
+
       }
 
       if (this.nodeType === 'publication') {
@@ -828,8 +849,7 @@ export default {
           uri: `https://varsome.com/gene/${this.nodeId}`
         };
       }
-      // console.log(this.authoritiveXref);
-      // console.log(this.references);
+
       if (this.node.inheritance) {
         this.inheritance = us.uniq(
           this.node.inheritance.map(i => i.label)
@@ -910,8 +930,8 @@ export default {
           }
         } else if (xref.id.includes('GARD')) {
           let urlId = xref.id.replace('GARD:', '');
-          urlId = urlId.replaceAll('0', '');
-          const urlLabel = this.node.label.replaceAll(' ', '-');
+          urlId = urlId.replace(/0/g, '');
+          const urlLabel = this.node.label.replace(/\s/g, '-');
           xref.uri = `https://rarediseases.info.nih.gov/diseases/${urlId}/${urlLabel.toLowerCase()}`;
           xref.label = 'GARD';
           this.authoritiveXref.patient = xref;
@@ -1110,7 +1130,8 @@ div.publication-abstract {
   }
 
   .title-bar {
-    padding-left: ($collapsed-sidebar-width + 5);
+    padding-left: 15px;
+    margin: 0 0 0 $collapsed-sidebar-width;
   }
 }
 
@@ -1141,5 +1162,12 @@ div.publication-abstract {
     margin-left: .5rem;
     text-transform: uppercase;
 }
+.histo-pheno-wrapper {
+    height: 350px !important;
+}
 
+.associated-phenotypes:hover {
+    background-color:#f7f7f7 !important;
+    cursor: pointer;
+}
 </style>
