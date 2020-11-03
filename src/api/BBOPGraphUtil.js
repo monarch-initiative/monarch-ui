@@ -29,7 +29,7 @@ export function populateSourceTemplate(datum) {
     'monarchUsage': 'Unknown',
     'vocabulary': 'Unknown',
     // to be extracted from BBOP tree:
-    'ingestDate': 'Unknown',
+    'ingestDate': '',
     'rdfDownloadUrl': '', // URL for transform of source data, in RDF (in ttl, nt, or both)
     'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
     'logoUrl': ''
