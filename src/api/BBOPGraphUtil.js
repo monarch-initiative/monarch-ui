@@ -5,10 +5,10 @@ import us from 'underscore';
 
 const predicates = { // predicates used to retrieve items from BBOP graph json emitted by biolink
   'distribution': 'dcat:distribution',
-  'source': 'dcterms:source',
+  'source': 'dc:source',
   'retrievedOn': 'http://purl.org/pav/retrievedOn',
   'created': 'http://purl.org/dc/terms/created',
-  'downloadUrl': 'dcterms:downloadURL',
+  'downloadUrl': 'dcat:downloadURL',
   'logo': 'schema:logo',
 };
 
