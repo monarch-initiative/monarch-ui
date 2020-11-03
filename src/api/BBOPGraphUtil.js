@@ -4,7 +4,7 @@
 import us from 'underscore';
 
 const predicates = { // predicates used to retrieve items from BBOP graph json emitted by biolink
-  'distribution': 'dcat:Distribution',
+  'distribution': 'dcat:distribution',
   'source': 'dcterms:source',
   'retrievedOn': 'http://purl.org/pav/retrievedOn',
   'created': 'http://purl.org/dc/terms/created',
