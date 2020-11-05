@@ -8,7 +8,7 @@ Please acknowledge the use of Monarch with the following paragraph:
 To cite the use of Monarch in publications, please use these two references:
 
 - Navigating the Phenotype Frontier: The Monarch Initiative. McMurry et al. GENETICS August 1, 2016 vol. 203 no. 4 1491-1495; DOI: 10.1534/genetics.116.188870
-- The Monarch Initiative: an integrative data and analytic platform connecting phenotypes to genotypes across species. Mungall et al. Nucleic Acids Res. 2017 Jan 4; 45(Database issue): D712–D722. Published online 2016 Nov 29. doi: 10.1093/nar/gkw1128
+- The Monarch Initiative in 2019: an integrative data and analytic platform connecting phenotypes to genotypes across species. Shefchek et al. Nucleic Acids Res. 2020 Jan 8; 48(Database issue): D704–D715. Published online 2019 Nov 08. doi: 10.1093/nar/gkz997
 
 To cite a specific data page or result in Monarch:
 
@@ -21,7 +21,7 @@ Prefixed Identifier: OMIM:154700
 http URI/permalink: https://monarchinitiative.org/OMIM:154700
 Suggested citation: Monarch Consortium. Accessed 2016-09-22. Marfan Syndrome. https://monarchinitiative.org/OMIM:154700
 
-The complete set of transformed data for a given source database can be found at http://data.monarchinitiative.org/ttl/
+The complete set of transformed data for a given source database can be found at https://archive.monarchinitiative.org/latest/
 
 Please note that the data in Monarch is constantly expanding and improving. The data is versioned with each database release, and archived database releases are available upon request. The evolution of individual records in Monarch is not currently tracked. More documentation about our identifiers can be found in GitHub, at https://github.com/monarch-initiative/dipper/blob/master/README.md#identifiers
 
