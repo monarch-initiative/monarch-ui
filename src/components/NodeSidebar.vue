@@ -154,10 +154,9 @@ export default {
 @import "~@/style/variables";
 
 $title-bar-height: 70px;
-$collapsed-sidebar-width: 50px;
 
 .node-sidebar {
-  background: $monarch-bg-color;
+  background: #191717de;
   border-right: 1px solid #292e34;
   bottom: 0;
   left: 0;
@@ -306,6 +305,13 @@ $collapsed-sidebar-width: 50px;
 @media (max-width: $sidebar-collapse-width) {
   .node-sidebar {
     width: $collapsed-sidebar-width;
+
+    .title {
+      display:none;
+    }
+    ul.list-group {
+      margin-top: 10px;
+    }
 
     li.list-group-item > a .list-group-item-value {
       display: none;

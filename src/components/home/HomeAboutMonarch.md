@@ -1,53 +1,6 @@
 <div class="home-page-section about-monarch-section">
     <div class="about-block">
        <h3> Connecting phenotypes to genotypes across species </h3>
-       <!-- <div class="data-section">
-          <div class="row">
-            <div class="col-sm">
-              <router-link
-                to="/analytics"
-                class="btn btn-link"
-                role="button">
-                <img
-                  class="icon"
-                  src="@/assets/img/monarch-ui-icon_ANATOMY.png"
-                  alt="disease">
-              </router-link>
-              <span class="network-name">
-                  <p class="amount">218,313</p>
-                  <p class="text">Disease-Phenotype Associations</p>
-              </span>
-            </div>
-            <div class="col-sm">
-              <router-link
-                to="/analytics"
-                class="btn btn-link"
-                role="button">
-                <img
-                  class="icon"
-                  src="@/assets/img/monarch-ui-icon_GENE.png"
-                  alt="disease">
-              </router-link>
-              <span class="network-name">
-              <p class="amount">793,526</p>
-              <p class="text">Gene-Phenotype Associations</p>
-            </div>
-            <div class="col-sm">
-              <router-link
-                to="/analytics"
-                class="btn btn-link"
-                role="button">
-                <img
-                  class="icon"
-                  src="@/assets/img/monarch-ui-icon_MODEL.png"
-                  alt="disease">
-              </router-link>
-              <span class="network-name">
-              <p class="amount">20,870</p>
-              <p class="text">Model Associations</p>
-            </div>
-          </div>
-        </div> -->
         <div class="description">
             Semantic-based integrative data analytics.<br><br>
             <router-link to="/about/monarch">

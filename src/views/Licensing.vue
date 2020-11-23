@@ -97,10 +97,10 @@
     <h4>Data</h4>
     <p>
       Data are derived from multiple sources (see <a href="/about/data-sources">here</a>), each with its own license. We
-      have described this licensing challenge extensively on <a href="reusabledata.org">reusabledata.org</a> and our
+      have described this licensing challenge extensively on <a href="https://reusabledata.org/">reusabledata.org</a> and our
       <a href="https://doi.org/10.1371/journal.pone.0213090">2018 PlosOne publication</a>. Many of the specific data
       resources we use in Monarch have been evaluated according to our reusabledata.org rubric; see the corpus of
-      evaluations <a href="http://reusabledata.org/#our-sources-data">here</a>.
+      evaluations <a href="https://reusabledata.org/#our-sources-data">here</a>.
     </p>
   </div>
 </template>

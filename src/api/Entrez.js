@@ -27,7 +27,7 @@ export async function getPublication(nodeId) {
     const entrezAbstractURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
     const entrezAbstractParams = {
       db: 'pubmed',
-      retmode: 'text',
+      retmode: 'xml',
       rettype: 'abstract',
       id: pubId
     };
