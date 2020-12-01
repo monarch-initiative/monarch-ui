@@ -24,14 +24,14 @@
                 <div class="display-name">
                   {{ source.sourceDescription }}
                 </div>
-                <div v-if="source.monarchUsage" class="source-usage">
+                <div v-if="source.monarchUsage" class="source-info">
                   <h6><i>How do we use it?</i></h6>
                   {{ source.monarchUsage }}
                 </div>
-                <div v-if="source.rdfDownloadUrl" class="source-rdf-download">
+                <div v-if="source.rdfDownloadUrl" class="source-info">
                   <h6><a :href="source.rdfDownloadUrl">Download RDF</a></h6>
                 </div>
-                <div v-if="source.sourceFiles.length > 0" class="source-files">
+                <div v-if="source.sourceFiles.length > 0" class="source-info">
                   <h6><i>Ingested files:</i></h6>
                 </div>
                 <div v-for="file in source.sourceFiles" :key="file">
@@ -47,6 +47,14 @@
                     </div>
                   </div>
                 </template>
+                <div v-if="source.reusableDataUrl" class="source-info">
+                  <h6>
+                    License information from the
+                    <a :href="source.reusableDataUrl" target="_blank">
+                      (Re)usable Data Project
+                    </a>
+                  </h6>
+                </div>
               </b-card>
             </b-collapse>
           </div>
@@ -87,7 +95,7 @@ export default {
     margin-bottom: 5px;
   }
 
-  .source-usage,.source-rdf-download,.source-files, .source-reusable {
+  .source-info {
       margin-top: 15px;
   }
 

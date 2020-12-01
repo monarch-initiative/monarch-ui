@@ -84,7 +84,7 @@ export default function getStaticSourceData() {
       reusableDataUrl: "http://reusabledata.org/impc.html"
     },
     {
-      sourceDisplayName: "ORPHANET",
+      sourceDisplayName: "Orphanet",
       sourceDescription: "Orphanet provides reference information on rare diseases and orphan drugs to help improve the diagnosis, care and treatment of patients with rare diseases.",
       monarchUsage: "We use the Orphanet disease-gene associations.",
       vocabulary: "ORPHA",
