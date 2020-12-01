@@ -35,14 +35,18 @@
                   <h6><i>Ingested files:</i></h6>
                 </div>
                 <div v-for="file in source.sourceFiles" :key="file">
-                  <a :href="file.fileUrl">{{ file.fileUrl }}</a> retrieved on {{ file.retrievedOn }}
+                  <a :href="file.fileUrl">{{ file.fileUrl }}</a>
+                  <span v-if="file.retrievedOn">
+                    retrieved on {{ file.retrievedOn }}
+                  </span>
                 </div>
-                <div class="versions">
-                  <div class="source-version" />
-                  <div class="monarch-version">
-                    Monarch Ingest Date: {{ source.ingestDate }}
+                <template v-if="source.ingestDate">
+                  <div class="versions">
+                    <div class="monarch-version">
+                      Monarch Ingest Date: {{ source.ingestDate }}
+                    </div>
                   </div>
-                </div>
+                </template>
               </b-card>
             </b-collapse>
           </div>
