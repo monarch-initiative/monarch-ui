@@ -10,6 +10,7 @@ export default function getStaticSourceData() {
         "cross-species ontology, to link all mouse phenotype annotations from various sources, which is developed by MGI.",
       vocabulary: "ECO, MA, MP, SO",
       summaryIRI: "MonarchArchive:#mgi",
+      logoUrl: '/img/sources/source-mgi.png',
       reusableDataUrl: "http://reusabledata.org/mgi.html"
     },
     {
@@ -22,14 +23,19 @@ export default function getStaticSourceData() {
       vocabulary: "We integrate the curated genotype-phenotype data, including experimentally derived fish " +
             "(such as via application of morpholinos), and links to the literature as evidence.",
       summaryIRI: "MonarchArchive:#zfin",
+      logoUrl: '/img/sources/source-zfin.png',
       reusableDataUrl: "http://reusabledata.org/zfin.html"
     },
     {
       sourceDisplayName: "Zebrafish Information Network (ZFIN Slim)",
-      sourceDescription: "See 'Zebrafish Information Network'",
+      sourceDescription: "The Zebrafish Information Resource is the community database resource for the laboratory " +
+        "use of zebrafish which develops and supports integrated zebrafish genetic, genomic and developmental " +
+        "information, maintains the definitive reference data sets of zebrafish research information toward " +
+        "facilitation of the use of zebrafish as a model for human biology.",
       monarchUsage: "Zfin model only containing Gene to phenotype associations using this file: https://zfin.org/downloads/phenoGeneCleanData_fish.txt",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#zfinslim",
+      logoUrl: '/img/sources/source-zfin.png',
       reusableDataUrl: "http://reusabledata.org/zfin.html"
     },
     {
@@ -38,6 +44,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Wormbase curates variant (allele)-phenotype associations. The variants are both genetic (intrinsic) and induced through application of reagents such as RNAi (extrinsic). We list the variant-phenotype associations. Some data is pulled from WormBase directly, other data is routed via WormMine.",
       vocabulary: "WBbt, WBls, WBPhenotype",
       summaryIRI: "MonarchArchive:#wormbase",
+      logoUrl: '/img/sources/source-wormbase.png',
       reusableDataUrl: "http://reusabledata.org/wormbase.html"
     },
     {
@@ -46,6 +53,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We integrate the genotype-phenotype associations.",
       vocabulary: "FBbt, FBcv, FBdv",
       summaryIRI: "MonarchArchive:#flybase",
+      logoUrl: '/img/sources/source-flybase.png',
       reusableDataUrl: "http://reusabledata.org/flybase.html"
     },
     {
@@ -54,6 +62,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We use the allele-phenotype associations recorded by the consortium. In addition, we map their allele+zygosity+background to MGI genotype identifiers. Where they do not map to MGI genotype identifiers, we create temporary identifiers for navigation purposes.",
       vocabulary: "MP",
       summaryIRI: "MonarchArchive:#impc",
+      logoUrl: '/img/sources/source-impc.png',
       reusableDataUrl: "http://reusabledata.org/impc.html"
     },
     {
@@ -62,6 +71,7 @@ export default function getStaticSourceData() {
       monarchUsage: "genotype (strain)-phenotype association",
       vocabulary: "MP",
       summaryIRI: "MonarchArchive:#mpd",
+      logoUrl: '/img/sources/source-mpd.png',
       reusableDataUrl: "http://reusabledata.org/mpd.html"
     },
     {
@@ -70,14 +80,16 @@ export default function getStaticSourceData() {
       monarchUsage: "We use curated disease-gene, disease-locus, and variant-disease associations, together with their annotated references. Most OMIM diseases are further curated by the HPO group. Most OMIM diseases are integrated into the Disease Ontology.",
       vocabulary: "OMIM",
       summaryIRI: "MonarchArchive:#omim",
+      logoUrl: '/img/sources/source-omim.png',
       reusableDataUrl: "http://reusabledata.org/impc.html"
     },
     {
-      sourceDisplayName: "ORPHANET",
+      sourceDisplayName: "Orphanet",
       sourceDescription: "Orphanet provides reference information on rare diseases and orphan drugs to help improve the diagnosis, care and treatment of patients with rare diseases.",
       monarchUsage: "We use the Orphanet disease-gene associations.",
       vocabulary: "ORPHA",
       summaryIRI: "MonarchArchive:#orphanet",
+      logoUrl: '/img/sources/source-orphanet.png',
       reusableDataUrl: "http://reusabledata.org/orphanet-open.html"
     },
     {
@@ -86,6 +98,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We currently utilize the 12 RefGenome species, as well as HUGO HCOP species, to seed the orthology calls. Species currently include: arabidopsis, budding yeast, chicken, chimp, dog, fission yeast, fruitfly, green lizard, horse, human, macaque, mouse, opossum, pig, platypus, rat, slime mold, worms, zebrafish. We use the orthology calls to populate the orthologs tabs for genes, as well as to infer disease-model associations via homology.",
       vocabulary: "RO",
       summaryIRI: "MonarchArchive:#panther",
+      logoUrl: '/img/sources/source-panther.png',
       reusableDataUrl: "http://reusabledata.org/panther.html"
     },
     {
@@ -93,6 +106,7 @@ export default function getStaticSourceData() {
       sourceDescription: "The Coriell Cell Repositories provide essential research reagents to the scientific community by establishing, verifying, maintaining, and distributing cell cultures and DNA derived from cell cultures. These collections, supported by funds from the National Institutes of Health (NIH) and several foundations, are extensively utilized by research scientists around the world. NINDS and NIGMS cell line catalog. NIGMS samples represent a variety of disease states, chromosomal abnormalities, apparently healthy individuals and many distinct human populations. NINDS samples are drawn from subjects with cerebrovascular disease, epilepsy, motor neuron disease, Parkinsonism and Tourette Syndrome, as well as controls.",
       monarchUsage: "We link pertinent cell lines to any diseases for which they are asserted models.",
       vocabulary: "OMIM",
+      logoUrl: '/img/sources/source-coriell.png',
       summaryIRI: "MonarchArchive:#coriell"
     },
     {
@@ -101,6 +115,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We integrate the asserted (curated) disease-gene associations, and their evidence.",
       vocabulary: "MESH, OMIM",
       summaryIRI: "MonarchArchive:#ctd",
+      logoUrl: '/img/sources/source-ctd.png',
       reusableDataUrl: "http://reusabledata.org/ctd.html"
     },
     {
@@ -109,6 +124,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We use the HPO disease-phenotype annotations as the primary atomic description of a disease, and list them on the disease pages, together with their references. The Human Phenotype Ontology is integrated into our cross-species phenotype ontology.",
       vocabulary: "ECO, HPO",
       summaryIRI: "MonarchArchive:#hpoa",
+      logoUrl: '/img/sources/source-hpo.png',
       reusableDataUrl: "http://reusabledata.org/hpo.html"
     },
     {
@@ -117,6 +133,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We list disease-gene associations, and gene-pathway associations. We utilize the KEGG Ortholog (KO) gene-pathway associations, and infer a specific-organisms' participation in that pathway based on the gene-KO links.",
       vocabulary: "MESH, OMIM",
       summaryIRI: "MonarchArchive:#kegg",
+      logoUrl: '/img/sources/source-kegg.png',
       reusableDataUrl: "http://reusabledata.org/kegg-ftp.html"
     },
     {
@@ -125,6 +142,7 @@ export default function getStaticSourceData() {
       monarchUsage: "We use NCBIGene ids and symbols as the primary identifier and label for human genes in our system and NCBITaxon identifiers and scientific name for species-specific labeling. For any given gene, we also list the annotated pmids from Pub2Gene.",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#ncbigene",
+      logoUrl: '/img/sources/source-ncbi.png',
       reusableDataUrl: "https://reusabledata.org/ncbi-gene.html"
     },
     {
@@ -133,6 +151,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch indicates gene-gene/protein-protein interactions on gene pages. We also use many of the id mappings to resolve ids in our own site.",
       vocabulary: "MI",
       summaryIRI: "MonarchArchive:#biogrid",
+      logoUrl: '/img/sources/source-biogrid.png',
       reusableDataUrl: "http://reusabledata.org/biogrid.html"
     },
     {
@@ -140,21 +159,23 @@ export default function getStaticSourceData() {
       sourceDescription: "The NHGRI-EBI Catalog of published genome-wide association studies.",
       monarchUsage: "Monarch links the variants recorded here to the curated EFO-classes",
       vocabulary: "RO, EFO, ECO",
-      summaryIRI: "MonarchArchive:#gwascatalog"
+      summaryIRI: "MonarchArchive:#gwascatalog",
+      logoUrl: '/img/sources/source-gwascatalog.png'
     },
     {
       sourceDisplayName: "AnimalQTLdb",
       sourceDescription: "The Animal Quantitative Trait Loci (QTL) database (Animal QTLdb) is designed to house publicly all available QTL and single-nucleotide polymorphism/gene association data on livestock animal species.",
       monarchUsage: "Monarch uses the QTL genetic maps and their computed genomic locations to create associations between the QTLs and their traits. The traits come in their internal Animal Trait ontology vocabulary, which they further map to [Vertebrate Trait](http://bioportal.bioontology.org/ontologies/VT), Product Trait, and Clinical Measurement Ontology vocabularies.",
       vocabulary: "RO, ECO",
-      summaryIRI: "MonarchArchive:#animalqtldb"
+      summaryIRI: "MonarchArchive:#animalqtldb",
+      logoUrl: '/img/sources/source-animalqtldb.png'
     },
     {
       sourceDisplayName: "Ensembl database of automatically annotated genomic data",
       sourceDescription: "Ensembl is a genome browser for vertebrate genomes that supports research in comparative genomics, evolution, sequence variation and transcriptional regulation.",
-
       monarchUsage: "Monarch obtains equivalencies between Ensembl gene IDs and NCBI gene IDs",
       vocabulary: "",
+      logoUrl: '/img/sources/source-ensembl.png',
       summaryIRI: "MonarchArchive:#ensembl"
     },
     {
@@ -163,6 +184,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch processes gene-process/function/subcellular/location associations.",
       vocabulary: "RO",
       summaryIRI: "MonarchArchive:#go",
+      logoUrl: '/img/sources/source-geneontology.png',
       reusableDataUrl: "https://reusabledata.org/go-ann.html"
     },
     {
@@ -170,14 +192,16 @@ export default function getStaticSourceData() {
       sourceDescription: "A curated online repository of HGNC-approved gene nomenclature, gene families and associated resources.",
       monarchUsage: "Monarch creates equivalences between HGNC identifiers and ENSEMBL and NCBIGene. We also add the links to cytogenic locations for the gene features.",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#hgnc"
+      summaryIRI: "MonarchArchive:#hgnc",
+      logoUrl: '/img/sources/source-hgnc.png'
     },
     {
       sourceDisplayName: "Mutant Mouse Resource and Research Centers",
       sourceDescription: "A repository of mouse stocks and ES cell line collections serving the world-wide genetics and biomedical research community for the benefit of human health.",
       monarchUsage: "Centers A repository of mouse stocks and ES cell line collections serving the world-wide genetics and biomedical research community for the benefit of human health.\tMonarch processes the Mutant Mouse Resource and Research Center strain data, which includes: strains and their mutant alleles, phenotypes of the alleles, and descriptions of the research uses of the strains.",
       vocabulary: "MP",
-      summaryIRI: "MonarchArchive:#mmrrc"
+      summaryIRI: "MonarchArchive:#mmrrc",
+      logoUrl: '/img/sources/source-mmrrc.png'
     },
     {
       sourceDisplayName: "Reactome - a curated knowledgebase of biological pathways",
@@ -185,6 +209,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch processes ensembl gene to pathway associations",
       vocabulary: "RO",
       summaryIRI: "MonarchArchive:#reactome",
+      logoUrl: '/img/sources/source-reactome.png',
       reusableDataUrl: "http://reusabledata.org/reactome.html"
     },
     {
@@ -193,6 +218,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch stores the top 20 ranked tissues where a gene is over expressed based on differential expression measures across evidence lines",
       vocabulary: "Uberon",
       summaryIRI: "MonarchArchive:#bgee",
+      logoUrl: '/img/sources/source-bgee.png',
       reusableDataUrl: "http://reusabledata.org/bgee.html"
     },
     {
@@ -201,6 +227,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch stores protein protein interactions with a confidence >.7",
       vocabulary: "RO",
       summaryIRI: "MonarchArchive:#string",
+      logoUrl: '/img/sources/source-string.png',
       reusableDataUrl: "http://reusabledata.org/string.html"
     },
     {
@@ -209,6 +236,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch stores gene to phenotype associations",
       vocabulary: "MP, RO, RGD References, RGD genes",
       summaryIRI: "MonarchArchive:#rgd",
+      logoUrl: '/img/sources/source-rgd.png',
       reusableDataUrl: "http://reusabledata.org/rgd.html"
     },
     {
@@ -217,6 +245,7 @@ export default function getStaticSourceData() {
       monarchUsage: "Monarch stores gene to phenotype associations and gene function data",
       vocabulary: "APO, RO",
       summaryIRI: "MonarchArchive:#sgd",
+      logoUrl: '/img/sources/source-sgd.png',
       reusableDataUrl: "http://reusabledata.org/sgd.html"
     },
     {
@@ -226,7 +255,8 @@ export default function getStaticSourceData() {
       monarchUsage: "We pull those relationships, as well as our local mapping of equivalences" +
           " between EOM and HP terminologies.",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#eom"
+      summaryIRI: "MonarchArchive:#eom",
+      logoUrl: '/img/sources/source-eom.png'
     },
     {
       sourceDisplayName: "Mouse Genome Informatics (MGI Slim)",
@@ -235,16 +265,16 @@ export default function getStaticSourceData() {
           "http://www.mousemine.org/mousemine/begin.do",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#mgi_slim",
+      logoUrl: '/img/sources/source-mgi.png',
       reusableDataUrl: "http://reusabledata.org/mgi.html"
     },
     {
       sourceDisplayName: "Monarch Initiative",
-      sourceDescription: "This is the parser for data curated by the" +
-          " Monarch Initiative https://monarchinitiative.org)." +
-          " Data is currently maintained in a private repository, soon to be released.",
+      sourceDescription: "This is the parser for data curated by the Monarch Initiative.",
       monarchUsage: "",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#monarch",
+      logoUrl: '/img/sources/source-monarch.png',
       reusableDataUrl: "http://reusabledata.org/monarch.html"
     },
     {
@@ -260,6 +290,7 @@ export default function getStaticSourceData() {
           "human, mouse, zebrafish, and rat but will be expanding in the future as needed.",
       vocabulary: "",
       summaryIRI: "MonarchArchive:#monochrom",
+      logoUrl: '/img/sources/source-monochrom.png',
       reusableDataUrl: "http://reusabledata.org/monochrom.html"
     },
     {
@@ -267,7 +298,8 @@ export default function getStaticSourceData() {
       sourceDescription: "Chemical and drug annotation data, aggregated from many popular data resources.",
       monarchUsage: "",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#mychem"
+      summaryIRI: "MonarchArchive:#mychem",
+      logoUrl: '/img/sources/source-mychem.png'
     },
     {
       sourceDisplayName: "UCSC Bands",
@@ -278,7 +310,8 @@ export default function getStaticSourceData() {
           "Here, we simply worry about the instance-level values for particular genome" +
           "builds.",
       vocabulary: "",
-      summaryIRI: "MonarchArchive:#ucscbands"
+      summaryIRI: "MonarchArchive:#ucscbands",
+      logoUrl: '/img/sources/source-ucscbands.png'
     },
     {
       sourceDisplayName: "Online Mendelian Inheritance in Animals",
@@ -286,6 +319,7 @@ export default function getStaticSourceData() {
       monarchUsage: "gene-disease association",
       vocabulary: "OMIA, OMIM",
       summaryIRI: "MonarchArchive:#omia",
+      logoUrl: '/img/sources/source-omia.png',
       reusableDataUrl: "http://reusabledata.org/omia.html"
     },
 
@@ -300,20 +334,18 @@ export default function getStaticSourceData() {
       sourceFiles: [
         {
           'fileUrl': "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/xml/ClinVarFullRelease_00-latest.xml.gz",
-          'retrievedOn': "Unknown"
+          'retrievedOn': ""
         },
         {
           'fileUrl': "ftp://ftp.ncbi.nlm.nih.gov/pub/clinvar/gene_condition_source_id",
-          'retrievedOn': "Unknown"
+          'retrievedOn': ""
         }
       ],
       logoUrl: '/img/sources/source-clinvar.png',
       summaryIRI: "MonarchArchive:#clinvar",
       reusableDataUrl: "http://reusabledata.org/clinvar.html",
-
-      // this will need updating periodically:
-      ingestDate: '2019-11-12',
-      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201911/rdf/clinvar.nt'
+      ingestDate: '',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/latest/rdf/clinvar.nt'
     },
     {
       sourceDisplayName: "Undiagnosed Diseases Program (UDP)",
@@ -324,8 +356,8 @@ export default function getStaticSourceData() {
       summaryIRI: "MonarchArchive:#udp",
 
       // this will need updating periodically:
-      ingestDate: '2019-03-16',
-      rdfDownloadUrl: 'https://archive.monarchinitiative.org/201911/rdf/udp.ttl'
+      ingestDate: '',
+      rdfDownloadUrl: 'https://archive.monarchinitiative.org/latest/rdf/udp.ttl'
     }
   ];
 

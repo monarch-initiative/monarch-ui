@@ -15,10 +15,6 @@ import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 // and only secondarily, to create a general-purpose service layer.
 //
 
-const metadataKeys = { // constants used to retrieve items from BBOP graph json emitted by biolink
-  // subjects with this predicate are considered version level IRIs, objects are summary level IRIs:
-  'summaryVersionPredicate': 'dcterms:isVersionOf',
-};
 
 const servers = {
   development: {
@@ -73,8 +69,6 @@ const apiServer = (new URLSearchParams(document.location.search.substring(1))).g
 const serverConfiguration = servers[apiServer];
 export const biolink = serverConfiguration.biolink_url;
 const scigraph = serverConfiguration.scigraph_url;
-
-export const summaryVersionPredicate = metadataKeys.summaryVersionPredicate;
 
 /**
   Lighter-weight BioLink node info. Used by LocalNav.vue
@@ -400,7 +394,7 @@ export async function getSources() {
   // for each source. All dynamic items are findable from summary and version IRIs per HCLS schema.
   let sourceData = us.chain(dynamicSourceDataGraph.all_edges())
     .filter(function fn(edge) {
-      return edge._predicate_id === summaryVersionPredicate;
+      return edge._predicate_id === 'dc:isVersionOf';
     })
     .map(function fn(edge) {
       return { '_version_iri': edge._subject_id, '_summary_iri': edge._object_id };
@@ -412,7 +406,6 @@ export async function getSources() {
   bbopgraphUtil.populateIngestDate(sourceData, dynamicSourceDataGraph);
   bbopgraphUtil.populateRdfDownloadUrl(sourceData, dynamicSourceDataGraph);
   bbopgraphUtil.populateSourceFiles(sourceData, dynamicSourceDataGraph);
-  bbopgraphUtil.populateLogoUrl(sourceData, dynamicSourceDataGraph);
 
   // We still need static data for some things, e.g. source display name, text descriptions of each source,
   // and usage, since these aren't in Scigraph (and possibly shouldn't be). Any item in staticSourceData will overwrite
