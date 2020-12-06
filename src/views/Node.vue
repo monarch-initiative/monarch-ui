@@ -929,8 +929,7 @@ export default {
             return true;
           }
         } else if (xref.id.includes('GARD')) {
-          let urlId = xref.id.replace('GARD:', '');
-          urlId = urlId.replace(/0/g, '');
+          const urlId = xref.id.replace(/^GARD:(0)*/g, '');
           const urlLabel = this.node.label.replace(/\s/g, '-');
           xref.uri = `https://rarediseases.info.nih.gov/diseases/${urlId}/${urlLabel.toLowerCase()}`;
           xref.label = 'GARD';
