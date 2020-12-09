@@ -171,6 +171,7 @@
 <script>
 import * as BL from '@/api/BioLink';
 import { reduceCategoryList } from '@/lib/CategoryMap';
+import { sanitizeNodeLabel } from '@/lib/Utils';
 
 const DEFAULT_ROWS_PER_PAGE = 25;
 
@@ -293,7 +294,7 @@ export default {
           const resultPacket = {
             category: simplifiedCategory,
             taxon: elem.taxon_label,
-            label: elem.label[0],
+            label: sanitizeNodeLabel(elem.label[0]),
             curie: elem.id,
             rows: this.rows,
             highlight: highlight.highlight,
