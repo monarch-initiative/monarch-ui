@@ -12,7 +12,11 @@
     </div>
 
     <div v-show="!dataError && initialLoad">
-      <taxon-filter v-model="taxonFilter" :is-visible="isTaxonShowing" @toggle-filter="toggleTaxonFilter($event)" />
+      <taxon-filter
+        v-model="taxonFilter"
+        :is-visible="isTaxonShowing"
+        @toggle-filter="toggleTaxonFilter($event)"
+      />
       <div>
         <h5>
           <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
@@ -26,9 +30,31 @@
           variant="primary"
           @click="toggleTaxonFilter()"
         >
-          <i class="fa fa-filter" :class="{ 'filter-active': hasFalseFilter() }" aria-hidden="true" /> Taxon Filter
+          <i
+            class="fa fa-filter"
+            :class="{ 'filter-active': hasFalseFilter() }"
+            aria-hidden="true"
+          />
+          Taxon Filter
         </b-button>
         <br>
+      </div>
+      <div>
+        <b-form-group class="px-0 col-6">
+          <b-input-group size="sm">
+            <b-form-input
+              id="filterInput"
+              v-model="filter"
+              type="search"
+              :placeholder="filterPlaceHolder"
+            />
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">
+                Clear
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
       </div>
       <b-table
         ref="tableRef"
@@ -37,6 +63,11 @@
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
+        :filter="filter"
+        :filter-included-fields="filterOn"
+        :no-provider-sorting="noProviderSorting"
+        :no-provider-filtering="noProviderFiltering"
+        sort-icon-left
         responsive="true"
         class="table-sm"
       >
@@ -60,7 +91,10 @@
           <template v-if="data.item.objectLink">
             <strong>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
+              <router-link
+                :to="data.item.objectLink"
+                v-html="$sanitizeText(data.item.assocObject)"
+              />
             </strong>
           </template>
           <template v-else>
@@ -70,11 +104,17 @@
           </template>
         </template>
 
-        <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
+        <template
+          v-if="isGroup || cardType.includes('ortholog')"
+          v-slot:cell(assocSubject)="data"
+        >
           <template v-if="data.item.subjectLink">
             <strong>
               <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
+              <router-link
+                :to="data.item.subjectLink"
+                v-html="$sanitizeText(data.item.assocSubject)"
+              >
                 {{ data.item.assocSubject }}
               </router-link>
             </strong>
@@ -122,9 +162,7 @@
             <span v-if="data.item._showDetails">
               &blacktriangledown;&nbsp;
             </span>
-            <span v-else>
-              &blacktriangleright;&nbsp;
-            </span>
+            <span v-else> &blacktriangleright;&nbsp; </span>
 
             <span v-for="(icon, index) in data.item.supportIcons" :key="index">
               <i :class="icon" class="fa fa-fw" />
@@ -162,7 +200,10 @@
 <script>
 import us from 'underscore';
 import {
-  processPublications, processSources, sanitizeNodeLabel, sanitizeText
+  processPublications,
+  processSources,
+  sanitizeNodeLabel,
+  sanitizeText,
 } from '@/lib/Utils';
 import EvidenceViewer from '@/components/EvidenceViewer.vue';
 import * as bioLinkService from '@/api/BioLink';
@@ -178,34 +219,34 @@ export default {
   props: {
     nodeId: {
       type: String,
-      required: true
+      required: true,
     },
     nodeLabel: {
       type: String,
-      required: true
+      required: true,
     },
     cardType: {
       type: String,
-      required: true
+      required: true,
     },
     nodeType: {
       type: String,
-      required: true
+      required: true,
     },
     taxonCounts: {
       type: Object,
-      required: true
+      required: true,
     },
     isFacetsShowing: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isGroup: {
       type: Boolean,
       required: false,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -224,11 +265,30 @@ export default {
       evidenceCache: {},
       taxonFilter: {
         counts: {},
-        taxons: {}
+        taxons: {},
       },
       filterActive: null,
-      isTaxonShowing: this.isFacetsShowing
+      isTaxonShowing: this.isFacetsShowing,
+      sortBy: '',
+      sortDesc: false,
+      sortDirection: 'asc',
+      filter: null,
+      noProviderSorting: true,
+      noProviderFiltering: true
     };
+  },
+  computed: {
+    sortOptions() {
+      return this.fields
+        .filter(f => f.sortable)
+        .map(f => ({ text: f.label, value: f.key }));
+    },
+    filterOn() {
+      return this.fields.filter(f => f.filterable).map(f => f.key);
+    },
+    filterPlaceHolder() {
+      return 'Filter by ' + this.firstCap(this.cardType);
+    }
   },
   watch: {
     cardType() {
@@ -236,7 +296,6 @@ export default {
       this.initialLoad = false;
       this.dataError = false;
       this.isTaxonShowing = false;
-
 
       window.scroll(0, 0);
       this.currentPage = 1;
@@ -257,30 +316,30 @@ export default {
     },
     hasFalseFilter() {
       let foundFalseTaxons = false;
-      Object.entries(this.taxonFilter.taxons)
-        .forEach((elem) => {
-          if (!elem[1]) {
-            foundFalseTaxons = true;
-          }
-        });
+      Object.entries(this.taxonFilter.taxons).forEach((elem) => {
+        if (!elem[1]) {
+          foundFalseTaxons = true;
+        }
+      });
       return foundFalseTaxons;
     },
     trueTaxonFilters() {
       const truth = [];
-      Object.entries(this.taxonFilter.taxons)
-        .forEach((elem) => {
-          if (elem[1]) {
-            truth.push(elem[0]);
-          }
-        });
+      Object.entries(this.taxonFilter.taxons).forEach((elem) => {
+        if (elem[1]) {
+          truth.push(elem[0]);
+        }
+      });
       return truth;
     },
     async rowsProvider(ctx, callback) {
-      this.fetchData().then(() => {
-        callback(this.rows);
-      }).catch((error) => {
-        callback([]);
-      });
+      this.fetchData()
+        .then(() => {
+          callback(this.rows);
+        })
+        .catch((error) => {
+          callback([]);
+        });
     },
     async fetchData(reset) {
       const that = this;
@@ -289,8 +348,8 @@ export default {
       try {
         const params = {
           fetch_objects: true,
-          start: ((this.currentPage - 1) * this.rowsPerPage),
-          rows: this.rowsPerPage
+          start: (this.currentPage - 1) * this.rowsPerPage,
+          rows: this.rowsPerPage,
         };
 
         const taxons = this.hasFalseFilter() ? this.trueTaxonFilters() : null;
@@ -299,10 +358,13 @@ export default {
           this.nodeId,
           this.cardType,
           taxons,
-          params,
+          params
         );
 
-        if (!associationsResponse.data || !associationsResponse.data.associations) {
+        if (
+          !associationsResponse.data ||
+          !associationsResponse.data.associations
+        ) {
           that.associationData = null;
           throw new Error('BioLink returned no data');
         }
@@ -330,7 +392,6 @@ export default {
           id: 'RO:Unknown',
         };
       } else {
-
         let inverse = false;
         if (!relation.label && relation.id) {
           relation.label = relation.id;
@@ -395,9 +456,12 @@ export default {
         const objectElem = elem.object;
         const subjectElem = elem.subject;
         let objectTaxon = this.parseTaxon(objectElem);
-        const evidence = us.pick(
-          elem, ['id', 'provided_by', 'publications', 'evidence_types']
-        );
+        const evidence = us.pick(elem, [
+          'id',
+          'provided_by',
+          'publications',
+          'evidence_types',
+        ]);
         evidence.publications = processPublications(evidence.publications);
         evidence.provided_by = processSources(evidence.provided_by);
         // Provide icon and label for database (provided_by)
@@ -406,7 +470,7 @@ export default {
         evidence.evidence_types = evidence.evidence_types.map(eco => ({
           id: eco.id,
           label: eco.label,
-          url: this.eviHref(eco)
+          url: this.eviHref(eco),
         }));
         const supportIcons = [];
         if (evidence.evidence_types.length > 0) {
@@ -441,13 +505,13 @@ export default {
           modifiedCardType = 'gene';
           objectTaxon = this.parseTaxon(objectElem);
         } else if (
-          modifiedCardType === 'causal-disease'
-          || modifiedCardType === 'correlated-disease'
+          modifiedCardType === 'causal-disease' ||
+          modifiedCardType === 'correlated-disease'
         ) {
           modifiedCardType = 'disease';
         } else if (
-          modifiedCardType === 'causal-gene'
-          || modifiedCardType === 'correlated-gene'
+          modifiedCardType === 'causal-gene' ||
+          modifiedCardType === 'correlated-gene'
         ) {
           modifiedCardType = 'gene';
         }
@@ -460,8 +524,10 @@ export default {
           objectLink = `/${objectElem.id}`;
         }
 
-        if (objectElem.id.startsWith('BNODE')
-          && modifiedCardType !== 'publication') {
+        if (
+          objectElem.id.startsWith('BNODE') &&
+          modifiedCardType !== 'publication'
+        ) {
           objectLink = null;
         }
 
@@ -502,11 +568,17 @@ export default {
         }
       });
       if (isTaxonCardType(this.cardType)) {
-        const taxonFacetTarget = Object.keys(this.associationData.facet_counts)[0];
-        Object.keys(this.associationData.facet_counts[taxonFacetTarget]).forEach((key) => {
+        const taxonFacetTarget = Object.keys(
+          this.associationData.facet_counts
+        )[0];
+        Object.keys(
+          this.associationData.facet_counts[taxonFacetTarget]
+        ).forEach((key) => {
           this.taxonFilter.taxons[key] = true;
         });
-        this.taxonFilter.counts = this.associationData.facet_counts[taxonFacetTarget];
+        this.taxonFilter.counts = this.associationData.facet_counts[
+          taxonFacetTarget
+        ];
       }
       this.totalAssociations = this.associationData.numFound;
     },
@@ -529,18 +601,19 @@ export default {
           key: 'assocObject',
           label: this.firstCap(this.cardType),
           class: 'assoc-object',
-          // sortable: true,
+          sortable: true,
+          filterable: true
         },
         {
           key: 'relation',
           label: 'Relation',
           class: 'relation-column-width',
-          // sortable: true,
+          sortable: true
         },
         {
           key: 'support',
           class: 'support-column-width',
-          label: 'Support',
+          label: 'Support'
         },
       ];
 
@@ -549,6 +622,7 @@ export default {
           key: 'assocSubject',
           label: this.firstCap(this.nodeType),
           class: 'assoc-subject',
+          sortable: true
         });
         spliceStart++;
       }
@@ -558,6 +632,7 @@ export default {
           key: 'assocSubject',
           label: this.firstCap(this.nodeType),
           class: 'assoc-subject',
+          sortable: true
         });
         spliceStart++;
       }
@@ -582,8 +657,8 @@ export default {
         this.hasTaxon = true;
         fields.splice(0, 0, {
           key: 'taxon',
-          label: 'Species'
-          // sortable: true,
+          label: 'Species',
+          sortable: true,
         });
       }
       this.fields = fields;
@@ -591,7 +666,7 @@ export default {
     parseTaxon(elemObj) {
       const taxon = {
         label: '',
-        id: ''
+        id: '',
       };
       if ('taxon' in elemObj) {
         taxon.label = elemObj.taxon.label;
@@ -600,8 +675,7 @@ export default {
       return taxon;
     },
     firstCap(val) {
-      return val.charAt(0)
-        .toUpperCase() + val.slice(1);
+      return val.charAt(0).toUpperCase() + val.slice(1);
     },
     pubHref(curie) {
       return `/publication/${curie}`;
@@ -629,17 +703,16 @@ export default {
       return `http://purl.obolibrary.org/obo/${identifier}`;
     },
     sourceLabel(url) {
-      const result = url.split(/[/]+/)
-        .pop()
-        .split(/[.]+/)[0]
-        .toUpperCase();
+      const result = url.split(/[/]+/).pop().split(/[.]+/)[0].toUpperCase();
       return result;
     },
     isFrequencyOnsetType(nodeType, cardType) {
-      return (nodeType === 'disease' && cardType === 'phenotype') ||
-              (nodeType === 'phenotype' && cardType === 'disease');
+      return (
+        (nodeType === 'disease' && cardType === 'phenotype') ||
+        (nodeType === 'phenotype' && cardType === 'disease')
+      );
     }
-  }
+  },
 };
 </script>
 
@@ -673,8 +746,7 @@ export default {
     outline: 1px solid lightgray;
   }
 
-  table.b-table.b-table-selectable > tbody > tr
-  {
+  table.b-table.b-table-selectable > tbody > tr {
     /*
      * Inhibit b-table's default user-select:none; which
      * was preventing user copying to clipboard.
