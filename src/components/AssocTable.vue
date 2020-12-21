@@ -15,7 +15,8 @@
       <taxon-filter v-model="taxonFilter" :is-visible="isTaxonShowing" @toggle-filter="toggleTaxonFilter($event)" />
       <div>
         <h5>
-          <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
+          <strong v-if="cardType === 'phenotype' && totalAssociations >= 0">{{ totalAssociations }}</strong>
+          <strong v-else if="totalAssociations > 0">{{ totalAssociations }}</strong>
           {{ cardType }} associations.
         </h5>
 
