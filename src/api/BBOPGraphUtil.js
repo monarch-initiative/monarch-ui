@@ -1,7 +1,9 @@
 // Functions to deal with BBOP graph json, retrieved from biolink-api
 // https://berkeleybop.github.io/bbop-graph/doc/index.html
+// These functions are called in BioLink.js getSources
 
 import us from 'underscore';
+
 
 const predicates = { // predicates used to retrieve items from BBOP graph json emitted by biolink
   'distribution': 'dcat:distribution',
@@ -9,12 +11,11 @@ const predicates = { // predicates used to retrieve items from BBOP graph json e
   'retrievedOn': 'http://purl.org/pav/retrievedOn',
   'created': 'http://purl.org/dc/terms/created',
   'downloadUrl': 'dcat:downloadURL',
-  'logo': 'schema:logo',
 };
+
 
 const curiePrefixURLs = { // various curie prefixes that need to be fixed/expanded to URLs
   'MonarchArchive': 'https://archive.monarchinitiative.org/',
-  'MonarchLogoRepo': '/img/sources/',
   'CoriellCollection': 'https://catalog.coriell.org/1/',
   'OBO': 'http://purl.obolibrary.org/obo/',
   'ZFIN': 'http://zfin.org/',
@@ -25,14 +26,14 @@ export function populateSourceTemplate(datum) {
     '_summary_iri': datum._summary_iri,
     '_version_iri': datum._version_iri,
     'sourceDisplayName': datum._version_iri,
-    'sourceDescription': 'Unknown',
-    'monarchUsage': 'Unknown',
-    'vocabulary': 'Unknown',
+    'sourceDescription': '',
+    'monarchUsage': '',
+    'vocabulary': '',
+    'logoUrl': '',
     // to be extracted from BBOP tree:
     'ingestDate': '',
     'rdfDownloadUrl': '', // URL for transform of source data, in RDF (in ttl, nt, or both)
     'sourceFiles': [], // [ {'fileUrl': url1, 'retrievedOn': '01-01-1970'}, {'fileUrl': url2, 'retrievedOn': '01-02-1970'}, ... ]
-    'logoUrl': ''
   };
 }
 
@@ -86,7 +87,7 @@ export function populateSourceFiles(sourceData, graph) {
     sourceData[i].sourceFiles = us.chain(sources)
       .map(function fn(source) {
         const node = graph.get_node(source);
-        let retVal = 'Unknown';
+        let retVal = '';
         if (Object.prototype.hasOwnProperty.call(node._metadata, predicates.retrievedOn)) {
           retVal = node._metadata[predicates.retrievedOn][0];
         }
@@ -114,15 +115,6 @@ export function populateRdfDownloadUrl(sourceData, graph) {
     const downloadUrl = _subjectPredicate2Object(distributionIRI, predicates.downloadUrl, graph);
     if (downloadUrl !== undefined) {
       sourceData[i].rdfDownloadUrl = downloadUrl.replace('MonarchArchive:', curiePrefixURLs.MonarchArchive);
-    }
-  }
-}
-
-export function populateLogoUrl(sourceData, graph) {
-  for (let i = 0; i < sourceData.length; i++) {
-    const logoUrl = _subjectPredicate2Object(sourceData[i]._summary_iri, predicates.logo, graph);
-    if (logoUrl !== undefined) {
-      sourceData[i].logoUrl = logoUrl.replace('MonarchLogoRepo:', curiePrefixURLs.MonarchLogoRepo);
     }
   }
 }

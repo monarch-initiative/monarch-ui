@@ -5,7 +5,7 @@
 <div class="collab-wrapper">
     <div class="row">
         <div class="col-sm-4 offset-xl-3 col-xl-2 collab">
-            <a href="https:oregonstate.edu/" target="__blank">
+            <a href="https://oregonstate.edu/" target="__blank">
               <img src="../../assets/img/osu.png" alt="osu">
             </a>
         </div>
@@ -27,7 +27,7 @@
            </a>
         </div>
         <div class="col-sm-4 col-xl-2 collab">
-            <a href="http://www.smd.qmul.ac.uk" target="__blank">
+            <a href="https://www.qmul.ac.uk/smd/" target="__blank">
                 <img src="../../assets/img/qmul.png" alt="qmul">
             </a> 
         </div>

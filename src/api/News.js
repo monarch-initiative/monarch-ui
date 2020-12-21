@@ -9,7 +9,8 @@ export default async function getNewsItems() {
     const newsResponse = await axios.get(monarchRss);
     newsItems = newsResponse.data.items.map(elem => ({
       url: elem.link,
-      date: new Date(elem.pubDate).toDateString().slice(4),
+      // https://stackoverflow.com/q/4310953
+      date: new Date(elem.pubDate.replace(/-/g, '/')).toDateString().slice(4),
       title: elem.title
     }));
   } catch (e) {
