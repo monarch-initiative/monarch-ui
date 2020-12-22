@@ -601,6 +601,9 @@ export default {
           this.counts[cardType] = count;
           if (count > 0) {
             nonEmptyCards.push(cardType);
+          } else if (cardType === 'phenotype' && (this.nodeType === 'gene' || this.nodeType === 'variant' || this.nodeType === 'disease')) {
+            // show phenotype for genes, variants, and diseases even if zero
+            nonEmptyCards.push(cardType);
           }
         });
       }
