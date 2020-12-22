@@ -31,6 +31,10 @@
         </b-button>
         <br>
       </div>
+      <div v-if="cardType === 'phenotype' && totalAssociations == 0">
+        We are not aware of any authoritative sources of phenotypes for this {{ nodeType }}. 
+        If you know of a source for this {{ nodeType }}, please let us know.
+      </div>
 
       <div v-show="!(cardType === 'phenotype' && totalAssociations == 0)">
         <b-table 
