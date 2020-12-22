@@ -31,131 +31,134 @@
         </b-button>
         <br>
       </div>
-      <b-table
-        ref="tableRef"
-        :items="rowsProvider"
-        :busy="tableBusy"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="rowsPerPage"
-        responsive="true"
-        class="table-sm"
-      >
-        <template v-if="hasTaxon" v-slot:cell(taxon)="data">
-          <i>{{ data.item.taxonLabel }}</i>
-        </template>
 
-        <template v-slot:cell(relation)="data">
-          <small>
+      <div v-show="!(cardType === 'phenotype' && totalAssociations == 0)">
+        <b-table 
+          ref="tableRef"
+          :items="rowsProvider"
+          :busy="tableBusy"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="rowsPerPage"
+          responsive="true"
+          class="table-sm"
+        >
+          <template v-if="hasTaxon" v-slot:cell(taxon)="data">
+            <i>{{ data.item.taxonLabel }}</i>
+          </template>
+
+          <template v-slot:cell(relation)="data">
+            <small>
+              <a
+                :href="data.item.relation.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ data.item.relation.label }}
+              </a>
+            </small>
+          </template>
+
+          <template v-slot:cell(assocObject)="data">
+            <template v-if="data.item.objectLink">
+              <strong>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
+              </strong>
+            </template>
+            <template v-else>
+              <strong>
+                {{ data.item.assocObject }}
+              </strong>
+            </template>
+          </template>
+
+          <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
+            <template v-if="data.item.subjectLink">
+              <strong>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
+                  {{ data.item.assocSubject }}
+                </router-link>
+              </strong>
+            </template>
+            <template v-else>
+              <strong>
+                {{ data.item.assocSubject }}
+              </strong>
+            </template>
+          </template>
+
+          <template v-if="hasFrequencyOnset" v-slot:cell(frequency)="data">
             <a
-              :href="data.item.relation.url"
+              v-if="data.item.frequency && nodeId === data.item.subjectCurie"
+              :href="data.item.frequency.url"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ data.item.relation.label }}
+              <small>
+                {{ data.item.frequency.label }}
+              </small>
             </a>
-          </small>
-        </template>
-
-        <template v-slot:cell(assocObject)="data">
-          <template v-if="data.item.objectLink">
-            <strong>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
-            </strong>
           </template>
-          <template v-else>
-            <strong>
-              {{ data.item.assocObject }}
-            </strong>
+
+          <template v-if="hasFrequencyOnset" v-slot:cell(onset)="data">
+            <a
+              v-if="data.item.onset && nodeId === data.item.subjectCurie"
+              :href="data.item.onset.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <small>
+                {{ data.item.onset.label }}
+              </small>
+            </a>
           </template>
-        </template>
 
-        <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
-          <template v-if="data.item.subjectLink">
-            <strong>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
-                {{ data.item.assocSubject }}
-              </router-link>
-            </strong>
+          <template v-slot:cell(support)="data">
+            <b-button
+              :pressed.sync="data.item._showDetails"
+              size="small"
+              class="btn btn-xs px-1 py-0 m-0"
+              variant="outline-info"
+            >
+              <span v-if="data.item._showDetails">
+                &blacktriangledown;&nbsp;
+              </span>
+              <span v-else>
+                &blacktriangleright;&nbsp;
+              </span>
+
+              <span v-for="(icon, index) in data.item.supportIcons" :key="index">
+                <i :class="icon" class="fa fa-fw" />
+              </span>
+              <small>{{ data.item.supportLength }}</small>
+            </b-button>
           </template>
-          <template v-else>
-            <strong>
-              {{ data.item.assocSubject }}
-            </strong>
+
+          <template v-slot:row-details="row">
+            <EvidenceViewer
+              :evidence="row.item.evidence"
+              :evidence-cache="evidenceCache"
+              :node-id="nodeId"
+              :node-label="nodeLabel"
+              :node-type="nodeType"
+              :subject-id="row.item.subjectCurie"
+              :subject-label="row.item.assocSubject"
+              :card-type="cardType"
+            />
           </template>
-        </template>
-
-        <template v-if="hasFrequencyOnset" v-slot:cell(frequency)="data">
-          <a
-            v-if="data.item.frequency && nodeId === data.item.subjectCurie"
-            :href="data.item.frequency.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <small>
-              {{ data.item.frequency.label }}
-            </small>
-          </a>
-        </template>
-
-        <template v-if="hasFrequencyOnset" v-slot:cell(onset)="data">
-          <a
-            v-if="data.item.onset && nodeId === data.item.subjectCurie"
-            :href="data.item.onset.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <small>
-              {{ data.item.onset.label }}
-            </small>
-          </a>
-        </template>
-
-        <template v-slot:cell(support)="data">
-          <b-button
-            :pressed.sync="data.item._showDetails"
-            size="small"
-            class="btn btn-xs px-1 py-0 m-0"
-            variant="outline-info"
-          >
-            <span v-if="data.item._showDetails">
-              &blacktriangledown;&nbsp;
-            </span>
-            <span v-else>
-              &blacktriangleright;&nbsp;
-            </span>
-
-            <span v-for="(icon, index) in data.item.supportIcons" :key="index">
-              <i :class="icon" class="fa fa-fw" />
-            </span>
-            <small>{{ data.item.supportLength }}</small>
-          </b-button>
-        </template>
-
-        <template v-slot:row-details="row">
-          <EvidenceViewer
-            :evidence="row.item.evidence"
-            :evidence-cache="evidenceCache"
-            :node-id="nodeId"
-            :node-label="nodeLabel"
-            :node-type="nodeType"
-            :subject-id="row.item.subjectCurie"
-            :subject-label="row.item.assocSubject"
-            :card-type="cardType"
-          />
-        </template>
-      </b-table>
-      <b-pagination
-        v-if="totalAssociations > rowsPerPage"
-        v-model="currentPage"
-        :per-page="rowsPerPage"
-        :total-rows="totalAssociations"
-        class="pag-width my-1"
-        align="center"
-        size="md"
-      />
+        </b-table>
+        <b-pagination
+          v-if="totalAssociations > rowsPerPage"
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="totalAssociations"
+          class="pag-width my-1"
+          align="center"
+          size="md"
+        />
+      </div>
     </div>
   </div>
 </template>
