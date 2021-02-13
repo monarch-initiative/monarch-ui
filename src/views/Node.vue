@@ -252,7 +252,7 @@
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
-          <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
+          <div v-if="!expandedCard && histoPhenoData.categories && (counts['phenotype'] > 0)" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
             <div class="node-content-section-content associated-phenotypes">
               <h5>Associated Phenotypes</h5>
               <div class="histo-pheno-wrapper">
