@@ -276,6 +276,7 @@
               :node-id="nodeId"
               :node-label="node.label"
               :is-group="isGroup"
+              :card-counts="counts"
             />
           </div>
         </div>

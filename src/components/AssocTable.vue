@@ -16,7 +16,7 @@
       <div>
         <h5>
           <strong v-if="cardType === 'phenotype' && totalAssociations >= 0">{{ totalAssociations }}</strong>
-          <strong v-else if="totalAssociations > 0">{{ totalAssociations }}</strong>
+          <strong v-else-if="totalAssociations > 0">{{ totalAssociations }}</strong>
           {{ cardType }} associations.
         </h5>
 
@@ -31,10 +31,32 @@
         </b-button>
         <br>
       </div>
-      <div v-if="cardType === 'phenotype' && totalAssociations == 0">
-        We are not aware of any authoritative sources of phenotypes for this {{ nodeType }}. 
-        If you know of a source for this {{ nodeType }}, please let us know.
-      </div>
+      <template v-if="cardType === 'phenotype' && totalAssociations == 0">
+        <div v-if="nodeType === 'gene'">
+          Although there are  <a :href="this.$route.path + '#ortholog-phenotype'">{{ cardCounts['ortholog-phenotype'] }}
+          ortholog phenotypes</a> in other species, we are not aware of any authoritative sources of observed 
+          human phenotypes for this gene. We are always improving our knowledgebase; to suggest a new source, 
+          <a href="https://github.com/monarch-initiative/helpdesk/issues" target="_blank">please submit a ticket</a>.
+        </div>
+        <div v-else-if="nodeType === 'disease'">
+          The Monarch knowledgebase includes {{ nOtherPhenotypes }} phenotypes 
+          that are associated either with the parent gene {{ parentGene }} 
+          or the associated disease {{ assocDisease }}, 
+          we are not aware of publicly available source data specific to the individual variants. 
+          We are always improving our knowledgebase; to suggest a new source, 
+          <a href="https://github.com/monarch-initiative/helpdesk/issues" target="_blank">please submit a ticket</a>. 
+        </div>
+        <div v-else-if="nodeType === 'variant' && cardCounts['gene'] > 0">
+           We are not aware of any phenotypes specifically associated with this variant; however, there are 
+           {{ nDiseasePhenotypes }} phenotypes associated with the corresponding diseases.   
+        </div>
+        <div v-else-if="nodeType === 'variant' && cardCounts['gene'] == 0">
+           For this variant, there is no corresponding gene in our knowledgebase; this could be 
+           because of incomplete source data, or because the variant is located in an untranslated region. 
+           To learn more, see 
+           <a :href="'https://www.ncbi.nlm.nih.gov/clinvar?term=' + nodeId" target="_blank">this ClinVar page</a>.
+        </div>
+      </template>
 
       <div v-show="!(cardType === 'phenotype' && totalAssociations == 0)">
         <b-table 
@@ -213,7 +235,12 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    }
+    },
+    cardCounts: {
+      type: Object,
+      required: false,
+      default: null,
+    },
   },
   data() {
     return {
@@ -237,6 +264,24 @@ export default {
       filterActive: null,
       isTaxonShowing: this.isFacetsShowing
     };
+  },
+  computed: {
+    nDiseasePhenotypes() {
+      //for variants with no phenotype associations, calculate the total # of phenotypes associated with the corresponding diseases
+      return '0';
+    },
+    parentGene() {
+      //for diseases with no phenotype associations, get the name of the parent gene
+      return '-';
+    },
+    assocDisease() {
+      //for diseases with no phenotype associations, get the name of the associated disease
+      return '-';
+    },
+    nOtherPhenotypes() {
+      ///for diseases with no phenotype associations, calculate the number of phenotypes associated either with the parent gene or the associated disease
+      return '0';
+    }
   },
   watch: {
     cardType() {
