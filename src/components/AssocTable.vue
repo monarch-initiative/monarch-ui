@@ -43,19 +43,19 @@
           </span>
           <span v-if="altDisplayGene == 1">
             <a :href="this.$route.path + '#ortholog-phenotype'">{{ cardCounts['ortholog-phenotype'] }}
-              ortholog phenotypes</a> in other species.
+              ortholog phenotype(s)</a> in other species.
           </span>
           <span v-if="altDisplayGene == 2">
             <a :href="this.$route.path + '#causal-disease'">{{ cardCounts['causal-disease'] }}
-              associated diseases</a>.
+              associated disease(s)</a>.
           </span>
           <span v-if="altDisplayGene == 3">
             <a :href="this.$route.path + '#correlated-disease'">{{ cardCounts['correlated-disease'] }}
-              associated diseases</a>.
+              associated disease(s)</a>.
           </span>
           <span v-if="altDisplayGene == 4">
             <a :href="this.$route.path + '#ortholog-disease'">{{ cardCounts['ortholog-disease'] }}
-              associated diseases</a>.
+              associated disease(s)</a>.
           </span>
         </template>
         <template v-else-if="nodeType === 'disease'">
@@ -69,15 +69,15 @@
           </span>
           <span v-if="altDisplayDisease == 1">
             <a :href="this.$route.path + '#causal-gene'">{{ cardCounts['causal-gene'] }}
-              causal genes</a>.
+              causal gene(s)</a>.
           </span>
           <span v-if="altDisplayDisease == 2">
             <a :href="this.$route.path + '#correlated-gene'">{{ cardCounts['correlated-gene'] }}
-              correlated genes</a>.
+              correlated gene(s)</a>.
           </span>
           <span v-if="altDisplayDisease == 3">
             <a :href="this.$route.path + '#gene'">{{ cardCounts['gene'] }}
-              associated genes</a>.
+              associated gene(s)</a>.
           </span>
         </template>
         <template v-else-if="nodeType === 'variant'">
@@ -89,7 +89,7 @@
           <span v-if="cardCounts['disease'] > 0">
             However, we encourage you to view the available
             <a :href="this.$route.path + '#disease'">{{ cardCounts['disease'] }}
-              associated diseases</a>.
+              associated disease(s)</a>.
           </span>
         </template>
         We are always improving our knowledgebase; to suggest a new source,
