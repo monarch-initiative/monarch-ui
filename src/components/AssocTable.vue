@@ -33,71 +33,71 @@
       </div>
       <div v-if="cardType === 'phenotype' && totalAssociations == 0">
         <template v-if="nodeType === 'gene'">
-          We are not aware of any authoritative sources of observed human phenotypes 
+          We are not aware of any authoritative sources of observed human phenotypes
           <span v-if="altDisplayGene == 0">
-            or diseases 
+            or diseases
           </span>
           for this gene.
-          <span v-if="altDisplayGene > 0"> 
+          <span v-if="altDisplayGene > 0">
             However, we encourage you to view the available
           </span>
           <span v-if="altDisplayGene == 1">
             <a :href="this.$route.path + '#ortholog-phenotype'">{{ cardCounts['ortholog-phenotype'] }}
-            ortholog phenotypes</a> in other species.
+              ortholog phenotypes</a> in other species.
           </span>
           <span v-if="altDisplayGene == 2">
-            <a :href="this.$route.path + '#causal-disease'">{{ cardCounts['causal-disease'] }} 
-            associated diseases</a>.
+            <a :href="this.$route.path + '#causal-disease'">{{ cardCounts['causal-disease'] }}
+              associated diseases</a>.
           </span>
           <span v-if="altDisplayGene == 3">
-            <a :href="this.$route.path + '#correlated-disease'">{{ cardCounts['correlated-disease'] }} 
+            <a :href="this.$route.path + '#correlated-disease'">{{ cardCounts['correlated-disease'] }}
               associated diseases</a>.
           </span>
           <span v-if="altDisplayGene == 4">
-            <a :href="this.$route.path + '#ortholog-disease'">{{ cardCounts['ortholog-disease'] }} 
+            <a :href="this.$route.path + '#ortholog-disease'">{{ cardCounts['ortholog-disease'] }}
               associated diseases</a>.
           </span>
         </template>
         <template v-else-if="nodeType === 'disease'">
-           We are not aware of any publicly available source data for phenotypes  
+          We are not aware of any publicly available source data for phenotypes
           <span v-if="altDisplayDisease == 0">
-            or genes 
+            or genes
           </span>
           for this disease.
-          <span v-if="altDisplayDisease > 0"> 
+          <span v-if="altDisplayDisease > 0">
             However, we encourage you to view the available
           </span>
           <span v-if="altDisplayDisease == 1">
             <a :href="this.$route.path + '#causal-gene'">{{ cardCounts['causal-gene'] }}
-            causal genes</a>.
+              causal genes</a>.
           </span>
           <span v-if="altDisplayDisease == 2">
-            <a :href="this.$route.path + '#correlated-gene'">{{ cardCounts['correlated-gene'] }} 
-            correlated genes</a>.
+            <a :href="this.$route.path + '#correlated-gene'">{{ cardCounts['correlated-gene'] }}
+              correlated genes</a>.
           </span>
           <span v-if="altDisplayDisease == 3">
-            <a :href="this.$route.path + '#gene'">{{ cardCounts['gene'] }} 
+            <a :href="this.$route.path + '#gene'">{{ cardCounts['gene'] }}
               associated genes</a>.
           </span>
         </template>
         <template v-else-if="nodeType === 'variant'">
-           We are not aware of any phenotypes 
-           <span v-if="cardCounts['disease'] == 0">
-            or diseases 
+          We are not aware of any phenotypes
+          <span v-if="cardCounts['disease'] == 0">
+            or diseases
           </span>
-          specifically associated with this variant. 
+          specifically associated with this variant.
           <span v-if="cardCounts['disease'] > 0">
-            However, we encourage you to view the available 
-             <a :href="this.$route.path + '#disease'">{{ cardCounts['disease'] }} 
-              associated diseases</a>. 
-           </span> 
+            However, we encourage you to view the available
+            <a :href="this.$route.path + '#disease'">{{ cardCounts['disease'] }}
+              associated diseases</a>.
+          </span>
         </template>
-        We are always improving our knowledgebase; to suggest a new source, 
-          <a href="https://github.com/monarch-initiative/helpdesk/issues" target="_blank">please submit a ticket</a>.
+        We are always improving our knowledgebase; to suggest a new source,
+        <a href="https://github.com/monarch-initiative/helpdesk/issues" target="_blank">please submit a ticket</a>.
       </div>
 
       <div v-show="!(cardType === 'phenotype' && totalAssociations == 0)">
-        <b-table 
+        <b-table
           ref="tableRef"
           :items="rowsProvider"
           :busy="tableBusy"
@@ -305,28 +305,28 @@ export default {
   },
   computed: {
     altDisplayGene() {
+      let n = 0;
       if (this.cardCounts['ortholog-phenotype'] > 0) {
-        return 1;
+        n = 1;
       } else if (this.cardCounts['causal-disease'] > 0) {
-        return 2;
+        n = 2;
       } else if (this.cardCounts['correlated-disease'] > 0) {
-        return 3;
+        n = 3;
       } else if (this.cardCounts['ortholog-disease'] > 0) {
-        return 4;
-      } else {
-        return 0;
+        n = 4;
       }
+      return n;
     },
     altDisplayDisease() {
+      let n = 0;
       if (this.cardCounts['causal-gene'] > 0) {
-        return 1;
+        n = 1;
       } else if (this.cardCounts['correlated-gene'] > 0) {
-        return 2;
-      } else if (this.cardCounts['gene'] > 0) {
-        return 3;
-      } else {
-        return 0;
+        n = 2;
+      } else if (this.cardCounts.gene > 0) {
+        n = 3;
       }
+      return n;
     }
   },
   watch: {
