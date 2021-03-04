@@ -131,10 +131,10 @@
           class="table-sm table-border-soft mt-2"
           size="md"
         />
-        <div class="search-results-rows">
+        <div class="search-results-rows card">
           <div v-if="searchResults && searchResults.length > 0 ">
-            <h3>
-              <span class="searchTerm">{{ query }}</span> has <span
+            <h3 class="card-header">
+              <span class="searchTerm">"{{ query }}"</span> has <span
                 class="searchTerm"
               >{{ numFound }}</span> matches
             </h3>
@@ -144,9 +144,8 @@
               :items="rowsProvider"
               :current-page="currentPage"
               :per-page="rowsPerPage"
-              striped
               responsive="true"
-              class="table-sm table-border-soft test-search-results-table"
+              class="table-sm table-border-soft search-results-table"
               hover
             >
               <template v-slot:cell(label)="row">
@@ -378,7 +377,14 @@ export default {
         font-weight: bold;
     }
 
+    .search-results-rows {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     .search-results-table {
+        background-color: #fff;
+        padding: 4px 15px;
     }
 
     /* clear fix */
