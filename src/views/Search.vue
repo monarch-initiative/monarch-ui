@@ -75,7 +75,7 @@
               <li
                 v-for="(value, category) of facetCategories"
                 :key="category"
-                class="border-top border-bottom"
+                class="border-bottom"
               >
                 <a
                   href
@@ -104,7 +104,7 @@
               <li
                 v-for="(value, taxon) of facetTaxons"
                 :key="taxon"
-                class="border-top border-bottom"
+                class="border-bottom"
               >
                 <a
                   href
@@ -123,42 +123,50 @@
         </div>
       </div>
       <div class="col-md-8">
-        <b-pagination
-          v-model="currentPage"
-          :total-rows="numFound"
-          :per-page="rowsPerPage"
-          responsive="true"
-          class="table-sm table-border-soft mt-2"
-          size="md"
-        />
-        <div class="search-results-rows card">
+        <div class="search-results-rows">
           <div v-if="searchResults && searchResults.length > 0 ">
-            <h3 class="card-header">
-              <span class="searchTerm">"{{ query }}"</span> has <span
-                class="searchTerm"
-              >{{ numFound }}</span> matches
-            </h3>
-            <b-table
-              ref="results-table"
-              :fields="fields"
-              :items="rowsProvider"
-              :current-page="currentPage"
-              :per-page="rowsPerPage"
-              responsive="true"
-              class="table-sm table-border-soft search-results-table"
-              hover
-            >
-              <template v-slot:cell(label)="row">
-                <router-link :to="row.item.toLink">
+            <div class="row">
+                <div class="col-xs-8 qry-title">
+                <h3>
+                  <span class="searchTerm">"{{ query }}"</span> has <span
+                    class="searchTerm"
+                  >{{ numFound }}</span> matches
+                </h3>
+              </div>
+              <div class="col-xs-4">
+                <b-pagination
+                  v-model="currentPage"
+                  :total-rows="numFound"
+                  :per-page="rowsPerPage"
+                  responsive="true"
+                  class="table-sm table-border-soft mt-2"
+                  size="md"
+                />
+              </div>
+            </div>
+            <div class="results">
+              <b-table
+                ref="results-table"
+                :fields="fields"
+                :items="rowsProvider"
+                :current-page="currentPage"
+                :per-page="rowsPerPage"
+                responsive="true"
+                class="table-sm table-border-soft search-results-table"
+                hover
+              >
+                <template v-slot:cell(label)="row">
+                  <router-link :to="row.item.toLink">
+                    <!-- eslint-disable-next-line vue/no-v-html -->
+                    <span v-html="row.item.label" />
+                  </router-link>
+                </template>
+                <template v-slot:cell(highlight)="row">
                   <!-- eslint-disable-next-line vue/no-v-html -->
-                  <span v-html="row.item.label" />
-                </router-link>
-              </template>
-              <template v-slot:cell(highlight)="row">
-                <!-- eslint-disable-next-line vue/no-v-html -->
-                <span v-html="row.item.highlight" />
-              </template>
-            </b-table>
+                  <span v-html="row.item.highlight" />
+                </template>
+              </b-table>
+            </div>
           </div>
         </div>
       </div>
@@ -314,7 +322,7 @@ export default {
 
 
 <style lang="scss">
-    @import "~@/style/variables";
+    
 
     .search-results-count {
         margin-left: 5px;
@@ -377,14 +385,36 @@ export default {
         font-weight: bold;
     }
 
-    .search-results-rows {
-        padding-left: 15px;
-        padding-right: 15px;
+    .row.card {
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+
+    .card-body.py-1 {
+      padding-top: 0px;
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+
+    .qry-title {
+      padding: 10px 20px 10px 0px;
+    }
+
+    .results {
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.125);
+      border-radius: 0.25rem;
     }
 
     .search-results-table {
         background-color: #fff;
-        padding: 4px 15px;
+        border-top-style: none;
+    }
+
+    .search-results-table th {
+        border-top-style: none;
+        background-color: #F7F7F7;
     }
 
     /* clear fix */
