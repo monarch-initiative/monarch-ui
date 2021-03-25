@@ -126,7 +126,7 @@
         <div class="search-results-rows">
           <div v-if="searchResults && searchResults.length > 0 ">
             <div class="row">
-                <div class="col-xs-8 qry-title">
+              <div class="col-xs-8 qry-title">
                 <h3>
                   <span class="searchTerm">"{{ query }}"</span> has <span
                     class="searchTerm"
@@ -322,7 +322,6 @@ export default {
 
 
 <style lang="scss">
-    
 
     .search-results-count {
         margin-left: 5px;
