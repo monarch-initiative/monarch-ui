@@ -2,18 +2,194 @@
   <div class="content">
     <h2 class="text-center">Selected Monarch Publications</h2>
       <div class="card">
+        <h3>2021</h3>
+          <div class="text">
+            <p>Gene Ontology Consortium. (2021) <b class="title">The Gene Ontology resource: enriching a GOld mine</b> <i>Nucleic Acids Res.</i> <b>49(D1)</b>:D325-D334. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33290552/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Hannestad LM, Dančík V, Godden M, Suen IW, Huellas-Bruskiewicz KC, Good BM, Mungall CJ, Bruskiewich RM. (2021) <b class="title">Knowledge Beacons: Web services for data harvesting of distributed biomedical knowledge</b>. <i>PLoS One.</i> <b>16(3)</b>:e0231916. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33755673/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Köhler S, Gargano M, Matentzoglu N, Carmody LC, Lewis-Smith D, Vasilevsky NA, Danis D, Balagura G, Baynam G, Brower AM, Callahan TJ, Chute CG, Est JL, Galer PD, Ganesan S, Griese M, Haimel M, Pazmandi J, Hanauer M, Harris NL, Hartnett MJ, Hastreiter M, Hauck F, He Y, Jeske T, Kearney H, Kindle G, Klein C, Knoflach K, Krause R, Lagorce D, McMurry JA, Miller JA, Munoz-Torres MC, Peters RL, Rapp CK, Rath AM, Rind SA, Rosenberg AZ, Segal MM, Seidel MG, Smedley D, Talmy T, Thomas Y, Wiafe SA, Xian J, Yüksel Z, Helbig I, Mungall CJ, Haendel MA, Robinson PN. (2021) <b class="title">The Human Phenotype Ontology in 2021</b>. <i>Nucleic Acids Research</i> <b>49(D1)</b>:D1207-D1217. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33264411/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Luo L, Yan S, Lai PT, Veltri D, Oler A, Xirasagar S, Ghosh R, Similuk M, Robinson PN, Lu Z. (2021) <b class="title">PhenoTagger: A Hybrid Method for Phenotype Concept Recognition using Human Phenotype Ontology</b> <i>Bioinformatics.</i> btab019. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33471061/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Reese JT, Unni D, Callahan TJ, Cappelletti L, Ravanmehr V, Carbon S, Shefchek KA, Good BM, Balhoff JP, Fontana T, Blau H, Matentzoglu N, Harris NL, Munoz-Torres MC, Haendel MA, Robinson PN, Joachimiak MP, Mungall CJ. (2021) <b class="title">KG-COVID-19: A Framework to Produce Customized Knowledge Graphs for COVID-19 Response</b>. <i>Patterns (N Y)</i> <b>2(1)</b>:100155. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33196056/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Rodríguez de Los Santos M, Rivalan M, David FS, Stumpf A, Pitsch J, Tsortouktzidis D, Velasquez LM, Voigt A, Schilling K, Mattei D, Long M, Vogt G, Knaus A, Fischer-Zirnsak B, Wittler L, Timmermann B, Robinson PN, Horn D, Mundlos S, Kornak U, Becker AJ, Schmitz D, Winter Y, Krawitz PM. (2021) <b class="title">A CRISPR-Cas9-engineered mouse model for GPI-anchor deficiency mirrors human phenotypes and exhibits hippocampal synaptic dysfunctions</b>. <i>Proc Natl Acad Sci U S A.</i> <b>118(2)</b>:e2014481118. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33402532/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Vangay P, Burgin J, Johnston A, Beck KL, Berrios DC, Blumberg K, Canon S, Chain P, Chandonia JM, Christianson D, Costes SV, Damerow J, Duncan WD, Dundore-Arias JP, Fagnan K, Galazka JM, Gibbons SM, Hays D, Hervey J, Hu B, Hurwitz BL, Jaiswal P, Joachimiak MP, Kinkel L, Ladau J, Martin SL, McCue LA, Miller K, Mouncey N, Mungall C, Pafilis E, Reddy TBK, Richardson L, Roux S, Schriml LM, Shaffer JP, Sundaramurthi JC, Thompson LR, Timme RE, Zheng J, Wood-Charlson EM, Eloe-Fadrosh EA. (2021) <b class="title">Microbiome Metadata Standards: Report of the National Microbiome Data Collaborative's Workshop and Follow-On Activities</b>. <i>mSystems.</i> <b>6(1)</b>:e01194-20. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33622857/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Vasilevsky NA, Hosseini M, Teplitzky S, Ilik V, Mohammadi E, Schneider J, Kern B, Colomb J, Edmunds SC, Gutzman K, Himmelstein DS, White M, Smith B, O'Keefe L, Haendel M, Holmes KL. (2021) <b class="title">Is authorship sufficient for today's collaborative research? A call for contributor roles</b>. <i>Account Res.</i> <b>28(1)</b>:23-43. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32602379/">pubmed</a>]
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <h3>2020</h3>
+          <div class="text">
+            <p>Arnaud E, Laporte MA, Kim S, Aubert C, Leonelli S, Miro B, Cooper L, Jaiswal P, Kruseman G, Shrestha R, Buttigieg PL, Mungall CJ, Pietragalla J, Agbona A, Muliro J, Detras J, Hualla V, Rathore A, Das RR, Dieng I, Bauchet G, Menda N, Pommier C, Shaw F, Lyon D, Mwanzia L, Juarez H, Bonaiuti E, Chiputwa B, Obileye O, Auzoux S, Yeumo ED, Mueller LA, Silverstein K, Lafargue A, Antezana E, Devare M, King B. (2020) <b class="title">The Ontologies Community of Practice: A CGIAR Initiative for Big Data in Agrifood Systems</b>. <i>Patterns (N Y).</i> <b>1(7)</b>:100105. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33205138/">pubmed</a>] 
+            </p>
+          </div>
+          <div class="text">
+            <p>Carmody LC, Blau H, Danis D, Zhang XA, Gourdine JP, Vasilevsky N, Krawitz P, Thompson MD, Robinson PN. (2020) <b class="title">Significantly different clinical phenotypes associated with mutations in synthesis and transamidase+remodeling glycosylphosphatidylinositol (GPI)-anchor biosynthesis genes</b>. <i>Orphanet J Rare Dis.</i> <b>15(1)</b>:40. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32019583/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Chang WH, Mashouri P, Lozano AX, Johnstone B, Husić M, Olry A, Maiella S, Balci TB, Sawyer SL, Robinson PN, Rath A, Brudno M. (2020) <b class="title">Phenotate: crowdsourcing phenotype annotations as exercises in undergraduate classes</b>. <i>Genet Med.</i> <b>22(8)</b>:1391-1400. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32366968/">pubmed</a>]
+            </p>
+          </div>
+          <div class="title">
+            <p>Cipriani V, Pontikos N, Arno G, Sergouniotis PI, Lenassi E, Thawong P, Danis D, Michaelides M, Webster AR, Moore AT, Robinson PN, Jacobsen JOB, Smedley D. (2020) <b class="title">An Improved Phenotype-Driven Tool for Rare Mendelian Variant Prioritization: Benchmarking Exomiser on Real Patient Whole-Exome Data</b> <i>Genes (Basel).</i> <b>11(4)</b>:460. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32340307/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Duncan WD, Thyvalikakath T, Haendel M, Torniai C, Hernandez P, Song M, Acharya A, Caplan DJ, Schleyer T, Ruttenberg A. (2020) <b class="title">Structuring, reuse and analysis of electronic dental data using the Oral Health and Disease Ontology</b>. <i>J Biomed Semantics.</i> <b>11(1)</b>:8. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32819435/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Gasteiger LM, Robinson PN, Pazmandi J, Boztug K, Seppänen MRJ, Seidel MG; Registry Working Party of the European Society for Immunodeficiencies (ESID). (2020) <b class="title">Supplementation of the ESID registry working definitions for the clinical diagnosis of inborn errors of immunity with encoded human phenotype ontology (HPO) terms</b>. <i>J Allergy Clin Immunol Pract.</i> <b>8(5)</b>:1778. <a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32389282/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Haendel M, Vasilevsky N, Unni D, Bologa C, Harris N, Rehm H, Hamosh A, Baynam G, Groza T, McMurry J, Dawkins H, Rath A, Thaxon C, Bocci G, Joachimiak MP, Köhler S, Robinson PN, Mungall C, Oprea TI. (2020) <b class="title">How many rare diseases are there?</b> <i>Nat Rev Drug Discov.</i> <b>19(2)</b>:77-78. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32020066/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Karlebach G, Hansen P, Veiga DF, Steinhaus R, Danis D, Li S, Anczukow O, Robinson PN. (2020) <b class="title">HBA-DEALS: accurate and simultaneous identification of differential expression and splicing using hierarchical Bayesian analysis</b>. <i>Genome Biol.</i> <b>21(1)</b>:171. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32660516/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Ong E, Wang LL, Schaub J, O'Toole JF, Steck B, Rosenberg AZ, Dowd F, Hansen J, Barisoni L, Jain S, de Boer IH, Valerius MT, Waikar SS, Park C, Crawford DC, Alexandrov T, Anderton CR, Stoeckert C, Weng C, Diehl AD, Mungall CJ, Haendel M, Robinson PN, Himmelfarb J, Iyengar R, Kretzler M, Mooney S, He Y. (2020) <b class="title">Modelling kidney disease using ontology: insights from the Kidney Precision Medicine Project</b>. <i>Nat Rev Nephrol.</i> <b>16(11)</b>:686-696. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32939051/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Petrini A, Mesiti M, Schubach M, Frasca M, Danis D, Re M, Grossi G, Cappelletti L, Castrignanò T, Robinson PN, Valentini G. (2020) <b class="title">parSMURF, a high-performance computing tool for the genome-wide detection of pathogenic variants</b>. <i>Gigascience.</i> <b>9(5)</b>:giaa052. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32444882/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Robinson PN, Haendel MA. (2020) <b class="title">Ontologies, Knowledge Representation, and Machine Learning for Translational Research: Recent Contributions</b>. <i>Yearb Med Inform.</i> <b>29(1)</b>:159-162. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32823310/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Robinson PN, Ravanmehr V, Jacobsen JOB, Danis D, Zhang XA, Carmody LC, Gargano MA, Thaxton CL, Karlebach G, Reese J, Holtgrewe M, Köhler S, McMurry JA, Haendel MA, Smedley D. (2020) <b class="title">Interpretable Clinical Genomics with a Likelihood Ratio Paradigm</b>. <i>Am J Hum Genet.</i> <b>107(3)</b>:403-417. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32755546/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Rubinstein YR, Robinson PN, Gahl WA, Avillach P, Baynam G, Cederroth H, Goodwin RM, Groft SC, Hansson MG, Harris NL, Huser V, Mascalzoni D, McMurry JA, Might M, Nellaker C, Mons B, Paltoo DN, Pevsner J, Posada M, Rockett-Frase AP, Roos M, Rubinstein TB, Taruscio D, van Enckevort E, Haendel MA. (2020) <b class="title">The case for open science: rare diseases</b>. <i>JAMIA Open.</i> <b>3(3)</b>:472-486. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33426479/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Shefchek KA, Harris NL, Gargano M, Matentzoglu N, Unni D, Brush M, Keith D, Conlin T, Vasilevsky N, Zhang XA, Balhoff JP, Babb L, Bello SM, Blau H, Bradford Y, Carbon S, Carmody L, Chan LE, Cipriani V, Cuzick A, Della Rocca M, Dunn N, Essaid S, Fey P, Grove C, Gourdine JP, Hamosh A, Harris M, Helbig I, Hoatlin M, Joachimiak M, Jupp S, Lett KB, Lewis SE, McNamara C, Pendlington ZM, Pilgrim C, Putman T, Ravanmehr V, Reese J, Riggs E, Robb S, Roncaglia P, Seager J, Segerdell E, Similuk M, Storm AL, Thaxon C, Thessen A, Jacobsen JOB, McMurry JA, Groza T, Köhler S, Smedley D, Robinson PN, Mungall CJ, Haendel MA, Munoz-Torres MC, Osumi-Sutherland D. (2020) <b class="title">The Monarch Initiative in 2019: an integrative data and analytic platform connecting phenotypes to genotypes across species</b>. <i>Nucleic Acids Res.</i> <b>48(D1)</b>:D704-D715. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31701156">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Steinhaus R, Gonzalez T, Seelow D, Robinson PN. (2020) <b class="title">Pervasive and CpG-dependent promoter-like characteristics of transcribed enhancers</b>. <i>Nucleic Acids Res.</i> <b>48(10)</b>:5306-5317. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32338759/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Tcheandjieu C, Aguirre M, Gustafsson S, Saha P, Potiny P, Haendel M, Ingelsson E, Rivas MA, Priest JR. (2020) <b class="title">A phenome-wide association study of 26 mendelian genes reveals phenotypic expressivity of common and rare variants within the general population</b>. <i>PLoS Genet</i>. <b>16(11)</b>:e1008802. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33226994/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Thessen AE, Walls RL, Vogt L, Singer J, Warren R, Buttigieg PL, Balhoff JP, Mungall CJ, McGuinness DL, Stucky BJ, Yoder MJ, Haendel MA. (2020) <b class="title">Transforming the study of organisms: Phenomic data models and knowledge bases</b>. <i>PLoS Comput Biol.</i> <b>16(11)</b>:e1008376. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33232313/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Wagner AH, Walsh B, Mayfield G, Tamborero D, Sonkin D, Krysiak K, Deu-Pons J, Duren RP, Gao J, McMurry J, Patterson S, Del Vecchio Fitz C, Pitel BA, Sezerman OU, Ellrott K, Warner JL, Rieke DT, Aittokallio T, Cerami E, Ritter DI, Schriml LM, Freimuth RR, Haendel M, Raca G, Madhavan S, Baudis M, Beckmann JS, Dienstmann R, Chakravarty D, Li XS, Mockus S, Elemento O, Schultz N, Lopez-Bigas N, Lawler M, Goecks J, Griffith M, Griffith OL, Margolin AA. (2020) <b class="title">A harmonized meta-knowledgebase of clinical interpretations of somatic genomic variants in cancer</b>. <i>Nat Genet.</i> <b>52(4)</b>:448-457. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32246132/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Wood V, Carbon S, Harris MA, Lock A, Engel SR, Hill DP, Van Auken K, Attrill H, Feuermann M, Gaudet P, Lovering RC, Poux S, Rutherford KM, Mungall CJ. (2020) <b class="title">Term Matrix: a novel Gene Ontology annotation quality control system based on ontology term co-annotation patterns</b>. <i>Open Biol.</i> <b>10(9)</b>:200149. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32875947/">pubmed</a>]
+            </p>
+          </div>
+        </div>
+        <div class ="card">
         <h3>2019</h3>
+          <div class="text">
+            <p>Ahalt SC, Chute CG, Fecho K, Glusman G, Hadlock J, Taylor CO, Pfaff ER, Robinson PN, Solbrig H, Ta C, Tatonetti N, Weng C; Biomedical Data Translator Consortium. (2019) <b class="title">Clinical Data: Sources and Types, Regulatory Constraints, Applications</b>. <i>Clin Transl Sci.</i> <b>12(4)</b>:329-333. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/31074176/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Altinbas L, Bormann N, Lehmann D, Jeuthe S, Wulsten D, Kornak U, Robinson PN, Wildemann B, Kararigas G. (2019) <b class="title">Assessment of Bones Deficient in Fibrillin-1 Microfibrils Reveals Pronounced Sex Differences</b>. <i>Int J Mol Sci.</i> <b>20(23)</b>:6059. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/31805661">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Bhushan R, Altinbas L, Jäger M, Zaradzki M, Lehmann D, Timmermann B, Clayton NP, Zhu Y, Kallenbach K, Kararigas G, Robinson PN. (2019) <b class="title">An integrative systems approach identifies novel candidates in Marfan syndrome-related pathophysiology</b>. <i>J Cell Mol Med.</i> <b>23(4)</b>:2526-2535. <a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/30677223">pubmed</a>]
+            </p>
+          </div>
           <div class="text">
             <p>Cacheiro P, Haendel MA, Smedley D; International Mouse Phenotyping Consortium 
                and the Monarch Initiative (2019) <b class="title">New models for human disease from the International
                Mouse Phenotyping Consortium</b>. <i>Mamm Genome </i> <b>30(5-6)</b>:143-150. 
-               [<a href="http://www.ncbi.nlm.nih.gov/pubmed/31127358">pubmed</a>]
+               [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31127358">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Carbon S, Champieux R, McMurry JA, Winfree L, Wyatt LR, Haendel MA. (2019) <b class="title">An analysis and metric of reusable data licensing practices for biomedical resources</b>. <i>PLoS One</i>. <b>14(3)</b>:e0213090. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30917137">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>
+              Gourdine JF, Brush MH, Vasilevsky NA, Shefchek K, Köhler S, Matentzoglu N, Munoz-Torres MC, McMurry JA, Zhang XA, Robinson PN, Haendel MA. (2019) <b class="title">Representing glycophenotypes: semantic unification of glycobiology resources for disease discovery</b>. <i>Database (Oxford). </i> baz114. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31735951">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Hansen P, Ali S, Blau H, Danis D, Hecht J, Kornak U, Lupiáñez DG, Mundlos S, Steinhaus R, Robinson PN. (2019) <b class="title">GOPHER: Generator Of Probes for capture Hi-C Experiments at high Resolution</b>. <i>BMC Genomics.</i> <b>20(1)</b>:40. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30642251">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Hansen P, Gargano M, Hecht J, Ibn-Salem J, Karlebach G, Roehr JT, Robinson PN. (2019) <b class="title">Computational Processing and Quality Control of Hi-C, Capture Hi-C and Capture-C Data</b>. <i>Genes (Basel).</i> <b>10(7)</b>:548. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31323892">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Hsieh TC, Mensah MA, Pantel JT, Aguilar D, Bar O, Bayat A, Becerra-Solano L, Bentzen HB, Biskup S, Borisov O, Braaten O, Ciaccio C, Coutelier M, Cremer K, Danyel M, Daschkey S, Eden HD, Devriendt K, Wilson S, Douzgou S, Đukić D, Ehmke N, Fauth C, Fischer-Zirnsak B, Fleischer N, Gabriel H, Graul-Neumann L, Gripp KW, Gurovich Y, Gusina A, Haddad N, Hajjir N, Hanani Y, Hertzberg J, Hoertnagel K, Howell J, Ivanovski I, Kaindl A, Kamphans T, Kamphausen S, Karimov C, Kathom H, Keryan A, Knaus A, Köhler S, Kornak U, Lavrov A, Leitheiser M, Lyon GJ, Mangold E, Reina PM, Carrascal AM, Mitter D, Herrador LM, Nadav G, Nöthen M, Orrico A, Ott CE, Park K, Peterlin B, Pölsler L, Raas-Rothschild A, Randolph L, Revencu N, Fagerberg CR, Robinson PN, Rosnev S, Rudnik S, Rudolf G, Schatz U, Schossig A, Schubach M, Shanoon O, Sheridan E, Smirin-Yosef P, Spielmann M, Suk EK, Sznajer Y, Thiel CT, Thiel G, Verloes A, Vrecar I, Wahl D, Weber I, Winter K, Wiśniewska M, Wollnik B, Yeung MW, Zhao M, Zhu N, Zschocke J, Mundlos S, Horn D, Krawitz PM. (2019) <b class="title">PEDIA: prioritization of exome data by image analysis</b> <i>Genet Med.</i> <b>21(12)</b>:2807-2814. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31164752">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Jia G, Li Y, Zhang H, Chattopadhyay I, Boeck Jensen A, Blair DR, Davis L, Robinson PN, Dahlén T, Brunak S, Benson M, Edgren G, Cox NJ, Gao X, Rzhetsky A. (2019) <b class="title">Estimating heritability and genetic correlations from large health datasets in the absence of genetic data</b>. <i>Nat Commun.</i> <b>10(1)</b>:5508. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31796735">pubmed</a>] 
             </p>
           </div>
           <div class="text">
             <p>
             Köhler S, Carmody L, Vasilevsky N, Jacobsen JOB, Danis D, Gourdine JP, Gargano M, Harris NL, Matentzoglu N, McMurry JA, Osumi-Sutherland D, Cipriani V, Balhoff JP, Conlin T, Blau H, Baynam G, Palmer R, Gratian D, Dawkins H, Segal M, Jansen AC, Muaz A, Chang WH, Bergerson J, Laulederkind SJF, Yüksel Z, Beltran S, Freeman AF, Sergouniotis PI, Durkin D, Storm AL, Hanauer M, Brudno M, Bello SM, Sincan M, Rageth K, Wheeler MT, Oegema R, Lourghi H, Della Rocca MG, Thompson R, Castellanos F, Priest J, Cunningham-Rundles C, Hegde A, Lovering RC, Hajek C, Olry A, Notarangelo L, Similuk M, Zhang XA,  Gómez-Andrés D, Lochmüller H, Dollfus H, Rosenzweig S, Marwaha S, Rath A, Sullivan K, Smith C, Milner JD, Leroux D, Boerkoel CF, Klion A, Carter MC, Groza T, Smedley D, Haendel MA, Mungall C, Robinson PN (2019) <b class="title">Expansion of the Human Phenotype Ontology (HPO) knowledge base and resources</b>.    <i> Nucleic Acids Res</i>  <b> 47(D1)</b>:D1018-D1027. 
             [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30476213">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Köhler S, Øien NC, Buske OJ, Groza T, Jacobsen JOB, McNamara C, Vasilevsky N, Carmody LC, Gourdine JP, Gargano M, McMurry JA, Danis D, Mungall CJ, Smedley D, Haendel M, Robinson PN. (2019) <b class="title">Encoding Clinical Data with the Human Phenotype Ontology for Computational Differential Diagnostics</b>. <i>Curr Protoc Hum Gene</i>. <b>103(1)</b>:e92. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31479590">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Nellåker C, Alkuraya FS, Baynam G, Bernier RA, Bernier FPJ, Boulanger V, Brudno M, Brunner HG, Clayton-Smith J, Cogné B, Dawkins HJS, deVries BBA, Douzgou S, Dudding-Byth T, Eichler EE, Ferlaino M, Fieggen K, Firth HV, FitzPatrick DR, Gration D, Groza T, Haendel M, Hallowell N, Hamosh A, Hehir-Kwa J, Hitz MP, Hughes M, Kini U, Kleefstra T, Kooy RF, Krawitz P, Küry S, Lees M, Lyon GJ, Lyonnet S, Marcadier JL, Meyn S, Moslerová V, Politei JM, Poulton CC, Raymond FL, Reijnders MRF, Robinson PN, Romano C, Rose CM, Sainsbury DCG, Schofield L, Sutton VR, Turnovec M, Van Dijck A, Van Esch H, Wilkie AOM; Minerva Consortium. (2019) <b class="title">Enabling Global Clinical Collaborations on Identifiable Patient Data: The Minerva Initiative</b>. <i>Front Genet.</i> <b>10</b>:611. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31417602">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>
+              Sergouniotis PI, Maxime E, Leroux D, Olry A, Thompson R, Rath A, Robinson PN, Dollfus H; ERN-EYE Ontology Study Group. (2019) <b class="title">An ontological foundation for ocular phenotypes and rare eye diseases</b>. <i>Orphanet J Rare Dis.</i> <b>14(1)</b>:8. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30626441">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Sickle Cell Disease Ontology Working Group. (2019) <b class="title">The Sickle Cell Disease Ontology: enabling universal sickle cell-based knowledge representation</b> <i>Database (Oxford).</i> [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31769834">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Taylor DM, Aronow BJ, Tan K, Bernt K, Salomonis N, Greene CS, Frolova A, Henrickson SE, Wells A, Pei L, Jaiswal JK, Whitsett J, Hamilton KE, MacParland SA, Kelsen J, Heuckeroth RO, Potter SS, Vella LA, Terry NA, Ghanem LR, Kennedy BC, Helbig I, Sullivan KE, Castelo-Soccio L, Kreigstein A, Herse F, Nawijn MC, Koppelman GH, Haendel M, Harris NL, Rokita JL, Zhang Y, Regev A, Rozenblatt-Rosen O, Rood JE, Tickle TL, Vento-Tormo R, Alimohamed S, Lek M, Mar JC, Loomes KM, Barrett DM, Uapinyoying P, Beggs AH, Agrawal PB, Chen YW, Muir AB, Garmire LX, Snapper SB, Nazarian J, Seeholzer SH, Fazelinia H, Singh LN, Faryabi RB, Raman P, Dawany N, Xie HM, Devkota B, Diskin SJ, Anderson SA, Rappaport EF, Peranteau W, Wikenheiser-Brokamp KA, Teichmann S, Wallace D, Peng T, Ding YY, Kim MS, Xing Y, Kong SW, Bönnemann CG, Mandl KD, White PS. (2019) <b class="title">The Pediatric Cell Atlas: Defining the Growth Phase of Human Development at Single-Cell Resolution</b>. <i>Dev Cell.</i> <b>49(1)</b>:10-29. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30930166">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Zhang XA, Yates A, Vasilevsky N, Gourdine JP, Callahan TJ, Carmody LC, Danis D, Joachimiak MP, Ravanmehr V, Pfaff ER, Champion J, Robasky K, Xu H, Fecho K, Walton NA, Zhu RL, Ramsdill J, Mungall CJ, Köhler S, Haendel MA, McDonald CJ, Vreeman DJ, Peden DB, Bennett TD, Feinstein JA, Martin B, Stefanski AL, Hunter LE, Chute CG, Robinson PN. (2019) <b class="title">Semantic integration of clinical laboratory tests from electronic health records for deep phenotyping and biomarker discovery</b>. <i>NPJ Digit Med.</i> <b>2</b>:32. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31119199">pubmed</a>]
             </p>
           </div>
         </div>
