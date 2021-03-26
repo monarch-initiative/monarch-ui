@@ -39,6 +39,10 @@
         <div class="card">
           <h3>2020</h3>
           <div class="text">
+            <p>Alliance of Genome Resources Consortium. (2020) <b class="title">Alliance of Genome Resources Portal: unified model organism research platform</b>. <i>Nucleic Acids Res.</i> <b>48(D1)</b>:D650-D658. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/31552413/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
             <p>Arnaud E, Laporte MA, Kim S, Aubert C, Leonelli S, Miro B, Cooper L, Jaiswal P, Kruseman G, Shrestha R, Buttigieg PL, Mungall CJ, Pietragalla J, Agbona A, Muliro J, Detras J, Hualla V, Rathore A, Das RR, Dieng I, Bauchet G, Menda N, Pommier C, Shaw F, Lyon D, Mwanzia L, Juarez H, Bonaiuti E, Chiputwa B, Obileye O, Auzoux S, Yeumo ED, Mueller LA, Silverstein K, Lafargue A, Antezana E, Devare M, King B. (2020) <b class="title">The Ontologies Community of Practice: A CGIAR Initiative for Big Data in Agrifood Systems</b>. <i>Patterns (N Y).</i> <b>1(7)</b>:100105. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/33205138/">pubmed</a>] 
             </p>
           </div>
@@ -68,6 +72,10 @@
           </div>
           <div class="text">
             <p>Karlebach G, Hansen P, Veiga DF, Steinhaus R, Danis D, Li S, Anczukow O, Robinson PN. (2020) <b class="title">HBA-DEALS: accurate and simultaneous identification of differential expression and splicing using hierarchical Bayesian analysis</b>. <i>Genome Biol.</i> <b>21(1)</b>:171. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32660516/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Mabee PM, Balhoff JP, Dahdul WM, Lapp H, Mungall CJ, Vision TJ. (2020) <b class="title">A Logical Model of Homology for Comparative Biology</b>. <i>Syst Biol.</i> <b>69(2)</b>:345-362. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/31596473/">pubmed</a>]
             </p>
           </div>
           <div class="text">
@@ -107,11 +115,19 @@
             </p>
           </div>
           <div class="text">
+            <p>Touré V, Vercruysse S, Acencio ML, Lovering RC, Orchard S, Bradley G, Casals-Casas C, Chaouiya C, Del-Toro N, Flobak Å, Gaudet P, Hermjakob H, Hoyt CT, Licata L, Lægreid A, Mungall CJ, Niknejad A, Panni S, Perfetto L, Porras P, Pratt D, Saez-Rodriguez J, Thieffry D, Thomas PD, Türei D, Kuiper M. (2020) <b class="title">The Minimum Information about a Molecular Interaction Causal Statement (MI2CAST)</b>. <i>Bioinformatics.</i> btaa622. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32637990/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
             <p>Wagner AH, Walsh B, Mayfield G, Tamborero D, Sonkin D, Krysiak K, Deu-Pons J, Duren RP, Gao J, McMurry J, Patterson S, Del Vecchio Fitz C, Pitel BA, Sezerman OU, Ellrott K, Warner JL, Rieke DT, Aittokallio T, Cerami E, Ritter DI, Schriml LM, Freimuth RR, Haendel M, Raca G, Madhavan S, Baudis M, Beckmann JS, Dienstmann R, Chakravarty D, Li XS, Mockus S, Elemento O, Schultz N, Lopez-Bigas N, Lawler M, Goecks J, Griffith M, Griffith OL, Margolin AA. (2020) <b class="title">A harmonized meta-knowledgebase of clinical interpretations of somatic genomic variants in cancer</b>. <i>Nat Genet.</i> <b>52(4)</b>:448-457. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32246132/">pubmed</a>]
             </p>
           </div>
           <div class="text">
             <p>Wood V, Carbon S, Harris MA, Lock A, Engel SR, Hill DP, Van Auken K, Attrill H, Feuermann M, Gaudet P, Lovering RC, Poux S, Rutherford KM, Mungall CJ. (2020) <b class="title">Term Matrix: a novel Gene Ontology annotation quality control system based on ontology term co-annotation patterns</b>. <i>Open Biol.</i> <b>10(9)</b>:200149. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32875947/">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Wood-Charlson EM, Anubhav, Auberry D, Blanco H, Borkum MI, Corilo YE, Davenport KW, Deshpande S, Devarakonda R, Drake M, Duncan WD, Flynn MC, Hays D, Hu B, Huntemann M, Li PE, Lipton M, Lo CC, Millard D, Miller K, Piehowski PD, Purvine S, Reddy TBK, Shakya M, Sundaramurthi JC, Vangay P, Wei Y, Wilson BE, Canon S, Chain PSG, Fagnan K, Martin S, McCue LA, Mungall CJ, Mouncey NJ, Maxon ME, Eloe-Fadrosh EA. (2020) <b class="title">The National Microbiome Data Collaborative: enabling microbiome science</b>. <i>Nat Rev Microbiol.</i> <b>18(6)</b>:313-314. [<a target="__blank" href="https://pubmed.ncbi.nlm.nih.gov/32350400/">pubmed</a>]
             </p>
           </div>
         </div>
@@ -141,6 +157,10 @@
             </p>
           </div>
           <div class="text">
+            <p>Giglio M, Tauber R, Nadendla S, Munro J, Olley D, Ball S, Mitraka E, Schriml LM, Gaudet P, Hobbs ET, Erill I, Siegele DA, Hu JC, Mungall C, Chibucos MC. (2109) <b class="title">ECO, the Evidence & Conclusion Ontology: community standard for evidence information</b>. <i>Nucleic Acids Res.</i> <b>47(D1)</b>:D1186-D1194. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30407590">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
             <p>
               Gourdine JF, Brush MH, Vasilevsky NA, Shefchek K, Köhler S, Matentzoglu N, Munoz-Torres MC, McMurry JA, Zhang XA, Robinson PN, Haendel MA. (2019) <b class="title">Representing glycophenotypes: semantic unification of glycobiology resources for disease discovery</b>. <i>Database (Oxford). </i> baz114. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31735951">pubmed</a>]
             </p>
@@ -155,6 +175,10 @@
           </div>
           <div class="text">
             <p>Hsieh TC, Mensah MA, Pantel JT, Aguilar D, Bar O, Bayat A, Becerra-Solano L, Bentzen HB, Biskup S, Borisov O, Braaten O, Ciaccio C, Coutelier M, Cremer K, Danyel M, Daschkey S, Eden HD, Devriendt K, Wilson S, Douzgou S, Đukić D, Ehmke N, Fauth C, Fischer-Zirnsak B, Fleischer N, Gabriel H, Graul-Neumann L, Gripp KW, Gurovich Y, Gusina A, Haddad N, Hajjir N, Hanani Y, Hertzberg J, Hoertnagel K, Howell J, Ivanovski I, Kaindl A, Kamphans T, Kamphausen S, Karimov C, Kathom H, Keryan A, Knaus A, Köhler S, Kornak U, Lavrov A, Leitheiser M, Lyon GJ, Mangold E, Reina PM, Carrascal AM, Mitter D, Herrador LM, Nadav G, Nöthen M, Orrico A, Ott CE, Park K, Peterlin B, Pölsler L, Raas-Rothschild A, Randolph L, Revencu N, Fagerberg CR, Robinson PN, Rosnev S, Rudnik S, Rudolf G, Schatz U, Schossig A, Schubach M, Shanoon O, Sheridan E, Smirin-Yosef P, Spielmann M, Suk EK, Sznajer Y, Thiel CT, Thiel G, Verloes A, Vrecar I, Wahl D, Weber I, Winter K, Wiśniewska M, Wollnik B, Yeung MW, Zhao M, Zhu N, Zschocke J, Mundlos S, Horn D, Krawitz PM. (2019) <b class="title">PEDIA: prioritization of exome data by image analysis</b> <i>Genet Med.</i> <b>21(12)</b>:2807-2814. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31164752">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Jackson RC, Balhoff JP, Douglass E, Harris NL, Mungall CJ, Overton JA. (2019) <b class="title">ROBOT: A Tool for Automating Ontology Workflows</b>. <i>BMC Bioinformatics.</i> <b>20(1)</b>:407. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31357927">pubmed</a>]
             </p>
           </div>
           <div class="text">
@@ -186,6 +210,14 @@
           </div>
           <div class="text">
             <p>Taylor DM, Aronow BJ, Tan K, Bernt K, Salomonis N, Greene CS, Frolova A, Henrickson SE, Wells A, Pei L, Jaiswal JK, Whitsett J, Hamilton KE, MacParland SA, Kelsen J, Heuckeroth RO, Potter SS, Vella LA, Terry NA, Ghanem LR, Kennedy BC, Helbig I, Sullivan KE, Castelo-Soccio L, Kreigstein A, Herse F, Nawijn MC, Koppelman GH, Haendel M, Harris NL, Rokita JL, Zhang Y, Regev A, Rozenblatt-Rosen O, Rood JE, Tickle TL, Vento-Tormo R, Alimohamed S, Lek M, Mar JC, Loomes KM, Barrett DM, Uapinyoying P, Beggs AH, Agrawal PB, Chen YW, Muir AB, Garmire LX, Snapper SB, Nazarian J, Seeholzer SH, Fazelinia H, Singh LN, Faryabi RB, Raman P, Dawany N, Xie HM, Devkota B, Diskin SJ, Anderson SA, Rappaport EF, Peranteau W, Wikenheiser-Brokamp KA, Teichmann S, Wallace D, Peng T, Ding YY, Kim MS, Xing Y, Kong SW, Bönnemann CG, Mandl KD, White PS. (2019) <b class="title">The Pediatric Cell Atlas: Defining the Growth Phase of Human Development at Single-Cell Resolution</b>. <i>Dev Cell.</i> <b>49(1)</b>:10-29. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/30930166">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Thomas PD, Hill DP, Mi H, Osumi-Sutherland D, Van Auken K, Carbon S, Balhoff JP, Albou LP, Good B, Gaudet P, Lewis SE, Mungall CJ. (2019) <b class="title">Gene Ontology Causal Activity Modeling (GO-CAM) moves beyond GO annotations to structured descriptions of biological functions and systems</b>. <i>Nat Genet.</i> <b>51(10)</b>:1429-1433. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31548717">pubmed</a>]
+            </p>
+          </div>
+          <div class="text">
+            <p>Walls RL, Cooper L, Elser J, Gandolfo MA, Mungall CJ, Smith B, Stevenson DW, Jaiswal P. (2019) <b class="title">The Plant Ontology Facilitates Comparisons of Plant Development Stages Across Species</b>. <i>Front Plant Sci.</i> <b>10</b>:631. [<a target="__blank" href="http://www.ncbi.nlm.nih.gov/pubmed/31214208">pubmed</a>]
             </p>
           </div>
           <div class="text">
