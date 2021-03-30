@@ -2,7 +2,7 @@
   <div>
     <div v-if="activeCarousel" class="disease-carousel">
       <h3 class="carousel-title">
-        Featured Diseases {{ featureDate }}
+        Featured Diseases
       </h3>
       <p class="carousel-sub">
         We are always updating our corpus of disease - phenotype associations to support current scientific understanding of disease.
