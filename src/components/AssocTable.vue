@@ -15,7 +15,8 @@
       <taxon-filter v-model="taxonFilter" :is-visible="isTaxonShowing" @toggle-filter="toggleTaxonFilter($event)" />
       <div>
         <h5>
-          <strong v-if="totalAssociations > 0">{{ totalAssociations }}</strong>
+          <strong v-if="cardType === 'phenotype' && totalAssociations >= 0">{{ totalAssociations }}</strong>
+          <strong v-else-if="totalAssociations > 0">{{ totalAssociations }}</strong>
           {{ cardType }} associations.
         </h5>
 
@@ -30,131 +31,198 @@
         </b-button>
         <br>
       </div>
-      <b-table
-        ref="tableRef"
-        :items="rowsProvider"
-        :busy="tableBusy"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="rowsPerPage"
-        responsive="true"
-        class="table-sm"
-      >
-        <template v-if="hasTaxon" v-slot:cell(taxon)="data">
-          <i>{{ data.item.taxonLabel }}</i>
+      <div v-if="cardType === 'phenotype' && totalAssociations == 0">
+        <template v-if="nodeType === 'gene'">
+          We are not aware of any authoritative sources of observed human phenotypes
+          <span v-if="altDisplayGene == 0">
+            or diseases
+          </span>
+          for this gene.
+          <span v-if="altDisplayGene > 0">
+            However, we encourage you to view the available
+          </span>
+          <span v-if="altDisplayGene == 1">
+            <a :href="this.$route.path + '#ortholog-phenotype'">{{ cardCounts['ortholog-phenotype'] }}
+              ortholog phenotype(s)</a> in other species.
+          </span>
+          <span v-if="altDisplayGene == 2">
+            <a :href="this.$route.path + '#causal-disease'">{{ cardCounts['causal-disease'] }}
+              associated disease(s)</a>.
+          </span>
+          <span v-if="altDisplayGene == 3">
+            <a :href="this.$route.path + '#correlated-disease'">{{ cardCounts['correlated-disease'] }}
+              associated disease(s)</a>.
+          </span>
+          <span v-if="altDisplayGene == 4">
+            <a :href="this.$route.path + '#ortholog-disease'">{{ cardCounts['ortholog-disease'] }}
+              associated disease(s)</a>.
+          </span>
         </template>
+        <template v-else-if="nodeType === 'disease'">
+          We are not aware of any publicly available source data for phenotypes
+          <span v-if="altDisplayDisease == 0">
+            or genes
+          </span>
+          for this disease.
+          <span v-if="altDisplayDisease > 0">
+            However, we encourage you to view the available
+          </span>
+          <span v-if="altDisplayDisease == 1">
+            <a :href="this.$route.path + '#causal-gene'">{{ cardCounts['causal-gene'] }}
+              causal gene(s)</a>.
+          </span>
+          <span v-if="altDisplayDisease == 2">
+            <a :href="this.$route.path + '#correlated-gene'">{{ cardCounts['correlated-gene'] }}
+              correlated gene(s)</a>.
+          </span>
+          <span v-if="altDisplayDisease == 3">
+            <a :href="this.$route.path + '#gene'">{{ cardCounts['gene'] }}
+              associated gene(s)</a>.
+          </span>
+        </template>
+        <template v-else-if="nodeType === 'variant'">
+          We are not aware of any phenotypes
+          <span v-if="cardCounts['disease'] == 0">
+            or diseases
+          </span>
+          specifically associated with this variant.
+          <span v-if="cardCounts['disease'] > 0">
+            However, we encourage you to view the available
+            <a :href="this.$route.path + '#disease'">{{ cardCounts['disease'] }}
+              associated disease(s)</a>.
+          </span>
+        </template>
+        We are always improving our knowledgebase; to suggest a new source,
+        <a href="https://github.com/monarch-initiative/helpdesk/issues" target="_blank">please submit a ticket</a>.
+      </div>
 
-        <template v-slot:cell(relation)="data">
-          <small>
+      <div v-show="!(cardType === 'phenotype' && totalAssociations == 0)">
+        <b-table
+          ref="tableRef"
+          :items="rowsProvider"
+          :busy="tableBusy"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="rowsPerPage"
+          responsive="true"
+          class="table-sm"
+        >
+          <template v-if="hasTaxon" v-slot:cell(taxon)="data">
+            <i>{{ data.item.taxonLabel }}</i>
+          </template>
+
+          <template v-slot:cell(relation)="data">
+            <small>
+              <a
+                :href="data.item.relation.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {{ data.item.relation.label }}
+              </a>
+            </small>
+          </template>
+
+          <template v-slot:cell(assocObject)="data">
+            <template v-if="data.item.objectLink">
+              <strong>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
+              </strong>
+            </template>
+            <template v-else>
+              <strong>
+                {{ data.item.assocObject }}
+              </strong>
+            </template>
+          </template>
+
+          <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
+            <template v-if="data.item.subjectLink">
+              <strong>
+                <!-- eslint-disable-next-line vue/no-v-html -->
+                <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
+                  {{ data.item.assocSubject }}
+                </router-link>
+              </strong>
+            </template>
+            <template v-else>
+              <strong>
+                {{ data.item.assocSubject }}
+              </strong>
+            </template>
+          </template>
+
+          <template v-if="hasFrequencyOnset" v-slot:cell(frequency)="data">
             <a
-              :href="data.item.relation.url"
+              v-if="data.item.frequency && nodeId === data.item.subjectCurie"
+              :href="data.item.frequency.url"
               target="_blank"
               rel="noopener noreferrer"
             >
-              {{ data.item.relation.label }}
+              <small>
+                {{ data.item.frequency.label }}
+              </small>
             </a>
-          </small>
-        </template>
-
-        <template v-slot:cell(assocObject)="data">
-          <template v-if="data.item.objectLink">
-            <strong>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.objectLink" v-html="$sanitizeText(data.item.assocObject)" />
-            </strong>
           </template>
-          <template v-else>
-            <strong>
-              {{ data.item.assocObject }}
-            </strong>
+
+          <template v-if="hasFrequencyOnset" v-slot:cell(onset)="data">
+            <a
+              v-if="data.item.onset && nodeId === data.item.subjectCurie"
+              :href="data.item.onset.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <small>
+                {{ data.item.onset.label }}
+              </small>
+            </a>
           </template>
-        </template>
 
-        <template v-if="isGroup || cardType.includes('ortholog')" v-slot:cell(assocSubject)="data">
-          <template v-if="data.item.subjectLink">
-            <strong>
-              <!-- eslint-disable-next-line vue/no-v-html -->
-              <router-link :to="data.item.subjectLink" v-html="$sanitizeText(data.item.assocSubject)">
-                {{ data.item.assocSubject }}
-              </router-link>
-            </strong>
+          <template v-slot:cell(support)="data">
+            <b-button
+              :pressed.sync="data.item._showDetails"
+              size="small"
+              class="btn btn-xs px-1 py-0 m-0"
+              variant="outline-info"
+            >
+              <span v-if="data.item._showDetails">
+                &blacktriangledown;&nbsp;
+              </span>
+              <span v-else>
+                &blacktriangleright;&nbsp;
+              </span>
+
+              <span v-for="(icon, index) in data.item.supportIcons" :key="index">
+                <i :class="icon" class="fa fa-fw" />
+              </span>
+              <small>{{ data.item.supportLength }}</small>
+            </b-button>
           </template>
-          <template v-else>
-            <strong>
-              {{ data.item.assocSubject }}
-            </strong>
+
+          <template v-slot:row-details="row">
+            <EvidenceViewer
+              :evidence="row.item.evidence"
+              :evidence-cache="evidenceCache"
+              :node-id="nodeId"
+              :node-label="nodeLabel"
+              :node-type="nodeType"
+              :subject-id="row.item.subjectCurie"
+              :subject-label="row.item.assocSubject"
+              :card-type="cardType"
+            />
           </template>
-        </template>
-
-        <template v-if="hasFrequencyOnset" v-slot:cell(frequency)="data">
-          <a
-            v-if="data.item.frequency && nodeId === data.item.subjectCurie"
-            :href="data.item.frequency.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <small>
-              {{ data.item.frequency.label }}
-            </small>
-          </a>
-        </template>
-
-        <template v-if="hasFrequencyOnset" v-slot:cell(onset)="data">
-          <a
-            v-if="data.item.onset && nodeId === data.item.subjectCurie"
-            :href="data.item.onset.url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <small>
-              {{ data.item.onset.label }}
-            </small>
-          </a>
-        </template>
-
-        <template v-slot:cell(support)="data">
-          <b-button
-            :pressed.sync="data.item._showDetails"
-            size="small"
-            class="btn btn-xs px-1 py-0 m-0"
-            variant="outline-info"
-          >
-            <span v-if="data.item._showDetails">
-              &blacktriangledown;&nbsp;
-            </span>
-            <span v-else>
-              &blacktriangleright;&nbsp;
-            </span>
-
-            <span v-for="(icon, index) in data.item.supportIcons" :key="index">
-              <i :class="icon" class="fa fa-fw" />
-            </span>
-            <small>{{ data.item.supportLength }}</small>
-          </b-button>
-        </template>
-
-        <template v-slot:row-details="row">
-          <EvidenceViewer
-            :evidence="row.item.evidence"
-            :evidence-cache="evidenceCache"
-            :node-id="nodeId"
-            :node-label="nodeLabel"
-            :node-type="nodeType"
-            :subject-id="row.item.subjectCurie"
-            :subject-label="row.item.assocSubject"
-            :card-type="cardType"
-          />
-        </template>
-      </b-table>
-      <b-pagination
-        v-if="totalAssociations > rowsPerPage"
-        v-model="currentPage"
-        :per-page="rowsPerPage"
-        :total-rows="totalAssociations"
-        class="pag-width my-1"
-        align="center"
-        size="md"
-      />
+        </b-table>
+        <b-pagination
+          v-if="totalAssociations > rowsPerPage"
+          v-model="currentPage"
+          :per-page="rowsPerPage"
+          :total-rows="totalAssociations"
+          class="pag-width my-1"
+          align="center"
+          size="md"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -205,7 +273,12 @@ export default {
       type: Boolean,
       required: false,
       default: false
-    }
+    },
+    cardCounts: {
+      type: Object,
+      required: false,
+      default: null,
+    },
   },
   data() {
     return {
@@ -229,6 +302,32 @@ export default {
       filterActive: null,
       isTaxonShowing: this.isFacetsShowing
     };
+  },
+  computed: {
+    altDisplayGene() {
+      let n = 0;
+      if (this.cardCounts['ortholog-phenotype'] > 0) {
+        n = 1;
+      } else if (this.cardCounts['causal-disease'] > 0) {
+        n = 2;
+      } else if (this.cardCounts['correlated-disease'] > 0) {
+        n = 3;
+      } else if (this.cardCounts['ortholog-disease'] > 0) {
+        n = 4;
+      }
+      return n;
+    },
+    altDisplayDisease() {
+      let n = 0;
+      if (this.cardCounts['causal-gene'] > 0) {
+        n = 1;
+      } else if (this.cardCounts['correlated-gene'] > 0) {
+        n = 2;
+      } else if (this.cardCounts.gene > 0) {
+        n = 3;
+      }
+      return n;
+    }
   },
   watch: {
     cardType() {

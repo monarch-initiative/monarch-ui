@@ -252,7 +252,7 @@
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
-          <div v-if="!expandedCard && histoPhenoData.categories" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
+          <div v-if="!expandedCard && histoPhenoData.categories && (counts['phenotype'] > 0)" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
             <div class="node-content-section-content associated-phenotypes">
               <h5>Associated Phenotypes</h5>
               <div class="histo-pheno-wrapper">
@@ -276,6 +276,7 @@
               :node-id="nodeId"
               :node-label="node.label"
               :is-group="isGroup"
+              :card-counts="counts"
             />
           </div>
         </div>
@@ -600,6 +601,9 @@ export default {
           const count = (associationCounts && associationCounts.counts) || 0;
           this.counts[cardType] = count;
           if (count > 0) {
+            nonEmptyCards.push(cardType);
+          } else if (cardType === 'phenotype' && (this.nodeType === 'gene' || this.nodeType === 'variant' || this.nodeType === 'disease')) {
+            // show phenotype for genes, variants, and diseases even if zero
             nonEmptyCards.push(cardType);
           }
         });
