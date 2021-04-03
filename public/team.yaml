@@ -48,6 +48,11 @@ institutions:
       title: Scientific Software Engineer
       alumni: false
       bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
+    - name: Kevin Schaper
+      picture: img/team/KevinSchaper.jpg
+      title: Scientific Software Engineer
+      alumni: false
+      bio: Kevin is a Software Engineer for the Monarch team at Oregon State University where he works on data ingest, search and the Monarch UI. He has a BS in Computer Science from University of Oregon and significant experience working with model organism data, with a special interest in search user interfaces and the supporting infrastructure.
     - name: Kent Shefchek
       picture: img/team/KentShefchek.jpg
       title: Bioinformatics Software Engineer
