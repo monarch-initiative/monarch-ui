@@ -836,7 +836,7 @@ export default {
 
       if (this.nodeType === 'gene') {
         const xref = {};
-        const prefix = this.node.id.split(':')[0];
+        const prefix = this.node.id.split(':')[0].toLowerCase();
         xref.label = prefix;
         xref.id = this.node.id;
         xref.uri = getXrefUrl(prefix, this.node.id, this.node.label.split(' ')[0]);
