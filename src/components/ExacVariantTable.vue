@@ -2,7 +2,7 @@
   <div
     v-if="showTable"
     id="vue-exac"
-    class="col-md-8"
+    class="col-xs-12 col-md-10 col-lg-9 table-responsive"
   >
     <h2 class="p-2">
       ExAC Population Frequencies
