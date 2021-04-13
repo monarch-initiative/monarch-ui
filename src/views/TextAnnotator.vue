@@ -116,6 +116,7 @@
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import * as biolink from '@/api/BioLink';
+import { validCatToPath } from '@/lib/CategoryMap';
 
 
 export default {
@@ -242,12 +243,16 @@ export default {
 
       const annotations = data.split('|');
       annotations.forEach((annotation) => {
-        let finalBuiltAnnotation = '';
+        let finalBuiltAnnotation = '<div class="annotation"><span class="ontology-id">';
         annotation = annotation.split(',');
-        finalBuiltAnnotation += '<div class="annotation"><span class="ontology-id">'
-          + '<a href="/' + annotation[1] + '"> ' + annotation[1]
-          + ' </a>'
-          + '</span>';
+        const catPath = validCatToPath(annotation[2]);
+        if (typeof catPath !== 'undefined') {
+          finalBuiltAnnotation += '<a href="/' + catPath + '/' +
+            annotation[1] + '"> ' + annotation[1] + ' </a>';
+        } else {
+          finalBuiltAnnotation += annotation[1];
+        }
+        finalBuiltAnnotation += '</span>';
         finalBuiltAnnotation += annotation[0] + '</div>';
         body.innerHTML += finalBuiltAnnotation;
       });
