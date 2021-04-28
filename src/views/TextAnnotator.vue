@@ -244,7 +244,12 @@ export default {
       const annotations = data.split('|');
       annotations.forEach((annotation) => {
         let finalBuiltAnnotation = '<div class="annotation"><span class="ontology-id">';
-        annotation = annotation.split(',');
+        // use regex to split instead of splitting on comma, because some terms may include '\\,'
+        annotation = annotation.split(/(?<!\\),/);
+        // find and replace occurances of '\\,' with comma
+        for (let i = 0; i < annotation.length; i++) {
+          annotation[i] = annotation[i].replace(/\\,/g, ',');
+        }
         const catPath = validCatToPath(annotation[2]);
         if (typeof catPath !== 'undefined') {
           finalBuiltAnnotation += '<a href="/' + catPath + '/' +
