@@ -75,6 +75,9 @@
                     </h4>
                   </div>
                 </div>
+                <div v-if="annotatedText" class="msgDownload">
+                  Click 'Download Annotations' to see all recognized terms including those without a corresponding web page in Monarch.
+                </div>
                 <div :class="['bottom', (!annotatedText) ? 'only-submit' : '']">
                   <b-button
                     v-if="annotatedText"
@@ -93,6 +96,15 @@
                     @click="annotateText"
                   >
                     Submit<i class="fa fa-caret-right fa-fw" />
+                  </b-button>
+                  <b-button
+                    v-if="annotatedText"
+                    ref="downloadAnnotations"
+                    :disabled="!validForm"
+                    class="stepper-button submit"
+                    @click="exportAnnotations"
+                  >
+                    Download Annotations
                   </b-button>
                   <b-button
                     v-if="annotatedText"
@@ -341,12 +353,30 @@ export default {
         }
       });
       this.phenotypes = [...new Set(phenotypes)].join(',');
+    },
+
+    exportAnnotations() {
+      const data = JSON.stringify(this.allAnnotations);
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(data, null, 2);
+      const exportFileDefaultName = 'text-annotator-data.json';
+      const linkElement = document.createElement('a');
+      linkElement.setAttribute('href', dataUri);
+      linkElement.setAttribute('download', exportFileDefaultName);
+      linkElement.click();
     }
   }
 };
 </script>
 <style lang="scss">
   @import "~@/style/variables";
+
+  .msgDownload {
+    border-top: 1px solid #cccccc;
+    text-align: center;
+    font-style: italic;
+    font-size: .9em;
+    padding: 2px;
+  }
 
   .stepper-box {
     box-shadow: none !important;
