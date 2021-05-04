@@ -63,7 +63,7 @@
                   </div>
                   <div v-if="resultsStep" class="step2">
                     <!-- eslint-disable-next-line vue/no-v-html -->
-                    <div ref="step2text" class="step2" v-html="annotatedText" />
+                    <div ref="step2text" class="step2" v-html="annotTextCleaned" />
                   </div>
                   <div v-if="showSpinner" class="spinner">
                     <b-spinner type="grow" label="Spinning" />
@@ -132,6 +132,8 @@ export default {
         message: ''
       },
       annotatedText: '',
+      annotTextCleaned: '',
+      allAnnotations: [],
       resultsStep: false,
       dataStep: true,
       errorAnnotating: false,
@@ -205,6 +207,8 @@ export default {
   methods: {
     back() {
       this.annotatedText = '';
+      this.annotTextCleaned = '';
+      this.allAnnotations = [];
       this.resultsStep = false;
       this.errorAnnotating = false;
     },
@@ -223,11 +227,68 @@ export default {
       this.showSpinner = true;
       const at = await biolink.annotateText(this.form.message, this.longestOnly);
       this.showSpinner = false;
+      // Call some endpoint and wait for a response.
       if (at.status !== 200) {
         this.errorAnnotating = true;
       } else {
-        // Call some endpoint and wait for a response. If, then return then
+        // If response, process data
+        // Original response:
         this.annotatedText = at.data;
+        // Clean up data to remove annotations that
+        //  don't have corresponding page in monarch
+        let cleanedAnnot = ''; // full annotation text scrubbed of invalid terms
+        let textOnly = ''; // tracks current position in original text block
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = at.data;
+        const allChildren = wrapper.childNodes;
+        for (let i = 0; i < allChildren.length; i++) {
+          if (allChildren[i].nodeType === 1) {
+            // evaluate each sciCrunchAnnotation for presence of valid category
+            let hasValidCat = false;
+            let vettedAnnot = ''; // validated annotations
+            const pos = textOnly.length;
+            const origAttr = allChildren[i].getAttribute('data-sciGraph'); // original attributes
+            const vettedAttr = document.createAttribute('data-sciGraph'); // new attribute
+            const annotations = origAttr.split('|');
+            annotations.forEach((annotation) => {
+              // use regex to split instead of splitting on comma, because some terms may include '\\,'
+              annotation = annotation.split(/(?<!\\),/);
+              // assign annotation data to data array
+              const annotData = {
+                matchedText: allChildren[i].innerHTML,
+                term: annotation[0],
+                ID: annotation[1],
+                category: annotation[2],
+                position: pos
+              };
+              this.allAnnotations.push(annotData);
+              // vet each annotation to ensure there is a valid Monarch entry
+              if (annotation[2]) {
+                if (validCatToPath(annotation[2])) {
+                  // append annotation only if it has a valid category
+                  // and add delimter if needed
+                  vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
+                  hasValidCat = true;
+                }
+              }
+            });
+            if (hasValidCat) {
+              // replace sciGraph data with validated annotations
+              vettedAttr.value = vettedAnnot;
+              allChildren[i].setAttributeNode(vettedAttr);
+              cleanedAnnot += allChildren[i].outerHTML;
+            } else {
+              // replace span with plain text when there are no validated annotations
+              cleanedAnnot += allChildren[i].innerHTML;
+            }
+            textOnly += allChildren[i].innerHTML;
+          } else {
+            // this child element contains un-annotated text
+            cleanedAnnot += allChildren[i].nodeValue;
+            textOnly += allChildren[i].nodeValue;
+          }
+        }
+        this.annotTextCleaned = cleanedAnnot;
       }
     },
 
