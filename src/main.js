@@ -21,8 +21,7 @@ if (productionServers.includes(window.location.hostname)) {
       id: 'UA-41803362-1',
       params: {
         anonymize_ip: true,
-        cookie_domain: "monarchinitiative.org",
-        cookie_flags: "SameSite=None;Secure",
+        cookie_flags: 'SameSite=None;Secure',
       }
     }
   }, router);
