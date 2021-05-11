@@ -79,14 +79,14 @@
                   <b-button
                     v-if="annotatedText"
                     ref="backButton"
+                    v-b-tooltip.hover
+                    title="Edit the input text"
                     :disabled="!validForm"
                     class="stepper-button back"
                     @click="back"
-                    v-b-tooltip.hover title="Edit the input text"
                   >
                     <i class="fa fa-caret-left fa-fw" />Back
                   </b-button>
-                  </b-tooltip>
                   <b-button
                     v-if="!resultsStep"
                     ref="submitButton"
@@ -99,20 +99,22 @@
                   <b-button
                     v-if="annotatedText"
                     ref="downloadAnnotations"
+                    v-b-tooltip.hover
+                    title="Download a spreadsheet of recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch."
                     :disabled="!validForm"
                     class="stepper-button submit"
                     @click="exportAnnotations"
-                    v-b-tooltip.hover title="Download a spreadsheet of recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch."
                   >
                     Download Annotations
                   </b-button>
                   <b-button
                     v-if="annotatedText"
                     ref="analyzePhenotypes"
+                    v-b-tooltip.hover
+                    title="Search for diseases and genes that are phenotypically similar to the list of phenotypes recognized in this text. You will be able to edit the list before running the search."
                     :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
                     :disabled="!validForm"
                     class="stepper-button submit"
-                    v-b-tooltip.hover title="Search for diseases and genes that are phenotypically similar to the list of phenotypes recognized in this text. You will be able to edit the list before running the search."
                   >
                     Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
                   </b-button>
