@@ -134,12 +134,17 @@ institutions:
         picture: img/team/JustinReese.jpg
         title: Software developer
         alumni: false
-        bio: Justin I am a computational biologist with an interest in integrating bioinformatics data to facilitate discovery, especially with respect to human disease. He leads the KG-COVID-19 project.
+        bio: Justin is a computational biologist with an interest in integrating bioinformatics data to facilitate discovery, especially with respect to human disease. He leads the KG-COVID-19 project and contributes to Monarch and other collaborative projects.
       - name: Deepak Unni
         picture: img/team/DeepakUnni.jpg
         title: Bioinformatics Software Developer
         alumni: true
         bio: Deepak Unni has an MS in Bioinformatics from Georgia Tech and has previously worked on NGS data analysis, genomic data integration, and the development of Apollo - a manual collaborative genome annotation editing tool. He joined Berkeley Bioinformatics Open-source Projects (BBOP), at LBNL, in 2018.
+      - name: Eric Douglass
+        picture: img/team/EricDouglass1.jpg
+        title: Software developer
+        alumni: true
+        bio: Eric is a software engineer who worked with Seth and Chris on data validation pipelines, Turtle and ontologies in triplestores and other tools. 
       - name: Sarah Kim
         picture: img/team/person-unknown.png
         title: Web Developer/Designer
