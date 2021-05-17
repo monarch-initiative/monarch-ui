@@ -62,12 +62,12 @@ institutions:
       picture: img/team/AnneThessen.png
       title: Biodiversity Informaticist
       alumni: false
-      bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.  
+      bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.
     - name: Tim Putman
       picture: img/team/TimPutman.jpg
       title: Bioinformatic Biologist
       alumni: true
-      bio: Tim needs his bio to be filled out.  
+      bio: Tim needs his bio to be filled out.
     - name: Dan Keith
       picture: img/team/DanielKeith.png
       title: Bioinformatics Semantic Engineer
@@ -75,7 +75,7 @@ institutions:
       bio: |+
         Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
         He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
-        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis. 
+        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
   - id: ohsu
     name: Oregon Health & Science University
     logo: img/team/ohsu.jpg
@@ -90,7 +90,7 @@ institutions:
         picture: img/team/ShahimEssaid.jpg
         title: Ontologist
         alumni: false
-        bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.   
+        bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
       - name: Nicole Vasilevsky
         picture: img/team/NicoleVasilevsky.jpg
         title: Lead Biocurator
@@ -104,7 +104,7 @@ institutions:
         picture: img/team/LillyWinfree.jpg
         title: Science and Data Analyst
         alumni: true
-        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.  
+        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
     logo: img/team/lbnl.jpeg
@@ -114,7 +114,7 @@ institutions:
         picture: img/team/ChrisMungall.jpg
         title: Monarch PI
         alumni: false
-        bio: "Dr. Mungall is a PI of the Monarch Initiative. He has a Ph.D. from University of Edinburgh in Bioinformatics. He leads a group working on the application of computational techniques to problems in life sciences of relevance to the health of humans and the health of the planet. His main interest is the application of artificial intelligence, knowledge-based methods, and biocuration to advance our understanding of the interconnected role of genes and genetic mechanisms in key biological processes.
+        bio: Dr. Mungall is a PI of the Monarch Initiative. He has a Ph.D. from University of Edinburgh in Bioinformatics. He leads a group working on the application of computational techniques to problems in life sciences of relevance to the health of humans and the health of the planet. His main interest is the application of artificial intelligence, knowledge-based methods, and biocuration to advance our understanding of the interconnected role of genes and genetic mechanisms in key biological processes.
       - name: Seth Carbon
         picture: img/team/SethCarbon.png
         title: Software engineer
@@ -126,7 +126,7 @@ institutions:
         alumni: false
         bio: Nomi Harris has an MS in computer science from MIT. She is the program manager for Berkeley Bioinformatics Open-source Projects (BBOP), and works on Monarch as well as a variety of other projects.
       - name: Sierra Moxon
-        picture: https://raw.githubusercontent.com/berkeleybop/berkeleybop.github.io/master/people/sierra-moxon/smoxon.png
+        picture: img/team/smoxon.png
         title: Software developer
         alumni: false
         bio: Sierra is a data architect and software developer with experience in model organism knowledgebases, the Alliance of Genome Resources, Intermine and agricultural biotechnology.
@@ -144,7 +144,7 @@ institutions:
         picture: img/team/EricDouglass1.jpg
         title: Software developer
         alumni: true
-        bio: Eric is a software engineer who worked with Seth and Chris on data validation pipelines, Turtle and ontologies in triplestores and other tools. 
+        bio: Eric is a software engineer who worked with Seth and Chris on data validation pipelines, Turtle and ontologies in triplestores and other tools.
       - name: Sarah Kim
         picture: img/team/person-unknown.png
         title: Web Developer/Designer
@@ -154,7 +154,7 @@ institutions:
         picture: img/team/SuzannaLewis.jpg
         title: Genomics
         alumni: true
-        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.  
+        bio: Suzi has an MS in Biology and MS in Computer Science. She is a scientist and Principal Investigator at the Berkeley Bioinformatics Open-source Project (BBOP) based at Lawrence Berkeley National Laboratory. She is one of the pioneers of developing open standards and software for genome annotation and ontologies.
       - name: Jeremy Nguyen Xuan
         picture: img/team/person-unknown.png
         title: Software Engineer
