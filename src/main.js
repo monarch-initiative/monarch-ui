@@ -20,7 +20,8 @@ if (productionServers.includes(window.location.hostname)) {
     config: {
       id: 'UA-41803362-1',
       params: {
-        anonymize_ip: true
+        anonymize_ip: true,
+        cookie_flags: 'SameSite=None;Secure',
       }
     }
   }, router);
