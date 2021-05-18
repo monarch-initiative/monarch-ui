@@ -172,7 +172,6 @@ export default {
       },
       annotatedText: '',
       annotTextCleaned: '',
-      allAnnotations: [],
       resultsStep: false,
       dataStep: true,
       errorAnnotating: false,
@@ -252,7 +251,6 @@ export default {
     back() {
       this.annotatedText = '';
       this.annotTextCleaned = '';
-      this.allAnnotations = [];
       this.resultsStep = false;
       this.errorAnnotating = false;
     },
@@ -280,60 +278,50 @@ export default {
         this.annotatedText = at.data;
         // Clean up data to remove annotations that
         //  don't have corresponding page in monarch
-        let cleanedAnnot = ''; // full annotation text scrubbed of invalid terms
-        let textOnly = ''; // tracks current position in original text block
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = at.data;
-        const allChildren = wrapper.childNodes;
-        for (let i = 0; i < allChildren.length; i++) {
-          if (allChildren[i].nodeType === 1) {
-            // evaluate each sciCrunchAnnotation for presence of valid category
-            let hasValidCat = false;
-            let vettedAnnot = ''; // validated annotations
-            const pos = textOnly.length;
-            const origAttr = allChildren[i].getAttribute('data-sciGraph'); // original attributes
-            const vettedAttr = document.createAttribute('data-sciGraph'); // new attribute
-            const annotations = origAttr.split('|');
-            annotations.forEach((annotation) => {
-              // use regex to split instead of splitting on comma, because some terms may include '\\,'
-              annotation = annotation.split(/(?<!\\),/);
-              // assign annotation data to data array
-              const annotData = {
-                matchedText: allChildren[i].innerHTML,
-                term: annotation[0],
-                ID: annotation[1],
-                category: annotation[2],
-                position: pos
-              };
-              this.allAnnotations.push(annotData);
-              // vet each annotation to ensure there is a valid Monarch entry
-              if (annotation[2]) {
-                if (validCatToPath(annotation[2])) {
-                  // append annotation only if it has a valid category
-                  // and add delimter if needed
-                  vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
-                  hasValidCat = true;
-                }
-              }
-            });
-            if (hasValidCat) {
-              // replace sciGraph data with validated annotations
-              vettedAttr.value = vettedAnnot;
-              allChildren[i].setAttributeNode(vettedAttr);
-              cleanedAnnot += allChildren[i].outerHTML;
-            } else {
-              // replace span with plain text when there are no validated annotations
-              cleanedAnnot += allChildren[i].innerHTML;
-            }
-            textOnly += allChildren[i].innerHTML;
-          } else {
-            // this child element contains un-annotated text
-            cleanedAnnot += allChildren[i].nodeValue;
-            textOnly += allChildren[i].nodeValue;
-          }
-        }
-        this.annotTextCleaned = cleanedAnnot;
+        this.cleanAnnotations();
       }
+    },
+
+    cleanAnnotations() {
+      let cleanedAnnot = ''; // full annotation text scrubbed of invalid terms
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = this.annotatedText;
+      const allChildren = wrapper.childNodes;
+      for (let i = 0; i < allChildren.length; i++) {
+        if (allChildren[i].nodeType === 1) {
+          // evaluate each sciCrunchAnnotation for presence of valid category
+          let hasValidCat = false;
+          let vettedAnnot = ''; // validated annotations
+          const origAttr = allChildren[i].getAttribute('data-sciGraph'); // original attributes
+          const vettedAttr = document.createAttribute('data-sciGraph'); // new attribute
+          const annotations = origAttr.split('|');
+          annotations.forEach((annotation) => {
+            const terms = this.parseTerm(annotation);
+            // vet each annotation to ensure there is a valid Monarch entry
+            if (terms[2]) {
+              if (validCatToPath(terms[2])) {
+                // append annotation only if it has a valid category
+                // and add delimter if needed
+                vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
+                hasValidCat = true;
+              }
+            }
+          });
+          if (hasValidCat) {
+            // replace sciGraph data with validated annotations
+            vettedAttr.value = vettedAnnot;
+            allChildren[i].setAttributeNode(vettedAttr);
+            cleanedAnnot += allChildren[i].outerHTML;
+          } else {
+            // replace span with plain text when there are no validated annotations
+            cleanedAnnot += allChildren[i].innerHTML;
+          }
+        } else {
+          // this child element contains un-annotated text
+          cleanedAnnot += allChildren[i].nodeValue;
+        }
+      }
+      this.annotTextCleaned = cleanedAnnot;
     },
 
     buildPopover(title, data) {
@@ -349,27 +337,53 @@ export default {
       const annotations = data.split('|');
       annotations.forEach((annotation) => {
         let finalBuiltAnnotation = '<div class="annotation"><span class="ontology-id">';
-        // use regex to split instead of splitting on comma, because some terms may include '\\,'
-        annotation = annotation.split(/(?<!\\),/);
-        // find and replace occurances of '\\,' with comma
-        for (let i = 0; i < annotation.length; i++) {
-          annotation[i] = annotation[i].replace(/\\,/g, ',');
-        }
-        const catPath = validCatToPath(annotation[2]);
+        const terms = this.parseTerm(annotation);
+        const catPath = validCatToPath(terms[2]);
         if (typeof catPath !== 'undefined') {
           finalBuiltAnnotation += '<a href="/' + catPath + '/' +
-            annotation[1] + '"> ' + annotation[1] + ' </a>';
+            terms[1] + '"> ' + terms[1] + ' </a>';
         } else {
-          finalBuiltAnnotation += annotation[1];
+          finalBuiltAnnotation += terms[1];
         }
         finalBuiltAnnotation += '</span>';
-        finalBuiltAnnotation += annotation[0] + '</div>';
+        finalBuiltAnnotation += terms[0] + '</div>';
         body.innerHTML += finalBuiltAnnotation;
       });
 
       popoverContainer.appendChild(header);
       popoverContainer.appendChild(body);
       return popoverContainer;
+    },
+
+    parseTerm(str) {
+      let terms = {};
+      const n = str.search('\\\\,');
+      if (n >= 0) {
+        // annoation term has an escaped comma, e.g., '\\,'
+        // split on comma
+        const parts = str.split(',');
+        // re-join terms containing escaped commas
+        let j = 0;
+        let found = false;
+        for (let i = 0; i < parts.length; i++) {
+          if (parts[i].endsWith('\\')) {
+            // replace escape character with comma
+            parts[i] = parts[i].replace(/\\/g, ',');
+            found = true;
+          } else {
+            if (found) {
+              terms[j] = parts[i - 1].concat(parts[i]);
+            } else {
+              terms[j] = parts[i];
+            }
+            found = false;
+            j += 1;
+          }
+        }
+      } else {
+        terms = str.split(',');
+      }
+      return terms;
     },
 
     storePhenotypes() {
@@ -388,7 +402,37 @@ export default {
     },
 
     exportAnnotations() {
-      const data = JSON.stringify(this.allAnnotations);
+      const exportData = [];
+      let textOnly = ''; // tracks current position in original text block
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = this.annotatedText;
+      const allChildren = wrapper.childNodes;
+      for (let i = 0; i < allChildren.length; i++) {
+        if (allChildren[i].nodeType === 1) {
+          // this child element contains annotated text
+          const pos = textOnly.length;
+          const attrs = allChildren[i].getAttribute('data-sciGraph'); // original attributes
+          const annotations = attrs.split('|');
+          annotations.forEach((annotation) => {
+            const terms = this.parseTerm(annotation);
+            // assign annotation data to data array
+            const annotData = {
+              matchedText: allChildren[i].innerHTML,
+              term: terms[0],
+              ID: terms[1],
+              category: terms[2],
+              position: pos
+            };
+            exportData.push(annotData);
+          });
+          textOnly += allChildren[i].innerHTML;
+        } else {
+          // this child element contains un-annotated text
+          textOnly += allChildren[i].nodeValue;
+        }
+      }
+
+      const data = JSON.stringify(exportData);
       const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(data, null, 2);
       const exportFileDefaultName = 'text-annotator-data.json';
       const linkElement = document.createElement('a');
