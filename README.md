@@ -93,6 +93,7 @@ The `vue-cli` workflow specifies that the contents of `public/` are copied verba
 - `news.yaml` is used to drive the `HomeNews.md` component.
 - `robots.txt` is used to guide or exclude web-crawling robots. See [Robots.txt](https://moz.com/learn/seo/robotstxt).
 - `index.html` is *transformed* by the build workflow to generate a corresponding `dist/index.html`. It is NOT copied verbatim.
+- `mondo_ids.txt` is used to populate the Featured Diseases carousel on the home page.
 
 
 ##### `monarch-ui/src/`
