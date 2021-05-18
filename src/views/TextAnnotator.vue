@@ -101,11 +101,11 @@
                     class="stepper-button submit"
                     @click="exportAnnotations"
                   >
-                  <i 
-                    v-b-tooltip.hover
-                    :title="TOOLTIP_DOWNLOAD"
-                    class="fa fa-info-circle" 
-                    aria-hidden="true" 
+                    <i
+                      v-b-tooltip.hover
+                      :title="TOOLTIP_DOWNLOAD"
+                      class="fa fa-info-circle"
+                      aria-hidden="true"
                     />
                     Download Annotations
                   </b-button>
@@ -116,11 +116,11 @@
                     :disabled="!validForm"
                     class="stepper-button submit"
                   >
-                    <i 
-                    v-b-tooltip.hover
-                    :title="TOOLTIP_ANALYZE"
-                    class="fa fa-info-circle" 
-                    aria-hidden="true" 
+                    <i
+                      v-b-tooltip.hover
+                      :title="TOOLTIP_ANALYZE"
+                      class="fa fa-info-circle"
+                      aria-hidden="true"
                     />
                     Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
                   </b-button>
@@ -279,13 +279,24 @@ export default {
           annotations.forEach((annotation) => {
             const terms = this.parseTerm(annotation);
             // vet each annotation to ensure there is a valid Monarch entry
-            if (terms[2]) {
-              if (validCatToPath(terms[2])) {
-                // append annotation only if it has a valid category
-                // and add delimter if needed
-                vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
-                hasValidCat = true;
+            if (validCatToPath(terms[2])) {
+              // append annotation only if it has a valid category
+              // and add delimter if needed
+              vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
+              hasValidCat = true;
+            } else if (terms[1].search('HP:') === 0) {
+              // map any HP terms with invalid categories to the "phenotype" category
+              let editedAnnot = '';
+              if (terms[2] === '') {
+                // add category
+                editedAnnot = annotation + 'phenotype';
+              } else {
+                // replace category
+                const patt1 = new RegExp(',' + terms[2] + '$', 'g');
+                editedAnnot = annotation.replace(patt1, ',phenotype');
               }
+              vettedAnnot += (hasValidCat) ? '|' + editedAnnot : editedAnnot;
+              hasValidCat = true;
             }
           });
           if (hasValidCat) {
