@@ -76,25 +76,15 @@
                   </div>
                 </div>
                 <div :class="['bottom', (!annotatedText) ? 'only-submit' : '']">
-                  <div class="bottom-button">
-                    <i
-                      v-if="annotatedText"
-                      v-b-tooltip.click
-                      class="fa fa-info-circle fa-2x"
-                      :title="TOOLTIP_BACK"
-                    />
-                    <b-button
-                      v-if="annotatedText"
-                      ref="backButton"
-                      v-b-tooltip.hover
-                      :title="TOOLTIP_BACK"
-                      :disabled="!validForm"
-                      class="stepper-button back"
-                      @click="back"
-                    >
-                      <i class="fa fa-caret-left fa-fw" />Back
-                    </b-button>
-                  </div>
+                  <b-button
+                    v-if="annotatedText"
+                    ref="backButton"
+                    :disabled="!validForm"
+                    class="stepper-button back"
+                    @click="back"
+                  >
+                    <i class="fa fa-caret-left fa-fw" />Back
+                  </b-button>
                   <b-button
                     v-if="!resultsStep"
                     ref="submitButton"
@@ -104,44 +94,36 @@
                   >
                     Submit<i class="fa fa-caret-right fa-fw" />
                   </b-button>
-                  <div class="bottom-button">
-                    <i
-                      v-if="annotatedText"
-                      v-b-tooltip.click
-                      class="fa fa-info-circle fa-2x"
-                      :title="TOOLTIP_DOWNLOAD"
+                  <b-button
+                    v-if="annotatedText"
+                    ref="downloadAnnotations"
+                    :disabled="!validForm"
+                    class="stepper-button submit"
+                    @click="exportAnnotations"
+                  >
+                  <i 
+                    v-b-tooltip.hover
+                    :title="TOOLTIP_DOWNLOAD"
+                    class="fa fa-info-circle" 
+                    aria-hidden="true" 
                     />
-                    <b-button
-                      v-if="annotatedText"
-                      ref="downloadAnnotations"
-                      v-b-tooltip.hover
-                      :title="TOOLTIP_DOWNLOAD"
-                      :disabled="!validForm"
-                      class="stepper-button submit"
-                      @click="exportAnnotations"
-                    >
-                      Download Annotations
-                    </b-button>
-                  </div>
-                  <div class="bottom-button">
-                    <i
-                      v-if="annotatedText"
-                      v-b-tooltip.click
-                      class="fa fa-info-circle fa-2x"
-                      :title="TOOLTIP_ANALYZE"
+                    Download Annotations
+                  </b-button>
+                  <b-button
+                    v-if="annotatedText"
+                    ref="analyzePhenotypes"
+                    :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
+                    :disabled="!validForm"
+                    class="stepper-button submit"
+                  >
+                    <i 
+                    v-b-tooltip.hover
+                    :title="TOOLTIP_ANALYZE"
+                    class="fa fa-info-circle" 
+                    aria-hidden="true" 
                     />
-                    <b-button
-                      v-if="annotatedText"
-                      ref="analyzePhenotypes"
-                      v-b-tooltip.hover
-                      :title="TOOLTIP_ANALYZE"
-                      :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
-                      :disabled="!validForm"
-                      class="stepper-button submit"
-                    >
-                      Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
-                    </b-button>
-                  </div>
+                    Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
+                  </b-button>
                 </div>
               </div>
             </div>
@@ -229,7 +211,6 @@ export default {
     }
   },
   created() {
-    this.TOOLTIP_BACK = 'Edit the input text';
     this.TOOLTIP_DOWNLOAD = 'Download a spreadsheet of recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch.';
     this.TOOLTIP_ANALYZE = 'Search for diseases and genes that are phenotypically similar to the list of phenotypes recognized in this text. You will be able to edit the list before running the search.';
   },
@@ -515,17 +496,6 @@ export default {
       .error {
         text-align: center;
       }
-    }
-
-    .bottom-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .fa-info-circle {
-      color:gray;
-      padding-bottom: 10px;
     }
 
     .bottom {
