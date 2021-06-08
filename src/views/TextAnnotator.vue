@@ -102,10 +102,9 @@
                     @click="exportAnnotations"
                   >
                     <i
-                      v-b-tooltip.hover
+                      v-b-tooltip.hover.focus
                       :title="TOOLTIP_DOWNLOAD"
                       class="fa fa-info-circle"
-                      aria-hidden="true"
                     />
                     Download Annotations
                   </b-button>
@@ -117,10 +116,9 @@
                     class="stepper-button submit"
                   >
                     <i
-                      v-b-tooltip.hover
+                      v-b-tooltip.hover.focus
                       :title="TOOLTIP_ANALYZE"
                       class="fa fa-info-circle"
-                      aria-hidden="true"
                     />
                     Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
                   </b-button>
@@ -138,6 +136,7 @@ import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import * as biolink from '@/api/BioLink';
 import { validCatToPath } from '@/lib/CategoryMap';
+import { saveAs } from 'file-saver';
 
 
 export default {
@@ -211,7 +210,7 @@ export default {
     }
   },
   created() {
-    this.TOOLTIP_DOWNLOAD = 'Download a spreadsheet of recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch.';
+    this.TOOLTIP_DOWNLOAD = 'Download a file with all recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch.';
     this.TOOLTIP_ANALYZE = 'Search for diseases and genes that are phenotypically similar to the list of phenotypes recognized in this text. You will be able to edit the list before running the search.';
   },
   validations: {
@@ -424,13 +423,9 @@ export default {
         }
       }
 
-      const data = JSON.stringify(exportData);
-      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(data, null, 2);
-      const exportFileDefaultName = 'text-annotator-data.json';
-      const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
-      linkElement.click();
+      const FileSaver = require('file-saver');
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      FileSaver.saveAs(blob, 'text-annotator-data.json');
     }
   }
 };
@@ -444,6 +439,10 @@ export default {
     font-style: italic;
     font-size: .9em;
     padding: 2px;
+  }
+
+  .tooltip[x-placement^="top"] {
+    margin-bottom: 10px;
   }
 
   .stepper-box {
