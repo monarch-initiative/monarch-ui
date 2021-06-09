@@ -16,10 +16,10 @@
 #
 
 institutions:
-  - id: osu
-    name: Oregon State University
-    logo: img/team/osu.png
-    website: https://oregonstate.edu/
+  - id: cu 
+    name: University of Colorado Anschutz Medical Campus
+    logo: 
+    website: https://www.cuanschutz.edu/
     people:
     - name: Melissa Haendel
       picture: img/team/MelissaHaendel.jpg
@@ -38,16 +38,21 @@ institutions:
       title: Program Manager
       alumni: false
       bio: Moni is a curator of genomes, and her work has focused on facilitating the development of software tools that accomplish these tasks, both structural and functional genome curation. She is a highly accomplished genomics scientist with extensive experience at the computer and at the bench. She has had substantial experience in project management, especially for bioinformatics software development and for genome curation efforts. And has been very successful in building and growing communities around genome curation efforts. Moni is the Program Manager for the Monarch Initiative.
-    - name: Tom Conlin
-      picture: img/team/TomConlin.png
-      title: Bioinformaticist
+    - name: Matthew Brush
+      picture: img/team/MatthewBrush.jpg
+      title: Ontologist
       alumni: false
-      bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
-    - name: Jen Martin
-      picture: img/team/JenMartin.png
-      title: Scientific Software Engineer
+      bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
+    - name: Shahim Essaid
+      picture: img/team/ShahimEssaid.jpg
+      title: Ontologist
       alumni: false
-      bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
+      bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
+    - name: Tim Putman
+      picture: img/team/TimPutman.jpg
+      title: Bioinformatic Biologist
+      alumni: false
+      bio: Tim needs his bio to be filled out.      
     - name: Kevin Schaper
       picture: img/team/KevinSchaper.jpg
       title: Scientific Software Engineer
@@ -63,11 +68,25 @@ institutions:
       title: Biodiversity Informaticist
       alumni: false
       bio: Dr. Thessen holds a BS in Marine Science from Nicholls State University and a Ph.D. in Oceanography from the University of Maryland. She has been running her own data science consulting company where her clients included NASA and the Smithsonian Institution. She will be working on environments and traits in monarch.
-    - name: Tim Putman
-      picture: img/team/TimPutman.jpg
-      title: Bioinformatic Biologist
+    - name: Sabrina Toro
+      picture: img/team/SabrinaToro.jpg
+      title: Biocurator
+      bio: Dr Toro is a biocurator for the Monarch Project. She has a PH.D in Science from the University of Liege (Belgium). Sabrina contributes to biocuration efforts for Monarch, and ontology development for the Mondo Disease Ontology, the Human Phenotye Ontology (HPO). 
+    - name: Nicole Vasilevsky
+      picture: img/team/NicoleVasilevsky.jpg
+      title: Lead Biocurator
+      alumni: false
+      bio: Dr. Vasilevsky is the lead biocurator for the Monarch project. She has a BA in Biology from Reed College and a Ph.D. in Cell Biology from Oregon Health & Science University. Nicole contributes to biocuration efforts for Monarch, and ontology development for the Human Phenotye Ontology (HPO), the Mondo Disease Ontology, the Cell Ontology (CL), and others.      
+  - id: osu
+    name: Oregon State University
+    logo: img/team/osu.png
+    website: https://oregonstate.edu/
+    people:
+    - name: Tom Conlin
+      picture: img/team/TomConlin.png
+      title: Bioinformaticist
       alumni: true
-      bio: Tim needs his bio to be filled out.
+      bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
     - name: Dan Keith
       picture: img/team/DanielKeith.png
       title: Bioinformatics Semantic Engineer
@@ -75,36 +94,26 @@ institutions:
       bio: |+
         Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
         He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
-        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
+        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.   
+    - name: Jen Martin
+      picture: img/team/JenMartin.png
+      title: Scientific Software Engineer
+      alumni: true
+      bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
   - id: ohsu
     name: Oregon Health & Science University
     logo: img/team/ohsu.jpg
     website: http://ohsu.edu
     people:
-      - name: Matthew Brush
-        picture: img/team/MatthewBrush.jpg
-        title: Ontologist
-        alumni: false
-        bio: Dr. Brush has a BS from Notre Dame and a Ph.D.in Cell Biology from Duke University, and is a former Biomedical Informatics Fellow at Oregon Health and Science University. He is the lead developer of the Genotype Ontology (GENO) for Monarch, and coordinates its use in ingest of genotype and phenotype data. In addition, he has contributed to development of several other ontologies that will be employed in the Monarch system, including the Reagent Ontology (ReO), the Ontology of Biomedical Investigations (OBI), the Cell Line Ontology (CLO), and the eagle-i Ontology (ERO).
-      - name: Shahim Essaid
-        picture: img/team/ShahimEssaid.jpg
-        title: Ontologist
-        alumni: false
-        bio: Dr. Essaid is an Ontologist and Software Engineer; he has an MD University of Baghdad, Iraq and holds a graduate certificate Department of Medical Informatics and Clinical Epidemiology from OHSU.
-      - name: Nicole Vasilevsky
-        picture: img/team/NicoleVasilevsky.jpg
-        title: Lead Biocurator
-        alumni: false
-        bio: Dr. Vasilevsky is the lead biocurator for the Monarch project. She has a BA in Biology from Reed College and a Ph.D. in Cell Biology from Oregon Health & Science University. Nicole contributes to biocuration efforts for Monarch, and ontology development for the Human Phenotye Ontology (HPO), the Mondo Disease Ontology, the Cell Ontology (CL), and others.
-      - name: Bryan Laraway
-        title: Data Wrangler
-        alumni: true
-        bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
-      - name: Lilly Winfree
-        picture: img/team/LillyWinfree.jpg
-        title: Science and Data Analyst
-        alumni: true
-        bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
+    - name: Bryan Laraway
+      title: Data Wrangler
+      alumni: true
+      bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
+    - name: Lilly Winfree
+      picture: img/team/LillyWinfree.jpg
+      title: Science and Data Analyst
+      alumni: true
+      bio: Dr. Winfree has a BS in Neuroscience from the University of Rochester and a Ph.D. in Neuroscience from Oregon Health & Science University. Lilly is responsible for scientific communication and outreach and contributes to data analytics. Lilly will be working with the Monarch Initiative bioinformatics team to derive biological stories from the data.
   - id: lbnl
     name: Lawrence Berkeley National Laboratory
     logo: img/team/lbnl.jpeg
