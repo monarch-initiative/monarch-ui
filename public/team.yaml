@@ -85,8 +85,13 @@ institutions:
     - name: Tom Conlin
       picture: img/team/TomConlin.png
       title: Bioinformaticist
-      alumni: true
+      alumni: false
       bio: Tom holds a BS in Mathematics and Computer Science and a MS in Computer Science with specialization in Parallel and Distributed Computing as applied to Bioinformatics, University of Oregon. Experienced with large scale data exchanges and model organism databases, Tom works primarily on the Monarch data ingest pipeline (Dipper) and on issues related to identifiers.
+    - name: Jen Martin
+      picture: img/team/JenMartin.png
+      title: Scientific Software Engineer
+      alumni: false
+      bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
     - name: Dan Keith
       picture: img/team/DanielKeith.png
       title: Bioinformatics Semantic Engineer
@@ -94,12 +99,7 @@ institutions:
       bio: |+
         Dan is a Software Engineer for the Monarch Initiative, within the OSU (Oregon State University) CGRB (Center for Genomic Research and Biocomputing).
         He works on Monarch Initiative web applications, as well as helping with tooling and infrastructure.
-        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.   
-    - name: Jen Martin
-      picture: img/team/JenMartin.png
-      title: Scientific Software Engineer
-      alumni: true
-      bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
+        Dan has a BS in Computer Science from Northwestern University and a MS and PhD in Computer Science from University of Oregon, specializing in programming language metatheory, scientific workflow, and program analysis.
   - id: ohsu
     name: Oregon Health & Science University
     logo: img/team/ohsu.jpg
