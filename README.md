@@ -93,7 +93,7 @@ The `vue-cli` workflow specifies that the contents of `public/` are copied verba
 - `news.yaml` is used to drive the `HomeNews.md` component.
 - `robots.txt` is used to guide or exclude web-crawling robots. See [Robots.txt](https://moz.com/learn/seo/robotstxt).
 - `index.html` is *transformed* by the build workflow to generate a corresponding `dist/index.html`. It is NOT copied verbatim.
-- `mondo_ids.txt` is used to populate the Featured Diseases carousel on the home page.
+- `mondo_ids.txt` is a tab-demimited list of "Diseases of the Month" for all 12 months of the year. It is used to populate the Featured Diseases carousel on the home page. The first field is the Mondo ID; the second indicates which month to display the disease, formatted as YYYY-MM-DD.
 
 
 ##### `monarch-ui/src/`

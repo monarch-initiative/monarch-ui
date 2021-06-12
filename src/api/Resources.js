@@ -35,17 +35,21 @@ export async function getRecentlyCurated() {
   const curatedResponse = await axios.get(recentlyCuratedUrl);
   try {
     const curatedLines = [];
+    const todayDate = new Date();
+    const thisMonth = todayDate.getMonth();
     curatedResponse.data.split('\n').forEach((line) => {
       const pieces = line.split('\t');
       const mondo = pieces[0];
       const date = pieces[1];
-      line = {};
-      line.mondo = mondo;
-      line.date = Date.parse(date);
-      curatedLines.push(line);
+      const itemDate = new Date(date).getUTCMonth();
+      if (itemDate === thisMonth) {
+        line = {};
+        line.mondo = mondo;
+        line.date = Date.parse(date);
+        curatedLines.push(line);
+      }
     });
-    curatedLines.sort((a, b) => b.date - a.date);
-    return curatedLines.length > 5 ? curatedLines.slice(6) : curatedLines;
+    return curatedLines;
   } catch (e) {
     return [];
   }
