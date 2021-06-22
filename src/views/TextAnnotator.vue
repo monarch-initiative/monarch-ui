@@ -63,7 +63,7 @@
                   </div>
                   <div v-if="resultsStep" class="step2">
                     <!-- eslint-disable-next-line vue/no-v-html -->
-                    <div ref="step2text" class="step2" v-html="annotatedText" />
+                    <div ref="step2text" class="step2" v-html="annotTextCleaned" />
                   </div>
                   <div v-if="showSpinner" class="spinner">
                     <b-spinner type="grow" label="Spinning" />
@@ -96,11 +96,30 @@
                   </b-button>
                   <b-button
                     v-if="annotatedText"
+                    ref="downloadAnnotations"
+                    :disabled="!validForm"
+                    class="stepper-button submit"
+                    @click="exportAnnotations"
+                  >
+                    <i
+                      v-b-tooltip.hover.focus
+                      :title="TOOLTIP_DOWNLOAD"
+                      class="fa fa-info-circle"
+                    />
+                    Download Annotations
+                  </b-button>
+                  <b-button
+                    v-if="annotatedText"
                     ref="analyzePhenotypes"
                     :to="{ name: 'analyze-phenotypes', params: { phenotypes: phenotypes}}"
                     :disabled="!validForm"
                     class="stepper-button submit"
                   >
+                    <i
+                      v-b-tooltip.hover.focus
+                      :title="TOOLTIP_ANALYZE"
+                      class="fa fa-info-circle"
+                    />
                     Analyze Phenotypes<i class="fa fa-caret-right fa-fw" />
                   </b-button>
                 </div>
@@ -116,6 +135,8 @@
 import { validationMixin } from 'vuelidate';
 import { required } from 'vuelidate/lib/validators';
 import * as biolink from '@/api/BioLink';
+import { validCatToPath } from '@/lib/CategoryMap';
+import { saveAs } from 'file-saver';
 
 
 export default {
@@ -131,6 +152,7 @@ export default {
         message: ''
       },
       annotatedText: '',
+      annotTextCleaned: '',
       resultsStep: false,
       dataStep: true,
       errorAnnotating: false,
@@ -187,6 +209,10 @@ export default {
       }
     }
   },
+  created() {
+    this.TOOLTIP_DOWNLOAD = 'Download a file with all recognized ontology terms and the corresponding input string with which they were matched. This will include terms that were recognized but do not have a corresponding web page in Monarch.';
+    this.TOOLTIP_ANALYZE = 'Search for diseases and genes that are phenotypically similar to the list of phenotypes recognized in this text. You will be able to edit the list before running the search.';
+  },
   validations: {
     form: {
       message: {
@@ -204,6 +230,7 @@ export default {
   methods: {
     back() {
       this.annotatedText = '';
+      this.annotTextCleaned = '';
       this.resultsStep = false;
       this.errorAnnotating = false;
     },
@@ -222,12 +249,70 @@ export default {
       this.showSpinner = true;
       const at = await biolink.annotateText(this.form.message, this.longestOnly);
       this.showSpinner = false;
+      // Call some endpoint and wait for a response.
       if (at.status !== 200) {
         this.errorAnnotating = true;
       } else {
-        // Call some endpoint and wait for a response. If, then return then
+        // If response, process data
+        // Original response:
         this.annotatedText = at.data;
+        // Clean up data to remove annotations that
+        //  don't have corresponding page in monarch
+        this.cleanAnnotations();
       }
+    },
+
+    cleanAnnotations() {
+      let cleanedAnnot = ''; // full annotation text scrubbed of invalid terms
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = this.annotatedText;
+      const allChildren = wrapper.childNodes;
+      for (let i = 0; i < allChildren.length; i++) {
+        if (allChildren[i].nodeType === 1) {
+          // evaluate each sciCrunchAnnotation for presence of valid category
+          let hasValidCat = false;
+          let vettedAnnot = ''; // validated annotations
+          const origAttr = allChildren[i].getAttribute('data-sciGraph'); // original attributes
+          const vettedAttr = document.createAttribute('data-sciGraph'); // new attribute
+          const annotations = origAttr.split('|');
+          annotations.forEach((annotation) => {
+            const terms = this.parseTerm(annotation);
+            // vet each annotation to ensure there is a valid Monarch entry
+            if (validCatToPath(terms[2])) {
+              // append annotation only if it has a valid category
+              // and add delimter if needed
+              vettedAnnot += (hasValidCat) ? '|' + annotation : annotation;
+              hasValidCat = true;
+            } else if (terms[1].search('HP:') === 0) {
+              // map any HP terms with invalid categories to the "phenotype" category
+              let editedAnnot = '';
+              if (terms[2] === '') {
+                // add category
+                editedAnnot = annotation + 'phenotype';
+              } else {
+                // replace category
+                const patt1 = new RegExp(',' + terms[2] + '$', 'g');
+                editedAnnot = annotation.replace(patt1, ',phenotype');
+              }
+              vettedAnnot += (hasValidCat) ? '|' + editedAnnot : editedAnnot;
+              hasValidCat = true;
+            }
+          });
+          if (hasValidCat) {
+            // replace sciGraph data with validated annotations
+            vettedAttr.value = vettedAnnot;
+            allChildren[i].setAttributeNode(vettedAttr);
+            cleanedAnnot += allChildren[i].outerHTML;
+          } else {
+            // replace span with plain text when there are no validated annotations
+            cleanedAnnot += allChildren[i].innerHTML;
+          }
+        } else {
+          // this child element contains un-annotated text
+          cleanedAnnot += allChildren[i].nodeValue;
+        }
+      }
+      this.annotTextCleaned = cleanedAnnot;
     },
 
     buildPopover(title, data) {
@@ -242,19 +327,54 @@ export default {
 
       const annotations = data.split('|');
       annotations.forEach((annotation) => {
-        let finalBuiltAnnotation = '';
-        annotation = annotation.split(',');
-        finalBuiltAnnotation += '<div class="annotation"><span class="ontology-id">'
-          + '<a href="/' + annotation[1] + '"> ' + annotation[1]
-          + ' </a>'
-          + '</span>';
-        finalBuiltAnnotation += annotation[0] + '</div>';
+        let finalBuiltAnnotation = '<div class="annotation"><span class="ontology-id">';
+        const terms = this.parseTerm(annotation);
+        const catPath = validCatToPath(terms[2]);
+        if (typeof catPath !== 'undefined') {
+          finalBuiltAnnotation += '<a href="/' + catPath + '/' +
+            terms[1] + '"> ' + terms[1] + ' </a>';
+        } else {
+          finalBuiltAnnotation += terms[1];
+        }
+        finalBuiltAnnotation += '</span>';
+        finalBuiltAnnotation += terms[0] + '</div>';
         body.innerHTML += finalBuiltAnnotation;
       });
 
       popoverContainer.appendChild(header);
       popoverContainer.appendChild(body);
       return popoverContainer;
+    },
+
+    parseTerm(str) {
+      let terms = {};
+      const n = str.search('\\\\,');
+      if (n >= 0) {
+        // annoation term has an escaped comma, e.g., '\\,'
+        // split on comma
+        const parts = str.split(',');
+        // re-join terms containing escaped commas
+        let j = 0;
+        let found = false;
+        for (let i = 0; i < parts.length; i++) {
+          if (parts[i].endsWith('\\')) {
+            // replace escape character with comma
+            parts[i] = parts[i].replace(/\\/g, ',');
+            found = true;
+          } else {
+            if (found) {
+              terms[j] = parts[i - 1].concat(parts[i]);
+            } else {
+              terms[j] = parts[i];
+            }
+            found = false;
+            j += 1;
+          }
+        }
+      } else {
+        terms = str.split(',');
+      }
+      return terms;
     },
 
     storePhenotypes() {
@@ -270,12 +390,60 @@ export default {
         }
       });
       this.phenotypes = [...new Set(phenotypes)].join(',');
+    },
+
+    exportAnnotations() {
+      const exportData = [];
+      let textOnly = ''; // tracks current position in original text block
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = this.annotatedText;
+      const allChildren = wrapper.childNodes;
+      for (let i = 0; i < allChildren.length; i++) {
+        if (allChildren[i].nodeType === 1) {
+          // this child element contains annotated text
+          const pos = textOnly.length;
+          const attrs = allChildren[i].getAttribute('data-sciGraph'); // original attributes
+          const annotations = attrs.split('|');
+          annotations.forEach((annotation) => {
+            const terms = this.parseTerm(annotation);
+            // assign annotation data to data array
+            const annotData = {
+              matchedText: allChildren[i].innerHTML,
+              term: terms[0],
+              ID: terms[1],
+              category: terms[2],
+              position: pos
+            };
+            exportData.push(annotData);
+          });
+          textOnly += allChildren[i].innerHTML;
+        } else {
+          // this child element contains un-annotated text
+          textOnly += allChildren[i].nodeValue;
+        }
+      }
+
+      const FileSaver = require('file-saver');
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      FileSaver.saveAs(blob, 'text-annotator-data.json');
     }
   }
 };
 </script>
 <style lang="scss">
   @import "~@/style/variables";
+
+  .msgDownload {
+    border-top: 1px solid #cccccc;
+    text-align: center;
+    font-style: italic;
+    font-size: .9em;
+    padding: 2px;
+  }
+
+  .tooltip[x-placement^="top"] {
+    margin-bottom: 10px;
+  }
 
   .stepper-box {
     box-shadow: none !important;

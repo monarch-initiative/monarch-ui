@@ -7,24 +7,24 @@
 
 /* eslint import/prefer-default-export: 0 */
 
-export function reduceCategoryList(categoryList) {
-  const validCats = {
-    'gene': 'gene',
-    'variant': 'variant',
-    'sequence feature': 'variant',
-    'genotype': 'genotype',
-    'phenotype': 'phenotype',
-    'disease': 'disease',
-    'pathway': 'pathway',
-    'anatomical entity': 'anatomy',
-    'publication': 'publication',
-    'case': 'case',
-    // TODO remove this
-    // when https://github.com/monarch-initiative/monarch-cypher-queries/commit/c3ff7c1
-    // makes it to production
-    'sequence featurevariant': 'variant',
-  };
+const validCats = {
+  'gene': 'gene',
+  'variant': 'variant',
+  'sequence feature': 'variant',
+  'genotype': 'genotype',
+  'phenotype': 'phenotype',
+  'disease': 'disease',
+  'pathway': 'pathway',
+  'anatomical entity': 'anatomy',
+  'publication': 'publication',
+  'case': 'case',
+  // TODO remove this
+  // when https://github.com/monarch-initiative/monarch-cypher-queries/commit/c3ff7c1
+  // makes it to production
+  'sequence featurevariant': 'variant',
+};
 
+export function reduceCategoryList(categoryList) {
   const modelCats = ['cell line', 'organism'];
 
   const categoryObj = categoryList.reduce((map, cat) => {
@@ -51,4 +51,8 @@ export function reduceCategoryList(categoryList) {
   }
 
   return result;
+}
+
+export function validCatToPath(cat) {
+  return validCats[cat];
 }
