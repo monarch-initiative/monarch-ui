@@ -90,7 +90,7 @@ institutions:
     - name: Jen Martin
       picture: img/team/JenMartin.png
       title: Scientific Software Engineer
-      alumni: false
+      alumni: true
       bio: Jen is a Software Engineer for the Monarch team at Oregon State University, where she works primarily on the Monarch user interface. She has a multidisciplinary background that she uses to bridge her passion for science with expertise in scientific programming and web application development. Her formal education includes a BS in Geology from the University of California at Davis.
     - name: Dan Keith
       picture: img/team/DanielKeith.png
