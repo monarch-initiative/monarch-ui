@@ -690,9 +690,10 @@ export default {
 
           const parser = new DOMParser();
           const articleXml = parser.parseFromString(this.entrezResult.abstract, 'text/xml');
+
           if (articleXml) {
-            this.entrezResult.abstract = articleXml.getElementsByTagName('AbstractText')[0].textContent;
-            const articleIds = articleXml.getElementsByTagName('ArticleId');
+            this.entrezResult.abstract = articleXml.getElementsByTagName('AbstractText')[0]?.textContent || 'No abstract found';
+            const articleIds = Array.from(articleXml.getElementsByTagName('ArticleId'));
             articleIds.map((articleId) => {
               if (articleId.getAttribute('IdType') === 'doi') {
                 this.entrezResult.doi = articleId.textContent;

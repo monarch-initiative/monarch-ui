@@ -22,8 +22,8 @@
     </div>
     <div class="row">
         <div class="col-sm-4 offset-xl-3 col-xl-2 collab">
-           <a href="https://www.ohsu.edu/" target="__blank">
-                <img src="../../assets/img/ohsu.jpg" alt="ohsu">
+           <a href="https://medschool.cuanschutz.edu/ai" target="__blank">
+                <img src="../../assets/img/health-ai.png" alt="Center for Health AI">
            </a>
         </div>
         <div class="col-sm-4 col-xl-2 collab">
