@@ -34,7 +34,6 @@ For detailed information on the structure of the code and how to contribute, see
 	- [Local Development: Fast Compile and hot-reload](#local-development-fast-compile-and-hot-reload)
 - [Production Build: Bundling and Minification](#production-build-bundling-and-minification)
 - [Production Test: Build and Serve](#production-test-build-and-serve)
-- [Deploy to gh-pages branch](#deploy-to-gh-pages-branch)
 - [Linting](#linting)
 - [Testing](#testing)
 	- [Run your unit tests](#run-your-unit-tests)
@@ -48,7 +47,7 @@ For detailed information on the structure of the code and how to contribute, see
 The UI is a VueJS single-page application that is loaded into the browser as a static set of Javascript, HTML, CSS, and media resources. Subsequent dynamic data is delivered to the browser via `XMLHttpRequest` calls to various backend services, primarily [BioLink](https://api.monarchinitiative.org). The data returned from these calls is then displayed appropriately in the web application.
 
 - Source: https://github.com/monarch-initiative/monarch-ui
-- Monarch Initiative UI (beta): https://beta.monarchinitiative.org
+- Monarch Initiative UI: https://monarchinitiative.org
 - [BioLink](https://api.monarchinitiative.org) service to access Monarch's data
 
 The VueJS application is built from source code via a modern chain of tools that deal with resource bundling, minification, and transpilation:
