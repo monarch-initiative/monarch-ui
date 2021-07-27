@@ -1,21 +1,18 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm';
-import axios from 'axios';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 // import Phenogrid from 'phenogrid/dist/phenogrid-bundle';
 import 'phenogrid/dist/phenogrid-bundle.css';
 import VueGtag from 'vue-gtag';
 import router from './router';
-import { productionServers } from './api/BioLink';
 import App from './App.vue';
 
-const Phenogrid = require('phenogrid');
 
 Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 
-if (productionServers.includes(window.location.hostname)) {
+if (window.location.hostname === 'monarchinitiative.org') {
   Vue.use(VueGtag, {
     config: {
       id: 'UA-41803362-1',

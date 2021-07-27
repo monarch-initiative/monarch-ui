@@ -15,60 +15,19 @@ import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 // and only secondarily, to create a general-purpose service layer.
 //
 
-
-const servers = {
-  development: {
-    'type': 'development',
-    'app_base': 'https://monarchinitiative.org',
-    'scigraph_url': 'https://scigraph-ontology-dev.monarchinitiative.org/scigraph/',
-    'scigraph_data_url': 'https://scigraph-data-dev.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr-dev.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr-dev.monarchinitiative.org/solr/search/',
-    'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
-    'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/',
-  },
-
-  beta: {
-    'type': 'beta',
-    'app_base': 'https://beta.monarchinitiative.org',
-    'scigraph_url': 'https://scigraph-ontology-dev.monarchinitiative.org/scigraph/',
-    'scigraph_data_url': 'https://scigraph-data-dev.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
-    'owlsim_services_url': 'https://beta.monarchinitiative.org/owlsim',
-    'analytics_id': '',
-    'biolink_url': 'https://api-dev.monarchinitiative.org/api/'
-  },
-
-  production: {
-    'type': 'production',
-    'app_base': 'https://monarchinitiative.org',
-    'scigraph_url': 'https://scigraph-ontology.monarchinitiative.org/scigraph/',
-    'scigraph_data_url': 'https://scigraph-data.monarchinitiative.org/scigraph/',
-    'golr_url': 'https://solr.monarchinitiative.org/solr/golr/',
-    'search_url': 'https://solr.monarchinitiative.org/solr/search/',
-    'owlsim_services_url': 'https://monarchinitiative.org/owlsim',
-    'analytics_id': '',
-    'biolink_url': 'https://api.monarchinitiative.org/api/',
-  }
-
+// versions/environments of api servers
+const versions = {
+  beta: 'https://api-dev.monarchinitiative.org/api/',
+  production: 'https://api.monarchinitiative.org/api/'
 };
 
-export const productionServers = [
-  'monarchinitiative.org',
-  'preview.monarchinitiative.org'
-];
+const defaultVersion = 'production';
 
-const defaultApiServer =
-  (productionServers.includes(window.location.hostname)) ? 'production' : 'development';
+const versionOverride = new URLSearchParams(document.location.search.substring(1)).get('api');
 
-const apiServer = (new URLSearchParams(document.location.search.substring(1))).get('api') || defaultApiServer;
-// console.log('apiServer', window.location.hostname, apiServer);
+export const version = versionOverride || defaultVersion;
 
-const serverConfiguration = servers[apiServer];
-export const biolink = serverConfiguration.biolink_url;
-const scigraph = serverConfiguration.scigraph_url;
+export const biolink = versions[version];
 
 /**
   Lighter-weight BioLink node info. Used by LocalNav.vue
@@ -94,12 +53,6 @@ export async function getNodeSummary(nodeId, nodeType) {
   return nodeSummary;
 }
 
-/*
-  Return our envrionment
- */
-export function getCurrentServerEnvironment() {
-  return apiServer;
-}
 
 /**
  Get node info to support Node.vue
