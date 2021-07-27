@@ -21,7 +21,7 @@ const versions = {
   production: 'https://api.monarchinitiative.org/api/'
 };
 
-const defaultVersion = window.location.hostname === 'monarchinitiative.org' ? 'production' : 'beta';
+const defaultVersion = 'production';
 
 const versionOverride = new URLSearchParams(document.location.search.substring(1)).get('api');
 
