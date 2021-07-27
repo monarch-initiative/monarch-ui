@@ -4,20 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "npm run serve",
-    "serve": "node_modules/.bin/vue-cli-service serve --port 8081",
-    "build": "node_modules/.bin/vue-cli-service build && cp dist/index.html dist/404.html",
-    "test": "npm run test:unit && npm run test:e2e",
-    "lint": "NODE_ENV=production node_modules/.bin/vue-cli-service lint --no-fix",
-    "analyze": "BUILD=analyze node_modules/.bin/vue-cli-service build",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "buildandserve": "npm run build && (cd dist/ && ln -s . monarch-ui) && http-server -c-1 dist/",
-    "clean": "rm -rf dist/",
-    "ghpublish": "BUILD=nonrootdomain ./publish.sh",
-    "ghalpha": "./publish.sh",
-    "lintfix": "node_modules/.bin/vue-cli-service lint --fix",
-    "rmdsstore": "find . -name '.DS_Store' -print -delete",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "vue-cli-service test:unit --require tests/unit/pre-setup.js",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "node_modules/.bin/vue-cli-service test:unit --require tests/unit/pre-setup.js",
-    "ui": "node_modules/.bin/vue ui"
+    "lint": "vue-cli-service lint",
+    "lintfix": "vue-cli-service lint --fix"
   },
   "dependencies": {
     "@babel/polyfill": "^7.8.7",

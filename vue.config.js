@@ -1,9 +1,5 @@
 const path = require('path');
 
-const analyze = process.env.BUILD === 'analyze';
-const nonrootdomain = process.env.BUILD === 'nonrootdomain';
-const baseURL = nonrootdomain ? '/monarch-ui/' : '/';
-
 const markdownItClass = require('markdown-it');
 process.env.VUE_APP_VERSION = require('./package.json').version;
 
@@ -33,7 +29,7 @@ const vueConfig = {
 
   runtimeCompiler: true,
   // outputDir: 'dist',
-  publicPath: baseURL,
+  publicPath: '/',
 
   lintOnSave: false,
 
@@ -128,9 +124,5 @@ const vueConfig = {
   }
 
 };
-
-if (analyze) {
-  vueConfig.pluginOptions.webpackBundleAnalyzer.analyzerMode = 'server';
-}
 
 module.exports = vueConfig;

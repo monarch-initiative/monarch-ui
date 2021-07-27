@@ -1,0 +1,32 @@
+name: Deploy Beta
+
+# when someone pushes to master branch
+on:
+  push:
+    branches:
+      - master
+
+# deploy latest app to beta on github pages
+jobs:
+  deploy-beta:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - name: Install packages
+        run: npm install
+      - name: Test code
+        run: npm run test:unit
+      - name: Build app
+        run: npm run build
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          keep_files: false
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}

@@ -26,6 +26,17 @@ const availableCardTypes = [
   'variant',
 ];
 
+// handle redirect from 404
+const handle404 = (to, from, next) => {
+  const redirect = sessionStorage.redirect;
+  if (redirect) {
+    console.info({ redirect });
+    delete sessionStorage.redirect;
+    next(redirect);
+  } else {
+    next();
+  }
+};
 
 const router = new Router({
   mode: 'history',
@@ -53,6 +64,7 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+      beforeEnter: handle404
     },
     {
       path: '/about/monarch',

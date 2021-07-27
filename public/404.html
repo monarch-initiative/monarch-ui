@@ -1,0 +1,10 @@
+<html>
+  <body>
+    <script type="text/javascript">
+      console.log(location);
+      const { origin, pathname, search } = location;
+      sessionStorage.redirect = pathname + search;
+      location.replace("/");
+    </script>
+  </body>
+</html>

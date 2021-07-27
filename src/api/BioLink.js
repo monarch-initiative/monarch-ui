@@ -56,8 +56,7 @@ const servers = {
 };
 
 export const productionServers = [
-  'monarchinitiative.org',
-  'preview.monarchinitiative.org'
+  'monarchinitiative.org'
 ];
 
 const defaultApiServer =
