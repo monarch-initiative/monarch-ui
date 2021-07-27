@@ -16,7 +16,7 @@ import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 //
 
 // versions/environments of api servers
-const apiVersions = {
+const versions = {
   beta: 'https://api-dev.monarchinitiative.org/api/',
   production: 'https://api.monarchinitiative.org/api/'
 };
@@ -25,9 +25,9 @@ const defaultVersion = window.location.hostname === 'monarchinitiative.org' ? 'p
 
 const versionOverride = new URLSearchParams(document.location.search.substring(1)).get('api');
 
-const version = versionOverride || defaultVersion;
+export const version = versionOverride || defaultVersion;
 
-export const biolink = apiVersions[version];
+export const biolink = versions[version];
 
 /**
   Lighter-weight BioLink node info. Used by LocalNav.vue
@@ -53,12 +53,6 @@ export async function getNodeSummary(nodeId, nodeType) {
   return nodeSummary;
 }
 
-/*
-  Return our envrionment
- */
-export function getCurrentServerEnvironment() {
-  return version;
-}
 
 /**
  Get node info to support Node.vue

@@ -184,14 +184,14 @@
 
     <b-navbar-toggle target="nav_collapse" />
     <div
-      v-if="getEnvironment() === 'development' || getEnvironment() === 'beta'"
+      v-if="apiVersion === 'beta'"
       v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
       title="Monarch UI BETA"
       class="beta"
     >
       BETA
     </div>
-    <div v-if="getEnvironment() != 'production'" class="production">
+    <div v-else class="production">
       <b-navbar-nav>
         <b-nav-item href="https://monarchinitiative.org/" target="_blank">
           Main Site
@@ -212,14 +212,8 @@ export default {
   },
   data() {
     return {
+      apiVersion: biolinkService.version
     };
-  },
-  mounted() {
-  },
-  methods: {
-    getEnvironment() {
-      return biolinkService.getCurrentServerEnvironment();
-    }
   }
 };
 </script>
