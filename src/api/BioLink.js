@@ -57,7 +57,7 @@ export async function getNodeSummary(nodeId, nodeType) {
   Return our envrionment
  */
 export function getCurrentServerEnvironment() {
-  return server;
+  return version;
 }
 
 /**
