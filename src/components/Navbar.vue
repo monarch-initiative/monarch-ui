@@ -191,7 +191,7 @@
     >
       BETA
     </div>
-    <div v-else class="production">
+    <div v-if="apiVersion === 'beta'" class="production">
       <b-navbar-nav>
         <b-nav-item href="https://monarchinitiative.org/" target="_blank">
           Main Site
