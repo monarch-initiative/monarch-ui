@@ -6,7 +6,6 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 import 'phenogrid/dist/phenogrid-bundle.css';
 import VueGtag from 'vue-gtag';
 import router from './router';
-import { productionServers } from './api/BioLink';
 import App from './App.vue';
 
 const Phenogrid = require('phenogrid');
@@ -15,17 +14,15 @@ Vue.config.productionTip = false;
 
 Vue.use(BootstrapVue);
 
-if (productionServers.includes(window.location.hostname)) {
-  Vue.use(VueGtag, {
-    config: {
-      id: 'UA-41803362-1',
-      params: {
-        anonymize_ip: true,
-        cookie_flags: 'SameSite=None;Secure',
-      }
+Vue.use(VueGtag, {
+  config: {
+    id: 'UA-41803362-1',
+    params: {
+      anonymize_ip: true,
+      cookie_flags: 'SameSite=None;Secure',
     }
-  }, router);
-}
+  }
+}, router);
 
 new Vue({
   router,

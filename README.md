@@ -65,10 +65,14 @@ The output of the build process is a set of static files including bundled Javas
 
 #### BioLink Service
 
-By default, the monarch-ui application will use the BioLink *development* server at [https://api-dev.monarchinitiative.org/api/](https://api-dev.monarchinitiative.org/api/) with the following exceptions:
-- If monarch-ui is being hosted on the production host [https://monarchinitiative.org](https://monarchinitiative.org), then the production BioLink at [https://api.monarchinitiative.org/api/](https://api.monarchinitiative.org/api/) will be used.
-- If the URL parameter `?api=production` is used, then production BioLink will be used.
-- Similarly, if the URL parameter `?api=development` is used, then development BioLink will be used.
+There are two versions of the BioLink service:
+ - **beta** at https://api-dev.monarchinitiative.org/api/
+ - **production** at https://api.monarchinitiative.org/api/
+
+When running on the live production site, `monarch-ui` will use **production** by default.
+Otherwise (e.g. running locally or in online deploy previews), `monarch-ui` will use **beta** by default.
+
+To override these defaults, put `?api=beta` or `?api=production` as a url parameter.
 
 
 ### Directory Structure
