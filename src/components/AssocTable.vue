@@ -418,7 +418,6 @@ export default {
           that.associationData.associations.forEach((association, index) => {
             association.publicationMeta = publications[index];
           });
-          console.log(ids, publications, that.associationData.associations)
         }
 
         if (reset) {
@@ -585,6 +584,10 @@ export default {
           objectElem.label = sanitizeNodeLabel(objectElem.label);
         }
 
+        if (modifiedCardType === 'publication') {
+          objectElem.label = truncate(elem.publicationMeta?.title, 50) || objectElem.label;
+        }
+
         const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
         this.fixupRelation(elem, this.nodeType, this.cardType);
         this.rows.push({
@@ -598,9 +601,8 @@ export default {
           assocSubject: subjectElem.label,
           subjectCurie: subjectElem.id,
           subjectLink,
-          title: truncate(elem.publicationMeta.title || '', 50),
-          author: (elem.publicationMeta.authors || [])[0]?.name || '',
-          date: elem.publicationMeta.pubdate || '',
+          author: (elem.publicationMeta?.authors || [])[0]?.name || '',
+          date: elem.publicationMeta?.pubdate || '',
           taxonLabel: objectTaxon.label,
           taxonId: objectTaxon.id,
           relation: elem.relation,
@@ -679,10 +681,6 @@ export default {
 
       if (this.cardType.includes('publication')) {
         fields.splice(1, 0, {
-          key: 'title',
-          label: 'Title'
-        },
-        {
           key: 'author',
           label: 'Author'
         },
