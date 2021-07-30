@@ -239,7 +239,7 @@ import TaxonFilter from '@/components/TaxonFilter.vue';
 import { isTaxonCardType } from '../lib/TaxonMap';
 import sourceToLabel from '../lib/sources';
 
-const truncate = (input, limit) => (input.length > limit ? `${input.substring(0, limit - 3)}...` : input);
+const truncate = (input = '', limit) => (input.length > limit ? `${input.substring(0, limit - 3)}...` : input);
 
 export default {
   components: {
