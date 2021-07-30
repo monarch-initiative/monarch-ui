@@ -829,7 +829,7 @@ export default {
 
   .assoc-object,
   .assoc-subject {
-    min-width: 200px;
+    // min-width: 200px;
     // word-break: break-all;
   }
 
