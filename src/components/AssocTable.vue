@@ -418,6 +418,7 @@ export default {
           that.associationData.associations.forEach((association, index) => {
             association.publicationMeta = publications[index];
           });
+          console.log(ids, publications, that.associationData.associations)
         }
 
         if (reset) {
@@ -586,7 +587,6 @@ export default {
 
         const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
         this.fixupRelation(elem, this.nodeType, this.cardType);
-        console.log(elem.publicationMeta);
         this.rows.push({
           annotationType: this.cardType,
           evidence,
@@ -598,9 +598,9 @@ export default {
           assocSubject: subjectElem.label,
           subjectCurie: subjectElem.id,
           subjectLink,
-          title: truncate(elem.publicationMeta.title, 20),
-          author: elem.publicationMeta.authors[0].name + ' et. al.',
-          date: elem.publicationMeta.pubdate,
+          title: truncate(elem.publicationMeta.title || '', 50),
+          author: (elem.publicationMeta.authors || [])[0]?.name || '',
+          date: elem.publicationMeta.pubdate || '',
           taxonLabel: objectTaxon.label,
           taxonId: objectTaxon.id,
           relation: elem.relation,

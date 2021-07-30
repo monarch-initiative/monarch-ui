@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export async function getPublications(ids) {
   const regex = /^PMID:(\d+)$/;
-  ids = ids.map(id => (regex.exec(id) || [])[1]).filter(id => id);
+  ids = ids.map(id => (regex.exec(id) || [])[1]);
 
   if (!ids.length) return null;
 
@@ -49,6 +49,13 @@ export async function getPublications(ids) {
 
         /* eslint-disable no-restricted-syntax */
         for (const id of ids) {
+          // if id is not a pubmed id or otherwise doesn't exist, add blank result
+          if (!id) {
+            results.push({});
+            /* eslint-disable no-continue */
+            continue;
+          }
+
           // put summary in result
           const result = (entrezSummary?.data?.result || [])[id] || {};
 
