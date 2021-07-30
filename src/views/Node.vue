@@ -81,7 +81,7 @@
                 <h6>
                   {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
                 </h6>
-                <h6>
+                <h6 class="publication-abstract">
                   {{ entrezResult.abstract }}
                 </h6>
                 <h6>
@@ -678,7 +678,7 @@ export default {
       }
 
       if (this.nodeType === 'publication') {
-        const entrezResult = await Entrez.getPublication(this.nodeId);
+        const entrezResult = (await Entrez.getPublications([this.nodeId]))[0];
 
         if (!entrezResult) {
           // console.log('Entrez.getPublication null for ', this.nodeId);
@@ -687,20 +687,8 @@ export default {
           const entrezTitle = htmlDecode(entrezResult.title);
           this.node.label = entrezTitle;
           this.node.uri = entrezResult.pubmedURL;
-
-          const parser = new DOMParser();
-          const articleXml = parser.parseFromString(this.entrezResult.abstract, 'text/xml');
-
-          if (articleXml) {
-            this.entrezResult.abstract = articleXml.getElementsByTagName('AbstractText')[0]?.textContent || 'No abstract found';
-            const articleIds = Array.from(articleXml.getElementsByTagName('ArticleId'));
-            articleIds.map((articleId) => {
-              if (articleId.getAttribute('IdType') === 'doi') {
-                this.entrezResult.doi = articleId.textContent;
-              }
-              return articleId;
-            });
-          }
+          this.entrezResult.doi = entrezResult.doi || 'No doi found';
+          this.entrezResult.abstract = entrezResult.abstract || 'No abstract found';
         }
       }
 
@@ -1124,8 +1112,8 @@ div.container-cards {
   }
 }
 
-div.publication-abstract {
-  margin: 0;
+.publication-abstract {
+  white-space: pre-wrap;
 }
 
 @media (max-width: $sidebar-collapse-width) {
