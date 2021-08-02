@@ -417,6 +417,7 @@ export default {
           const publications = await Entrez.getPublications(ids);
           that.associationData.associations.forEach((association, index) => {
             association.publicationMeta = publications[index];
+            console.log(association.publicationMeta);
           });
         }
 
@@ -602,7 +603,8 @@ export default {
           subjectCurie: subjectElem.id,
           subjectLink,
           author: (elem.publicationMeta?.authors || [])[0]?.name || '',
-          date: elem.publicationMeta?.pubdate || '',
+          publisher: elem.publicationMeta?.source || '',
+          date: (elem.publicationMeta?.pubdate || '').split(/\s/)[0] || '',
           taxonLabel: objectTaxon.label,
           taxonId: objectTaxon.id,
           relation: elem.relation,
@@ -687,6 +689,10 @@ export default {
         {
           key: 'date',
           label: 'Date'
+        },
+        {
+          key: 'publisher',
+          label: 'Publisher'
         });
         spliceStart += 3;
       }
