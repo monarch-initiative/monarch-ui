@@ -229,6 +229,7 @@
 
 <script>
 import us from 'underscore';
+import * as Entrez from '@/api/Entrez';
 import {
   processPublications, processSources, sanitizeNodeLabel, sanitizeText
 } from '@/lib/Utils';
@@ -237,6 +238,8 @@ import * as bioLinkService from '@/api/BioLink';
 import TaxonFilter from '@/components/TaxonFilter.vue';
 import { isTaxonCardType } from '../lib/TaxonMap';
 import sourceToLabel from '../lib/sources';
+
+const truncate = (input = '', limit) => (input.length > limit ? `${input.substring(0, limit - 3)}...` : input);
 
 export default {
   components: {
@@ -401,12 +404,22 @@ export default {
           params,
         );
 
+
         if (!associationsResponse.data || !associationsResponse.data.associations) {
           that.associationData = null;
           throw new Error('BioLink returned no data');
         }
 
         that.associationData = associationsResponse.data;
+
+        if (this.cardType === 'publication') {
+          const ids = that.associationData.associations.map(({ object }) => object.id);
+          const publications = await Entrez.getPublications(ids);
+          that.associationData.associations.forEach((association, index) => {
+            association.publicationMeta = publications[index];
+            console.log(association.publicationMeta);
+          });
+        }
 
         if (reset) {
           this.currentPage = 1;
@@ -572,6 +585,10 @@ export default {
           objectElem.label = sanitizeNodeLabel(objectElem.label);
         }
 
+        if (modifiedCardType === 'publication') {
+          objectElem.label = truncate(elem.publicationMeta?.title, 50) || objectElem.label;
+        }
+
         const subjectLink = `/${this.nodeType}/${subjectElem.id}`;
         this.fixupRelation(elem, this.nodeType, this.cardType);
         this.rows.push({
@@ -585,6 +602,9 @@ export default {
           assocSubject: subjectElem.label,
           subjectCurie: subjectElem.id,
           subjectLink,
+          author: (elem.publicationMeta?.authors || [])[0]?.name || '',
+          publisher: elem.publicationMeta?.source || '',
+          date: (elem.publicationMeta?.pubdate || '').split(/\s/)[0] || '',
           taxonLabel: objectTaxon.label,
           taxonId: objectTaxon.id,
           relation: elem.relation,
@@ -659,6 +679,22 @@ export default {
           class: 'assoc-subject',
         });
         spliceStart++;
+      }
+
+      if (this.cardType.includes('publication')) {
+        fields.splice(1, 0, {
+          key: 'author',
+          label: 'Author'
+        },
+        {
+          key: 'date',
+          label: 'Date'
+        },
+        {
+          key: 'publisher',
+          label: 'Publisher'
+        });
+        spliceStart += 3;
       }
 
       if (this.isFrequencyOnsetType(this.nodeType, this.cardType)) {
@@ -797,7 +833,7 @@ export default {
 
   .assoc-object,
   .assoc-subject {
-    min-width: 200px;
+    // min-width: 200px;
     // word-break: break-all;
   }
 

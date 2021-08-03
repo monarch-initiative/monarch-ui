@@ -5,15 +5,15 @@
       between the Compact and the Home layouts.
     -->
     <div v-if="compact" class="row footer compact">
-      <div class="col-lg-4 version">
+      <div class="col-12 col-lg-4 version">
         <i>The Monarch Initiative 2020</i>
       </div>
-      <div class="col-4 report">
+      <div class="col-12 col-lg-4 report">
         <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">
           Report Issue or Suggest Content
         </b-button>
       </div>
-      <div class="col-lg-4 copyright">
+      <div class="col-12 col-lg-4 copyright">
         <i class="fa fa-creative-commons fa-fw" />
         CC-BY 3.0, except where noted.
       </div>
@@ -72,8 +72,8 @@ export default {
 
 div.footer {
   margin: 0;
-  padding: 0 10px;
-  height: $footer-height;
+  padding: 20px;
+  min-height: $footer-height;
   width: 100%;
   text-align: center;
   color: white;
@@ -131,12 +131,12 @@ div.footer {
   }
 
   .version {
-    padding: 10px 0 0 15px;
+    padding: 10px;
   }
 
   .copyright {
     text-align: right;
-    padding: 10px 15px 0 0;
+    padding: 10px;
   }
 
   .issue-btn {
@@ -151,10 +151,6 @@ div.footer {
 }
 
 div.footer.compact {
-  min-height: $footer-height;
-  margin: 0;
-  padding: 15px 0 5px 0;
-
   font-size: 0.875rem;
   text-align: left;
   background-color: $monarch-bg-color;
