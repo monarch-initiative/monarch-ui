@@ -73,7 +73,7 @@ export async function getNode(nodeId, nodeType) {
     rows: 1
   };
 
-  const nodeSummary = axios.get(bioentityUrl, { params })
+  const nodeSummary = await axios.get(bioentityUrl, { params })
     .then((bioentityResp) => {
       const bioentityResponseData = bioentityResp.data;
 
@@ -90,7 +90,11 @@ export async function getNode(nodeId, nodeType) {
       // are we even using this anymore?
       bioentityResponseData.uri = bioentityResponseData.iri;
       return bioentityResponseData;
+    }).catch((error) => {
+      throw new Error(error.response.data.error.message);
     });
+
+  console.log(nodeSummary);
 
   return nodeSummary;
 }
@@ -718,6 +722,7 @@ export async function getPhenotypeCategories(diseaseId) {
   params.append('use_compact_associations', false);
   params.append('direct', false);
   params.append('direct_taxon', false);
+
   const response = await axios.get(biolinkUrl, { params });
   if (response.data.facet_counts.closure_bin) {
     return response.data.facet_counts.closure_bin;

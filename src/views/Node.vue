@@ -25,7 +25,7 @@
           <h6>
             Error loading {{ labels[nodeType] }}:&nbsp; {{ nodeId }}
           </h6>
-          <pre class="pre-scrollable">{{ nodeError }}</pre>
+          <div>{{ nodeError }}</div>
         </small>
       </div>
       <div v-else class="text-center spinner-wrapper">
@@ -613,8 +613,6 @@ export default {
     },
 
     async fetchData() {
-      const path = this.$route.fullPath;
-
       this.path = this.$route.path;
       this.nodeId = this.$route.params.id;
       this.nodeType = this.path.split('/')[1];
@@ -640,15 +638,16 @@ export default {
       this.reactomeId = null;
       this.histoPhenoData = {};
 
-      const nodeSummaryPromise = biolinkService.getNode(this.nodeId, this.nodeType);
-      const neighborhoodPromise = biolinkService.getNeighborhood(this.nodeId, this.nodeType);
+      let node;
 
-      const [node, neighborhood] = await Promise.all(
-        [
-          nodeSummaryPromise,
-          neighborhoodPromise
-        ]
-      );
+      try {
+        node = await biolinkService.getNode(this.nodeId, this.nodeType);
+      } catch (error) {
+        this.nodeError = error;
+        return;
+      }
+
+      const neighborhood = await biolinkService.getNeighborhood(this.nodeId, this.nodeType);
 
       // Redirect if biolink is returning a different ID than the
       // one we provided
@@ -994,6 +993,11 @@ $line-height-compact: 1.3em;
   min-height: 100%;
 }
 
+.loading {
+  margin: 50px;
+  text-align: center;
+}
+
 .overlay {
   position: fixed;
   width: 100vw;
@@ -1089,11 +1093,6 @@ div.container-cards {
   width: unset;
   padding: 0;
   margin: 0 0 0 $sidebar-width;
-
-  .loading {
-    margin: 15% calc(50% - 14%);
-    text-align: center;
-  }
 
   & .node-content-section {
     padding-left: 0;
