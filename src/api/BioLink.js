@@ -17,8 +17,9 @@ import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 
 // versions/environments of api servers
 const versions = {
-  beta: 'https://api-dev.monarchinitiative.org/api/',
-  production: 'https://api.monarchinitiative.org/api/'
+  'google-cloud': 'https://api.monarch-test.ddns.net/api/',
+  'beta': 'https://api-dev.monarchinitiative.org/api/',
+  'production': 'https://api.monarchinitiative.org/api/'
 };
 
 const defaultVersion = 'production';
