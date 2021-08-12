@@ -9,7 +9,7 @@
 <script>
 import { biolink } from '@/api/BioLink';
 
-/* global Phenogrid */
+const Phenogrid = require('phenogrid');
 
 export default {
   props: {
