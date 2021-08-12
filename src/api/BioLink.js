@@ -17,8 +17,7 @@ import { labelToId, isTaxonCardType, isSubjectCardType } from '../lib/TaxonMap';
 
 // versions/environments of api servers
 const versions = {
-  // WHEN NEW GOOGLE CLOUD SERVICES STABLE, REMOVE FIRST ENTRY AND REPLACE LATTER TWO
-  'google-cloud': 'https://api.monarch-test.ddns.net/api/',
+  'google-cloud': 'https://api.monarch-test.ddns.net/api/',  // REMOVE WHEN NEW GOOGLE CLOUD SERVICES STABLE AND CANONICAL URLS BELOW HAVE BEEN TRANSFERRED TO THEM
   'beta': 'https://api-dev.monarchinitiative.org/api/',
   'production': 'https://api.monarchinitiative.org/api/'
 };
@@ -27,7 +26,7 @@ const defaultVersion = 'production';
 
 const versionOverride = new URLSearchParams(document.location.search.substring(1)).get('api');
 
-export const version = versionOverride || defaultVersion;
+export const version = versionOverride && versions[versionOverride] ? versionOverride : defaultVersion;
 
 export const biolink = versions[version];
 
