@@ -184,14 +184,14 @@
 
     <b-navbar-toggle target="nav_collapse" />
     <div
-      v-if="apiVersion === 'beta'"
-      v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-      title="Monarch UI BETA"
+      v-if="apiVersion !== 'production'"
+      v-b-popover.hover.v-danger.bottomleft="'You are currently using a beta version of our APIs. The Monarch Initiative is in the process of creating a new experience for you. If you believe you see an issue or want to suggest content please see the footer of this page.'"
+      title="Monarch APIs BETA"
       class="beta"
     >
       BETA
     </div>
-    <div v-if="apiVersion === 'beta'" class="production">
+    <div v-if="apiVersion !== 'production'" class="production">
       <b-navbar-nav>
         <b-nav-item href="https://monarchinitiative.org/" target="_blank">
           Main Site
