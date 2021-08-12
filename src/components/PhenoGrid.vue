@@ -11,8 +11,6 @@ import { biolink } from '@/api/BioLink';
 
 const Phenogrid = require('phenogrid');
 
-/* global Phenogrid */
-
 export default {
   props: {
     xAxis: {
