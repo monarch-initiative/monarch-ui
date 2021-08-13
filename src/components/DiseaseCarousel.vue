@@ -7,7 +7,7 @@
       <p class="carousel-sub">
         We are always updating our corpus of disease - phenotype associations to support current scientific understanding of disease.
       </p><div v-if="activeCarousel.id" class="row carousel-row">
-        <div class="col-6 disease-information">
+        <div class="col-md disease-information">
           <h3 class="disease-name">
             <a :href="'/disease/' + activeCarousel.id">
               {{ activeCarousel.label }}
@@ -24,7 +24,7 @@
             <i class="fa fa-caret-right" />
           </b-button>
         </div>
-        <div class="col-6 disease-phenotypes">
+        <div class="col-md disease-phenotypes">
           <histo-pheno :active-item="activeCarousel" />
         </div>
       </div>
@@ -98,20 +98,23 @@ export default {
 
 <style scoped>
 
+    .histo-pheno {
+        height: 500px;
+        min-height: unset !important;
+    }
+
     .disease-carousel {
-        height: 425px;
+        color: white;
     }
 
     .disease-carousel .carousel-title {
         margin: 0;
         padding: 1rem 0 .5rem 0;
         text-align: center;
-        color: white;
         text-transform: uppercase;
     }
 
     .disease-carousel .carousel-sub {
-        color: white;
         text-align: center;
         margin-bottom: .5rem;
         font-style: italic;
@@ -122,8 +125,7 @@ export default {
     }
 
     .disease-carousel .disease-information {
-        padding: .5rem 1rem 2.5rem 5.5rem;
-        color: white;
+      padding: 2rem;
     }
 
     .disease-carousel .disease-information .disease-name {
