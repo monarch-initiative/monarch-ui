@@ -80,11 +80,6 @@ div.footer {
   background-color: $monarch-bg-color;
   box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2), 0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 
-
-  .report {
-    text-align: center;
-  }
-
   a {
     color: white;
   }
@@ -134,9 +129,21 @@ div.footer {
     padding: 10px;
   }
 
+  .report {
+    text-align: center;
+  }
+
   .copyright {
     text-align: right;
     padding: 10px;
+  }
+
+  $lg-width: map-get($grid-breakpoints, "lg");
+  @media (max-width: $lg-width) {
+    .version,
+    .copyright {
+      text-align: center;
+    }
   }
 
   .issue-btn {

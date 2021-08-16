@@ -1,9 +1,9 @@
 <template>
   <b-navbar
     id="monarchng-navbar"
-    class="fixed-top"
+    class="sticky-top"
     fixed="true"
-    toggleable="sm"
+    toggleable="lg"
     type="dark"
     variant="info"
   >
@@ -235,14 +235,9 @@ nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
 }
 
 nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item {
-  xvertical-align:middle;
   margin-right: 15px;
 }
 
-nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item > .nav-link {
-  xpadding:0;
-  xmargin:0;
-}
 
 nav#monarchng-navbar.navbar .navbar-toggle {
   margin: 2px 35px 0 10px;
@@ -262,6 +257,20 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
   background-image: linear-gradient(to right, #0B556B 0%, #232733 100%) !important;
   background-repeat: repeat-x !important;
   box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+}
+
+.navbar-collapse.collapse.show {
+  .navbar-nav {
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 5px 0;
+  }
+}
+
+.navbar-toggler.not-collapsed {
+  margin-bottom: 20px;
 }
 
 .nav-ac {

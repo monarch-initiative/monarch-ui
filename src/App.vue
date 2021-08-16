@@ -63,11 +63,10 @@ $fa-font-path: "~font-awesome/fonts" !default;
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 #app.page-wrapper .content-wrapper {
-  padding: $navbar-height 0 0 0;
   flex: 1;
   margin: 0;
   background-color: #efefef;
@@ -87,21 +86,15 @@ $fa-font-path: "~font-awesome/fonts" !default;
   padding-bottom: 15px;
 }
 
-div.vue-markdown {
-  xmargin-top: $navbar-height;
-  xborder: 5px solid cyan;
-}
 
 div.container-fluid.monarch-home-view div.vue-markdown,
 div.container-fluid.monarch-view div.vue-markdown {
   margin-top: 0;
-  xborder: 5px solid magenta;
 }
 
 div.vue-markdown-plain {
   margin-top: $navbar-height;
   padding: 20px;
-  xborder: 5px solid lightgreen;
 
   pre {
     background-color: #f6f8fa;

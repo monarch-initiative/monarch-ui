@@ -112,7 +112,6 @@ $md-width: map-get($grid-breakpoints, "md");
   .card.node-card {
     min-width: $card-width;
     max-width: $card-width;
-    xborder:5px solid red;
   }
 }
 
