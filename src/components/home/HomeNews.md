@@ -67,7 +67,7 @@
 </style>
 
 <script>
-  import getNewsItems from "@/api/News";
+  import getNewsItems from "@/api/news";
 
   export default {
     data() {

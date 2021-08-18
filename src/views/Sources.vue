@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import * as biolinkService from "@/api/BioLink";
+import * as biolinkService from "@/api/bio-link";
 
 export default {
   name: "Sources",

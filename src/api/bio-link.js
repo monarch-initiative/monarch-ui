@@ -1,8 +1,8 @@
 import axios from "axios";
 import us from "underscore";
 import * as bbopgraph from "bbop-graph";
-import getStaticSourceData from "./StaticSourceData";
-import * as bbopgraphUtil from "./BBOPGraphUtil";
+import getStaticSourceData from "./static-source-data";
+import * as bbopgraphUtil from "./bbop-graph-util";
 import {
   labelToId,
   isTaxonCardType,

@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Node from "./views/Node.vue";
-import { getBasicNode } from "./api/BioLink";
+import { getBasicNode } from "./api/bio-link";
 import { reduceCategoryList } from "./lib/category-map";
 
 Vue.use(Router);

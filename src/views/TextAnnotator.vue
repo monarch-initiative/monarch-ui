@@ -151,7 +151,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import * as biolink from "@/api/BioLink";
+import * as biolink from "@/api/bio-link";
 import { validCatToPath } from "@/lib/category-map";
 
 export default {

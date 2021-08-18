@@ -555,7 +555,7 @@
 import Vue from "vue";
 import VueFormWizard from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
-import * as biolinkService from "@/api/BioLink";
+import * as biolinkService from "@/api/bio-link";
 import MonarchAutocomplete from "@/components/MonarchAutocomplete.vue";
 import PhenoGrid from "@/components/PhenoGrid.vue";
 import PhenotypesTable from "@/components/PhenotypesTable.vue";

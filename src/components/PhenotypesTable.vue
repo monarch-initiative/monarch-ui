@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-import * as bioLinkService from "@/api/BioLink";
+import * as bioLinkService from "@/api/bio-link";
 
 export default {
   props: {

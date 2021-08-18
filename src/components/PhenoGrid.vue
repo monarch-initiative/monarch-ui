@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { biolink } from "@/api/BioLink";
+import { biolink } from "@/api/bio-link";
 
 const Phenogrid = require("phenogrid");
 

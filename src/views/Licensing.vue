@@ -203,7 +203,7 @@
 </template>
 
 <script>
-import getOntologyLicenseInfo from "../api/OboFoundry";
+import getOntologyLicenseInfo from "../api/obo-foundry";
 
 export default {
   data() {

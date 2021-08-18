@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import * as biolinkService from "@/api/BioLink";
+import * as biolinkService from "@/api/bio-link";
 
 describe("getSources", () => {
   it("returns array with objects for each source", async function fn() {

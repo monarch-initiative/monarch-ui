@@ -55,7 +55,7 @@
 </template>
 <script>
 import _ from "underscore";
-import * as BL from "@/api/BioLink";
+import * as BL from "@/api/bio-link";
 
 export default {
   props: {

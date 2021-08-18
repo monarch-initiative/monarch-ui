@@ -261,7 +261,7 @@
 
 <script>
 import us from "underscore";
-import * as Entrez from "@/api/Entrez";
+import * as Entrez from "@/api/entrez";
 import {
   processPublications,
   processSources,
@@ -269,7 +269,7 @@ import {
   sanitizeText,
 } from "@/lib/utils";
 import EvidenceViewer from "@/components/EvidenceViewer.vue";
-import * as bioLinkService from "@/api/BioLink";
+import * as bioLinkService from "@/api/bio-link";
 import TaxonFilter from "@/components/TaxonFilter.vue";
 import { isTaxonCardType } from "../lib/taxon-map";
 import sourceToLabel from "../lib/sources";

@@ -208,7 +208,7 @@
 
 <script>
 import MonarchAutocomplete from "@/components/MonarchAutocomplete.vue";
-import * as biolinkService from "@/api/BioLink";
+import * as biolinkService from "@/api/bio-link";
 
 export default {
   name: "MonarchNavbar",

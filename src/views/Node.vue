@@ -385,9 +385,9 @@
 
 <script>
 import us from "underscore";
-import * as biolinkService from "@/api/BioLink";
-import * as MyGene from "@/api/MyGene";
-import * as Entrez from "@/api/Entrez";
+import * as biolinkService from "@/api/bio-link";
+import * as MyGene from "@/api/my-gene";
+import * as Entrez from "@/api/entrez";
 import {
   getXrefUrl,
   processSources,

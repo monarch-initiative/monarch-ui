@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import * as BL from "@/api/BioLink";
+import * as BL from "@/api/bio-link";
 import { reduceCategoryList } from "@/lib/category-map";
 import { sanitizeNodeLabel } from "@/lib/utils";
 

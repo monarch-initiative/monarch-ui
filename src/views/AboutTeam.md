@@ -62,7 +62,7 @@
 </div>
 
 <script>
-  import { getTeam } from "@/api/Resources";
+  import { getTeam } from "@/api/resources";
   import MarkdownIt from "markdown-it";
   import { applyLinkHandlers } from "../lib/markdown";
 

@@ -118,7 +118,7 @@
 
 <script>
 import vClickOutside from "v-click-outside";
-import * as biolink from "@/api/BioLink";
+import * as biolink from "@/api/bio-link";
 import { reduceCategoryList } from "@/lib/category-map";
 
 const debounce = require("lodash/debounce");

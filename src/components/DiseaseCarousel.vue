@@ -39,8 +39,8 @@
 </template>
 <script>
 import HistoPheno from "@/components/HistoPheno.vue";
-import { getRecentlyCurated } from "@/api/Resources";
-import { getPhenotypeCategories, getBasicNode } from "@/api/BioLink";
+import { getRecentlyCurated } from "@/api/resources";
+import { getPhenotypeCategories, getBasicNode } from "@/api/bio-link";
 
 export default {
   components: {

@@ -270,7 +270,7 @@
 </template>
 
 <script>
-import { getEvidence } from "@/api/BioLink";
+import { getEvidence } from "@/api/bio-link";
 import {
   getXrefUrl,
   processSources,
