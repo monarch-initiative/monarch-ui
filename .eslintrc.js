@@ -6,10 +6,6 @@ const GenomeFeatureViewer = path.resolve(
   __dirname,
   "node_modules/genomefeaturecomponent/dist/index.js"
 );
-const GenomeFeatureViewerCSS = path.resolve(
-  __dirname,
-  "node_modules/genomefeaturecomponent/dist/GenomeFeatureViewer.css"
-);
 
 module.exports = {
   root: true,

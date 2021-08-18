@@ -182,7 +182,7 @@ export default {
     };
   },
   watch: {
-    $route: function $route(to, from) {
+    $route: function $route() {
       this.searchViaRouteParams();
       this.updateResultsTable();
     },
@@ -231,10 +231,10 @@ export default {
     rowsProvider(ctx, callback) {
       // const start = ((this.currentPage - 1) * this.rowsPerPage);
       this.search()
-        .then((data) => {
+        .then(() => {
           callback(this.searchResults);
         })
-        .catch((error) => {
+        .catch(() => {
           callback([]);
         });
     },
@@ -264,7 +264,7 @@ export default {
         this.facetTaxons = searchResponse.facet_counts.taxon_label;
         this.numFound = searchResponse.numFound;
         // console.log('searchResponse', searchResponse.numFound, searchResponse.docs[0].label[0]);
-        searchResponse.docs.forEach((elem, index) => {
+        searchResponse.docs.forEach((elem) => {
           const highlight = searchResponse.highlighting[elem.id];
           const simplifiedCategory = reduceCategoryList(elem.category);
           const resultPacket = {

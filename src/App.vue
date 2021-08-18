@@ -30,7 +30,7 @@ export default {
     };
   },
   watch: {
-    $route: function $route(to, from) {
+    $route: function $route(to) {
       this.useCompactFooter = to.path !== "/";
     },
   },

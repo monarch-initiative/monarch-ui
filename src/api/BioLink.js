@@ -133,7 +133,7 @@ export async function getBasicNode(nodeId) {
   });
 }
 
-function canUseSuperclassNode(nodeId, nodeType, superId) {
+function canUseSuperclassNode(nodeId, nodeType) {
   let result = true;
 
   if (nodeType === "disease") {
@@ -461,7 +461,7 @@ export async function getSearchTermSuggestions(
   }
 
   if (filters) {
-    filters.forEach((elem) => {
+    filters.forEach(() => {
       params.append("fq", filters);
     });
   }
