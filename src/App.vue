@@ -5,26 +5,24 @@
       <router-view />
     </div>
     <div class="footer-wrapper">
-      <monarch-footer
-        :compact="useCompactFooter"
-      />
+      <monarch-footer :compact="useCompactFooter" />
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import { sanitizeText } from '@/lib/Utils';
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
+import Vue from "vue";
+import { sanitizeText } from "@/lib/utils";
+import Navbar from "@/components/Navbar.vue";
+import Footer from "@/components/Footer.vue";
 
 Vue.prototype.$sanitizeText = sanitizeText;
 
-Vue.component('monarch-footer', Footer);
+Vue.component("monarch-footer", Footer);
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    'monarch-navbar': Navbar
+    "monarch-navbar": Navbar,
   },
   data() {
     return {
@@ -32,24 +30,23 @@ export default {
     };
   },
   watch: {
-    '$route': function $route(to, from) {
-      this.useCompactFooter = (to.path !== '/');
-    }
+    $route: function $route(to, from) {
+      this.useCompactFooter = to.path !== "/";
+    },
   },
   mounted() {
-    this.useCompactFooter = (this.$route.path !== '/');
+    this.useCompactFooter = this.$route.path !== "/";
   },
 };
-
 </script>
 
 <style lang="scss">
 @import "~@/style/variables.scss";
 
 $fa-font-path: "~font-awesome/fonts" !default;
-@import '~font-awesome/scss/font-awesome';
+@import "~font-awesome/scss/font-awesome";
 @import "~bootstrap/scss/bootstrap";
-@import '~bootstrap-vue/dist/bootstrap-vue.css';
+@import "~bootstrap-vue/dist/bootstrap-vue.css";
 
 [v-cloak] {
   display: none;
@@ -86,7 +83,6 @@ $fa-font-path: "~font-awesome/fonts" !default;
   padding-bottom: 15px;
 }
 
-
 div.container-fluid.monarch-home-view div.vue-markdown,
 div.container-fluid.monarch-view div.vue-markdown {
   margin-top: 0;
@@ -118,14 +114,13 @@ div.vue-markdown-plain {
     background-color: #f6f8fa;
     border-radius: 3px;
     color: #24292e;
-    background-color: rgba(27,31,35,.05);
+    background-color: rgba(27, 31, 35, 0.05);
     border-radius: 3px;
     font-size: 85%;
     margin: 0;
-    padding: .2em .4em;
+    padding: 0.2em 0.4em;
   }
 }
-
 
 :target::before {
   content: "";
@@ -141,12 +136,18 @@ a.header-anchor {
   padding-top: 90px;
 }
 
-a.header-anchor, a.header-anchor:hover, .title a {
+a.header-anchor,
+a.header-anchor:hover,
+.title a {
   text-decoration: none;
 }
 
-h1:hover a.header-anchor, h2:hover a.header-anchor, h3:hover a.header-anchor,
-h4:hover a.header-anchor, h5:hover a.header-anchor, h6:hover a.header-anchor {
+h1:hover a.header-anchor,
+h2:hover a.header-anchor,
+h3:hover a.header-anchor,
+h4:hover a.header-anchor,
+h5:hover a.header-anchor,
+h6:hover a.header-anchor {
   opacity: 1;
 }
 
@@ -157,8 +158,9 @@ blockquote.blockquote {
   border-left: 2px solid lightgray;
 }
 
-html, body {
-  font-family: 'Poppins', sans-serif;
+html,
+body {
+  font-family: "Poppins", sans-serif;
 }
 
 .gfc-tooltip {
@@ -166,8 +168,18 @@ html, body {
 }
 
 @media (min-width: 2400px) {
-
-  .col-desktop-1, .col-desktop-2, .col-desktop-3, .col-desktop-4, .col-desktop-5, .col-desktop-6, .col-desktop-7, .col-desktop-8, .col-desktop-9, .col-desktop-10, .col-desktop-11, .col-desktop-12 {
+  .col-desktop-1,
+  .col-desktop-2,
+  .col-desktop-3,
+  .col-desktop-4,
+  .col-desktop-5,
+  .col-desktop-6,
+  .col-desktop-7,
+  .col-desktop-8,
+  .col-desktop-9,
+  .col-desktop-10,
+  .col-desktop-11,
+  .col-desktop-12 {
     float: left;
   }
 
@@ -319,7 +331,8 @@ html, body {
     display: table-row !important;
   }
 
-  th.visible-desktop, td.visible-desktop {
+  th.visible-desktop,
+  td.visible-desktop {
     display: table-cell !important;
   }
 
@@ -339,5 +352,4 @@ html, body {
     display: none !important;
   }
 }
-
 </style>

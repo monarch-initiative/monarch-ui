@@ -1,13 +1,7 @@
 <template>
-  <div
-    id="filter"
-    :class="{ active: isVisible }"
-    class="container-fluid"
-  >
+  <div id="filter" :class="{ active: isVisible }" class="container-fluid">
     <div class="top-row">
-      <b-button class="" size="sm" @click="toggleSelectedFilter">
-        Select All
-      </b-button>
+      <b-button class="" size="sm" @click="toggleAll"> Select All </b-button>
       <b-button class="exit" size="sm" @click="hideFilter">
         Apply & Close
       </b-button>
@@ -21,8 +15,12 @@
       class="facet-item row"
     >
       <div class="col-lg-10">
-        <b-form-checkbox v-model="taxonFilter.taxons[key]" @input="updateTaxonFilter">
-          <i>{{ idToLabel(key) }}</i>&nbsp;({{ key }})
+        <b-form-checkbox
+          :value="taxonFilter.taxons[key]"
+          @change="toggleFilter(key, $event.target.value)"
+        >
+          <i>{{ idToLabel(key) }}</i
+          >&nbsp;({{ key }})
         </b-form-checkbox>
       </div>
 
@@ -33,14 +31,13 @@
   </div>
 </template>
 
-
 <script>
-import { idToLabel } from '../lib/TaxonMap';
+import { idToLabel } from "../lib/taxon-map";
 
 export default {
-  name: 'TaxonFilter',
+  name: "TaxonFilter",
   model: {
-    prop: 'taxonFilter'
+    prop: "taxonFilter",
   },
   props: {
     taxonFilter: {
@@ -63,22 +60,17 @@ export default {
     };
   },
   watch: {
-    isVisible(newval) {
+    isVisible() {
       this.localCopy = JSON.parse(JSON.stringify(this.taxonFilter));
-    }
+    },
   },
-  mounted() {
-
-  },
+  mounted() {},
   beforeUpdate() {
     if (!this.initialDataFlag) {
       this.initialDataFlag = true;
     }
   },
   methods: {
-    updateTaxonFilter() {
-      this.$forceUpdate();
-    },
     idToLabel(id) {
       return idToLabel(id);
     },
@@ -98,30 +90,35 @@ export default {
           isChanged = true;
         } else {
           newKeys.forEach((objKey) => {
-            if (this.taxonFilter.taxons[objKey] !== this.localCopy.taxons[objKey]) {
+            if (
+              this.taxonFilter.taxons[objKey] !== this.localCopy.taxons[objKey]
+            ) {
               isChanged = true;
             }
           });
         }
         if (isChanged) {
-          this.$emit('toggle-filter', true);
+          this.$emit("toggle-filter", true);
         } else {
-          this.$emit('toggle-filter', false);
+          this.$emit("toggle-filter", false);
         }
       }
     },
-    toggleSelectedFilter() {
+    toggleFilter(key, value) {
+      const newFilters = { ...this.taxonFilter };
+      newFilters[key] = value;
+      this.$emit("update:modelValue", newFilters);
+    },
+    toggleAll() {
       this.selectedAll = !this.selectedAll;
-
-      Object.keys(this.taxonFilter.taxons).forEach((taxon) => {
-        this.taxonFilter.taxons[taxon] = this.selectedAll;
+      const newFilters = { ...this.taxonFilter };
+      Object.keys(newFilters.taxons).forEach((taxon) => {
+        newFilters.taxons[taxon] = this.selectedAll;
       });
-
-      this.updateTaxonFilter();
+      this.$emit("update:modelValue", newFilters);
     },
   },
 };
-
 </script>
 
 <style lang="scss">
@@ -141,7 +138,7 @@ $filter-width: 600px;
   overflow-y: auto;
   overflow-x: hidden;
   background: ghostwhite;
-  border:2px solid gray;
+  border: 2px solid gray;
   border-radius: 5px;
   font-size: 0.95rem;
   padding: 20px;
@@ -166,7 +163,7 @@ $filter-width: 600px;
 }
 
 #filter .exit {
-  float:right;
+  float: right;
   cursor: pointer;
 
   &:hover {
@@ -182,5 +179,4 @@ $filter-width: 600px;
     background-color: $monarch-bg-color;
   }
 }
-
 </style>

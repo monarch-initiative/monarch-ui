@@ -1,13 +1,12 @@
-import { expect } from 'chai';
-import sinon from 'sinon';
-import axios from 'axios';
-import AboutMonarch from '@/views/AboutMonarch.md';
-import AboutTeam from '@/views/AboutTeam.md';
-import { shallowMountWithRouting } from './test-utils';
+import { expect } from "chai";
+import sinon from "sinon";
+import axios from "axios";
+import AboutMonarch from "@/views/AboutMonarch.md";
+import AboutTeam from "@/views/AboutTeam.md";
+import { shallowMountWithRouting } from "./test-utils";
 
 const teamResponse = {
-  data:
-`####
+  data: `####
 #### Information file containing institution and member information
 #### for the monarch project.
 #### Still needs to be a little spiffier--the template is bare bones.
@@ -32,7 +31,7 @@ institutions:
         title: Monarch PI
         alumni: false
         bio: Dr. Haendel is currently a PI of the Monarch Initiative. She has a BA from Reed College in Chemistry and a Ph.D. in Neuroscience from the University of Wisconsin, Madison. She is currently a PI of the Monarch Initiative, with the aim of providing integrated access to model systems phenotype-genotype data for the purposes of disease hypothesis exploration. She also participates in development of the eagle-i and CTSAconnect ontologies, designed to collect and disseminate information about biomedical resources and enable research profiling. Her research interests are in using ontologies to promote synthetic science though connections within biomedical data, to utilize information science during the course of research and its publication, and to enable scientific reproducibility.
-`
+`,
 };
 
 // Fixing the:
@@ -41,15 +40,14 @@ institutions:
 // See: https://stackoverflow.com/a/50639123/5667222
 //
 
-describe('AboutMonarch.md', () => {
+describe("AboutMonarch.md", () => {
   it('renders "Our philosophy"', () => {
     const wrapper = shallowMountWithRouting(AboutMonarch);
-    expect(wrapper.text()).to.include('Monarch\'s Vision');
+    expect(wrapper.text()).to.include("Monarch's Vision");
   });
 });
 
-
-describe('AboutTeam.md', () => {
+describe("AboutTeam.md", () => {
   // let sandbox;
   // beforeEach(() => {
   //   sandbox = sinon.createSandbox();
@@ -59,11 +57,12 @@ describe('AboutTeam.md', () => {
   // });
 
   it('renders "Participating Institutions"', () => {
-    sinon.stub(axios, 'get')
+    sinon
+      .stub(axios, "get")
       .withArgs(`${process.env.BASE_URL}team.yaml`)
       .returns(Promise.resolve(teamResponse));
 
     const wrapper = shallowMountWithRouting(AboutTeam);
-    expect(wrapper.text()).to.include('Participating Institutions');
+    expect(wrapper.text()).to.include("Participating Institutions");
   });
 });

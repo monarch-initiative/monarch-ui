@@ -1,53 +1,47 @@
 <template>
   <div>
-    <br><br>
+    <br /><br />
     <h1>Monarch Data Graphs</h1>
-    <br>
+    <br />
     <section class="data-dashboard text-center">
       <h2>Monarch Associations</h2>
       <div class="container">
         <div class="row">
           <div class="col-sm">
-            <router-link
-              to="/analytics"
-              class="btn btn-link"
-              role="button"
-            >
+            <router-link to="/analytics" class="btn btn-link" role="button">
               <img
-                style="max-height:35px;"
+                style="max-height: 35px"
                 src="../assets/img/monarch-ui-icon_DISEASE.png"
                 alt="disease"
-              >
+              />
             </router-link>
-            <span class="network-name"><br><b>218,313</b><br>Disease-Phenotype Associations</span>
+            <span class="network-name"
+              ><br /><b>218,313</b><br />Disease-Phenotype Associations</span
+            >
           </div>
           <div class="col-sm">
-            <router-link
-              to="/analytics"
-              class="btn btn-link"
-              role="button"
-            >
+            <router-link to="/analytics" class="btn btn-link" role="button">
               <img
-                style="max-height:35px;"
+                style="max-height: 35px"
                 src="../assets/img/monarch-ui-icon_GENE.png"
                 alt="genes"
-              >
+              />
             </router-link>
-            <span class="network-name"><br><b>793,526</b><br>Gene-Phenotype Associations</span>
+            <span class="network-name"
+              ><br /><b>793,526</b><br />Gene-Phenotype Associations</span
+            >
           </div>
           <div class="col-sm">
-            <router-link
-              to="/analytics"
-              class="btn btn-link"
-              role="button"
-            >
+            <router-link to="/analytics" class="btn btn-link" role="button">
               <img
-                style="max-height:35px;"
+                style="max-height: 35px"
                 src="../assets/img/monarch-ui-icon_MODEL.png"
                 alt="models"
-              >
+              />
             </router-link>
-            <span class="network-name"><br><b>20,870</b><br>Model Associations</span>
+            <span class="network-name"
+              ><br /><b>20,870</b><br />Model Associations</span
+            >
           </div>
         </div>
       </div>
@@ -57,9 +51,9 @@
         <h2>Counts of species-specific data integrated into Monarch</h2>
         <img
           class="center-block text-center img-fluid"
-          style="max-height:300px;"
+          style="max-height: 300px"
           src="../assets/img/tax-heat-plotly.png"
-        >
+        />
         <h4>For the top 15 species in Monarch</h4>
       </div>
     </section>
@@ -68,33 +62,28 @@
 
 <script>
 export default {
-  name: 'Analytics',
-  components: {
-  },
+  name: "Analytics",
+  components: {},
   data() {
-    return {
-    };
+    return {};
   },
-  mounted() {
-  }
+  mounted() {},
 };
 </script>
 
 <style>
-
-.analytics  {
+.analytics {
   padding: 50px;
   text-align: center;
-  }
+}
 
 .analytics h2 {
   padding-top: 25px;
   text-align: center;
-  }
+}
 
-  .analytics h4 {
+.analytics h4 {
   padding-bottom: 25px;
   text-align: center;
-  }
-
+}
 </style>

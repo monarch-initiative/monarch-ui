@@ -3,32 +3,32 @@
 </template>
 
 <script>
-import ApexCharts from 'apexcharts';
+import ApexCharts from "apexcharts";
 
 export default {
   props: {
     activeItem: {
       type: Object,
-      required: true
+      required: true,
     },
     colorScheme: {
       type: String,
-      default: 'light'
+      default: "light",
     },
     toolbar: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      histoPheno: null
+      histoPheno: null,
     };
   },
   watch: {
     activeItem: {
-      handler: 'updateHistoPheno'
-    }
+      handler: "updateHistoPheno",
+    },
   },
   mounted() {
     this.updateHistoPheno();
@@ -36,7 +36,10 @@ export default {
   methods: {
     generateHistoPheno(options) {
       // Generates initial Chart
-      this.histoPheno = new ApexCharts(document.querySelector('.histo-pheno'), options);
+      this.histoPheno = new ApexCharts(
+        document.querySelector(".histo-pheno"),
+        options
+      );
       this.histoPheno.render();
     },
     refreshHistoPheno(options) {
@@ -44,25 +47,27 @@ export default {
       this.histoPheno.updateOptions(options);
     },
     getChartOptions(dataSeries, labels) {
-      let color = '#FFF';
-      let customClass = 'light';
-      if (this.colorScheme === 'dark') {
-        color = '#868686';
-        customClass = 'dark';
+      let color = "#FFF";
+      let customClass = "light";
+      if (this.colorScheme === "dark") {
+        color = "#868686";
+        customClass = "dark";
       }
       return {
-        series: [{
-          data: dataSeries
-        }],
-        colors: ['#CCE34C'],
+        series: [
+          {
+            data: dataSeries,
+          },
+        ],
+        colors: ["#CCE34C"],
         chart: {
-          type: 'bar',
+          type: "bar",
           redrawOnParentResize: true,
-          height: '100%',
-          width: '100%',
+          height: "100%",
+          width: "100%",
           toolbar: {
-            show: this.toolbar
-          }
+            show: this.toolbar,
+          },
         },
         plotOptions: {
           bar: {
@@ -71,7 +76,7 @@ export default {
         },
         stroke: {
           width: 0,
-          colors: [color]
+          colors: [color],
         },
         xaxis: {
           showForNullSeries: false,
@@ -79,59 +84,61 @@ export default {
           labels: {
             style: {
               colors: [color],
-              cssClass: customClass
-            }
+              cssClass: customClass,
+            },
           },
           title: {
-            text: '# of Phenotypes',
+            text: "# of Phenotypes",
             style: {
               color,
-              cssClass: customClass
-            }
+              cssClass: customClass,
+            },
           },
           lines: {
             show: false,
-          }
+          },
         },
         dataLabels: {
-          enabled: false
+          enabled: false,
         },
         yaxis: {
           showForNullSeries: false,
           title: {
-            text: undefined
+            text: undefined,
           },
           labels: {
             style: {
               colors: [color],
-              cssClass: customClass
-            }
-          }
+              cssClass: customClass,
+            },
+          },
         },
         tooltip: {
-          enabled: false
+          enabled: false,
         },
         fill: {
-          opacity: 1
+          opacity: 1,
         },
         grid: {
           xaxis: {
             lines: {
-              show: false
-            }
+              show: false,
+            },
           },
           yaxis: {
             lines: {
-              show: false
-            }
-          }
-        }
+              show: false,
+            },
+          },
+        },
       };
     },
     updateHistoPheno() {
       let activeItem = this.activeItem.categories;
       // Remove categories with 0, sort desc
-      Object.keys(activeItem).forEach(key => (activeItem[key] === 0) && delete activeItem[key]);
+      Object.keys(activeItem).forEach(
+        (key) => activeItem[key] === 0 && delete activeItem[key]
+      );
       activeItem = Object.entries(activeItem);
       activeItem = activeItem.sort((a, b) => b[1] - a[1]);
       activeItem = Object.fromEntries(activeItem);
@@ -143,18 +150,20 @@ export default {
       } else {
         this.generateHistoPheno(options);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
-.apexcharts-yaxis-label.light, .apexcharts-xaxis-title-text {
-    color: white;
-    fill: white;
+.apexcharts-yaxis-label.light,
+.apexcharts-xaxis-title-text {
+  color: white;
+  fill: white;
 }
-.apexcharts-yaxis-label.dark, .apexcharts-xaxis-title-text.dark {
-    color: grey;
-    fill: grey;
+.apexcharts-yaxis-label.dark,
+.apexcharts-xaxis-title-text.dark {
+  color: grey;
+  fill: grey;
 }
 </style>

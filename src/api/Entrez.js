@@ -1,6 +1,6 @@
 /* eslint import/prefer-default-export: 0 */
 
-import axios from 'axios';
+import axios from "axios";
 
 // https://dataguide.nlm.nih.gov/eutilities/utilities.html#efetch
 // Documentation for ESummary service:
@@ -8,25 +8,25 @@ import axios from 'axios';
 
 export async function getPublications(ids) {
   const regex = /^PMID:(\d+)$/;
-  ids = ids.map(id => (regex.exec(id) || [])[1]);
+  ids = ids.map((id) => (regex.exec(id) || [])[1]);
 
   if (!ids.length) return null;
 
   const entrezSummaryURL =
-    'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?';
+    "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?";
   const entrezSummaryParams = {
-    db: 'pubmed',
-    retmode: 'json',
-    id: ids.join(','),
+    db: "pubmed",
+    retmode: "json",
+    id: ids.join(","),
   };
 
   const entrezAbstractURL =
-    'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?';
+    "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?";
   const entrezAbstractParams = {
-    db: 'pubmed',
-    retmode: 'xml',
-    rettype: 'abstract',
-    id: ids.join(','),
+    db: "pubmed",
+    retmode: "xml",
+    rettype: "abstract",
+    id: ids.join(","),
   };
 
   const results = [];
@@ -43,8 +43,8 @@ export async function getPublications(ids) {
 
         const abstracts = Array.from(
           new DOMParser()
-            .parseFromString(entrezAbstract?.data || '', 'text/xml')
-            .getElementsByTagName('PubmedArticle')
+            .parseFromString(entrezAbstract?.data || "", "text/xml")
+            .getElementsByTagName("PubmedArticle")
         );
 
         /* eslint-disable no-restricted-syntax */
@@ -60,25 +60,27 @@ export async function getPublications(ids) {
           const result = (entrezSummary?.data?.result || [])[id] || {};
 
           // find matching abstract xml entry
-          const abstract = abstracts.find(article => article?.getElementsByTagName('PMID')[0]?.textContent?.includes(id));
+          const abstract = abstracts.find((article) =>
+            article?.getElementsByTagName("PMID")[0]?.textContent?.includes(id)
+          );
 
           // get doi from summary, or from abstract as backup, and put in result
           const summaryDoi = (result.articleids || []).find(
-            ({ idtype }) => idtype === 'doi'
+            ({ idtype }) => idtype === "doi"
           )?.value;
           const abstractDoi = (
-            Array.from(abstract?.getElementsByTagName('ArticleId') || []).find(
-              articleId => articleId?.getAttribute('IdType') === 'doi'
+            Array.from(abstract?.getElementsByTagName("ArticleId") || []).find(
+              (articleId) => articleId?.getAttribute("IdType") === "doi"
             ) || {}
           ).textContent;
-          result.doi = summaryDoi || abstractDoi || '';
+          result.doi = summaryDoi || abstractDoi || "";
 
           // get abstract text and put in result
           const abstractText = Array.from(
-            abstract?.getElementsByTagName('AbstractText') || []
+            abstract?.getElementsByTagName("AbstractText") || []
           )
-            .map(textNode => textNode?.textContent)
-            .join('\n\n');
+            .map((textNode) => textNode?.textContent)
+            .join("\n\n");
           result.abstract = abstractText;
 
           // put extra details in result

@@ -1,7 +1,6 @@
-<div
-  class="intro">
+<div class="intro">
 
-![](../../assets/img/monarch-logo-white-stacked.png)
+  ![](../../assets/img/monarch-logo-white-stacked.png)
 
   <embedded-autocomplete
     :home-search="true"
@@ -11,44 +10,42 @@
 
 </div>
 
-
 <script>
-import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
+  import MonarchAutocomplete from "@/components/MonarchAutocomplete.vue";
 
-export default {
-  name: 'Home',
-  components: {
-    'embedded-autocomplete': MonarchAutocomplete,
-  },
-};
+  export default {
+    name: "Home",
+    components: {
+      "embedded-autocomplete": MonarchAutocomplete
+    }
+  };
 </script>
 
-
 <style lang="scss">
-@import "~@/style/variables";
+  @import "~@/style/variables";
 
-div.intro {
-  margin: auto;
-  padding: 20px;
-  text-align: center;
-  color: white;
-  background-color: $monarch-bg-color;
-  height: 275px;
+  div.intro {
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    background-color: $monarch-bg-color;
+    height: 275px;
 
-  vertical-align: middle;
+    vertical-align: middle;
 
-  img {
-    max-height:80px;
-  }
+    img {
+      max-height: 80px;
+    }
 
-  h4 {
-    font-size: 20px;
-  }
-
-  @media(min-width:$grid-float-breakpoint) {
     h4 {
-      font-size: 24px;
+      font-size: 20px;
+    }
+
+    @media (min-width: $grid-float-breakpoint) {
+      h4 {
+        font-size: 24px;
+      }
     }
   }
-}
 </style>

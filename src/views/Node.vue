@@ -22,17 +22,13 @@
     <div v-if="!node" class="loading">
       <div v-if="nodeError">
         <small>
-          <h6>
-            Error loading {{ labels[nodeType] }}:&nbsp; {{ nodeId }}
-          </h6>
+          <h6>Error loading {{ labels[nodeType] }}:&nbsp; {{ nodeId }}</h6>
           <div>{{ nodeError }}</div>
         </small>
       </div>
       <div v-else class="text-center spinner-wrapper">
         <b-spinner class="loading-spinner" type="grow" label="Spinning" />
-        <h5 class="text-center">
-          {{ nodeId }}
-        </h5>
+        <h5 class="text-center">{{ nodeId }}</h5>
       </div>
     </div>
 
@@ -42,12 +38,18 @@
         <div ref="titleBar" class="title-bar">
           <h4 class="node-label-label">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <span v-html="node.label" />&nbsp;<span class="node-label-id">{{ node.id }}</span>
+            <span v-html="node.label" />&nbsp;<span class="node-label-id">{{
+              node.id
+            }}</span>
             <span v-if="originalId" class="node-label-id">
               (Redirected from {{ originalId }})
             </span>
-            <br>
-            <span v-if="synonyms['Exact Synonym'].length > 1" class="node-label-synonyms">&nbsp;{{ synonyms['Exact Synonym'].join(', ') }}</span>
+            <br />
+            <span
+              v-if="synonyms['Exact Synonym'].length > 1"
+              class="node-label-synonyms"
+              >&nbsp;{{ synonyms["Exact Synonym"].join(", ") }}</span
+            >
           </h4>
           &nbsp;
           <!--
@@ -64,7 +66,10 @@
       </div>
       <div v-if="node" class="container-fluid node-container">
         <div class="row">
-          <div v-if="!expandedCard && overviewSection()" class="node-content-section col-12 col-md-6">
+          <div
+            v-if="!expandedCard && overviewSection()"
+            class="node-content-section col-12 col-md-6"
+          >
             <div class="node-content-section-content">
               <h5>Overview</h5>
               <div v-if="node.description" class="node-sub-section">
@@ -79,16 +84,24 @@
               <div v-if="entrezResult" class="node-sub-section">
                 <h6>{{ entrezResult.pubdate }}</h6>
                 <h6>
-                  {{ entrezResult.authors.map(a => { return a.name; }).join(', ') }}
+                  {{
+                    entrezResult.authors
+                      .map((a) => {
+                        return a.name;
+                      })
+                      .join(", ")
+                  }}
                 </h6>
                 <h6 class="publication-abstract">
                   {{ entrezResult.abstract }}
                 </h6>
-                <h6>
-                  DOI: {{ entrezResult.doi }}
-                </h6>
-                <br>
-                <b-button :href="entrezResult.pubmedURL" target="__blank" variant="outline-primary">
+                <h6>DOI: {{ entrezResult.doi }}</h6>
+                <br />
+                <b-button
+                  :href="entrezResult.pubmedURL"
+                  target="__blank"
+                  variant="outline-primary"
+                >
                   View on PubMed
                 </b-button>
               </div>
@@ -104,36 +117,60 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && supportSection()" class="node-content-section col-12 col-md-6">
+          <div
+            v-if="!expandedCard && supportSection()"
+            class="node-content-section col-12 col-md-6"
+          >
             <div class="node-content-section-content">
               <h5>External Resources</h5>
               <div class="node-sub-section">
                 <div class="linked-references">
                   <div v-if="nodeType == 'disease'">
-                    <h6 v-if="authoritiveXref.synopsis && authoritiveXref.synopsis.label" class="resource-section">
-                      <strong>Clinical Synopsis</strong>: <b-button
+                    <h6
+                      v-if="
+                        authoritiveXref.synopsis &&
+                        authoritiveXref.synopsis.label
+                      "
+                      class="resource-section"
+                    >
+                      <strong>Clinical Synopsis</strong>:
+                      <b-button
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.synopsis.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.synopsis.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.synopsis.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </h6>
-                    <h6 v-if="authoritiveXref.patient && authoritiveXref.patient.label" class="resource-section">
-                      <strong>Clinical Information for patients</strong>:  <b-button
+                    <h6
+                      v-if="
+                        authoritiveXref.patient && authoritiveXref.patient.label
+                      "
+                      class="resource-section"
+                    >
+                      <strong>Clinical Information for patients</strong>:
+                      <b-button
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.patient.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.patient.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.patient.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </h6>
                   </div>
 
                   <div v-if="nodeType == 'gene'">
-                    <div v-if="authoritiveXref.gene.taxon && authoritiveXref.gene.taxon.label" class="resource-section">
+                    <div
+                      v-if="
+                        authoritiveXref.gene.taxon &&
+                        authoritiveXref.gene.taxon.label
+                      "
+                      class="resource-section"
+                    >
                       <strong>Gene Summaries</strong>:
                       <b-button
                         size="sm"
@@ -141,7 +178,8 @@
                         :href="authoritiveXref.gene.taxon.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.taxon.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.gene.taxon.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                       <b-button
                         v-if="authoritiveXref.gene.ensembl"
@@ -150,28 +188,37 @@
                         :href="authoritiveXref.gene.ensembl.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.ensembl.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.gene.ensembl.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </div>
-                    <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.clinical" class="resource-section">
+                    <h6
+                      v-if="
+                        authoritiveXref.gene && authoritiveXref.gene.clinical
+                      "
+                      class="resource-section"
+                    >
                       <strong>Clinical Information</strong>:
 
                       <b-button
-                        v-if="authoritiveXref.gene && authoritiveXref.gene.clinical.omim"
+                        v-if="
+                          authoritiveXref.gene &&
+                          authoritiveXref.gene.clinical.omim
+                        "
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.gene.clinical.omim.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.clinical.omim.label }} <i
-                          class="fa fa-external-link"
-                          aria-hidden="true"
-                        />
+                        {{ authoritiveXref.gene.clinical.omim.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
 
-
                       <b-button
-                        v-if="authoritiveXref.gene && authoritiveXref.gene.clinical.varsome"
+                        v-if="
+                          authoritiveXref.gene &&
+                          authoritiveXref.gene.clinical.varsome
+                        "
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.gene.clinical.varsome.uri"
@@ -181,33 +228,55 @@
                         <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </h6>
-                    <h6 v-if="authoritiveXref.gene && authoritiveXref.gene.pathway" class="resource-section">
-                      <strong>Pathway Analysis</strong>:  <b-button
+                    <h6
+                      v-if="
+                        authoritiveXref.gene && authoritiveXref.gene.pathway
+                      "
+                      class="resource-section"
+                    >
+                      <strong>Pathway Analysis</strong>:
+                      <b-button
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.gene.pathway.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.gene.pathway.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.gene.pathway.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </h6>
                   </div>
 
                   <div v-if="nodeType === 'phenotype'">
-                    <h6 v-if="authoritiveXref.phenotype && authoritiveXref.phenotype.label" class="resource-section">
-                      <strong>Ontology Browser</strong>:  <b-button
+                    <h6
+                      v-if="
+                        authoritiveXref.phenotype &&
+                        authoritiveXref.phenotype.label
+                      "
+                      class="resource-section"
+                    >
+                      <strong>Ontology Browser</strong>:
+                      <b-button
                         size="sm"
                         variant="outline-info"
                         :href="authoritiveXref.phenotype.uri"
                         target="_blank"
                       >
-                        {{ authoritiveXref.phenotype.label }} <i class="fa fa-external-link" aria-hidden="true" />
+                        {{ authoritiveXref.phenotype.label }}
+                        <i class="fa fa-external-link" aria-hidden="true" />
                       </b-button>
                     </h6>
                   </div>
                 </div>
-                <div v-if="references.linked.length > 0" class="linked-references">
-                  <h6 v-if="nodeType === 'disease'" v-b-toggle.collapse-1 class="heading-toggle">
+                <div
+                  v-if="references.linked.length > 0"
+                  class="linked-references"
+                >
+                  <h6
+                    v-if="nodeType === 'disease'"
+                    v-b-toggle.collapse-1
+                    class="heading-toggle"
+                  >
                     <strong>
                       <i class="fa fa-angle-right" aria-hidden="true" />
                       <i class="fa fa-angle-down" aria-hidden="true" />
@@ -222,7 +291,11 @@
                     </strong>
                   </h6>
                   <b-collapse id="collapse-1">
-                    <span v-for="(r, index) in references.linked" :key="index" class="synonym">
+                    <span
+                      v-for="(r, index) in references.linked"
+                      :key="index"
+                      class="synonym"
+                    >
                       <span class="reference-external">
                         <a
                           :href="r.uri"
@@ -240,23 +313,43 @@
               </div>
             </div>
           </div>
-          <div v-if="!expandedCard && hasGeneExac && showExac" class="node-content-section col-12 col-md-6">
+          <div
+            v-if="!expandedCard && hasGeneExac && showExac"
+            class="node-content-section col-12 col-md-6"
+          >
             <div class="node-content-section-content">
               <h5>ExAC Population Frequencies</h5>
-              <exac-gene :node-id="nodeId" @show-exac="showExacSection($event)" />
+              <exac-gene
+                :node-id="nodeId"
+                @show-exac="showExacSection($event)"
+              />
             </div>
           </div>
-          <div v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL" class="node-content-section col-12 col-md-8">
+          <div
+            v-if="!expandedCard && node.geneInfo && node.geneInfo.externalURL"
+            class="node-content-section col-12 col-md-8"
+          >
             <div class="node-content-section-content">
               <h5>Genome Features</h5>
               <genome-feature :mygene-data="node.geneInfo" />
             </div>
           </div>
-          <div v-if="!expandedCard && histoPhenoData.categories && (counts['phenotype'] > 0)" class="node-content-section col-12 col-md-6" @click="expandCard('phenotype')">
+          <div
+            v-if="
+              !expandedCard &&
+              histoPhenoData.categories &&
+              counts['phenotype'] > 0
+            "
+            class="node-content-section col-12 col-md-6"
+            @click="expandCard('phenotype')"
+          >
             <div class="node-content-section-content associated-phenotypes">
               <h5>Associated Phenotypes</h5>
               <div class="histo-pheno-wrapper">
-                <histo-pheno :active-item="histoPhenoData" :color-scheme="'dark'" />
+                <histo-pheno
+                  :active-item="histoPhenoData"
+                  :color-scheme="'dark'"
+                />
               </div>
             </div>
           </div>
@@ -267,7 +360,10 @@
         <div v-if="!expandedCard && nodeType === 'variant'">
           <exac-variant :node-id="nodeId" />
         </div>
-        <div v-if="expandedCard" class="expanded-card-view node-content-section">
+        <div
+          v-if="expandedCard"
+          class="expanded-card-view node-content-section"
+        >
           <div class="node-content-section-content">
             <assoc-table
               :taxon-counts="taxonCounts"
@@ -287,175 +383,173 @@
   </div>
 </template>
 
-
 <script>
-
-import us from 'underscore';
-import * as biolinkService from '@/api/BioLink';
-import * as MyGene from '@/api/MyGene';
-import * as Entrez from '@/api/Entrez';
+import us from "underscore";
+import * as biolinkService from "@/api/BioLink";
+import * as MyGene from "@/api/MyGene";
+import * as Entrez from "@/api/Entrez";
 import {
-  getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText
-} from '@/lib/Utils';
+  getXrefUrl,
+  processSources,
+  sanitizeNodeLabel,
+  sanitizeText,
+} from "@/lib/utils";
 
-import NodeSidebar from '@/components/NodeSidebar.vue';
-import NodeCard from '@/components/NodeCard.vue';
-import AssocTable from '@/components/AssocTable.vue';
-import ExacGeneSummary from '@/components/ExacGeneSummary.vue';
-import ExacVariantTable from '@/components/ExacVariantTable.vue';
-import GenomeFeature from '@/components/GenomeFeature.vue';
-import ReactomeViewer from '@/components/ReactomeViewer.vue';
-import HistoPheno from '@/components/HistoPheno.vue';
-
+import NodeSidebar from "@/components/NodeSidebar.vue";
+import AssocTable from "@/components/AssocTable.vue";
+import ExacGeneSummary from "@/components/ExacGeneSummary.vue";
+import ExacVariantTable from "@/components/ExacVariantTable.vue";
+import GenomeFeature from "@/components/GenomeFeature.vue";
+import ReactomeViewer from "@/components/ReactomeViewer.vue";
+import HistoPheno from "@/components/HistoPheno.vue";
 
 // https://stackoverflow.com/a/34064434/5667222
 function htmlDecode(input) {
-  const doc = new DOMParser().parseFromString(input, 'text/html');
+  const doc = new DOMParser().parseFromString(input, "text/html");
   return doc.documentElement.textContent;
 }
 
-
 const availableCardTypes = [
-  'phenotype',
-  'gene',
-  'causal-gene',
-  'correlated-gene',
-  'variant',
-  'model',
-  'disease',
-  'causal-disease',
-  'correlated-disease',
-  'pathway',
-  'cellline',
-  'anatomy',
-  'publication',
-  'case',
-  'function',
-  'genotype',
-  'homolog',
-  'interaction',
-  'ortholog-phenotype',
-  'ortholog-disease',
+  "phenotype",
+  "gene",
+  "causal-gene",
+  "correlated-gene",
+  "variant",
+  "model",
+  "disease",
+  "causal-disease",
+  "correlated-disease",
+  "pathway",
+  "cellline",
+  "anatomy",
+  "publication",
+  "case",
+  "function",
+  "genotype",
+  "homolog",
+  "interaction",
+  "ortholog-phenotype",
+  "ortholog-disease",
 ];
 
 const icons = {
-  anatomy: require('../assets/img/monarch-ui-icon_ANATOMY.png'),
-  cellline: require('../assets/img/monarch-ui-icon_CELL_LINE.png'),
-  disease: require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  'causal-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  'correlated-disease': require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  function: require('../assets/img/monarch-ui-icon_FUNCTION.png'),
-  gene: require('../assets/img/monarch-ui-icon_GENE.png'),
-  'causal-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
-  'correlated-gene': require('../assets/img/monarch-ui-icon_GENE.png'),
-  genotype: require('../assets/img/monarch-ui-icon_GENOTYPE.png'),
-  case: require('../assets/img/monarch-ui-icon_DISEASE.png'),
-  homolog: require('../assets/img/monarch-ui-icon_HOMOLOG.png'),
-  interaction: require('../assets/img/monarch-ui-icon_INTERACTIONS.png'),
-  publication: require('../assets/img/monarch-ui-icon_PUBLICATION.png'),
-  model: require('../assets/img/monarch-ui-icon_MODEL.png'),
-  'ortholog-disease': require('../assets/img/monarch-ui-icon_ORTHOLOG_DISEASE.png'),
-  'ortholog-phenotype': require('../assets/img/monarch-ui-icon_ORTHOLOG_PHENOTYPE.png'),
-  pathway: require('../assets/img/monarch-ui-icon_PATHWAYS.png'),
-  phenotype: require('../assets/img/monarch-ui-icon_PHENOTYPE.png'),
-  variant: require('../assets/img/monarch-ui-icon_VARIANT.png')
+  anatomy: require("../assets/img/monarch-ui-icon_ANATOMY.png"),
+  cellline: require("../assets/img/monarch-ui-icon_CELL_LINE.png"),
+  disease: require("../assets/img/monarch-ui-icon_DISEASE.png"),
+  "causal-disease": require("../assets/img/monarch-ui-icon_DISEASE.png"),
+  "correlated-disease": require("../assets/img/monarch-ui-icon_DISEASE.png"),
+  function: require("../assets/img/monarch-ui-icon_FUNCTION.png"),
+  gene: require("../assets/img/monarch-ui-icon_GENE.png"),
+  "causal-gene": require("../assets/img/monarch-ui-icon_GENE.png"),
+  "correlated-gene": require("../assets/img/monarch-ui-icon_GENE.png"),
+  genotype: require("../assets/img/monarch-ui-icon_GENOTYPE.png"),
+  case: require("../assets/img/monarch-ui-icon_DISEASE.png"),
+  homolog: require("../assets/img/monarch-ui-icon_HOMOLOG.png"),
+  interaction: require("../assets/img/monarch-ui-icon_INTERACTIONS.png"),
+  publication: require("../assets/img/monarch-ui-icon_PUBLICATION.png"),
+  model: require("../assets/img/monarch-ui-icon_MODEL.png"),
+  "ortholog-disease": require("../assets/img/monarch-ui-icon_ORTHOLOG_DISEASE.png"),
+  "ortholog-phenotype": require("../assets/img/monarch-ui-icon_ORTHOLOG_PHENOTYPE.png"),
+  pathway: require("../assets/img/monarch-ui-icon_PATHWAYS.png"),
+  phenotype: require("../assets/img/monarch-ui-icon_PHENOTYPE.png"),
+  variant: require("../assets/img/monarch-ui-icon_VARIANT.png"),
 };
 
 const labels = {
-  anatomy: 'Anatomy',
-  cellline: 'Cell Line',
-  disease: 'Disease',
-  'causal-disease': 'Disease (causal)',
-  'correlated-disease': 'Disease (correlated)',
-  function: 'Function',
-  gene: 'Gene',
-  'causal-gene': 'Gene (causal)',
-  'correlated-gene': 'Gene (correlated)',
-  genotype: 'Genotype',
-  case: 'Case',
-  homolog: 'Homolog',
-  interaction: 'Interaction',
-  publication: 'Publication',
-  model: 'Model',
-  'ortholog-phenotype': 'Ortholog Phenotype',
-  'ortholog-disease': 'Ortholog Disease',
-  pathway: 'Pathway',
-  phenotype: 'Phenotype',
-  variant: 'Variant',
+  anatomy: "Anatomy",
+  cellline: "Cell Line",
+  disease: "Disease",
+  "causal-disease": "Disease (causal)",
+  "correlated-disease": "Disease (correlated)",
+  function: "Function",
+  gene: "Gene",
+  "causal-gene": "Gene (causal)",
+  "correlated-gene": "Gene (correlated)",
+  genotype: "Genotype",
+  case: "Case",
+  homolog: "Homolog",
+  interaction: "Interaction",
+  publication: "Publication",
+  model: "Model",
+  "ortholog-phenotype": "Ortholog Phenotype",
+  "ortholog-disease": "Ortholog Disease",
+  pathway: "Pathway",
+  phenotype: "Phenotype",
+  variant: "Variant",
 };
 
 export default {
   components: {
-    'node-sidebar': NodeSidebar,
+    "node-sidebar": NodeSidebar,
     // 'node-card': NodeCard,
-    'assoc-table': AssocTable,
-    'exac-gene': ExacGeneSummary,
-    'exac-variant': ExacVariantTable,
-    'genome-feature': GenomeFeature,
-    'reactome-viewer': ReactomeViewer,
-    'histo-pheno': HistoPheno
+    "assoc-table": AssocTable,
+    "exac-gene": ExacGeneSummary,
+    "exac-variant": ExacVariantTable,
+    "genome-feature": GenomeFeature,
+    "reactome-viewer": ReactomeViewer,
+    "histo-pheno": HistoPheno,
   },
 
   data() {
     return {
       jsonld: [
         {
-          '@context': 'http://schema.org',
-          '@type': 'Organization',
-          'url': 'https://monarchinitiative.org',
-          'email': 'info@monarchinitiative.org'
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          url: "https://monarchinitiative.org",
+          email: "info@monarchinitiative.org",
         },
         // specify actions
         {
-          '@context': 'http://schema.org',
-          '@type': 'WebSite',
-          'url': 'https://monarchinitiative.org',
-          'potentialAction': {
-            '@type': 'SearchAction',
-            'target': 'https://monarchiniative.org/search/{term}',
-            'query-input': 'required name=term'
-          }
+          "@context": "http://schema.org",
+          "@type": "WebSite",
+          url: "https://monarchinitiative.org",
+          potentialAction: {
+            "@type": "SearchAction",
+            target: "https://monarchiniative.org/search/{term}",
+            "query-input": "required name=term",
+          },
         },
       ],
       isFacetsShowing: false,
       isNeighborhoodShowing: false,
       facetObject: {
         evidence: {
-          IEA: true
+          IEA: true,
         },
         systems: {
-          'Skeletal system': true,
-          'Limbs': true,
-          'Nervous system': true,
-          'Head or neck': true,
-          'Metabolism/homeostasis': true,
-          'Cardiovascular system': true,
-          'Integument': true,
-          'Genitourinary system': true,
-          'Eye': true,
-          'Musculature': true,
-          'Neoplasm': true,
-          'Digestive system': true,
-          'Immune System': true,
-          'Blood and blood-forming tissues': true,
-          'Endocrine': true,
-          'Respiratory system': true,
-          'Ear': true,
-          'Connective tissue': true,
-          'Prenatal development or birth': true,
-          'Growth': true,
-          'Constitutional': true,
-          'Thoracic cavity': true,
-          'Breast': true,
-          'Voice': true,
-          'Cellular': true
-        }
+          "Skeletal system": true,
+          Limbs: true,
+          "Nervous system": true,
+          "Head or neck": true,
+          "Metabolism/homeostasis": true,
+          "Cardiovascular system": true,
+          Integument: true,
+          "Genitourinary system": true,
+          Eye: true,
+          Musculature: true,
+          Neoplasm: true,
+          "Digestive system": true,
+          "Immune System": true,
+          "Blood and blood-forming tissues": true,
+          Endocrine: true,
+          "Respiratory system": true,
+          Ear: true,
+          "Connective tissue": true,
+          "Prenatal development or birth": true,
+          Growth: true,
+          Constitutional: true,
+          "Thoracic cavity": true,
+          Breast: true,
+          Voice: true,
+          Cellular: true,
+        },
       },
       isSelected: {
         phenotypes: false,
         genes: false,
         models: false,
-        diseases: false
+        diseases: false,
       },
       taxonCounts: {},
       node: null,
@@ -467,8 +561,8 @@ export default {
       references: [],
       inheritance: null,
       modifiers: null,
-      contentScript: '',
-      contentBody: '',
+      contentScript: "",
+      contentBody: "",
       path: null,
       icons,
       labels,
@@ -487,8 +581,8 @@ export default {
       isRedirected: false,
       showExac: false,
       authoritiveXref: {
-        synopsis: '',
-        patient: ''
+        synopsis: "",
+        patient: "",
       },
       hasXrefs: false,
       counts: {
@@ -501,42 +595,41 @@ export default {
         publication: 0,
         cellline: 0,
         genotype: 0,
-        case: 0
+        case: 0,
       },
       histoPhenoData: {},
       relationshipsColumns: [
         {
-          label: 'Subject',
-          field: 'subject.id'
+          label: "Subject",
+          field: "subject.id",
         },
         {
-          label: 'Property',
-          field: 'property.id'
+          label: "Property",
+          field: "property.id",
         },
         {
-          label: 'Object',
-          field: 'object.id'
+          label: "Object",
+          field: "object.id",
         },
         {
-          label: 'Source',
-          field: 'source'
-        }
+          label: "Source",
+          field: "source",
+        },
       ],
     };
   },
 
-  computed: {
-  },
+  computed: {},
 
   watch: {
     facetObject: {
-      handler(val, oldVal) {
+      handler() {
         this.updateCounts();
       },
-      deep: true
+      deep: true,
     },
 
-    $route(to, _from) {
+    $route(to) {
       // Only fetchData if the path is different.
       if (to.path !== this.path && !this.isRedirected) {
         this.fetchData();
@@ -554,8 +647,10 @@ export default {
   updated() {
     // Small hack to emulate fixed element taking up size.
     if (this.$refs.titleBar) {
-      const titleBarWrapper = document.getElementsByClassName('title-bar-wrapper')[0];
-      titleBarWrapper.style.height = (this.$refs.titleBar.clientHeight + 20) + 'px';
+      const titleBarWrapper =
+        document.getElementsByClassName("title-bar-wrapper")[0];
+      titleBarWrapper.style.height =
+        this.$refs.titleBar.clientHeight + 20 + "px";
     }
   },
 
@@ -564,9 +659,13 @@ export default {
   },
 
   methods: {
-
     overviewSection() {
-      return this.node.description || this.inheritance || this.entrezResult || this.modifiers;
+      return (
+        this.node.description ||
+        this.inheritance ||
+        this.entrezResult ||
+        this.modifiers
+      );
     },
 
     supportSection() {
@@ -574,7 +673,7 @@ export default {
     },
 
     expandCard(cardType) {
-      this.$router.push({ hash: cardType }).catch((err) => {});
+      this.$router.push({ hash: cardType }).catch(() => {});
       this.expandedCard = cardType;
     },
 
@@ -602,7 +701,12 @@ export default {
           this.counts[cardType] = count;
           if (count > 0) {
             nonEmptyCards.push(cardType);
-          } else if (cardType === 'phenotype' && (this.nodeType === 'gene' || this.nodeType === 'variant' || this.nodeType === 'disease')) {
+          } else if (
+            cardType === "phenotype" &&
+            (this.nodeType === "gene" ||
+              this.nodeType === "variant" ||
+              this.nodeType === "disease")
+          ) {
             // show phenotype for genes, variants, and diseases even if zero
             nonEmptyCards.push(cardType);
           }
@@ -615,13 +719,13 @@ export default {
     async fetchData() {
       this.path = this.$route.path;
       this.nodeId = this.$route.params.id;
-      this.nodeType = this.path.split('/')[1];
+      this.nodeType = this.path.split("/")[1];
 
       // copying from old app bbop.monarch.Engine.prototype.convertIdToCurie
       // Looks like people still link to terms using fragment format instead of curie
       // eg IMPC phenogrid https://www.mousephenotype.org/data/genes/MGI:98297
       if (/_/.test(this.nodeId) && !/:/.test(this.nodeId)) {
-        const newNodeId = this.nodeId.replace('_', ':');
+        const newNodeId = this.nodeId.replace("_", ":");
         this.$router.push(newNodeId);
       }
 
@@ -633,7 +737,7 @@ export default {
       this.nonEmptyCards = [];
       this.isNeighborhoodShowing = false;
       this.inheritance = null;
-      this.references = { 'linked': [], 'static': [] };
+      this.references = { linked: [], static: [] };
       this.modifiers = null;
       this.reactomeId = null;
       this.histoPhenoData = {};
@@ -647,7 +751,10 @@ export default {
         return;
       }
 
-      const neighborhood = await biolinkService.getNeighborhood(this.nodeId, this.nodeType);
+      const neighborhood = await biolinkService.getNeighborhood(
+        this.nodeId,
+        this.nodeType
+      );
 
       // Redirect if biolink is returning a different ID than the
       // one we provided
@@ -660,23 +767,23 @@ export default {
 
       this.node = node;
 
-
       if (neighborhood.synonyms) {
         this.synonyms = neighborhood.synonyms;
       } else {
         this.synonyms = {};
       }
 
-      if (this.nodeType === 'disease') {
+      if (this.nodeType === "disease") {
         // HistoPheno
-        const categories = await biolinkService.getPhenotypeCategories(this.node.id);
+        const categories = await biolinkService.getPhenotypeCategories(
+          this.node.id
+        );
         this.histoPhenoData = {
-          categories
+          categories,
         };
-
       }
 
-      if (this.nodeType === 'publication') {
+      if (this.nodeType === "publication") {
         const entrezResult = (await Entrez.getPublications([this.nodeId]))[0];
 
         if (!entrezResult) {
@@ -686,8 +793,9 @@ export default {
           const entrezTitle = htmlDecode(entrezResult.title);
           this.node.label = entrezTitle;
           this.node.uri = entrezResult.pubmedURL;
-          this.entrezResult.doi = entrezResult.doi || 'No doi found';
-          this.entrezResult.abstract = entrezResult.abstract || 'No abstract found';
+          this.entrezResult.doi = entrezResult.doi || "No doi found";
+          this.entrezResult.abstract =
+            entrezResult.abstract || "No abstract found";
         }
       }
 
@@ -699,7 +807,6 @@ export default {
         this.node.label = sanitizeNodeLabel(this.node.label);
       }
 
-
       //
       // Because Monarch doesn't ingest gene descriptions, we must
       // asynchronously pull these from MyGene. In the future, BioLink
@@ -707,19 +814,22 @@ export default {
       // call from the BioLink server.
       //
 
-      if (this.nodeType === 'gene' || this.nodeType === 'variant') {
+      if (this.nodeType === "gene" || this.nodeType === "variant") {
         const geneInfo = await MyGene.getGeneDescription(this.node.id);
         const hit = geneInfo && geneInfo.hits[0];
         if (hit) {
           node.description = hit.summary;
           node.geneInfo = geneInfo;
         }
-      } else if (this.nodeType === 'case') {
+      } else if (this.nodeType === "case") {
         node.description = this.getCaseDescription();
       }
 
-      const reactomePrefix = 'REACT:';
-      if (this.nodeType === 'pathway' && this.node.id.indexOf(reactomePrefix) === 0) {
+      const reactomePrefix = "REACT:";
+      if (
+        this.nodeType === "pathway" &&
+        this.node.id.indexOf(reactomePrefix) === 0
+      ) {
         this.reactomeId = this.node.id.slice(reactomePrefix.length);
       }
 
@@ -727,11 +837,11 @@ export default {
       // If there a taxon for the current node, then build
       // a nice URL
       //
-      const ncbiTaxonPrefix = 'NCBITaxon:';
+      const ncbiTaxonPrefix = "NCBITaxon:";
       if (
-        this.node.taxon
-        && this.node.taxon.id
-        && this.node.taxon.id.indexOf(ncbiTaxonPrefix) === 0
+        this.node.taxon &&
+        this.node.taxon.id &&
+        this.node.taxon.id.indexOf(ncbiTaxonPrefix) === 0
       ) {
         const taxonNumber = this.node.taxon.id.slice(ncbiTaxonPrefix.length);
         this.node.taxon.uri = `https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=info&id=${taxonNumber}`;
@@ -751,13 +861,13 @@ export default {
       const subclasses = neighborhood.subclasses;
       const xrefs = neighborhood.xrefs;
       this.hasXrefs = xrefs.length > 0;
-      this.superclasses = us.map(us.uniq(superclasses), c => ({
+      this.superclasses = us.map(us.uniq(superclasses), (c) => ({
         id: c,
-        label: nodeMap[c].lbl
+        label: nodeMap[c].lbl,
       }));
-      this.subclasses = us.map(us.uniq(subclasses), c => ({
+      this.subclasses = us.map(us.uniq(subclasses), (c) => ({
         id: c,
-        label: nodeMap[c].lbl
+        label: nodeMap[c].lbl,
       }));
 
       this.isGroup = this.subclasses.length > 0;
@@ -769,14 +879,16 @@ export default {
       let sources = Object.keys(this.node.association_counts.sources);
       sources = processSources(sources);
       // Add the curie prefix for the node we're on
-      sources = new Set([this.nodeId.split(':')[0].toLowerCase()].concat(sources));
+      sources = new Set(
+        [this.nodeId.split(":")[0].toLowerCase()].concat(sources)
+      );
       // IMPC only has gene and phenotype pages
       if (
-        sources.has('impc')
-        && this.nodeType !== 'phenotype'
-        && this.nodeType !== 'gene'
+        sources.has("impc") &&
+        this.nodeType !== "phenotype" &&
+        this.nodeType !== "gene"
       ) {
-        sources.delete('impc');
+        sources.delete("impc");
       }
 
       const seenCache = new Set([]);
@@ -785,36 +897,38 @@ export default {
 
       xrefs.forEach((xref) => {
         let hasRef = false;
-        const xrefPrefix = xref.split(':')[0].toLowerCase();
-        Array.from(sources).concat([xrefPrefix]).forEach((source) => {
-          const url = getXrefUrl(source, xref, this.node.label.split(' ')[0]);
-          if (url) {
-            hasRef = true;
-            if (seenCache.has(xref)) {
-              const xrefId = xref.split(':')[1];
-              xref = `${source.toUpperCase()}:${xrefId}`;
-            } else {
-              seenCache.add(xref);
-            }
-            if (!urlCache.has(url)) {
-              const xrefObj = {
-                id: xref,
-                label: '',
-                uri: url
-              };
-              if (!this.filterAuthority(xrefObj)) {
-                this.references.linked.push(xrefObj);
+        const xrefPrefix = xref.split(":")[0].toLowerCase();
+        Array.from(sources)
+          .concat([xrefPrefix])
+          .forEach((source) => {
+            const url = getXrefUrl(source, xref, this.node.label.split(" ")[0]);
+            if (url) {
+              hasRef = true;
+              if (seenCache.has(xref)) {
+                const xrefId = xref.split(":")[1];
+                xref = `${source.toUpperCase()}:${xrefId}`;
+              } else {
+                seenCache.add(xref);
               }
-              urlCache.add(url);
+              if (!urlCache.has(url)) {
+                const xrefObj = {
+                  id: xref,
+                  label: "",
+                  uri: url,
+                };
+                if (!this.filterAuthority(xrefObj)) {
+                  this.references.linked.push(xrefObj);
+                }
+                urlCache.add(url);
+              }
             }
-          }
-        });
+          });
 
         if (!hasRef) {
           const xrefObj = {
             id: xref,
-            label: '',
-            uri: null
+            label: "",
+            uri: null,
           };
           if (!this.filterAuthority(xrefObj)) {
             this.references.static.push(xrefObj);
@@ -822,42 +936,47 @@ export default {
         }
       });
 
-      if (this.nodeType === 'gene') {
+      if (this.nodeType === "gene") {
         const xref = {};
-        const prefix = this.node.id.split(':')[0].toLowerCase();
+        const prefix = this.node.id.split(":")[0].toLowerCase();
         xref.label = prefix;
         xref.id = this.node.id;
-        xref.uri = getXrefUrl(prefix, this.node.id, this.node.label.split(' ')[0]);
+        xref.uri = getXrefUrl(
+          prefix,
+          this.node.id,
+          this.node.label.split(" ")[0]
+        );
         this.authoritiveXref.gene.taxon = xref;
       }
 
       // We have a deal with VarSome for mutual linking, this should
       // be in some configuration file or directly in our database
       // eg https://varsome.com/gene/HGNC:1100
-      if (this.nodeId.startsWith('HGNC')) {
+      if (this.nodeId.startsWith("HGNC")) {
         this.authoritiveXref.gene.clinical.varsome = {
           id: this.nodeId,
-          label: 'Varsome',
-          uri: `https://varsome.com/gene/${this.nodeId}`
+          label: "Varsome",
+          uri: `https://varsome.com/gene/${this.nodeId}`,
         };
       }
 
       if (this.node.inheritance) {
-        this.inheritance = us.uniq(
-          this.node.inheritance.map(i => i.label)
-        ).join(', ');
+        this.inheritance = us
+          .uniq(this.node.inheritance.map((i) => i.label))
+          .join(", ");
       }
       if (this.node.clinical_modifiers) {
-        this.modifiers = us.uniq(
-          this.node.clinical_modifiers.map(m => m.label)
-        ).join(', ');
+        this.modifiers = us
+          .uniq(this.node.clinical_modifiers.map((m) => m.label))
+          .join(", ");
       }
 
       this.nodeCategory = this.node.categories
         ? this.node.categories[0].toLowerCase()
         : this.nodeType;
       this.nodeIcon = this.icons[this.nodeCategory];
-      this.hasGeneExac = (this.nodeType === 'gene' || this.nodeType === 'variant');
+      this.hasGeneExac =
+        this.nodeType === "gene" || this.nodeType === "variant";
 
       this.buildCounts();
 
@@ -867,7 +986,7 @@ export default {
       //
       const hash = this.$router.currentRoute.hash;
       if (hash.length > 1) {
-        const cardType = hash.split('?')[0].slice(1);
+        const cardType = hash.split("?")[0].slice(1);
         this.$nextTick(() => {
           this.expandCard(cardType);
         });
@@ -912,41 +1031,41 @@ export default {
     },
 
     filterAuthority(xref) {
-      if (this.nodeType === 'disease') {
-        if (xref.id.includes('OMIM') || xref.id.includes('ORPHA')) {
+      if (this.nodeType === "disease") {
+        if (xref.id.includes("OMIM") || xref.id.includes("ORPHA")) {
           // Prioritize OMIM
-          if (!this.authoritiveXref.synopsis.id.includes('OMIM')) {
-            xref.label = xref.id.includes('OMIM') ? 'OMIM' : 'Orphanet';
+          if (!this.authoritiveXref.synopsis.id.includes("OMIM")) {
+            xref.label = xref.id.includes("OMIM") ? "OMIM" : "Orphanet";
             this.authoritiveXref.synopsis = xref;
             return true;
           }
-        } else if (xref.id.includes('GARD')) {
-          const urlId = xref.id.replace(/^GARD:(0)*/g, '');
-          const urlLabel = this.node.label.replace(/\s/g, '-');
+        } else if (xref.id.includes("GARD")) {
+          const urlId = xref.id.replace(/^GARD:(0)*/g, "");
+          const urlLabel = this.node.label.replace(/\s/g, "-");
           xref.uri = `https://rarediseases.info.nih.gov/diseases/${urlId}/${urlLabel.toLowerCase()}`;
-          xref.label = 'GARD';
+          xref.label = "GARD";
           this.authoritiveXref.patient = xref;
           return true;
         }
-      } else if (this.nodeType === 'gene') {
-        if (xref.id.includes('OMIM')) {
-          xref.label = 'OMIM';
+      } else if (this.nodeType === "gene") {
+        if (xref.id.includes("OMIM")) {
+          xref.label = "OMIM";
           this.authoritiveXref.gene.clinical.omim = xref;
           return true;
         }
-        if (xref.id.includes('ENSEMBL') && xref.uri.includes('ensembl')) {
-          xref.label = 'ENSEMBL';
+        if (xref.id.includes("ENSEMBL") && xref.uri.includes("ensembl")) {
+          xref.label = "ENSEMBL";
           this.authoritiveXref.gene.ensembl = xref;
           return true;
         }
-        if (xref.id.includes('REACT')) {
-          xref.label = 'REACTOME';
+        if (xref.id.includes("REACT")) {
+          xref.label = "REACTOME";
           this.authoritiveXref.gene.pathway = xref;
           return true;
         }
-      } else if (this.nodeType === 'phenotype') {
-        if (xref.id.includes('HP')) {
-          xref.label = 'HPO';
+      } else if (this.nodeType === "phenotype") {
+        if (xref.id.includes("HP")) {
+          xref.label = "HPO";
           this.authoritiveXref.phenotype = xref;
           return true;
         }
@@ -957,27 +1076,26 @@ export default {
     resetAuthoritiveXref() {
       this.authoritiveXref = {
         synopsis: {
-          id: '',
-          uri: '',
-          label: ''
+          id: "",
+          uri: "",
+          label: "",
         },
         patient: {
-          id: '',
-          uri: '',
-          label: ''
+          id: "",
+          uri: "",
+          label: "",
         },
         gene: {
-          ensembl: '',
-          taxon: '',
+          ensembl: "",
+          taxon: "",
           clinical: {},
-          pathway: ''
+          pathway: "",
         },
-        phenotype: '',
+        phenotype: "",
       };
-    }
-  }
+    },
+  },
 };
-
 </script>
 
 <style lang="scss">
@@ -987,7 +1105,6 @@ $sidebar-content-width: 500px;
 $sidebar-button-width: 32px;
 $title-bar-max-height: 60px;
 $line-height-compact: 1.3em;
-
 
 .node-wrapper {
   min-height: 100%;
@@ -1008,7 +1125,7 @@ $line-height-compact: 1.3em;
 }
 
 .overlay.active {
-    display: initial;
+  display: initial;
 }
 
 .container-fluid.node-container {
@@ -1017,7 +1134,7 @@ $line-height-compact: 1.3em;
   height: 100%;
 
   .expanded-card-view {
-    padding:0;
+    padding: 0;
   }
 }
 
@@ -1031,11 +1148,13 @@ $line-height-compact: 1.3em;
   }
 }
 
-.collapsed .fa-angle-down, .not-collapsed .fa-angle-right {
+.collapsed .fa-angle-down,
+.not-collapsed .fa-angle-right {
   display: none;
 }
 
-.collapsed .fa-angle-right, .not-collapsed .fa-angle-down {
+.collapsed .fa-angle-right,
+.not-collapsed .fa-angle-down {
   display: inline-block;
 }
 .heading-toggle {
@@ -1080,11 +1199,11 @@ $line-height-compact: 1.3em;
     font-size: inherit;
 
     & .node-label-id {
-      font-size: .8rem;
+      font-size: 0.8rem;
     }
     & .node-label-synonyms {
-      font-size: .75rem;
-      font-style: italic
+      font-size: 0.75rem;
+      font-style: italic;
     }
   }
 }
@@ -1100,7 +1219,7 @@ div.container-cards {
   }
 
   & .node-content-section-content {
-    height:100%;
+    height: 100%;
     padding: 1rem;
     background-color: white;
     box-shadow: 0px 1px 2px 0px #80808040;
@@ -1133,32 +1252,33 @@ div.container-cards {
 }
 
 .node-sub-section {
-  margin: 0 0 .5rem;
-  padding: 0 0 0 .5rem;
+  margin: 0 0 0.5rem;
+  padding: 0 0 0 0.5rem;
 
-  & .linked-references, .static-references {
-    margin: 0 0 .5rem 0;
+  & .linked-references,
+  .static-references {
+    margin: 0 0 0.5rem 0;
   }
 }
 
 .spinner-wrapper {
-    margin-top: 2.5rem;
+  margin-top: 2.5rem;
 }
 
 .resource-section {
-    margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
 .resource-section .btn {
-    margin-left: .5rem;
-    text-transform: uppercase;
+  margin-left: 0.5rem;
+  text-transform: uppercase;
 }
 .histo-pheno-wrapper {
-    height: 350px !important;
+  height: 350px !important;
 }
 
 .associated-phenotypes:hover {
-    background-color:#f7f7f7 !important;
-    cursor: pointer;
+  background-color: #f7f7f7 !important;
+  cursor: pointer;
 }
 </style>
