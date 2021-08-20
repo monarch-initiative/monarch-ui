@@ -1,7 +1,9 @@
 <template>
   <div id="filter" :class="{ active: isVisible }" class="container-fluid">
     <div class="top-row">
-      <b-button class="" size="sm" @click="toggleAll"> Select All </b-button>
+      <b-button class="" size="sm" @click="toggleSelectedFilter">
+        Select All
+      </b-button>
       <b-button class="exit" size="sm" @click="hideFilter">
         Apply & Close
       </b-button>
@@ -15,10 +17,12 @@
       class="facet-item row"
     >
       <div class="col-lg-10">
+        <!-- eslint-disable -->
         <b-form-checkbox
-          :value="taxonFilter.taxons[key]"
-          @change="toggleFilter(key, $event.target.value)"
+          v-model="taxonFilter.taxons[key]"
+          @input="updateTaxonFilter"
         >
+        <!-- eslint-enable -->
           <i>{{ idToLabel(key) }}</i
           >&nbsp;({{ key }})
         </b-form-checkbox>
@@ -71,6 +75,9 @@ export default {
     }
   },
   methods: {
+    updateTaxonFilter() {
+      this.$forceUpdate();
+    },
     idToLabel(id) {
       return idToLabel(id);
     },
@@ -104,18 +111,15 @@ export default {
         }
       }
     },
-    toggleFilter(key, value) {
-      const newFilters = { ...this.taxonFilter };
-      newFilters[key] = value;
-      this.$emit("input", newFilters);
-    },
-    toggleAll() {
+    toggleSelectedFilter() {
       this.selectedAll = !this.selectedAll;
-      const newFilters = { ...this.taxonFilter };
-      Object.keys(newFilters.taxons).forEach((taxon) => {
-        newFilters.taxons[taxon] = this.selectedAll;
+
+      Object.keys(this.taxonFilter.taxons).forEach((taxon) => {
+        // eslint-disable-next-line
+        this.taxonFilter.taxons[taxon] = this.selectedAll;
       });
-      this.$emit("input", newFilters);
+
+      this.updateTaxonFilter();
     },
   },
 };
