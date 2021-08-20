@@ -107,7 +107,7 @@ export default {
     toggleFilter(key, value) {
       const newFilters = { ...this.taxonFilter };
       newFilters[key] = value;
-      this.$emit("update:modelValue", newFilters);
+      this.$emit("input", newFilters);
     },
     toggleAll() {
       this.selectedAll = !this.selectedAll;
@@ -115,7 +115,7 @@ export default {
       Object.keys(newFilters.taxons).forEach((taxon) => {
         newFilters.taxons[taxon] = this.selectedAll;
       });
-      this.$emit("update:modelValue", newFilters);
+      this.$emit("input", newFilters);
     },
   },
 };
