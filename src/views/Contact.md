@@ -18,7 +18,7 @@
         <p>
             To learn more about using or contributing to the Mondo Disease Ontology, 
             please visit 
-            <a href="https://monarch-initiative.github.io/mondo/" target="__blank">https://monarch-initiative.github.io/mondo/</a> 
+            <a href="https://mondo.monarchinitiative.org/" target="__blank">https://mondo.monarchinitiative.org/</a> 
             for details.
         </p>
         <p>
