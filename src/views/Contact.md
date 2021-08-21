@@ -3,7 +3,7 @@
     <div class="contact">
         <p>
             If you have a specific question about Monarch, its data, usage, software, or services, you can create a 
-            ticket on our helpdesk <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a> or get live feedback on <a href="https://gitter.im/monarch-initiative/helpdesk" target="__blank">gitter</a>.
+            ticket on our helpdesk <a href="https://github.com/monarch-initiative/helpdesk/issues" target="__blank">issue tracker</a>.
             We invite you to join the rest of the Monarch Initiative community on 
             <a href="https://github.com/monarch-initiative" target="__blank">GitHub!</a>
         </p>

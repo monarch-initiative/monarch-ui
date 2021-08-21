@@ -1,7 +1,5 @@
 ## monarch-ui README
 
-[![Gitter](https://badges.gitter.im/monarch-initiative/helpdesk.svg)](https://gitter.im/monarch-initiative/helpdesk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-
 This repository contains the source code for the Monarch Initiative web application (aka, the Monarch UI).
 
 This README describes the application and its interaction with Monarch Initiative services such as BioLink. It also provide a Quickstart on how to build and run the application.
