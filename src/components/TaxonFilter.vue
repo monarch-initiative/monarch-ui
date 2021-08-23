@@ -8,7 +8,7 @@
         Apply & Close
       </b-button>
       <p v-if="showMessage" class="warning">
-        You must select at least 1 taxon. There are times when you really want to make sure you select at least 1 taxon please.
+        You must select at least 1 taxon.
       </p>
     </div>
     <div
