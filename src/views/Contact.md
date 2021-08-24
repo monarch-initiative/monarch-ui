@@ -8,10 +8,6 @@
         href="https://github.com/monarch-initiative/helpdesk/issues"
         target="__blank"
         >issue tracker</a
-      >
-      or get live feedback on
-      <a href="https://gitter.im/monarch-initiative/helpdesk" target="__blank"
-        >gitter</a
       >. We invite you to join the rest of the Monarch Initiative community on
       <a href="https://github.com/monarch-initiative" target="__blank"
         >GitHub!</a
@@ -32,8 +28,8 @@
     <p>
       To learn more about using or contributing to the Mondo Disease Ontology,
       please visit
-      <a href="https://monarch-initiative.github.io/mondo/" target="__blank"
-        >https://monarch-initiative.github.io/mondo/</a
+      <a href="https://mondo.monarchinitiative.org/" target="__blank"
+        >https://mondo.monarchinitiative.org/</a
       >
       for details.
     </p>
