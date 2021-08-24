@@ -1,5 +1,5 @@
-import axios from 'axios';
-import yaml from 'js-yaml';
+import axios from "axios";
+import yaml from "js-yaml";
 
 export async function getTeam() {
   const teamUrl = `${process.env.BASE_URL}team.yaml`;
@@ -7,16 +7,14 @@ export async function getTeam() {
 
   let team = null;
   try {
-    const teamParsed = await yaml.safeLoad(teamResponse.data, 'utf8');
+    const teamParsed = await yaml.safeLoad(teamResponse.data, "utf8");
     const institutions = teamParsed.institutions;
 
     institutions.forEach((i) => {
       i.logo = `${process.env.BASE_URL}${i.logo}`;
 
       const people = i.people;
-      const peopleNames = people
-        .filter(p => !p.alumni)
-        .map(p => p.name);
+      const peopleNames = people.filter((p) => !p.alumni).map((p) => p.name);
       i.peopleNames = peopleNames;
       people.forEach((p) => {
         p.picture = `${process.env.BASE_URL}${p.picture}`;
@@ -37,8 +35,8 @@ export async function getRecentlyCurated() {
     const curatedLines = [];
     const todayDate = new Date();
     const thisMonth = todayDate.getMonth();
-    curatedResponse.data.split('\n').forEach((line) => {
-      const pieces = line.split('\t');
+    curatedResponse.data.split("\n").forEach((line) => {
+      const pieces = line.split("\t");
       const mondo = pieces[0];
       const date = pieces[1];
       const itemDate = new Date(date).getUTCMonth();

@@ -1,7 +1,6 @@
-import us from 'underscore';
-import sanitizeHTML from 'sanitize-html';
-import xrefs from '@/lib/conf/xrefs';
-
+import us from "underscore";
+import sanitizeHTML from "sanitize-html";
+import xrefs from "@/lib/conf/xrefs";
 
 /**
  * Processes a list of publications and returns a list
@@ -12,11 +11,11 @@ import xrefs from '@/lib/conf/xrefs';
  */
 export function processPublications(publications) {
   return publications
-    .filter(pub => !pub.id.startsWith('MONDO'))
+    .filter((pub) => !pub.id.startsWith("MONDO"))
     .map((pub) => {
-      let url = '';
-      if (pub.id.startsWith('PMID')) {
-        const reference = pub.id.split(':')[1];
+      let url = "";
+      if (pub.id.startsWith("PMID")) {
+        const reference = pub.id.split(":")[1];
         url = `http://www.ncbi.nlm.nih.gov/pubmed/${reference}`;
       } else {
         url = `/publication/${pub.id}`;
@@ -24,7 +23,7 @@ export function processPublications(publications) {
       return {
         id: pub.id,
         label: pub.label || pub.id,
-        url
+        url,
       };
     });
 }
@@ -39,17 +38,19 @@ export function processSources(sources) {
   if (sources === null) {
     // This happens when we get an assoc from mondo
     // https://github.com/monarch-initiative/monarch-ui/issues/333
-    sources = ['http://purl.obolibrary.org/obo/mondo.owl'];
+    sources = ["http://purl.obolibrary.org/obo/mondo.owl"];
   }
-  sources = us.uniq(sources.map(db => db.replace(/_?slim/, '')));
-  return sources.map(db => db
-    .split('/')
-    .pop()
-    .replace('#', '')
-    .split('.')[0]
-    .toLowerCase()
-    // monarch data boutique curated from OMIA data
-    .replace('monarch', 'omia'));
+  sources = us.uniq(sources.map((db) => db.replace(/_?slim/, "")));
+  return sources.map((db) =>
+    db
+      .split("/")
+      .pop()
+      .replace("#", "")
+      .split(".")[0]
+      .toLowerCase()
+      // monarch data boutique curated from OMIA data
+      .replace("monarch", "omia")
+  );
 }
 
 /**
@@ -64,22 +65,22 @@ export function processSources(sources) {
  */
 export function getXrefUrl(source, curie, label) {
   let url = null;
-  let [prefix, reference] = curie.split(':');
+  let [prefix, reference] = curie.split(":");
   // OMIM:1234.123 -> OMIM:1234#123
-  if (prefix === 'OMIM') {
-    reference = reference.replace('.', '#');
+  if (prefix === "OMIM") {
+    reference = reference.replace(".", "#");
   }
   if (source in xrefs && prefix in xrefs[source]) {
     url = xrefs[source][prefix];
-    url = url.replace('[reference]', reference);
-    url = url.replace('[label]', label);
+    url = url.replace("[reference]", reference);
+    url = url.replace("[label]", label);
   }
   return url;
 }
 
 export function sanitizeText(dirty) {
   const result = sanitizeHTML(dirty, {
-    allowedTags: sanitizeHTML.defaults.allowedTags.concat(['img', 'sup'])
+    allowedTags: sanitizeHTML.defaults.allowedTags.concat(["img", "sup"]),
   });
 
   return result;
@@ -88,6 +89,6 @@ export function sanitizeText(dirty) {
 export function sanitizeNodeLabel(dirty) {
   // See https://github.com/monarch-initiative/monarch-ui/issues/108
   // as a background for the below hack
-  const tagRegex = new RegExp('<(.*?)>', 'g');
-  return dirty.replace(tagRegex, '<sup>$1</sup>');
+  const tagRegex = new RegExp("<(.*?)>", "g");
+  return dirty.replace(tagRegex, "<sup>$1</sup>");
 }

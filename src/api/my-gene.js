@@ -1,35 +1,35 @@
 /* eslint import/prefer-default-export: 0 */
 
-import axios from 'axios';
-import { idToLabel, isAGRApolloTaxon } from '../lib/TaxonMap';
+import axios from "axios";
+import { idToLabel, isAGRApolloTaxon } from "../lib/taxon-map";
 
 export async function getGeneDescription(geneId) {
-  const mygeneURL = 'https://mygene.info/v3/query';
+  const mygeneURL = "https://mygene.info/v3/query";
 
   // http://docs.mygene.info/en/latest/doc/data.html#species
   // http://docs.mygene.info/en/latest/doc/query_service.html#available-fields
-  let formattedId = '';
-  let speciesParam = 'all';
+  let formattedId = "";
+  let speciesParam = "all";
 
   if (geneId.match(/^NCBIGene/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, '$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "$1");
   } else if (geneId.match(/^OMIM/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'mim:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "mim:$1");
     speciesParam = 9606;
   } else if (geneId.match(/^MGI/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'mgi:MGI\\:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "mgi:MGI\\:$1");
     speciesParam = 10090;
   } else if (geneId.match(/^FlyBase/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'flybase:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "flybase:$1");
     speciesParam = 7227;
   } else if (geneId.match(/^Wormbase/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'wormbase:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "wormbase:$1");
     speciesParam = 6239;
   } else if (geneId.match(/^ZFIN/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'zfin:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "zfin:$1");
     speciesParam = 7955;
   } else if (geneId.match(/^RGD/)) {
-    formattedId = geneId.replace(/\S+:(\d+)/, 'rgd:$1');
+    formattedId = geneId.replace(/\S+:(\d+)/, "rgd:$1");
     speciesParam = 10116;
   } else {
     formattedId = geneId;
@@ -37,7 +37,7 @@ export async function getGeneDescription(geneId) {
 
   const mygeneParams = {
     q: formattedId,
-    fields: 'summary,genomic_pos,name,symbol,taxid',
+    fields: "summary,genomic_pos,name,symbol,taxid",
     species: speciesParam,
   };
 
@@ -115,12 +115,28 @@ export async function getGeneDescription(geneId) {
           // console.log(`Species ${taxid} not available from Apollo.  Not showing genome features.`);
         } else {
           const thisSpecies = idToLabel(`NCBITaxon:${taxid}`);
-          const defaultTrackName = 'All Genes'; // this is the generic track name
-          const locationString = locationObj.chr + ':' + locationObj.start + '..' + locationObj.end;
-          const apolloServerPrefix = 'https://agr-apollo.berkeleybop.io/apollo/';
-          const externalUrl = 'http://www.alliancegenome.org/jbrowse/index.html?data=data/' + encodeURI(thisSpecies) + '&loc=' + encodeURI(locationString) + '&tracks=' + defaultTrackName;
-          const trackDataPrefix = apolloServerPrefix + 'track/' + encodeURI(thisSpecies) + '/' + defaultTrackName + '/' + encodeURI(locationString) + '.json';
-          const trackDataWithHighlightURL = trackDataPrefix + '?name=' + symbol;
+          const defaultTrackName = "All Genes"; // this is the generic track name
+          const locationString =
+            locationObj.chr + ":" + locationObj.start + ".." + locationObj.end;
+          const apolloServerPrefix =
+            "https://agr-apollo.berkeleybop.io/apollo/";
+          const externalUrl =
+            "http://www.alliancegenome.org/jbrowse/index.html?data=data/" +
+            encodeURI(thisSpecies) +
+            "&loc=" +
+            encodeURI(locationString) +
+            "&tracks=" +
+            defaultTrackName;
+          const trackDataPrefix =
+            apolloServerPrefix +
+            "track/" +
+            encodeURI(thisSpecies) +
+            "/" +
+            defaultTrackName +
+            "/" +
+            encodeURI(locationString) +
+            ".json";
+          const trackDataWithHighlightURL = trackDataPrefix + "?name=" + symbol;
           // console.log('trackDataWithHighlight', trackDataWithHighlightURL);
           try {
             const trackResponse = await axios.get(trackDataWithHighlightURL);

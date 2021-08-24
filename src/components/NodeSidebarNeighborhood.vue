@@ -1,16 +1,14 @@
 <template>
   <nav id="neighborhood" :class="{ active: isVisible }">
-    <i class="close fa fa-times" aria-hidden="true" @click="closeNeighborhood()" />
+    <i
+      class="close fa fa-times"
+      aria-hidden="true"
+      @click="closeNeighborhood()"
+    />
     <div class="neighborhood">
-      <div
-        v-for="c in superclasses"
-        :key="c.id"
-        class="row superclass"
-      >
+      <div v-for="c in superclasses" :key="c.id" class="row superclass">
         <div class="col-12">
-          <router-link
-            :to="'/' + nodeType + '/' + c.id"
-          >
+          <router-link :to="'/' + nodeType + '/' + c.id">
             {{ getLabel(c) }}
           </router-link>
         </div>
@@ -18,15 +16,12 @@
 
       <div class="row currentclass">
         <div class="col-12">
-          {{ nodeLabel }} <i class="fa fa-flag" style="float:right" aria-hidden="true" />
+          {{ nodeLabel }}
+          <i class="fa fa-flag" style="float: right" aria-hidden="true" />
         </div>
       </div>
 
-      <div
-        v-for="c in subclasses"
-        :key="c.id"
-        class="row subclass"
-      >
+      <div v-for="c in subclasses" :key="c.id" class="row subclass">
         <div class="col-12">
           <router-link :to="'/' + nodeType + '/' + c.id">
             {{ getLabel(c) }}
@@ -37,21 +32,19 @@
   </nav>
 </template>
 
-
 <script>
-
 export default {
-  name: 'NodeSidebarNeighborhood',
+  name: "NodeSidebarNeighborhood",
   props: {
     nodeType: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     nodeLabel: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     superclasses: {
       type: Array,
@@ -76,21 +69,17 @@ export default {
     },
     closeNeighborhood() {
       // console.log('trying to close');
-      this.$emit('toggleNeighborhood');
-    }
+      this.$emit("toggleNeighborhood");
+    },
   },
 };
-
 </script>
 
-
 <style lang="scss">
-
 @import "~@/style/variables";
 
 $neighborhood-width: 500px;
 $neighborhood-button-width: 32px;
-
 
 .neighborhood {
   margin-top: 5px;
@@ -107,13 +96,12 @@ $neighborhood-button-width: 32px;
   overflow-y: auto;
   overflow-x: hidden;
   background: ghostwhite;
-  border:2px solid lightgray;
+  border: 2px solid lightgray;
   border-radius: 5px;
   max-height: 75%;
   font-size: 0.95rem;
   padding: 5px;
 }
-
 
 #neighborhood .close {
   float: right;
@@ -158,5 +146,4 @@ $neighborhood-button-width: 32px;
   background: #fff;
   border-color: lightblue;
 }
-
 </style>
