@@ -28,36 +28,36 @@
 
 */
 
-var loaderUtils = require('loader-utils');
-var hljs = require('highlight.js');
-var cheerio = require('cheerio');
-var markdown = require('markdown-it');
-const mia = require('markdown-it-anchor');
+var loaderUtils = require("loader-utils");
+var hljs = require("highlight.js");
+var cheerio = require("cheerio");
+var markdown = require("markdown-it");
+const mia = require("markdown-it-anchor");
 
-const monarchMarkdown = require('../lib/markdown');
+const monarchMarkdown = require("../lib/markdown");
 const applyLinkHandlers = monarchMarkdown.applyLinkHandlers;
 
-var Token = require('markdown-it/lib/token');
+var Token = require("markdown-it/lib/token");
 
 function slugify(s) {
-  const cleaned = String(s).trim().toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[\:`()]/g, '')
-    .replace(/\//g, '');
+  const cleaned = String(s)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[\:`()]/g, "")
+    .replace(/\//g, "");
   const result = encodeURIComponent(cleaned);
   // console.log('slugify', s, result);
   return result;
-};
-
+}
 
 // https://github.com/valeriangalliat/markdown-it-anchor#usage
 const miaOptions = {
   permalink: true,
   permalinkBefore: false,
-  permalinkSymbol: '&#x1F517;',
+  permalinkSymbol: "&#x1F517;",
   slugify: slugify,
 };
-
 
 /**
  * `<pre></pre>` => `<pre v-pre></pre>`
@@ -65,8 +65,8 @@ const miaOptions = {
  * @param  {string} str
  * @return {string}
  */
-var addVuePreviewAttr = function(str) {
-  return str.replace(/(<pre|<code)/g, '$1 v-pre');
+var addVuePreviewAttr = function (str) {
+  return str.replace(/(<pre|<code)/g, "$1 v-pre");
 };
 
 /**
@@ -74,9 +74,9 @@ var addVuePreviewAttr = function(str) {
  * @param  {string} str
  * @param  {string} lang
  */
-var renderHighlight = function(str, lang) {
+var renderHighlight = function (str, lang) {
   if (!(lang && hljs.getLanguage(lang))) {
-    return '';
+    return "";
   }
 
   return hljs.highlight(lang, str, true).value;
@@ -87,43 +87,45 @@ var renderHighlight = function(str, lang) {
  * @param  {[type]} html [description]
  * @return {[type]}      [description]
  */
-var renderVueTemplate = function(html, wrapper, wrapperClass) {
+var renderVueTemplate = function (html, wrapper, wrapperClass) {
   var $ = cheerio.load(html, {
     decodeEntities: false,
     lowerCaseAttributeNames: false,
-    lowerCaseTags: false
+    lowerCaseTags: false,
   });
 
   var output = {
-    style: $.html('style'),
+    style: $.html("style"),
     // get only the first script child. Causes issues if multiple script files in page.
-    script: $.html($('script').first())
+    script: $.html($("script").first()),
   };
   var result;
 
-  $('style').remove();
-  $('script').remove();
+  $("style").remove();
+  $("script").remove();
 
   result =
     `<template><${wrapper} class="${wrapperClass}">` +
     $.html() +
     `</${wrapper}></template>\n` +
     output.style +
-    '\n' +
+    "\n" +
     output.script;
 
   return result;
 };
 
-module.exports = function(source) {
+module.exports = function (source) {
   this.cacheable && this.cacheable();
   var parser, preprocess;
   var params = loaderUtils.getOptions(this) || {};
 
-  var vueMarkdownOptions = this._compilation ?
-                            this._compilation.__vueMarkdownOptions__ :
-                            null;
-  var opts = vueMarkdownOptions ? Object.create(vueMarkdownOptions.__proto__) : {}; // inherit prototype
+  var vueMarkdownOptions = this._compilation
+    ? this._compilation.__vueMarkdownOptions__
+    : null;
+  var opts = vueMarkdownOptions
+    ? Object.create(vueMarkdownOptions.__proto__)
+    : {}; // inherit prototype
   var preventExtract = false;
 
   opts = Object.assign(opts, params, vueMarkdownOptions); // assign attributes
@@ -133,17 +135,16 @@ module.exports = function(source) {
     preventExtract = true;
   }
 
-  if (typeof opts.render === 'function') {
+  if (typeof opts.render === "function") {
     parser = opts;
-  }
-  else {
+  } else {
     opts = Object.assign(
       {
-        preset: 'default',
+        preset: "default",
         html: true,
         highlight: renderHighlight,
-        wrapper: 'section',
-        wrapperClass: 'vue-markdown'
+        wrapper: "section",
+        wrapperClass: "vue-markdown",
       },
       opts
     );
@@ -238,28 +239,31 @@ module.exports = function(source) {
 
     //add ruler:extract script and style tags from html token content
     !preventExtract &&
-      parser.core.ruler.push('extract_script_or_style', function replace(
-        state
-      ) {
-        let tag_reg = new RegExp('<(script|style)(?:[^<]|<)+</\\1>', 'g');
-        let newTokens = [];
-        state.tokens
-          .filter(token => token.type == 'fence' && token.info == 'html')
-          .forEach(token => {
-            let tokens = (token.content.match(tag_reg) || []).map(content => {
-              let t = new Token('html_block', '', 0);
-              t.content = content;
-              return t;
+      parser.core.ruler.push(
+        "extract_script_or_style",
+        function replace(state) {
+          let tag_reg = new RegExp("<(script|style)(?:[^<]|<)+</\\1>", "g");
+          let newTokens = [];
+          state.tokens
+            .filter((token) => token.type == "fence" && token.info == "html")
+            .forEach((token) => {
+              let tokens = (token.content.match(tag_reg) || []).map(
+                (content) => {
+                  let t = new Token("html_block", "", 0);
+                  t.content = content;
+                  return t;
+                }
+              );
+              if (tokens.length > 0) {
+                newTokens.push.apply(newTokens, tokens);
+              }
             });
-            if (tokens.length > 0) {
-              newTokens.push.apply(newTokens, tokens);
-            }
-          });
-        state.tokens.push.apply(state.tokens, newTokens);
-      });
+          state.tokens.push.apply(state.tokens, newTokens);
+        }
+      );
 
     if (plugins) {
-      plugins.forEach(function(plugin) {
+      plugins.forEach(function (plugin) {
         if (Array.isArray(plugin)) {
           parser.use.apply(parser, plugin);
         } else {
@@ -276,10 +280,10 @@ module.exports = function(source) {
   function overrideParserRules(rules) {
     if (parser && parser.renderer && parser.renderer.rules) {
       var parserRules = parser.renderer.rules;
-      rules.forEach(function(rule) {
+      rules.forEach(function (rule) {
         if (parserRules && parserRules[rule]) {
           var defaultRule = parserRules[rule];
-          parserRules[rule] = function() {
+          parserRules[rule] = function () {
             return addVuePreviewAttr(defaultRule.apply(this, arguments));
           };
         }
@@ -287,20 +291,20 @@ module.exports = function(source) {
     }
   }
 
-  overrideParserRules(['code_inline', 'code_block', 'fence']);
+  overrideParserRules(["code_inline", "code_block", "fence"]);
 
   if (preprocess) {
     source = preprocess.call(this, parser, source);
   }
 
-  source = source.replace(/@/g, '__at__');
+  source = source.replace(/@/g, "__at__");
 
-  var content = parser.render(source).replace(/__at__/g, '@');
+  var content = parser.render(source).replace(/__at__/g, "@");
   var result = renderVueTemplate(content, opts.wrapper, opts.wrapperClass);
 
   if (opts.raw) {
     return result;
   } else {
-    return 'module.exports = ' + JSON.stringify(result);
+    return "module.exports = " + JSON.stringify(result);
   }
 };

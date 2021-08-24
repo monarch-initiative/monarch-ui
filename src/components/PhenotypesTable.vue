@@ -1,15 +1,18 @@
 <template>
   <div>
     <div v-if="dataFetched">
-      <h6>Source data for each match result (each column) in the Phenogrid above is represented as a row in the table below.</h6>
+      <h6>
+        Source data for each match result (each column) in the Phenogrid above
+        is represented as a row in the table below.
+      </h6>
       <b-form-input v-model="filter" placeholder="Filter by match or taxon" />
       <b-table
         :items="filtered"
         :fields="fields"
         :current-page="currentPage"
         :per-page="rowsPerPage"
-        :sort-by.sync="sortBy"
-        :sort-desc.sync="sortDesc"
+        :sort-by="sortBy"
+        :sort-desc="sortDesc"
         responsive="true"
         class="table-border-soft"
       >
@@ -28,24 +31,22 @@
         />
       </div>
     </div>
-    <div v-else>
-      Loading Phenotype Comparison Table ...
-    </div>
+    <div v-else>Loading Phenotype Comparison Table ...</div>
   </div>
 </template>
 <script>
-import * as bioLinkService from '@/api/BioLink';
+import * as bioLinkService from "@/api/bio-link";
 
 export default {
   props: {
     source: {
       type: Array,
-      required: true
+      required: true,
     },
     targetSpecies: {
       type: String,
       required: false,
-      default: '9606'
+      default: "9606",
     },
     compare: {
       type: Array,
@@ -55,58 +56,61 @@ export default {
     mode: {
       type: String,
       required: true,
-      default: 'search'
-    }
+      default: "search",
+    },
   },
-
 
   data() {
     return {
       dataFetched: false,
       rowsPerPage: 10,
       currentPage: 1,
-      filter: '',
-      sortBy: 'score',
+      filter: "",
+      sortBy: "score",
       sortDesc: true,
       fields: [
         {
-          key: 'hitLabel',
-          label: 'Match Label',
-          sortable: true
+          key: "hitLabel",
+          label: "Match Label",
+          sortable: true,
         },
         {
-          key: 'hitId',
-          label: 'Match Identifier',
-          sortable: true
+          key: "hitId",
+          label: "Match Identifier",
+          sortable: true,
         },
         {
-          label: 'Similarity Score',
-          key: 'score',
-          sortable: true
+          label: "Similarity Score",
+          key: "score",
+          sortable: true,
         },
         {
-          key: 'taxonLabel',
-          label: 'Taxon Label',
-          sortable: true
-        }
+          key: "taxonLabel",
+          label: "Taxon Label",
+          sortable: true,
+        },
       ],
       items: [],
-      preItems: []
+      preItems: [],
     };
   },
   computed: {
     filtered() {
       const filterValue = this.filter;
       const fields = this.fields;
-      const filtered = this.items.filter(row => fields.some((field) => {
-        const fieldKey = field.key;
-        if (fieldKey !== 'score') {
-          return row[fieldKey].toUpperCase().includes(filterValue.toUpperCase());
-        }
-        return false;
-      }));
+      const filtered = this.items.filter((row) =>
+        fields.some((field) => {
+          const fieldKey = field.key;
+          if (fieldKey !== "score") {
+            return row[fieldKey]
+              .toUpperCase()
+              .includes(filterValue.toUpperCase());
+          }
+          return false;
+        })
+      );
       return filtered.length > 0 ? filtered : this.items;
-    }
+    },
   },
   watch: {
     phenotypes() {
@@ -114,7 +118,7 @@ export default {
     },
     preItems() {
       this.processItems();
-    }
+    },
   },
   mounted() {
     this.comparePhenotypes();
@@ -125,7 +129,11 @@ export default {
       try {
         // console.log(this.source);
         // console.log(this.compare);
-        const searchResponse = await bioLinkService.comparePhenotypes(this.source, this.compare, this.mode);
+        const searchResponse = await bioLinkService.comparePhenotypes(
+          this.source,
+          this.compare,
+          this.mode
+        );
         this.preItems = searchResponse;
         this.dataFetched = true;
       } catch (e) {
@@ -140,20 +148,20 @@ export default {
           hitLabel: elem.label,
           hitId: elem.id,
           score: elem.score,
-          taxonLabel: elem.taxon.label !== null ? elem.taxon.label : '-'
+          taxonLabel: elem.taxon.label !== null ? elem.taxon.label : "-",
         };
         this.items.push(rowData);
       });
     },
     round(value, decimals) {
       return value.toFixed(decimals);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
-  .ic-score{
-    color: rgb(135, 99, 163);
-  }
+.ic-score {
+  color: rgb(135, 99, 163);
+}
 </style>

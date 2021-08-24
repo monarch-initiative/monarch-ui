@@ -2,9 +2,9 @@
   <div class="container-fluid evidence-section py-0">
     <div class="summary">
       Summary ({{
-        evidence.evidence_types.length
-          + evidence.publications.length
-          + evidence.provided_by.length
+        evidence.evidence_types.length +
+        evidence.publications.length +
+        evidence.provided_by.length
       }})
     </div>
 
@@ -37,11 +37,7 @@
             :key="index"
             class="row"
           >
-            <a
-              :href="support.url"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a :href="support.url" target="_blank" rel="noopener noreferrer">
               {{ support.label }}&nbsp;
             </a>
           </div>
@@ -69,11 +65,7 @@
             class="row"
           >
             <span v-if="pub.id.startsWith('PMID')">
-              <a
-                :href="pub.url"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a :href="pub.url" target="_blank" rel="noopener noreferrer">
                 {{ pub.label }}
                 <i class="fa fa-external-link" aria-hidden="true" />
               </a>
@@ -100,7 +92,7 @@
           Sources ({{ evidence.provided_by.length }})
         </b-button>
         <b-collapse :id="'collapse-3' + evidence.id">
-          <strong>{{ evidence.provided_by.join(', ') }}</strong>
+          <strong>{{ evidence.provided_by.join(", ") }}</strong>
         </b-collapse>
       </div>
     </template>
@@ -111,11 +103,7 @@
     </div>
 
     <div v-show="!evidenceFetched && !evidenceError" class="evidence-ajax-msg">
-      <b-spinner
-        class="loading-spinner"
-        type="grow"
-        label="Spinning"
-      />
+      <b-spinner class="loading-spinner" type="grow" label="Spinning" />
       <span>&nbsp;&nbsp;Fetching Evidence</span>
     </div>
 
@@ -135,7 +123,6 @@
         />
       </div>
 
-
       <b-table
         :items="rowsProvider"
         :fields="fields"
@@ -148,7 +135,10 @@
         <template v-slot:cell(subject)="data">
           <template v-if="data.item.subject.url">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <router-link :to="data.item.subject.url" v-html="$sanitizeText(data.item.subject.label)" />
+            <router-link
+              :to="data.item.subject.url"
+              v-html="$sanitizeText(data.item.subject.label)"
+            />
           </template>
           <template v-else>
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -163,7 +153,10 @@
         <template v-slot:cell(object)="data">
           <template v-if="data.item.object.url">
             <!-- eslint-disable-next-line vue/no-v-html -->
-            <router-link :to="data.item.object.url" v-html="$sanitizeText(data.item.object.label)" />
+            <router-link
+              :to="data.item.object.url"
+              v-html="$sanitizeText(data.item.object.label)"
+            />
           </template>
           <template v-else>
             <!-- eslint-disable-next-line vue/no-v-html -->
@@ -179,11 +172,7 @@
               class="row"
             >
               <span v-if="pub.id.startsWith('PMID')" class="nowrap">
-                <a
-                  :href="pub.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a :href="pub.url" target="_blank" rel="noopener noreferrer">
                   {{ pub.label }}
                   <i class="fa fa-external-link" aria-hidden="true" />
                 </a>
@@ -195,16 +184,12 @@
           </template>
           <template v-else>
             <div
-              v-for="(pub, index) in data.item.publications.slice(0,2)"
+              v-for="(pub, index) in data.item.publications.slice(0, 2)"
               :key="index"
               class="row"
             >
               <span v-if="pub.id.startsWith('PMID')" class="nowrap">
-                <a
-                  :href="pub.url"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a :href="pub.url" target="_blank" rel="noopener noreferrer">
                   {{ pub.label }}
                   <i class="fa fa-external-link" aria-hidden="true" />
                 </a>
@@ -214,7 +199,9 @@
               </span>
             </div>
             <div>
-              <b-collapse :id="'collapse-pubs' + evidence.id + data.item.rowNum">
+              <b-collapse
+                :id="'collapse-pubs' + evidence.id + data.item.rowNum"
+              >
                 <div
                   v-for="(pub, index) in data.item.publications.slice(2)"
                   :key="index"
@@ -283,11 +270,14 @@
 </template>
 
 <script>
-import { getEvidence } from '@/api/BioLink';
+import { getEvidence } from "@/api/bio-link";
 import {
-  getXrefUrl, processSources, sanitizeNodeLabel, sanitizeText
-} from '@/lib/Utils';
-import sourceToLabel from '@/lib/sources';
+  getXrefUrl,
+  processSources,
+  sanitizeNodeLabel,
+  sanitizeText,
+} from "@/lib/utils";
+import sourceToLabel from "@/lib/sources";
 
 export default {
   components: {},
@@ -302,7 +292,7 @@ export default {
     },
     cardType: {
       type: String,
-      required: true
+      required: true,
     },
     nodeId: {
       type: String,
@@ -316,17 +306,17 @@ export default {
     nodeType: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     subjectId: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     subjectLabel: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
   },
   data() {
@@ -340,59 +330,63 @@ export default {
       rows: [],
       fields: [
         {
-          key: 'subject',
-          label: 'Subject',
-          class: 'subject',
+          key: "subject",
+          label: "Subject",
+          class: "subject",
         },
         {
-          key: 'relation',
-          label: 'Relation',
-          class: 'relation',
+          key: "relation",
+          label: "Relation",
+          class: "relation",
         },
         {
-          key: 'object',
-          label: 'Object',
-          class: 'object',
+          key: "object",
+          label: "Object",
+          class: "object",
         },
         {
-          key: 'publications',
-          label: 'Publications',
-          class: 'publications',
+          key: "publications",
+          label: "Publications",
+          class: "publications",
         },
         {
-          key: 'sources',
-          label: 'Sources',
-          class: 'sources',
+          key: "sources",
+          label: "Sources",
+          class: "sources",
         },
         {
-          key: 'references',
-          label: 'References',
-          class: 'references',
+          key: "references",
+          label: "References",
+          class: "references",
         },
-      ]
+      ],
     };
   },
   methods: {
-
     async fetchEvidence() {
-      const that = this;
+      const that = { ...this };
 
       if (!(that.evidence.id in that.evidenceCache) && !that.evidenceFetched) {
         that.evidenceError = false;
         try {
-          const associationsResponse = await getEvidence(that.evidence.id, this.nodeType);
+          const associationsResponse = await getEvidence(
+            that.evidence.id,
+            this.nodeType
+          );
 
-          if (!associationsResponse.data
-            || !associationsResponse.data.associations) {
-            throw new Error('getEvidence() returned no data');
+          if (
+            !associationsResponse.data ||
+            !associationsResponse.data.associations
+          ) {
+            throw new Error("getEvidence() returned no data");
           }
           that.evidenceFetched = true;
-          that.evidenceCache[that.evidence.id] =
-            that.processEvidence(associationsResponse.data.associations);
+          that.evidenceCache[that.evidence.id] = that.processEvidence(
+            associationsResponse.data.associations
+          );
 
           // Sends data back to the parent component AssocTable
-          that.$emit('evidenceCache', that.evidenceCache);
-
+          that.$emit("evidenceCache", that.evidenceCache);
         } catch (err) {
           that.evidenceError = err;
         }
@@ -406,11 +400,13 @@ export default {
     },
 
     rowsProvider(ctx, callback) {
-      this.fetchEvidence().then(() => {
-        callback(this.rows);
-      }).catch((error) => {
-        callback([]);
-      });
+      this.fetchEvidence()
+        .then(() => {
+          callback(this.rows);
+        })
+        .catch(() => {
+          callback([]);
+        });
     },
 
     processEvidence(evidenceTable) {
@@ -426,9 +422,9 @@ export default {
           }
 
           if (
-            node.id.startsWith('BNODE') // blank node
-            || node.id.startsWith('MONARCH') // monarch association (likely)
-            || node.id === this.nodeId
+            node.id.startsWith("BNODE") || // blank node
+            node.id.startsWith("MONARCH") || // monarch association (likely)
+            node.id === this.nodeId
           ) {
             node.url = null;
           } else {
@@ -437,11 +433,11 @@ export default {
         });
 
         evi.publications = evi.publications
-          .filter(pub => !pub.id.startsWith('MONDO'))
+          .filter((pub) => !pub.id.startsWith("MONDO"))
           .map((pub) => {
-            let url = '';
-            if (pub.id.startsWith('PMID')) {
-              const reference = pub.id.split(':')[1];
+            let url = "";
+            if (pub.id.startsWith("PMID")) {
+              const reference = pub.id.split(":")[1];
               url = `http://www.ncbi.nlm.nih.gov/pubmed/${reference}`;
             } else {
               url = `/publication/${pub.id}`;
@@ -449,7 +445,7 @@ export default {
             return {
               id: pub.id,
               label: pub.id,
-              url
+              url,
             };
           });
 
@@ -461,25 +457,24 @@ export default {
         evi.references = [];
 
         evi.provided_by.forEach((db) => {
-
           subjects.forEach((subject) => {
             const subjectUrl = getXrefUrl(db, subject, evi.subject.label);
             if (subjectUrl !== null) {
               // IMPC only has pages for genes and phenotypes
               if (
-                db === 'impc'
-                && subject.startsWith('MGI')
-                && evi.relation.id === 'RO:0002200'
+                db === "impc" &&
+                subject.startsWith("MGI") &&
+                evi.relation.id === "RO:0002200"
               ) {
                 evi.references.push({
                   url: subjectUrl,
-                  label: subject.replace('MGI:', 'IMPC:')
+                  label: subject.replace("MGI:", "IMPC:"),
                 });
               }
-              if (db !== 'impc') {
+              if (db !== "impc") {
                 evi.references.push({
                   url: subjectUrl,
-                  label: subject
+                  label: subject,
                 });
               }
             }
@@ -489,61 +484,61 @@ export default {
             const objectUrl = getXrefUrl(db, object, evi.object.label);
             if (objectUrl !== null) {
               if (
-                db === 'impc'
-                && object.startsWith('MGI')
-                && evi.relation.id === 'GENO:0000408'
+                db === "impc" &&
+                object.startsWith("MGI") &&
+                evi.relation.id === "GENO:0000408"
               ) {
                 evi.references.push({
                   url: objectUrl,
-                  label: object.replace('MGI:', 'IMPC:')
+                  label: object.replace("MGI:", "IMPC:"),
                 });
               }
-              if (db !== 'impc') {
+              if (db !== "impc") {
                 evi.references.push({
                   url: objectUrl,
-                  label: object
+                  label: object,
                 });
               }
             }
           });
-
         });
 
-        evi.provided_by = evi.provided_by.map(db => sourceToLabel(db));
+        evi.provided_by = evi.provided_by.map((db) => sourceToLabel(db));
 
         evi.rowNum = ++rowNum;
       });
 
       // Sort is browser dependent, redo in ontobio
-      evidenceTable =
-        evidenceTable.sort((a, b) => (
-          (b.provided_by.join().includes('OMIM')
-            || b.provided_by.join().includes('Orphanet'))
-            ? 1 : -1));
+      evidenceTable = evidenceTable.sort((a, b) =>
+        b.provided_by.join().includes("OMIM") ||
+        b.provided_by.join().includes("Orphanet")
+          ? 1
+          : -1
+      );
 
       // Sort is browser dependent, redo in ontobio
       // Sorting by has phenotype seems to help the flow of statements,
       // but more testing needed, ideally these statements would be
       // grouped together o coupled with a graph view to disambiguate
-      evidenceTable =
-        evidenceTable.sort((a, b) => (
-          (a.relation.label !== 'has phenotype'
-            && b.relation.label === 'has phenotype') ? 1 : -1));
+      evidenceTable = evidenceTable.sort((a, b) =>
+        a.relation.label !== "has phenotype" &&
+        b.relation.label === "has phenotype"
+          ? 1
+          : -1
+      );
 
       return evidenceTable;
-    }
-
-  }
+    },
+  },
 };
-
 </script>
 
 <style lang="scss">
 @import "~@/style/variables";
 
-  .evidence-section {
-    //max-height: 200px;
-    //overflow-y: auto;
+.evidence-section {
+  //max-height: 200px;
+  //overflow-y: auto;
   div {
     font-size: 0.9rem;
   }
@@ -604,7 +599,7 @@ export default {
     white-space: nowrap;
   }
 
-  & .fa  {
+  & .fa {
     &.neighbors {
       font-size: 1.4em;
       transform: rotate(90deg);
@@ -612,5 +607,4 @@ export default {
     }
   }
 }
-
 </style>

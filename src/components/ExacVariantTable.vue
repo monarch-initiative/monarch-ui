@@ -4,9 +4,7 @@
     id="vue-exac"
     class="col-xs-12 col-md-10 col-lg-9 table-responsive"
   >
-    <h2 class="p-2">
-      ExAC Population Frequencies
-    </h2>
+    <h2 class="p-2">ExAC Population Frequencies</h2>
     <table class="table table-hover">
       <thead>
         <tr>
@@ -19,72 +17,56 @@
       </thead>
       <tbody>
         <tr>
-          <th scope="row">
-            South Asian
-          </th>
+          <th scope="row">South Asian</th>
           <td>{{ rowData.sas.aC }}</td>
           <td>{{ rowData.sas.aN }}</td>
           <td>{{ rowData.sas.hom }}</td>
           <td>{{ rowData.sas.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            Other
-          </th>
+          <th scope="row">Other</th>
           <td>{{ rowData.oth.aC }}</td>
           <td>{{ rowData.oth.aN }}</td>
           <td>{{ rowData.oth.hom }}</td>
           <td>{{ rowData.oth.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            Latino
-          </th>
+          <th scope="row">Latino</th>
           <td>{{ rowData.amr.aC }}</td>
           <td>{{ rowData.amr.aN }}</td>
           <td>{{ rowData.amr.hom }}</td>
           <td>{{ rowData.amr.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            European (Non-Finnish)
-          </th>
+          <th scope="row">European (Non-Finnish)</th>
           <td>{{ rowData.nfe.aC }}</td>
           <td>{{ rowData.nfe.aN }}</td>
           <td>{{ rowData.nfe.hom }}</td>
           <td>{{ rowData.nfe.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            African
-          </th>
+          <th scope="row">African</th>
           <td>{{ rowData.afr.aC }}</td>
           <td>{{ rowData.afr.aN }}</td>
           <td>{{ rowData.afr.hom }}</td>
           <td>{{ rowData.afr.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            East Asian
-          </th>
+          <th scope="row">East Asian</th>
           <td>{{ rowData.eas.aC }}</td>
           <td>{{ rowData.eas.aN }}</td>
           <td>{{ rowData.eas.hom }}</td>
           <td>{{ rowData.eas.aF }}</td>
         </tr>
         <tr>
-          <th scope="row">
-            European (Finnish)
-          </th>
+          <th scope="row">European (Finnish)</th>
           <td>{{ rowData.fin.aC }}</td>
           <td>{{ rowData.fin.aN }}</td>
           <td>{{ rowData.fin.hom }}</td>
           <td>{{ rowData.fin.aF }}</td>
         </tr>
-        <tr style="border-top: solid black 2px;">
-          <th scope="row">
-            Total
-          </th>
+        <tr style="border-top: solid black 2px">
+          <th scope="row">Total</th>
           <td>
             {{ rowData.tot.aC }}
           </td>
@@ -101,43 +83,39 @@
       </tbody>
     </table>
     <div id="exac-link">
-      <a
-        :href="exacID"
-        target="_blank"
-        class="glyphicon glyphicon-link"
-      />
+      <a :href="exacID" target="_blank" class="glyphicon glyphicon-link" />
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   props: {
     nodeId: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      rowData: '',
-      exacID: '',
+      rowData: "",
+      exacID: "",
       showTable: false,
       curieMap: {
-        ClinVarVariant: 'clinvar.variant_id',
-        dbSNP: 'dbsnp.rsid'
-      }
+        ClinVarVariant: "clinvar.variant_id",
+        dbSNP: "dbsnp.rsid",
+      },
     };
   },
   computed: {
     nodePrefix() {
-      const splitId = this.nodeId.split(':');
+      const splitId = this.nodeId.split(":");
       return {
         prefix: splitId[0],
-        identifier: splitId[1]
+        identifier: splitId[1],
       };
-    }
+    },
   },
   mounted() {
     if (this.nodePrefix.prefix in this.curieMap) {
@@ -150,23 +128,20 @@ export default {
       let aCTotal = 0;
       let aNTotal = 0;
       let homTotal = 0;
-      let aFTotal = 0;
 
       prefixes.forEach((prefix) => {
         const aC = alleleCounts[`ac_${prefix}`];
         const aN = alleleNumbers[`an_${prefix}`];
         const hom = homozygotes[`hom_${prefix}`];
-        const aF = this.singleAlleleFrequency(aC, aN);
         aCTotal += aC;
         aNTotal += aN;
         homTotal += hom;
-        aFTotal += aF;
 
         const element = {
           aC,
           aN,
           hom,
-          aF: this.singleAlleleFrequency(aC, aN)
+          aF: this.singleAlleleFrequency(aC, aN),
         };
         rowData[prefix] = element;
       });
@@ -174,7 +149,7 @@ export default {
         aC: aCTotal,
         aN: aNTotal,
         hom: homTotal,
-        aF: this.round(aCTotal / aNTotal, 4)
+        aF: this.round(aCTotal / aNTotal, 4),
       };
       return rowData;
     },
@@ -182,22 +157,27 @@ export default {
       return this.round(count / number, 7);
     },
     round(value, decimals) {
-      let returnValue = '';
+      let returnValue = "";
       if (value < 1) {
         returnValue = value.toPrecision(2);
       } else {
-        returnValue = Number(Math.round(`${value}e${decimals}`) + `e-${decimals}`);
+        returnValue = Number(
+          Math.round(`${value}e${decimals}`) + `e-${decimals}`
+        );
       }
       return returnValue;
     },
     hitMyVariant() {
-      const baseURL = 'https://myvariant.info/v1/query';
-      axios.get(baseURL, {
-        params: {
-          q: `${this.curieMap[this.nodePrefix.prefix]}:${this.nodePrefix.identifier}`,
-          fields: 'exac'
-        }
-      })
+      const baseURL = "https://myvariant.info/v1/query";
+      axios
+        .get(baseURL, {
+          params: {
+            q: `${this.curieMap[this.nodePrefix.prefix]}:${
+              this.nodePrefix.identifier
+            }`,
+            fields: "exac",
+          },
+        })
         .then((resp) => {
           if (resp.data.total === 1) {
             const exacData = resp.data.hits[0].exac;
@@ -205,43 +185,48 @@ export default {
               const alleleCounts = exacData.ac;
               const alleleNumbers = exacData.an;
               const homozygotes = exacData.hom;
-              const exacURL = 'https://exac.broadinstitute.org/variant/';
+              const exacURL = "https://exac.broadinstitute.org/variant/";
               const exacIDParams = [
                 exacData.chrom,
                 exacData.pos,
                 exacData.ref,
-                exacData.alt
-              ].join('-');
+                exacData.alt,
+              ].join("-");
               this.exacID = `${exacURL}${exacIDParams}`;
               const prefixes = [
-                'sas',
-                'oth',
-                'amr',
-                'nfe',
-                'afr',
-                'eas',
-                'fin'
+                "sas",
+                "oth",
+                "amr",
+                "nfe",
+                "afr",
+                "eas",
+                "fin",
               ];
-              this.rowData = this.buildRowData(prefixes, alleleCounts, alleleNumbers, homozygotes);
+              this.rowData = this.buildRowData(
+                prefixes,
+                alleleCounts,
+                alleleNumbers,
+                homozygotes
+              );
               this.showTable = true;
             }
           }
         })
         .catch((err) => {
           // eslint-disable-next-line
-            console.log(err);
+          console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
-    #vue-exac {
-        border-radius: 10px;
-        border: solid darkgray 1px;
-    }
-    #exac-link {
-        text-align: right;
-        margin-bottom: 10px;
-    }
+#vue-exac {
+  border-radius: 10px;
+  border: solid darkgray 1px;
+}
+#exac-link {
+  text-align: right;
+  margin-bottom: 10px;
+}
 </style>

@@ -14,7 +14,10 @@
         <li class="list-group-item title">
           {{ $parent.labels[nodeType] }}
         </li>
-        <li :class="{ active: !expandedCard }" class="list-group-item list-group-item-squat">
+        <li
+          :class="{ active: !expandedCard }"
+          class="list-group-item list-group-item-squat"
+        >
           <b-link @click="expandCard(null)">
             <i class="fa fa-fw fa-th-large" />
             <span class="list-group-item-value">Overview</span>
@@ -22,7 +25,10 @@
         </li>
 
         <li class="list-group-item list-group-item-squat">
-          <b-link :disabled="neighborhoodDisabled" @click="toggleNeighborhood()">
+          <b-link
+            :disabled="neighborhoodDisabled"
+            @click="toggleNeighborhood()"
+          >
             <i class="fa fa-fw fa-share-alt neighbors" />
             <span class="list-group-item-value">Neighbors</span>
           </b-link>
@@ -34,9 +40,10 @@
           class="list-group-item"
         >
           <a :href="'#' + cardType" @click="expandCard(cardType)">
-            <img :src="$parent.icons[cardType]" class="entity-type-icon">
+            <img :src="$parent.icons[cardType]" class="entity-type-icon" />
             <span class="list-group-item-value">
-              {{ $parent.labels[cardType] }} <span class="count">{{ cardCounts[cardType] }}</span>
+              {{ $parent.labels[cardType] }}
+              <span class="count">{{ cardCounts[cardType] }}</span>
             </span>
           </a>
         </li>
@@ -45,21 +52,18 @@
   </div>
 </template>
 
-
 <script>
-import * as biolinkService from '@/api/BioLink';
-
-import NodeSidebarNeighborhood from '@/components/NodeSidebarNeighborhood.vue';
-import vClickOutside from 'v-click-outside';
+import NodeSidebarNeighborhood from "@/components/NodeSidebarNeighborhood.vue";
+import vClickOutside from "v-click-outside";
 
 export default {
-  name: 'NodeSidebar',
+  name: "NodeSidebar",
 
   components: {
-    'node-sidebar-neighborhood': NodeSidebarNeighborhood,
+    "node-sidebar-neighborhood": NodeSidebarNeighborhood,
   },
   directives: {
-    clickOutside: vClickOutside.directive
+    clickOutside: vClickOutside.directive,
   },
   props: {
     cardsToDisplay: {
@@ -70,7 +74,7 @@ export default {
     expandedCard: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     cardCounts: {
       type: Object,
@@ -80,12 +84,12 @@ export default {
     nodeType: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     nodeLabel: {
       type: String,
       required: false,
-      default: '',
+      default: "",
     },
     superclasses: {
       type: Array,
@@ -105,49 +109,46 @@ export default {
     isGroup: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
   },
 
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     neighborhoodDisabled() {
-      return (!this.superclasses || this.superclasses.length === 0) && (!this.subclasses || this.subclasses.length === 0);
+      return (
+        (!this.superclasses || this.superclasses.length === 0) &&
+        (!this.subclasses || this.subclasses.length === 0)
+      );
     },
     facetsDisabled() {
       return false; // this.nodeType === 'publication';
-    }
+    },
   },
-  created() {
-  },
+  created() {},
 
-  updated() {
-  },
+  updated() {},
 
-  destroyed() {
-  },
+  unmounted() {},
 
-  mounted() {
-  },
+  mounted() {},
 
   methods: {
     expandCard(cardType) {
-      this.$emit('expand-card', cardType);
+      this.$emit("expand-card", cardType);
     },
     toggleNeighborhood() {
-      this.$emit('toggle-neighborhood');
+      this.$emit("toggle-neighborhood");
     },
     hideNeighborhoodOrFacets() {
       if (this.isNeighborhoodShowing) {
         this.toggleNeighborhood();
       }
-    }
-  }
+    },
+  },
 };
-
 </script>
 
 <style lang="scss">
@@ -237,7 +238,12 @@ $title-bar-height: 70px;
     }
 
     &.active {
-      background: linear-gradient(to left, #262a2b91, #262a2b36,#262a2b0a) !important;
+      background: linear-gradient(
+        to left,
+        #262a2b91,
+        #262a2b36,
+        #262a2b0a
+      ) !important;
       color: white !important;
 
       & a {
@@ -249,7 +255,7 @@ $title-bar-height: 70px;
       }
     }
 
-    &> a img.entity-type-icon {
+    & > a img.entity-type-icon {
       margin: 0;
       padding: 0;
       height: 30px;
@@ -262,14 +268,13 @@ $title-bar-height: 70px;
         height: 28px;
       }
 
-      &> a img.entity-type-icon {
+      & > a img.entity-type-icon {
         margin: 0 6px 4px 2px;
         height: 27px;
       }
     }
 
     &.list-group-item-squat {
-
       a {
         height: 30px;
 
@@ -297,7 +302,7 @@ $title-bar-height: 70px;
     color: white;
 
     h5 {
-      margin-left:10px;
+      margin-left: 10px;
     }
   }
 }
@@ -307,7 +312,7 @@ $title-bar-height: 70px;
     width: $collapsed-sidebar-width;
 
     .title {
-      display:none;
+      display: none;
     }
     ul.list-group {
       margin-top: 10px;
@@ -322,5 +327,4 @@ $title-bar-height: 70px;
     }
   }
 }
-
 </style>

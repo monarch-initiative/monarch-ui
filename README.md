@@ -126,10 +126,10 @@ The most important file here is `variables.scss`, which can be included in every
 
 ##### `monarch-ui/src/api/`
 
-We've tried to isolate external network API access into this directory, so that the rest of the UI can be unaware of the protocol and network issues inherent in making `XMLHttpRequest` or `axios` calls. For example, `api/BioLink.js` is the module that makes REST calls to the BioLink server, and the rest of the UI simply imports from `api/BioLink.js`. For example:
+We've tried to isolate external network API access into this directory, so that the rest of the UI can be unaware of the protocol and network issues inherent in making `XMLHttpRequest` or `axios` calls. For example, `api/bio-link.js` is the module that makes REST calls to the BioLink server, and the rest of the UI simply imports from `api/bio-link.js`. For example:
 
 ```javascript
-import * as BL from '@/api/BioLink';
+import * as BL from '@/api/bio-link';
 // ...
 const promise = BL.getNeighborhood(this.nodeId, this.nodeType);
 ```

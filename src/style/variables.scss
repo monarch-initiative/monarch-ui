@@ -8,17 +8,19 @@ $font-family-base: "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $sidebar-collapse-width: 1000px;
 $grid-float-breakpoint: 600px;
 
-$link-color: darken(#4285f4, 20%); // #0088dd; // #1a0dab; // #0088ce; // #4285f4;
+$link-color: darken(
+  #4285f4,
+  20%
+); // #0088dd; // #1a0dab; // #0088ce; // #4285f4;
 
-$monarch-bg-color: #15556A;
-$monarch-button-color: #CCE34C;
+$monarch-bg-color: #15556a;
+$monarch-button-color: #cce34c;
 $home-section-light-bg: white;
 $home-section-dark-bg: #f8f9fa;
 
-$navbar-padding-y:          0 !default;
-$nav-link-padding-y:        0 !default;
-$nav-link-padding-x:        0 !default;
-
+$navbar-padding-y: 0 !default;
+$nav-link-padding-y: 0 !default;
+$nav-link-padding-x: 0 !default;
 
 /*
   Copied from bootstrap/scss/_variables.scss for reference:
@@ -42,7 +44,7 @@ $grid-breakpoints: (
   xs: 0,
   sm: 576px,
   md: 768px,
-/*
+  /*
   monarch: $grid-float-breakpoint,
 
   The attempt to create a custom breakpoint name doesn't work and
@@ -50,10 +52,9 @@ $grid-breakpoints: (
   in a future version of Bootstrap, but for now, we'll adopt 'sm' as our
   navbar breakpoint.
 */
-  lg: 992px,
-  xl: 1200px
+    lg: 992px,
+  xl: 1200px,
 ) !default;
-
 
 $collapsed-sidebar-width: 50px;
 $sidebar-width: 250px;
