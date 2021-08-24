@@ -8,8 +8,7 @@
         href="https://github.com/monarch-initiative/helpdesk/issues"
         target="__blank"
         >issue tracker</a
-      >
-      . We invite you to join the rest of the Monarch Initiative community on
+      >. We invite you to join the rest of the Monarch Initiative community on
       <a href="https://github.com/monarch-initiative" target="__blank"
         >GitHub!</a
       >
