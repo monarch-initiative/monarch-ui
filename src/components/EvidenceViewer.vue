@@ -364,7 +364,7 @@ export default {
   },
   methods: {
     async fetchEvidence() {
-      const that = { ...this };
+      const that = this;
 
       if (!(that.evidence.id in that.evidenceCache) && !that.evidenceFetched) {
         that.evidenceError = false;
@@ -381,6 +381,7 @@ export default {
             throw new Error("getEvidence() returned no data");
           }
           that.evidenceFetched = true;
+          // eslint-disable-next-line
           that.evidenceCache[that.evidence.id] = that.processEvidence(
             associationsResponse.data.associations
           );
