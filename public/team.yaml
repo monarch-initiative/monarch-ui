@@ -187,7 +187,7 @@ institutions:
       - name: J. Hary Caufield
         picture: img/team/HarryCaufield.jpeg
         title: Data Scientist
-        alumni: true
+        alumni: false
         bio: Harry has interests in bio data mining, text mining, natural language processing, bio-ontologies, protein interactions, and knowledge graph assembly. He has a PhD in Integrative Life Sciences and an MS in Bioinformatics, both from Virginia Commonwealth University, as well as postdoctoral biomedical informatics experience from the UCLA School of Medicine.
 
   - id: jax
