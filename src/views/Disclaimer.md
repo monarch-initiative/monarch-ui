@@ -10,9 +10,8 @@
   </p>
   <h4>Use of Hotjar</h4>
   <p>
-    This web application makes use of Hotjar, a background script and service
-    that tracks user behavior such as navigation, clicks, and other interaction.
-    Hotjar takes significant steps to remove identifying information from the data
+    This web application tracks user behavior such as navigation and clicks.
+    We do this through the use of Hotjar, a background script and service that takes significant steps to remove identifying information from the data
     it collects to ensure anonymity. To learn more about how Hotjar maintains
     privacy and complies with relevant privacy laws,
     <a href="https://www.hotjar.com/legal/compliance/gdpr-commitment/">see their explanation here</a>.
