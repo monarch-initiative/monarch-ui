@@ -184,6 +184,11 @@ institutions:
         title: Lead Bioinformatician
         alumni: true
         bio: Dr. Washington has a BS in Biology from Harvey Mudd College and a Ph.D. in Molecular and Cellular Biology from The University of Arizona where she focused on the study of the C. elegans as a model for human disease. She is interested in the intersection of computers with biological research, in particular making tools to realize hidden connections in diverse types of biological data and integrating large-scale experiments.
+      - name: J. Hary Caufield
+        picture: img/team/HarryCaufield.jpeg
+        title: Data Scientist
+        alumni: false
+        bio: Harry has interests in bio data mining, text mining, natural language processing, bio-ontologies, protein interactions, and knowledge graph assembly. He has a PhD in Integrative Life Sciences and an MS in Bioinformatics, both from Virginia Commonwealth University, as well as postdoctoral biomedical informatics experience from the UCLA School of Medicine.
 
   - id: jax
     name: The Jackson Laboratory
