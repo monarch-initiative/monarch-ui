@@ -16,7 +16,7 @@
     <p>
       If you are having trouble using or connecting to any of our public
       services, please check our
-      <a href="https://status.monarchinitiative.org/" target="__blank"
+      <a href="https://stats.uptimerobot.com/XPRo9s4BJ5" target="__blank"
         >status page</a
       >.
     </p>
