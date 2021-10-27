@@ -389,6 +389,8 @@ export async function getSearchResults(query, start, rows, categories, taxa) {
   params.append("start", start);
   params.append("rows", rows);
   params.append("highlight_class", "hilite");
+  params.append("boost_q", "category:disease^5");
+  params.append("boost_q", "category:phenotype^5");
   params.append("boost_q", "category:genotype^-10");
   params.append("boost_q", "category:variant^-35");
   params.append("boost_q", "category:publication^-10");
