@@ -83,8 +83,11 @@ export default {
     },
     nodeType: {
       type: String,
-      required: false,
-      default: "",
+      required: true,
+    },
+    nodeId: {
+      type: String,
+      required: true,
     },
     nodeLabel: {
       type: String,
@@ -137,7 +140,18 @@ export default {
 
   methods: {
     expandCard(cardType) {
+      this.trackExpandCard(cardType);
       this.$emit("expand-card", cardType);
+    },
+    trackExpandCard(cardType) {
+      this.$gtag.event(
+        this.nodeType + " node, " + cardType + " card, expand card",
+        {
+          event_category: "node page card expand",
+          event_label: this.nodeId,
+          value: this.cardCounts[cardType],
+        }
+      );
     },
     toggleNeighborhood() {
       this.$emit("toggle-neighborhood");
