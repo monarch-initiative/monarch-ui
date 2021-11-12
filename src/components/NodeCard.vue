@@ -5,47 +5,35 @@
     :class="{ active: isSelected }"
     class="card node-card"
     @click="toggleSelected()"
->
+  >
     <div class="card-title card-header">
-      <img
-        :src="cardIcon"
-        class="card-img-top"
->
+      <img :src="cardIcon" class="card-img-top" />
       {{ pluralize(cardLabel, cardCount[cardType]) }}
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'NodeCard',
+  name: "NodeCard",
 
   /* eslint vue/require-default-prop: 0 */
   /* eslint vue/require-prop-types: 0 */
-  props: [
-    'cardType',
-    'cardCount',
-    'parentNode',
-    'parentNodeId'
-  ],
+  props: ["cardType", "cardCount", "parentNode", "parentNodeId"],
 
   data() {
     return {
       isSelected: false,
       cardIcon: null,
-      cardLabel: null
+      cardLabel: null,
     };
   },
 
-  created() {
-  },
+  created() {},
 
-  updated() {
-  },
+  updated() {},
 
-  destroyed() {
-  },
+  unmounted() {},
 
   mounted() {
     this.cardIcon = this.$parent.icons[this.cardType];
@@ -56,18 +44,16 @@ export default {
     toggleSelected() {
       this.isSelected = !this.isSelected;
       if (this.isSelected) {
-        this.$emit('expand-card', this);
+        this.$emit("expand-card", this);
       }
     },
 
     pluralize(label, count) {
-      const s = count === 1 ? '' : 's';
+      const s = count === 1 ? "" : "s";
       return `${count} ${label}${s}`;
-    }
-  }
-
+    },
+  },
 };
-
 </script>
 
 <style lang="scss">
@@ -84,12 +70,12 @@ $card-width: 300px;
   min-width: 90%;
   max-width: 90%;
   cursor: pointer;
-  border:none;
+  border: none;
 }
 
 .card.node-card .card-img-top {
-  width:40px;
-  height:40px;
+  width: 40px;
+  height: 40px;
   margin-right: 10px;
 }
 
@@ -112,8 +98,6 @@ $md-width: map-get($grid-breakpoints, "md");
   .card.node-card {
     min-width: $card-width;
     max-width: $card-width;
-    xborder:5px solid red;
   }
 }
-
 </style>

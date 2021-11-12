@@ -1,9 +1,9 @@
 <template>
   <b-navbar
     id="monarchng-navbar"
-    class="fixed-top"
+    class="sticky-top"
     fixed="true"
-    toggleable="sm"
+    toggleable="lg"
     type="dark"
     variant="info"
   >
@@ -13,17 +13,12 @@
         src="../assets/img/monarch-logo-white.svg"
         alt="Monarch Initiative logo"
         title="Monarch Initiative front page"
-      >
+      />
     </b-navbar-brand>
-    <b-collapse
-      id="nav_collapse"
-      is-nav=""
-    >
+    <b-collapse id="nav_collapse" is-nav="">
       <b-navbar-nav>
         <b-nav-item-dropdown text="Tools">
-          <b-dropdown-item
-            to="/analyze/phenotypes"
-          >
+          <b-dropdown-item to="/analyze/phenotypes">
             Phenotype Profile Search
           </b-dropdown-item>
 
@@ -36,25 +31,17 @@
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown text="About">
-          <b-dropdown-item to="/about/monarch">
-            About Monarch
-          </b-dropdown-item>
+          <b-dropdown-item to="/about/monarch"> About Monarch </b-dropdown-item>
 
-          <b-dropdown-item to="/about/team">
-            Our Team
-          </b-dropdown-item>
+          <b-dropdown-item to="/about/team"> Our Team </b-dropdown-item>
 
-          <b-dropdown-item to="/about/licensing">
-            Licensing
-          </b-dropdown-item>
+          <b-dropdown-item to="/about/licensing"> Licensing </b-dropdown-item>
 
           <b-dropdown-item to="/about/licensing#ontologies">
             Ontologies
           </b-dropdown-item>
 
-          <b-dropdown-item to="/about/disclaimer">
-            Disclaimer
-          </b-dropdown-item>
+          <b-dropdown-item to="/about/disclaimer"> Disclaimer </b-dropdown-item>
 
           <b-dropdown-item to="/about/phenotypes">
             About Phenotypes
@@ -70,7 +57,11 @@
             Monarch Web Services
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://archive.monarchinitiative.org/latest/" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item
+            href="https://archive.monarchinitiative.org/latest/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Data Downloads
           </b-dropdown-item>
         </b-nav-item-dropdown>
@@ -80,27 +71,35 @@
             Publications
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://github.com/monarch-initiative" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item
+            href="https://github.com/monarch-initiative"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             GitHub Organization
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://medium.com/@MonarchInit/how-to-annotate-a-patients-phenotypic-profile-afc5773d6cdb" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item
+            href="https://medium.com/@MonarchInit/how-to-annotate-a-patients-phenotypic-profile-afc5773d6cdb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Phenotype Curation Guidelines
           </b-dropdown-item>
 
-          <b-dropdown-item href="https://github.com/obophenotype/upheno" target="_blank" rel="noopener noreferrer">
+          <b-dropdown-item
+            href="https://github.com/obophenotype/upheno"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Phenotype Ontologies Project
           </b-dropdown-item>
         </b-nav-item-dropdown>
 
         <b-nav-item-dropdown text="Help">
-          <b-dropdown-item to="/help/contact">
-            Contact Us
-          </b-dropdown-item>
+          <b-dropdown-item to="/help/contact"> Contact Us </b-dropdown-item>
 
-          <b-dropdown-item to="/help/cite">
-            Cite Monarch
-          </b-dropdown-item>
+          <b-dropdown-item to="/help/cite"> Cite Monarch </b-dropdown-item>
 
           <b-dropdown-item to="/help/linkout">
             Link to Monarch
@@ -128,11 +127,13 @@
           </b-dropdown-item>
 
           <b-dropdown-item to="/disease/MONDO:0010935">
-            Disease: neuronopathy, distal hereditary motor, type 5A MONDO:0010935
+            Disease: neuronopathy, distal hereditary motor, type 5A
+            MONDO:0010935
           </b-dropdown-item>
 
           <b-dropdown-item to="/disease/OMIMPS:PS120435">
-            Disease: Colorectal cancer, hereditary nonpolyposis OMIMPS:PS120435 (no superclass)
+            Disease: Colorectal cancer, hereditary nonpolyposis OMIMPS:PS120435
+            (no superclass)
           </b-dropdown-item>
 
           <b-dropdown-item to="/disease/MONDO:0010156">
@@ -160,7 +161,9 @@
           </b-dropdown-item>
           <b-dropdown-divider />
           <b-dropdown-item to="/publication/PMID:28650316">
-            Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup> exchanger NCKX4 is required for efficient cone-mediated vision. PMID:28650316
+            Publication: The Na<sup>+</sup>/Ca<sup>2+</sup>, K<sup>+</sup>
+            exchanger NCKX4 is required for efficient cone-mediated vision.
+            PMID:28650316
           </b-dropdown-item>
 
           <b-dropdown-item to="/pathway/REACT:R-MMU-425561">
@@ -184,14 +187,16 @@
 
     <b-navbar-toggle target="nav_collapse" />
     <div
-      v-if="getEnvironment() === 'development' || getEnvironment() === 'beta'"
-      v-b-popover.hover.v-danger.bottomleft="'You are currently on our BETA site. The Monarch Initiative is in the process of creating a new experience for you. We are currently assessing UI functionality and data quality, if you believe you see an issue or want to suggest content please see the footer of this page.'"
-      title="Monarch UI BETA"
+      v-if="apiVersion !== 'production'"
+      v-b-popover.hover.v-danger.bottomleft="
+        'You are currently using a beta version of our APIs. The Monarch Initiative is in the process of creating a new experience for you. If you believe you see an issue or want to suggest content please see the footer of this page.'
+      "
+      title="Monarch APIs BETA"
       class="beta"
     >
       BETA
     </div>
-    <div v-if="getEnvironment() != 'production'" class="production">
+    <div v-if="apiVersion !== 'production'" class="production">
       <b-navbar-nav>
         <b-nav-item href="https://monarchinitiative.org/" target="_blank">
           Main Site
@@ -202,25 +207,19 @@
 </template>
 
 <script>
-import MonarchAutocomplete from '@/components/MonarchAutocomplete.vue';
-import * as biolinkService from '@/api/BioLink';
+import MonarchAutocomplete from "@/components/MonarchAutocomplete.vue";
+import * as biolinkService from "@/api/bio-link";
 
 export default {
-  name: 'MonarchNavbar',
+  name: "MonarchNavbar",
   components: {
-    MonarchAutocomplete
+    MonarchAutocomplete,
   },
   data() {
     return {
+      apiVersion: biolinkService.version,
     };
   },
-  mounted() {
-  },
-  methods: {
-    getEnvironment() {
-      return biolinkService.getCurrentServerEnvironment();
-    }
-  }
 };
 </script>
 
@@ -241,13 +240,7 @@ nav#monarchng-navbar.navbar .navbar-brand .branding-logo {
 }
 
 nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item {
-  xvertical-align:middle;
   margin-right: 15px;
-}
-
-nav#monarchng-navbar.navbar .navbar-collapse > .navbar-nav > .nav-item > .nav-link {
-  xpadding:0;
-  xmargin:0;
 }
 
 nav#monarchng-navbar.navbar .navbar-toggle {
@@ -264,14 +257,37 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
 }
 
 #monarchng-navbar {
-  background-image: -webkit-linear-gradient(left, #0B556B 0%, #232733 100%) !important;
-  background-image: linear-gradient(to right, #0B556B 0%, #232733 100%) !important;
+  background-image: -webkit-linear-gradient(
+    left,
+    #0b556b 0%,
+    #232733 100%
+  ) !important;
+  background-image: linear-gradient(
+    to right,
+    #0b556b 0%,
+    #232733 100%
+  ) !important;
   background-repeat: repeat-x !important;
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}
+
+.navbar-collapse.collapse.show {
+  .navbar-nav {
+    margin: 20px 0;
+  }
+
+  li {
+    margin: 5px 0;
+  }
+}
+
+.navbar-toggler.not-collapsed {
+  margin-bottom: 20px;
 }
 
 .nav-ac {
-  margin:1px 25px 1px 0;
+  margin: 1px 25px 1px 0;
   height: 30px;
 }
 
@@ -292,5 +308,4 @@ nav#monarchng-navbar.navbar .navbar-toggle .icon-bar {
 .production {
   margin-left: 5px;
 }
-
 </style>

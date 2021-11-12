@@ -1,8 +1,6 @@
 <template>
   <div class="container-fluid monarch-view data-sources">
-    <h2 class="text-center page-title">
-      Monarch Sources
-    </h2>
+    <h2 class="text-center page-title">Monarch Sources</h2>
     <div class="source-wrapper">
       <div
         v-for="(source, index) in sortedSource"
@@ -15,12 +13,16 @@
           </div>
 
           <div>
-            <b-button v-b-toggle="'collapse-' + index" variant="primary" class="btn btn-info">
+            <b-button
+              v-b-toggle="'collapse-' + index"
+              variant="primary"
+              class="btn btn-info"
+            >
               More info
             </b-button>
             <b-collapse :id="'collapse-' + index" class="mt-2">
               <b-card>
-                <img v-if="source.logoUrl" :src="source.logoUrl">
+                <img v-if="source.logoUrl" :src="source.logoUrl" />
                 <div class="display-name">
                   {{ source.sourceDescription }}
                 </div>
@@ -65,10 +67,10 @@
 </template>
 
 <script>
-import * as biolinkService from '@/api/BioLink';
+import * as biolinkService from "@/api/bio-link";
 
 export default {
-  name: 'Sources',
+  name: "Sources",
   data() {
     return {
       sources: [],
@@ -76,35 +78,36 @@ export default {
   },
   computed: {
     sortedSource() {
-      return this.sources.slice().sort((a, b) => (
-        (a.sourceDisplayName < b.sourceDisplayName) ? -1 : 1));
-    }
+      return this.sources
+        .slice()
+        .sort((a, b) => (a.sourceDisplayName < b.sourceDisplayName ? -1 : 1));
+    },
   },
   async mounted() {
     this.sources = await biolinkService.getSources();
-  }
+  },
 };
 </script>
 
 <style lang="scss">
-  @import "~@/style/variables";
-  .source {
-    border: 5px solid $monarch-bg-color;
-    padding: 15px;
-    color: black;
-    margin-bottom: 5px;
-  }
+@import "~@/style/variables";
+.source {
+  border: 5px solid $monarch-bg-color;
+  padding: 15px;
+  color: black;
+  margin-bottom: 5px;
+}
 
-  .source-info {
-      margin-top: 15px;
-  }
+.source-info {
+  margin-top: 15px;
+}
 
-  .versions {
-      .monarch-version {
-          float: right;
-          padding-top: 5px;
-          border-top: 2px solid $monarch-bg-color;
-          margin-top: 15px;
-      }
+.versions {
+  .monarch-version {
+    float: right;
+    padding-top: 5px;
+    border-top: 2px solid $monarch-bg-color;
+    margin-top: 15px;
   }
+}
 </style>

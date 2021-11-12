@@ -1,39 +1,38 @@
 <template>
   <div
     v-if="pgVersion === index"
-    :id="'phenogridbox-'+index"
+    :id="'phenogridbox-' + index"
     ref="phenogridbox"
   />
 </template>
 
 <script>
-import { biolink } from '@/api/BioLink';
+import { biolink } from "@/api/bio-link";
 
-/* global Phenogrid */
+const Phenogrid = require("phenogrid");
 
 export default {
   props: {
     xAxis: {
       type: Array,
-      default: null
+      default: null,
     },
     yAxis: {
       type: Array,
-      default: null
+      default: null,
     },
     index: {
       type: Number,
-      default: 0
+      default: 0,
     },
     mode: {
       type: String,
-      default: null
-    }
-
+      default: null,
+    },
   },
   data() {
     return {
-      pgVersion: null
+      pgVersion: null,
     };
   },
   mounted() {
@@ -49,23 +48,23 @@ export default {
   methods: {
     launchPhenogrid() {
       const pgData = {
-        'title': 'Phenogrid Results',
-        'xAxis': this.xAxis,
-        'yAxis': this.yAxis
+        title: "Phenogrid Results",
+        xAxis: this.xAxis,
+        yAxis: this.yAxis,
       };
 
-      const appBase = window.location.protocol + '//' + window.location.host;
+      const appBase = window.location.protocol + "//" + window.location.host;
 
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
         serverURL: biolink,
         appURL: appBase,
         gridSkeletonData: pgData,
         selectedCalculation: 0,
-        selectedSort: 'Frequency',
+        selectedSort: "Frequency",
         geneList: this.xAxis,
-        owlSimFunction: this.mode
+        owlSimFunction: this.mode,
       });
-    }
-  }
+    },
+  },
 };
 </script>

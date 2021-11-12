@@ -1,34 +1,25 @@
 <template>
-  <div
-    id="reactome-wrapper"
-    class="reactome-wrapper"
-  >
-    <div
-      v-if="reactomeId"
-      id="reactome-div"
-      class="row"
-    />
+  <div id="reactome-wrapper" class="reactome-wrapper">
+    <div v-if="reactomeId" id="reactome-div" class="row" />
 
-    <div
-      v-else
-    >
+    <div v-else>
       <h6>No Reactome ID</h6>
     </div>
   </div>
 </template>
 
 <script>
-
 let vueInstance = null;
 
 // https://reactome.org/dev/diagram/js#reuse-diagram-widget
 
 // https://stackoverflow.com/a/49331651/5667222
 
-const reactomeScriptId = 'reactome-script';
-const reactomeWrapperId = 'reactome-wrapper';
-const reactomeDivId = 'reactome-div';
-const reactomeLibraryURL = 'https://reactome.org/DiagramJs/diagram/diagram.nocache.js';
+const reactomeScriptId = "reactome-script";
+const reactomeWrapperId = "reactome-wrapper";
+const reactomeDivId = "reactome-div";
+const reactomeLibraryURL =
+  "https://reactome.org/DiagramJs/diagram/diagram.nocache.js";
 
 /* global Reactome */
 
@@ -37,7 +28,6 @@ window.onReactomeDiagramReady = function onReactomeDiagramReady() {
   vueInstance.buildDiagram();
   vueInstance.loadDiagram();
 };
-
 
 export default {
   props: {
@@ -66,17 +56,17 @@ export default {
       }
       this.loadDiagram();
     } else {
-      const scriptTag = document.createElement('script');
+      const scriptTag = document.createElement("script");
       scriptTag.src = reactomeLibraryURL;
       scriptTag.id = reactomeScriptId;
-      document.getElementsByTagName('head')[0].appendChild(scriptTag);
+      document.getElementsByTagName("head")[0].appendChild(scriptTag);
     }
 
-    window.addEventListener('resize', this.handleResize);
+    window.addEventListener("resize", this.handleResize);
   },
 
-  beforeDestroy() {
-    window.removeEventListener('resize', this.handleResize);
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
     vueInstance = null;
   },
 
@@ -105,9 +95,9 @@ export default {
       const reactomeDiv = document.getElementById(reactomeDivId);
       this.fit();
       this.diagram = Reactome.Diagram.create({
-        'placeHolder' : reactomeDivId,
-        'width' : this.width,
-        'height' : this.height,
+        placeHolder: reactomeDivId,
+        width: this.width,
+        height: this.height,
       });
 
       // //Adding different listeners
@@ -128,7 +118,7 @@ export default {
     loadDiagram() {
       this.diagram.loadDiagram(this.reactomeId);
     },
-  }
+  },
 };
 </script>
 
@@ -146,5 +136,4 @@ export default {
   margin: 0;
   padding: 0;
 }
-
 </style>

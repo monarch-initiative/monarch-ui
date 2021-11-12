@@ -5,30 +5,31 @@
       between the Compact and the Home layouts.
     -->
     <div v-if="compact" class="row footer compact">
-      <div class="col-lg-4 version">
+      <div class="col-12 col-lg-4 version">
         <i>The Monarch Initiative 2020</i>
       </div>
-      <div class="col-4 report">
-        <b-button class="issue-btn" target="_blank" href="https://github.com/monarch-initiative/helpdesk/issues">
+      <div class="col-12 col-lg-4 report">
+        <b-button
+          class="issue-btn"
+          target="_blank"
+          href="https://github.com/monarch-initiative/helpdesk/issues"
+        >
           Report Issue or Suggest Content
         </b-button>
       </div>
-      <div class="col-lg-4 copyright">
+      <div class="col-12 col-lg-4 copyright">
         <i class="fa fa-creative-commons fa-fw" />
         CC-BY 3.0, except where noted.
       </div>
     </div>
-    <div
-      v-else
-      class="row footer"
-    >
+    <div v-else class="row footer">
       <div class="col-4 col-lg-2">
         <div class="media">
           <img
             class="img-fluid monarch-logo"
             src="../assets/img/monarch-logo-white.png"
             alt="Monarch logo"
-          >
+          />
         </div>
       </div>
       <div class="socials col-8 col-lg-10">
@@ -48,7 +49,6 @@
   </div>
 </template>
 
-
 <script>
 export default {
   props: {
@@ -61,29 +61,24 @@ export default {
   data() {
     return {
       isCompact: true,
-      version: process.env.VUE_APP_VERSION
+      version: process.env.VUE_APP_VERSION,
     };
   },
 };
-
 </script>
 <style lang="scss">
 @import "~@/style/variables";
 
 div.footer {
   margin: 0;
-  padding: 0 10px;
-  height: $footer-height;
+  padding: 20px;
+  min-height: $footer-height;
   width: 100%;
   text-align: center;
   color: white;
   background-color: $monarch-bg-color;
-  box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2), 0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-
-
-  .report {
-    text-align: center;
-  }
+  box-shadow: 0px -3px 2px -1px rgba(0, 0, 0, 0.2),
+    0px 2px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 
   a {
     color: white;
@@ -94,7 +89,7 @@ div.footer {
   }
 
   .socials .icons {
-    float:right;
+    float: right;
     i {
       font-size: 28px;
       margin: 15px 15px 0 0;
@@ -122,7 +117,7 @@ div.footer {
       color: white;
     }
 
-    @media (min-width:$grid-float-breakpoint) {
+    @media (min-width: $grid-float-breakpoint) {
       .about-section {
         text-align: left;
         color: red;
@@ -131,12 +126,24 @@ div.footer {
   }
 
   .version {
-    padding: 10px 0 0 15px;
+    padding: 10px;
+  }
+
+  .report {
+    text-align: center;
   }
 
   .copyright {
     text-align: right;
-    padding: 10px 15px 0 0;
+    padding: 10px;
+  }
+
+  $lg-width: map-get($grid-breakpoints, "lg");
+  @media (max-width: $lg-width) {
+    .version,
+    .copyright {
+      text-align: center;
+    }
   }
 
   .issue-btn {
@@ -151,14 +158,10 @@ div.footer {
 }
 
 div.footer.compact {
-  min-height: $footer-height;
-  margin: 0;
-  padding: 15px 0 5px 0;
-
   font-size: 0.875rem;
   text-align: left;
   background-color: $monarch-bg-color;
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12)
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+    0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }
-
 </style>

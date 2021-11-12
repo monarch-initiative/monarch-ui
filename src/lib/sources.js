@@ -3,54 +3,54 @@
  */
 
 export default function sourceToLabel(source) {
-  let label = '';
+  let label = "";
 
-  if (source !== null && source !== '') {
+  if (source !== null && source !== "") {
     // default label is all uppercase
     label = source.toUpperCase();
 
     if (source.match(/biogrid/i)) {
-      label = 'BioGRID';
+      label = "BioGRID";
     } else if (source.match(/clinvar/i)) {
-      label = 'ClinVar';
+      label = "ClinVar";
     } else if (source.match(/coriell/)) {
-      label = 'Coriell';
+      label = "Coriell";
     } else if (source.match(/decipher/i)) {
-      label = 'Decipher';
+      label = "Decipher";
     } else if (source.match(/ensembl/)) {
-      label = 'Ensembl';
+      label = "Ensembl";
     } else if (source.match(/fb|flybase/i)) {
-      label = 'FlyBase';
+      label = "FlyBase";
     } else if (source.match(/genereviews/i)) {
-      label = 'Gene Reviews';
+      label = "Gene Reviews";
     } else if (source.match(/hpo/)) {
-      label = 'HPO';
+      label = "HPO";
     } else if (source.match(/mygene/i)) {
-      label = 'MyGene';
+      label = "MyGene";
     } else if (source.match(/orphanet/i)) {
-      label = 'Orphanet';
+      label = "Orphanet";
     } else if (source.match(/panther/i)) {
-      label = 'Panther';
+      label = "Panther";
     } else if (source.match(/pharmgkb/i)) {
-      label = 'PharmGKB';
+      label = "PharmGKB";
     } else if (source.match(/uniprot/)) {
-      label = 'UniProt';
+      label = "UniProt";
     } else if (source.match(/vega/i)) {
-      label = 'Vega';
+      label = "Vega";
     } else if (source.match(/wb|wormbase/i)) {
-      label = 'Wormbase';
+      label = "Wormbase";
     } else if (source.match(/gwascatalog/)) {
-      label = 'GWAS Catalog';
+      label = "GWAS Catalog";
     } else if (source.match(/animalqtldb/)) {
-      label = 'AnimalQTLdb';
+      label = "AnimalQTLdb";
     } else if (source.match(/go/)) {
-      label = 'Gene Ontology';
+      label = "Gene Ontology";
     } else if (source.match(/gene reviews/)) {
-      label = 'Gene Reviews';
+      label = "Gene Reviews";
     } else if (source.match(/reactome/)) {
-      label = 'Reactome';
+      label = "Reactome";
     } else if (source.match(/bgee/)) {
-      label = 'Bgee';
+      label = "Bgee";
     }
   }
 
