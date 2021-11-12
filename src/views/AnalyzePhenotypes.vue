@@ -541,7 +541,8 @@ export default {
         { value: 'mouse', text: 'Mouse (genes)' },
         { value: 'zebrafish', text: 'Zebrafish (genes)' },
         { value: 'ff', text: 'Fruit fly (genes)' },
-        { value: 'worm', text: 'Nematode (genes)' }
+        { value: 'worm', text: 'Nematode (genes)' },
+        { value: 'frog', text: 'Frog (genes)' },
       ],
       selectedGeneGroup: null,
       currentStep: 1,
@@ -608,6 +609,11 @@ export default {
           text: 'Caenorhabditis elegans (genes)',
           groupId: '6239',
           groupName: 'Caenorhabditis elegans'
+        },
+        'frog': {
+          text: 'Xenopus (genes)',
+          groupId: '8353',
+          groupName: 'Xenopus'
         },
       }
     };
