@@ -58,16 +58,6 @@ The VueJS application is built from source code via a modern chain of tools that
 The output of the build process is a set of static files including bundled Javascript, CSS, HTML and other media assets. These are then deployed to Netlify where they can be served to users on the internet.
 
 
-#### BioLink Service
-
-There are two versions of the BioLink service:
- - **beta** at https://api-dev.monarchinitiative.org/api/
- - **production** at https://api.monarchinitiative.org/api/
-
-`monarch-ui` will use **production** by default.
-To override this, put `?api=beta` as a url parameter.
-
-
 ### Directory Structure
 
 #### `monarch-ui/`

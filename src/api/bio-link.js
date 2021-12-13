@@ -21,9 +21,8 @@ import {
 
 // versions/environments of api servers
 const versions = {
-  "google-cloud": "https://api.monarch-test.ddns.net/api/", // REMOVE WHEN NEW GOOGLE CLOUD SERVICES STABLE AND CANONICAL URLS BELOW HAVE BEEN TRANSFERRED TO THEM
+  production: "https://api.monarch-test.ddns.net/api/",
   beta: "https://api-dev.monarchinitiative.org/api/",
-  production: "https://api.monarchinitiative.org/api/",
 };
 
 const defaultVersion = "production";
