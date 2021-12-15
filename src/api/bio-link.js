@@ -21,7 +21,8 @@ import {
 
 // versions/environments of api servers
 const versions = {
-  production: "https://api.monarch-test.ddns.net/api/",
+  // production: "https://api.monarch-test.ddns.net/api/", // GOOGLE CLOUD
+  production: "https://api.monarchinitiative.org/api/", // OSU
   beta: "https://api-dev.monarchinitiative.org/api/",
 };
 
