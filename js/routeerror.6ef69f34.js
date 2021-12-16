@@ -1,2 +1,2 @@
 (window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["routeerror"],{"3c59":function(t,r,e){"use strict";e("b8f1")},7066:function(t,r,e){"use strict";e.r(r);var n=function(){var t=this,r=t.$createElement,e=t._self._c||r;return e("div",{staticClass:"container-fluid route-error-view"},[e("br"),e("br"),e("br"),e("br"),e("h3",{staticClass:"text-center border"},[t._v(" No such path available: "),e("b",[t._v(t._s(t.badPath))])])])},a=[],o={name:"RouteError",data:function(){return{badPath:null}},mounted:function(){this.badPath=this.$route.path},methods:{}},u=o,s=(e("3c59"),e("2877")),c=Object(s["a"])(u,n,a,!1,null,null,null);r["default"]=c.exports},b8f1:function(t,r,e){}}]);
-//# sourceMappingURL=routeerror.8ba63332.js.map
+//# sourceMappingURL=routeerror.6ef69f34.js.map
