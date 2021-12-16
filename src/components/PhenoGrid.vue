@@ -57,6 +57,7 @@ export default {
 
       Phenogrid.createPhenogridForElement(this.$refs.phenogridbox, {
         serverURL: biolink,
+        forceBiolink: true,
         appURL: appBase,
         gridSkeletonData: pgData,
         selectedCalculation: 0,
