@@ -61,7 +61,7 @@ institutions:
     - name: Kent Shefchek
       picture: img/team/KentShefchek.jpg
       title: Bioinformatics Software Engineer
-      alumni: false
+      alumni: true
       bio: Kent is a full stack developer for the Monarch Initiative working on the data ingest pipline, API, and the Monarch UI.
     - name: Anne Thessen
       picture: img/team/AnneThessen.png
