@@ -82,6 +82,11 @@ institutions:
       title: Scientific Software Engineer
       alumni: false
       bio: Victoria is a Scientific Software Engineer at the University of Colorado - Anschutz, School of Medicine, Center for Health AI. She received her bachelor's in Computer Science and minor in Economics from the University of Colorado - Boulder. She has more than 3 years of experience in data analysis, data architecture, software development and database administration. She will be developing and maintaining LinkML, a data modeling language and associated tooling such as deployments into other contexts, compliance testing batteries, and schema visualization tools. Aside from work, she likes to spend her free time trying every kind of culinary and going to theme parks.
+    - name: Corey Cox
+      picture: img/team/CoreyCox.jpg
+      title: Scientific Software Engineer
+      alumni: false
+      bio: Corey Cox is a biochemist, developer, and data scientist and is currently a Scientific Software Engineer for TISLab. He has substantial lab experience and undergraduate degrees in Biochemistry and Molecular Biology with a Masters in Biomedical Science and Biotechnology as part of merging his loves of technology and science over the last decade. Corey hopes to leverage experience in data QA/QC, visualization, and analysis to help create robust datasets and pipelines for applying Artificial Intelligence to improving healthcare outcomes.
   - id: osu
     name: Oregon State University
     logo: img/team/osu.png
