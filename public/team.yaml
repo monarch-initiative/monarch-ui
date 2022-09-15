@@ -77,11 +77,16 @@ institutions:
       title: Lead Biocurator
       alumni: false
       bio: Dr. Vasilevsky is the lead biocurator for the Monarch project. She has a BA in Biology from Reed College and a Ph.D. in Cell Biology from Oregon Health & Science University. Nicole contributes to biocuration efforts for Monarch, and ontology development for the Human Phenotye Ontology (HPO), the Mondo Disease Ontology, the Cell Ontology (CL), and others.      
-    - name: Victoria Alexandra Soesanto
-      picture: img/team/VictoriaSoesanto.jpg
+    - name: Bryan Laraway
+      picture: img/team/BryanLaraway.jpg
       title: Scientific Software Engineer
       alumni: false
-      bio: Victoria is a Scientific Software Engineer at the University of Colorado - Anschutz, School of Medicine, Center for Health AI. She received her bachelor's in Computer Science and minor in Economics from the University of Colorado - Boulder. She has more than 3 years of experience in data analysis, data architecture, software development and database administration. She will be developing and maintaining LinkML, a data modeling language and associated tooling such as deployments into other contexts, compliance testing batteries, and schema visualization tools. Aside from work, she likes to spend her free time trying every kind of culinary and going to theme parks.
+      bio: Bryan is a Scientific Software Engineer at the University of Colorado - Anschutz Medical Campus, Department of Biomedical Informatics. He has a BA from Reed College in Biology and a MS in Bioinformatics &amp; Computational Biology from Oregon Health &amp; Science University. He is focused on rare disease research in both patient electronic medical records and model organism data. He is also a former Data Wrangler for the Monarch Initiative, previously assisting with data ingestion.
+    - name: Corey Cox
+      picture: img/team/CoreyCox.jpg
+      title: Scientific Software Engineer
+      alumni: false
+      bio: Corey Cox is a biochemist, developer, and data scientist and is currently a Scientific Software Engineer for TISLab. He has substantial lab experience and undergraduate degrees in Biochemistry and Molecular Biology with a Masters in Biomedical Science and Biotechnology as part of merging his loves of technology and science over the last decade. Corey hopes to leverage experience in data QA/QC, visualization, and analysis to help create robust datasets and pipelines for applying Artificial Intelligence to improving healthcare outcomes.
   - id: osu
     name: Oregon State University
     logo: img/team/osu.png
@@ -110,10 +115,6 @@ institutions:
     logo: img/team/ohsu.jpg
     website: http://ohsu.edu
     people:
-    - name: Bryan Laraway
-      title: Data Wrangler
-      alumni: true
-      bio: Bryan has a BA from Reed College in Biology, post-bac training in MIS from Oregon Institute of Technology, and is currently a Master’s student in Bioinformatics &amp; Computational Biology at Oregon Health &amp; Science University. He is currently a Data Wrangler for the Monarch Initiative, assisting with data ingestion.
     - name: Lilly Winfree
       picture: img/team/LillyWinfree.jpg
       title: Science and Data Analyst
