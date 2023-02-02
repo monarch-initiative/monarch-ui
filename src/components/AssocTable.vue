@@ -212,7 +212,7 @@
           <template v-slot:cell(support)="data">
             <b-button
               :pressed="data.item._showDetails"
-              @click="data.item._showDetails = !data.item._showDetails"
+              @click="data.item._showDetails = !data.item._showDetails; trackShowDetails(data.item); "
               size="small"
               class="btn btn-xs px-1 py-0 m-0"
               variant="outline-info"
@@ -824,6 +824,18 @@ export default {
         (nodeType === "disease" && cardType === "phenotype") ||
         (nodeType === "phenotype" && cardType === "disease")
       );
+    },
+    trackShowDetails(item) {
+      if (item._showDetails) {
+        this.$gtag.event(
+          this.nodeType + " node, " + this.cardType + " card, expand support ",
+          {
+            event_category: "node page association table expand support",
+            event_label: item.assocObject,
+            value: item.supportLength,
+          }
+        );
+      }
     },
   },
 };
