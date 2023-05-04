@@ -21,10 +21,7 @@ import {
 
 // versions/environments of api servers
 const versions = {
-  // production: "https://api.monarch-test.ddns.net/api/", // GOOGLE CLOUD (manager entrypoint)
-  // production: "https://api.monarchinitiative.org/api/", // OSU
-  // production: "https://api.monarch-gc-balanced.ddns.net/api/", // GOOGLE CLOUD (load-balanced entrypoint, old DNS)
-  production: "https://api-gcp.monarchinitiative.org/api/", // GOOGLE CLOUD (new DNS under monarch domain)
+  production: "https://api.monarchinitiative.org/api/", // GOOGLE CLOUD (new DNS under monarch domain)
   beta: "https://api-dev.monarchinitiative.org/api/",
 };
 
