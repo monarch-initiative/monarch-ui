@@ -43,7 +43,7 @@
     "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
     "vue-form-wizard": "^0.8.4",
-    "vue-gtag": "^1.6.2",
+    "vue-gtag": "^1.16.1",
     "vue-router": "^3.1.6",
     "vuelidate": "^0.7.5",
     "webpack": "^4.42.1"
@@ -60,7 +60,7 @@
     "@vue/eslint-config-standard": "^5.1.2",
     "@vue/test-utils": "^1.0.0-beta.32",
     "chai": "^4.2.0",
-    "chromedriver": "^79.0.3",
+    "chromedriver": "^87.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-import-resolver-webpack": "^0.12.1",
