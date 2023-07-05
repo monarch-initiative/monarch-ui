@@ -15,7 +15,7 @@ if (window.location.hostname === "monarchinitiative.org") {
     VueGtag,
     {
       config: {
-        id: "UA-41803362-1",
+        id: "G-D165H4CWLP",
         params: {
           anonymize_ip: true,
           cookie_flags: "SameSite=None;Secure",
