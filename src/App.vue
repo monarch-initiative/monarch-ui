@@ -1,5 +1,11 @@
 <template>
   <div id="app" class="page-wrapper">
+    <monarch-banner
+      >This site will soon be replaced by a
+      <a href="https://next.monarchinitiative.org/" target="_blank"
+        >new version</a
+      >, re-built and re-imagined. Check it out!</monarch-banner
+    >
     <monarch-navbar />
     <div class="content-wrapper">
       <router-view />
@@ -15,6 +21,7 @@ import Vue from "vue";
 import { sanitizeText } from "@/lib/utils";
 import Navbar from "@/components/Navbar.vue";
 import Footer from "@/components/Footer.vue";
+import Banner from "./components/Banner.vue";
 
 Vue.prototype.$sanitizeText = sanitizeText;
 
@@ -23,6 +30,7 @@ export default {
   name: "App",
   components: {
     "monarch-navbar": Navbar,
+    "monarch-banner": Banner,
   },
   data() {
     return {
