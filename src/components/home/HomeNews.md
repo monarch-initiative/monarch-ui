@@ -16,19 +16,6 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm col-lg-4">
-      <i class="fa fa-twitter fa-fw"></i> Tweets from
-      <a href="https://twitter.com/MonarchInit">@MonarchInit</a>
-      <a
-        class="twitter-timeline"
-        href="https://twitter.com/MonarchInit"
-        data-preview=""
-        data-chrome="noheader nofooter"
-        data-height="350"
-      >
-        @MonarchInit
-      </a>
-    </div>
   </div>
 </div>
 
