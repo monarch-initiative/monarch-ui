@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="page-wrapper">
     <monarch-banner
-      >This site will soon be replaced by a
-      <a href="https://next.monarchinitiative.org/" target="_blank"
+      >This site has been replaced by a
+      <a href="https://monarchinitiative.org/" target="_blank"
         >new version</a
       >, re-built and re-imagined. Check it out!</monarch-banner
     >
