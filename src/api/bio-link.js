@@ -21,7 +21,7 @@ import {
 
 // versions/environments of api servers
 const versions = {
-  production: "https://api.monarchinitiative.org/api/", // GOOGLE CLOUD (new DNS under monarch domain)
+  production: "https://api-v2.monarchinitiative.org/api/", // GOOGLE CLOUD (new DNS under monarch domain)
   beta: "https://api-dev.monarchinitiative.org/api/",
 };
 
