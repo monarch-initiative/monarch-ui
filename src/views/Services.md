@@ -27,7 +27,7 @@
           src="../assets/img/biolink_logo_white.png"
         /><br /><br />
         <b-button
-          href="https://api.monarchinitiative.org/api/"
+          href="https://api-biolink.monarchinitiative.org/api/"
           target="_blank"
           class="documentation"
           variant="outline-light"
