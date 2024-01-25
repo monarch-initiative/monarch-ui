@@ -42,11 +42,11 @@ For detailed information on the structure of the code and how to contribute, see
 
 ### Overall Architecture
 
-The UI is a VueJS single-page application that is loaded into the browser as a static set of Javascript, HTML, CSS, and media resources. Subsequent dynamic data is delivered to the browser via `XMLHttpRequest` calls to various backend services, primarily [BioLink](https://api-v2.monarchinitiative.org). The data returned from these calls is then displayed appropriately in the web application.
+The UI is a VueJS single-page application that is loaded into the browser as a static set of Javascript, HTML, CSS, and media resources. Subsequent dynamic data is delivered to the browser via `XMLHttpRequest` calls to various backend services, primarily [BioLink](https://api-biolink.monarchinitiative.org). The data returned from these calls is then displayed appropriately in the web application.
 
 - Source: https://github.com/monarch-initiative/monarch-ui
 - Monarch Initiative UI: https://monarchinitiative.org
-- [BioLink](https://api-v2.monarchinitiative.org) service to access Monarch's data
+- [BioLink](https://api-biolink.monarchinitiative.org) service to access Monarch's data
 
 The VueJS application is built from source code via a modern chain of tools that deal with resource bundling, minification, and transpilation:
 
