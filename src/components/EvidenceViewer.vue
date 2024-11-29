@@ -172,13 +172,14 @@
               class="row"
             >
               <span v-if="pub.id.startsWith('PMID')" class="nowrap">
-                <a :href="pub.url" target="_blank" rel="noopener noreferrer">
+                <a :href="pub.url" target="_blank" rel="noopener noreferrer"
+                  @click="trackOpenPub(pub.id)">
                   {{ pub.label }}
                   <i class="fa fa-external-link" aria-hidden="true" />
                 </a>
               </span>
               <span v-else class="nowrap">
-                <router-link :to="pub.url">{{ pub.label }}</router-link>
+                <router-link :to="pub.url" @click="trackOpenPub(pub.id)">{{ pub.label }}</router-link>
               </span>
             </div>
           </template>
@@ -529,6 +530,15 @@ export default {
       );
 
       return evidenceTable;
+    },
+    trackOpenPub(label) {
+      this.$gtag.event(
+        this.nodeType + " node, " + this.cardType + " card, open publication",
+        {
+          event_category: "node association table evidence open publication",
+          event_label: label,
+        }
+      );
     },
   },
 };
